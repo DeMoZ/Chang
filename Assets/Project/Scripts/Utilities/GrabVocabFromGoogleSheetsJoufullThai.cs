@@ -163,11 +163,13 @@ public class GrabVocabFromGoogleSheetsJoufullThai
     private static PhraseData CreatePhraseData(Languages language, string currentSection, IList<object> columns)
     {
         var key = Regex.Replace(columns[3].ToString(), "[^a-zA-Z0-9-]", "_");
-        // make the key shorter
-        // if (key.Length > 15)
-        //     key = key.Substring(0, 15);
-
-        // var clip = await TextToSpeech.GetClip(key, columns[1].ToString());
+        // make the key shorter and unic
+        if (key.Length > 20)
+        {
+            key = key.Substring(0, 15);
+            var uniqueSuffix = Guid.NewGuid().ToString().Substring(0, 5);
+            key = $"{key}_{uniqueSuffix}";
+        }
 
         return new PhraseData
         {
@@ -177,7 +179,6 @@ public class GrabVocabFromGoogleSheetsJoufullThai
             Word = columns[1].ToString(),
             Phonetic = columns[2].ToString(),
             Meaning = columns[3].ToString(),
-            AudioClip = null, // todo roman audioclip
         };
     }
 }
