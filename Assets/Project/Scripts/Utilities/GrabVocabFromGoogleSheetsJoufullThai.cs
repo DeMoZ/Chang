@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 using UnityEditor;
@@ -78,7 +77,8 @@ public class GrabVocabFromGoogleSheetsJoufullThai
 
         if (rows is { Count: > 0 })
         {
-            await ProcessData(rows);
+            var data = FilterData(rows);
+            WordConfigFileCreator.CreateJson(Languages.Thai, data);
         }
         else
         {
@@ -88,7 +88,14 @@ public class GrabVocabFromGoogleSheetsJoufullThai
         Debug.LogWarning($"[{nameof(ReadGoogleSheet)}] --- Done --- count letters: {countLetters}");
     }
 
-    private static async Task ProcessData(IList<IList<object>> rows)
+    [MenuItem("Chang/Utilities/Create Word Configs from Json")]
+    public static void CreateWordConfigs()
+    {
+        WordConfigFileCreator.ReadJsongAndCreateConfigs(Languages.Thai);
+        Debug.LogWarning($"[{nameof(ReadGoogleSheet)}] --- Done ---");
+    }
+
+    private static List<PhraseData> FilterData(IList<IList<object>> rows)
     {
         var currentSection = string.Empty;
         var phrases = new List<PhraseData>();
@@ -135,7 +142,6 @@ public class GrabVocabFromGoogleSheetsJoufullThai
                     {
                         Debug.Log($"create config : {data}");
                         phrases.Add(CreatePhraseData(Languages.Thai, currentSection, columns));
-                        // await CreateConfig(Languages.Thai, currentSection, columns);
                         countLetters += columns[1].ToString().Length;
                     }
                     else
@@ -151,25 +157,7 @@ public class GrabVocabFromGoogleSheetsJoufullThai
             Debug.LogError($"error : {e}");
         }
 
-        // todo roman write phrases as json on the disk
-        var json = JsonUtility.ToJson(phrases);
-        
-
-
-
-
-
-
-
-        
-        
-        // finally
-        // {
-        //     // todo roman unSet Unity Dirty
-
-        //     AssetDatabase.SaveAssets();
-        //     AssetDatabase.Refresh();
-        // }
+        return phrases;
     }
 
     private static PhraseData CreatePhraseData(Languages language, string currentSection, IList<object> columns)
@@ -191,38 +179,6 @@ public class GrabVocabFromGoogleSheetsJoufullThai
             Meaning = columns[3].ToString(),
             AudioClip = null, // todo roman audioclip
         };
-    }
-
-    // todo roman config creation should be from the reading json
-    private static async Task CreateConfig(Languages language, string currentSection, IList<object> columns)
-    {
-        if (string.IsNullOrEmpty(columns[1].ToString()) ||
-            string.IsNullOrEmpty(columns[2].ToString()) ||
-            string.IsNullOrEmpty(columns[3].ToString()))
-        {
-            Debug.LogError($"Empty value for {string.Join(",", columns)}");
-            return;
-        }
-
-        var key = Regex.Replace(columns[3].ToString(), "[^a-zA-Z0-9-]", "_");
-        // make the key shorter
-        // if (key.Length > 15)
-        //     key = key.Substring(0, 15);
-
-        // var clip = await TextToSpeech.GetClip(key, columns[1].ToString());
-
-        var phraseData = new PhraseData
-        {
-            Key = key,
-            Language = language,
-            Section = currentSection,
-            Word = columns[1].ToString(),
-            Phonetic = columns[2].ToString(),
-            Meaning = columns[3].ToString(),
-            AudioClip = null, // todo roman audioclip
-        };
-
-        WordConfigFileCreator.Create(phraseData.Language, phraseData.Key, phraseData);
     }
 }
 

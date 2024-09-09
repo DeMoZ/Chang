@@ -2,6 +2,8 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using System;
 
 public static class WordConfigFileCreator
 {
@@ -10,12 +12,55 @@ public static class WordConfigFileCreator
     private static string WordsFolder = "Words";
     private static string NewFolder = "New";
 
-    public static void Create(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
-    {
+    private static string JsonFileName = "Words.json";
 
+    public static void CreateJson(Languages language, List<PhraseData> data)
+    {
+        var relativePath = Path.Combine(RelativePath, language.ToString(), JsonFileName);
+        var path = Path.Combine(Application.dataPath, relativePath);
+        var jsonData = JsonConvert.SerializeObject(data);
+        File.WriteAllText(path, jsonData);
+    }
+
+    public async static void ReadJsongAndCreateConfigs(Languages language)
+    {
+        var relativePath = Path.Combine(RelativePath, language.ToString(), JsonFileName);
+        var path = Path.Combine(Application.dataPath, relativePath);
+
+        if (!File.Exists(path))
+        {
+            Debug.LogError($"File {path} does not exist");
+            return;
+        }
+
+        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+        var dataString = await new StreamReader(stream).ReadToEndAsync();
+        var data = JsonConvert.DeserializeObject<List<PhraseData>>(dataString);
+
+        try
+        {
+            foreach (PhraseData phraseData in data)
+            {
+                Debug.Log($"{phraseData.Section}, {phraseData.Word}, {phraseData.Phonetic}, {phraseData.Meaning}");
+                CreateConfig(language, phraseData.Key, phraseData);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"{e}");
+        }
+        finally
+        {
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+    }
+
+    public static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
+    {
         var meanings = new List<Translation>
         {
-            new Translation()
+            new()
             {
                 Language = Languages.English,
                 Meaning = phraseData.Meaning
@@ -38,7 +83,6 @@ public static class WordConfigFileCreator
         dataAsset.Language = phraseData.Language;
         dataAsset.AudioClip = phraseData.AudioClip;
         dataAsset.Word = word;
-        //phraseConfig.Phrase = todo roman but maybe not needed
 
         var relativePath = Path.Combine(RelativePath, language.ToString(), WordsFolder, NewFolder, $"{name}.asset");
         var assetRelativePath = Path.Combine(AssetsFolder, relativePath);
