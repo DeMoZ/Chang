@@ -4,6 +4,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 
 public static class WordConfigFileCreator
 {
@@ -16,17 +17,14 @@ public static class WordConfigFileCreator
 
     public static void CreateJson(Languages language, List<PhraseData> data)
     {
-        var relativePath = Path.Combine(RelativePath, language.ToString(), JsonFileName);
-        var path = Path.Combine(Application.dataPath, relativePath);
+        var path = GetWordsJsonFilePath(language);
         var jsonData = JsonConvert.SerializeObject(data);
         File.WriteAllText(path, jsonData);
     }
 
     public async static void ReadJsongAndCreateConfigs(Languages language)
     {
-        var relativePath = Path.Combine(RelativePath, language.ToString(), JsonFileName);
-        var path = Path.Combine(Application.dataPath, relativePath);
-
+        var path = GetWordsJsonFilePath(language);
         if (!File.Exists(path))
         {
             Debug.LogError($"File {path} does not exist");
@@ -54,6 +52,29 @@ public static class WordConfigFileCreator
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+    }
+
+    public async static Task<List<(string filename, string word)>> GetDatasetForAudio(Languages language)
+    {
+        var path = GetWordsJsonFilePath(language);
+        List<(string filename, string word)> dataset = new();
+        if (!File.Exists(path))
+        {
+            Debug.LogError($"File {path} does not exist");
+            return dataset;
+        }
+
+        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+        var dataString = await new StreamReader(stream).ReadToEndAsync();
+        var data = JsonConvert.DeserializeObject<List<PhraseData>>(dataString);
+
+        // todo roman create dataset for audio
+        foreach (PhraseData phraseData in data)
+        {
+            dataset.Add((phraseData.Key, phraseData.Word));
+        }
+
+        return dataset;
     }
 
     public static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
@@ -97,5 +118,12 @@ public static class WordConfigFileCreator
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+    }
+
+    private static string GetWordsJsonFilePath(Languages language)
+    {
+        var relativePath = Path.Combine(RelativePath, language.ToString(), JsonFileName);
+        var path = Path.Combine(Application.dataPath, relativePath);
+        return path;
     }
 }

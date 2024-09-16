@@ -3,78 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 using UnityEditor;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
-using Google.Apis.Sheets.v4;
-using Google.Apis.Sheets.v4.Data;
-using Google.Apis.Util.Store;
+using System.Net.Http;
 
-public class GrabVocabFromGoogleSheetsJoufullThai
+public class VocabularyUtilities
 {
-    static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
-    static string ApplicationName = "Google Sheets API Unity";
-    private static string RelativePath = "Project/Scripts/Utilities/ChangExternal";
-    private static string SecretFileName = "gcloud_client_secret.json";
-    private static string TokenFileName = "gcloud_client_token.json";
-    private static string IdFileName = "ids.json";
     private static int countLetters = 0;
 
     [MenuItem("Chang/Utilities/Create Words Json From Google Sheet")]
-    public static async void ReadGoogleSheet()
+    public static async void ReadGoogleSheetAsync()
     {
-        countLetters = 0;
+        var gSheetsToJson = new GoogleSheetToJson();
+        var result = gSheetsToJson.TryGetWords();
+        await result;
 
-        string secretFullPath = Path.Combine(Application.dataPath, RelativePath, SecretFileName);
-        string tokenFullPath = Path.Combine(Application.dataPath, RelativePath, TokenFileName);
-        string IdsFullPath = Path.Combine(Application.dataPath, RelativePath, IdFileName);
-
-        // Load credentials from file
-        await using var stream = new FileStream(secretFullPath, FileMode.Open, FileAccess.Read);
-        var secretsTask = await GoogleClientSecrets.FromStreamAsync(stream);
-        var secrets = secretsTask.Secrets;
-
-        Debug.LogWarning($"[{nameof(ReadGoogleSheet)}] need to finish authorization in the browser");
-        var credentialTask = await GoogleWebAuthorizationBroker.AuthorizeAsync(secrets, Scopes, "user",
-            CancellationToken.None,
-            new FileDataStore(tokenFullPath, true));
-        Debug.Log($"Credential file saved to: {TokenFileName} at {tokenFullPath}");
-        Debug.LogWarning($"[{nameof(ReadGoogleSheet)}] authorization finished");
-        // Create Google Sheets API service.
-        var service = new SheetsService(new BaseClientService.Initializer()
+        if (!result.Result.Any())
         {
-            HttpClientInitializer = credentialTask,
-            ApplicationName = ApplicationName,
-        });
-
-        await using var idsStream = new FileStream(IdsFullPath, FileMode.Open, FileAccess.Read);
-        var idsString = await new StreamReader(idsStream).ReadToEndAsync();
-        var idsData = JsonUtility.FromJson<IdsData>(idsString);
-
-        var spreadsheetId = idsData.spreadsheetId;
-        // Sheet info
-        Spreadsheet spreadsheet = await service.Spreadsheets.Get(spreadsheetId).ExecuteAsync();
-        var firstSheet = spreadsheet.Sheets.FirstOrDefault();
-        if (firstSheet == null)
-        {
-            Debug.LogError($"[{nameof(ReadGoogleSheet)}] there are no sheets in the document");
-            return;
+            Debug.LogError($"[{nameof(ReadGoogleSheetAsync)}] --- Failed ---");
         }
 
-        var firstSheetName = firstSheet.Properties.Title;
-        Debug.Log(
-            $"[{nameof(ReadGoogleSheet)}] {nameof(firstSheetName)}: {firstSheetName}\nnow we use only first sheet");
-        //var range = $"{firstSheetName}!A1:D10"; // Cells range on the page
-        var range = $"{firstSheetName}"; // all the data from the page
-        SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, range);
-
-        // Get data from the sheet
-        ValueRange response = request.Execute();
-        IList<IList<object>> rows = response.Values;
-
+        countLetters = 0;
+        var rows = result.Result;
         if (rows is { Count: > 0 })
         {
             var data = FilterData(rows);
@@ -85,14 +37,54 @@ public class GrabVocabFromGoogleSheetsJoufullThai
             Debug.Log("No data found.");
         }
 
-        Debug.LogWarning($"[{nameof(ReadGoogleSheet)}] --- Done --- count letters: {countLetters}");
+        Debug.LogWarning($"[{nameof(ReadGoogleSheetAsync)}] --- Done --- count letters: {countLetters}");
     }
 
     [MenuItem("Chang/Utilities/Create Word Configs from Json")]
     public static void CreateWordConfigs()
     {
+        Debug.LogWarning($"[{nameof(CreateWordConfigs)}] --- Start ---");
         WordConfigFileCreator.ReadJsongAndCreateConfigs(Languages.Thai);
-        Debug.LogWarning($"[{nameof(ReadGoogleSheet)}] --- Done ---");
+        Debug.LogWarning($"[{nameof(CreateWordConfigs)}] --- Done ---");
+    }
+
+    [MenuItem("Chang/Utilities/Create Audio from Json")]
+    public static async void CreateAudioFilesAsync()
+    {
+        Debug.LogWarning($"[{nameof(CreateAudioFilesAsync)}] --- Start ---");
+        List<(string filename, string word)> dataset = await WordConfigFileCreator.GetDatasetForAudio(Languages.Thai);
+        var textToVoice = new TextToVoice();
+        // 2. from dataset to audio with saving each audio        
+        //-------------------------------------
+        var data = dataset[0];
+        var filePath = Path.Combine(Application.dataPath, "Project", "Languages", "Thai", "WordsAudio", "New", data.filename + ".mp3");
+        var result = await textToVoice.TryGetAudioAsync(data.word, "th-TH", filePath);
+        if (!result){
+            Debug.LogError($"[{nameof(CreateAudioFilesAsync)}] --- Failed ---");
+        }
+        //-------------------------------------      
+
+        Debug.LogWarning($"[{nameof(CreateAudioFilesAsync)}] --- Done ---");
+    }
+
+
+
+    public async Task GenerateAudioAsync(string thaiText)
+    {
+        // Use another TTS engine (e.g., AWS Polly or Azure Speech)
+        // Assume we have an endpoint that accepts text and generates audio for Thai
+        string ttsServiceUrl = "https://your-tts-service.com/api/generate";
+
+        using var client = new HttpClient();
+        var content = new StringContent($"{{ \"text\": \"{thaiText}\" }}", System.Text.Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(ttsServiceUrl, content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Process the audio returned from the TTS service
+            var audioStream = await response.Content.ReadAsStreamAsync();
+            // Save or play the audio as needed
+        }
     }
 
     private static List<PhraseData> FilterData(IList<IList<object>> rows)
