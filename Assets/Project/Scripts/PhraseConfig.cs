@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Collections;
-using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Chang/Phrase Config", fileName = "WordConfig")]
 public class PhraseConfig : ScriptableObject
 {
     [field: SerializeField] public string Key { get; set; } = string.Empty;
-    [field: SerializeField] public Languages Language { get; set; } = Languages.Thai;
+    /*[field: SerializeField]*/public Languages Language { get; set; } = Languages.Thai;
     [field: SerializeField] public AudioClip AudioClip { get; set; }
+    [field: SerializeField] public Sprite Sprite { get; set; }
     [field: SerializeField] public WordConfig Word { get; set; }
 }
 
@@ -32,5 +30,5 @@ public class WordConfig
 public class Translation
 {
     [field: SerializeField] public Languages Language { get; set; }
-    [field: SerializeField] public string Meaning { get;  set; }
+    [field: SerializeField] public string Meaning { get; set; }
 }
