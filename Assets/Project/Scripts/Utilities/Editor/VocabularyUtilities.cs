@@ -1,3 +1,4 @@
+using UnityEditor;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
 
-using UnityEditor;
 using System.Net.Http;
 
 public class VocabularyUtilities
@@ -59,7 +59,8 @@ public class VocabularyUtilities
         var data = dataset[0];
         var filePath = Path.Combine(Application.dataPath, "Project", "Languages", "Thai", "WordsAudio", "New", data.filename + ".mp3");
         var result = await textToVoice.TryGetAudioAsync(data.word, "th-TH", filePath);
-        if (!result){
+        if (!result)
+        {
             Debug.LogError($"[{nameof(CreateAudioFilesAsync)}] --- Failed ---");
         }
         //-------------------------------------      

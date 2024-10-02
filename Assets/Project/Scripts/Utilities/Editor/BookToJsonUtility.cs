@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -16,14 +15,14 @@ public class BookToJsonUtility : ScriptableObject
     void MakeJson()
     {
         Debug.Log($"{nameof(MakeJson)} Start");
-        var result = new List<LessonNames>();
+        var result = new List<LessonName>();
 
         foreach (var lesson in GameBookConfig.Lessons)
         {
             var assetPath = AssetDatabase.GetAssetPath(lesson);
             var fileName = Path.GetFileNameWithoutExtension(assetPath);
 
-            result.Add(new LessonNames()
+            result.Add(new LessonName()
             {
                 FileName = fileName,
                 AssetPath = assetPath,
@@ -36,11 +35,4 @@ public class BookToJsonUtility : ScriptableObject
         AssetDatabase.Refresh();
         Debug.Log($"{nameof(MakeJson)} Done");
     }
-}
-
-[Serializable]
-public struct LessonNames
-{
-    public string FileName;
-    public string AssetPath;
 }

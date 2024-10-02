@@ -2,20 +2,29 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
+using Chang.Resources;
 
-public class Bootstrap : MonoBehaviour
+
+namespace Chang
 {
-    async void Start()
+    public class Bootstrap : MonoBehaviour
     {
-        await BootstrapProcesses();
+        async void Start()
+        {
+            await BootstrapProcesses();
 
-        var handle = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Single);
-        await UniTask.WaitUntil(() => handle.isDone, PlayerLoopTiming.Update);
-        
-    }
+            //var resourceManager = new SimpleResourceManager();
+            //var game = new Game(resourceManager);
 
-    private async UniTask BootstrapProcesses()
-    {
-        await UniTask.Delay(1);
+            var handle = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Single);
+            await UniTask.WaitUntil(() => handle.isDone, PlayerLoopTiming.Update);
+
+            //game.Start();
+        }
+
+        private async UniTask BootstrapProcesses()
+        {
+            await UniTask.Delay(1);
+        }
     }
 }
