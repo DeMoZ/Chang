@@ -23,11 +23,11 @@ namespace Chang.FSM
 
             // todo roman implement
             var gameBookController = _screenManager.GetGameBookController();
-            gameBookController.Init(_gameModel.LessonNames, (index) => OnLessonClick(index, _gameModel.LessonNames).Forget());
+            gameBookController.Init(_gameModel.LessonNames, (index) => OnLessonClick(index).Forget());
             gameBookController.SetViewActive(true);
         }
 
-         public async UniTaskVoid OnLessonClick(int index, List<LessonName> lessonNames)
+         public async UniTaskVoid OnLessonClick(int index)
         {
             if (_isLoading)
                 return;
@@ -39,9 +39,11 @@ namespace Chang.FSM
 
 // todo roman Need to show preloading with loading lesson content / or move to preload state again but with loading content switch ????
 
-            var lessonConfig = await _resourcesManager.LoadAssetAsync<LessonConfig>(lessonNames[index].FileName);
             // todo roman PlayLesson by iteration through lessonConfig.Questions
+            _gameModel.NextLessonIndex = index;
+            _gameModel.PreloadType = PreloadType.Lesson;
 
+            OnStateResult.Invoke(StateType.Preload);
 
             // todo roman hide loading screen
             _isLoading = false;

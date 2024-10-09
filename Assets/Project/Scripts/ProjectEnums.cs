@@ -21,7 +21,7 @@ namespace Chang
     {
         None,
         Boot,       // Run game, preload all that need for the game on bootstrap
-        Lobby,      // Enter the lobby, load book
+        // Lobby,      // Enter the lobby, load book
         Lesson,     // Start lesson, load all media for lesson
     }
 

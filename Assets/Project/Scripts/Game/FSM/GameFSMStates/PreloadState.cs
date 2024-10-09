@@ -39,10 +39,24 @@ namespace Chang.FSM
 
             _preloaderController.SetViewActive(true);
 
-            List<LessonName> lessons = await LoadGameBookConfig();
-            _gameModel.LessonNames = lessons;
+            switch (_gameModel.PreloadType)
+            {
+                case PreloadType.Boot:
+                    List<LessonName> lessons = await LoadGameBookConfig();
+                    _gameModel.LessonNames = lessons;
 
-            OnStateResult.Invoke(StateType.Lobby);
+                    OnStateResult.Invoke(StateType.Lobby);
+                    break;
+                // case PreloadType.Lobby:
+                //     // _gameModel.Lessons are already in the model, so no need to call PlreloaderType.Lobby
+                //     break;
+                case PreloadType.Lesson:
+                    await LoadLessonContent();
+                    break;
+                default:
+                    throw new NotImplementedException();
+                    break;
+            }
         }
 
         private async UniTask<List<LessonName>> LoadGameBookConfig()
@@ -51,6 +65,14 @@ namespace Chang.FSM
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
             await UniTask.Delay(5000);
             return JsonConvert.DeserializeObject<List<LessonName>>(text.text);
+        }
+
+        private async UniTask LoadLessonContent()
+        {
+            await UniTask.Delay(5000);
+            var lessonConfig = await _resourcesManager.LoadAssetAsync<LessonConfig>(_gameModel.LessonNames[_gameModel.NextLessonIndex].FileName);
+
+            OnStateResult.Invoke(StateType.PlayerVocabulary);
         }
     }
 }

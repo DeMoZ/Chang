@@ -27,6 +27,8 @@ namespace Chang.FSM
 
         protected override void Init()
         {
+            _gameModel.PreloadType = PreloadType.Boot;
+            
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
                 { StateType.Preload, new PreloadState( _gameModel, OnStateResult, _screenManager, _resourcesManager) },
