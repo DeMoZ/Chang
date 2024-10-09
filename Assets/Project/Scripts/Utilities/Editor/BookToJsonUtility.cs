@@ -5,34 +5,37 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BookToJsonUtility", menuName = "Chang/GameBook/BookToJsonUtility", order = 0)]
-public class BookToJsonUtility : ScriptableObject
+namespace Chang
 {
-    public GameBookConfig GameBookConfig;
-    public TextAsset GameBookJson;
-
-    [Button]
-    void MakeJson()
+    [CreateAssetMenu(fileName = "BookToJsonUtility", menuName = "Chang/GameBook/BookToJsonUtility", order = 0)]
+    public class BookToJsonUtility : ScriptableObject
     {
-        Debug.Log($"{nameof(MakeJson)} Start");
-        var result = new List<LessonName>();
+        public GameBookConfig GameBookConfig;
+        public TextAsset GameBookJson;
 
-        foreach (var lesson in GameBookConfig.Lessons)
+        [Button]
+        void MakeJson()
         {
-            var assetPath = AssetDatabase.GetAssetPath(lesson);
-            var fileName = Path.GetFileNameWithoutExtension(assetPath);
+            Debug.Log($"{nameof(MakeJson)} Start");
+            var result = new List<LessonName>();
 
-            result.Add(new LessonName()
+            foreach (var lesson in GameBookConfig.Lessons)
             {
-                FileName = fileName,
-                AssetPath = assetPath,
-            });
+                var assetPath = AssetDatabase.GetAssetPath(lesson);
+                var fileName = Path.GetFileNameWithoutExtension(assetPath);
+
+                result.Add(new LessonName()
+                {
+                    FileName = fileName,
+                    AssetPath = assetPath,
+                });
+            }
+
+            var json = JsonConvert.SerializeObject(result, Formatting.Indented);
+            File.WriteAllText(AssetDatabase.GetAssetPath(GameBookJson), json);
+
+            AssetDatabase.Refresh();
+            Debug.Log($"{nameof(MakeJson)} Done");
         }
-
-        var json = JsonConvert.SerializeObject(result, Formatting.Indented);
-        File.WriteAllText(AssetDatabase.GetAssetPath(GameBookJson), json);
-
-        AssetDatabase.Refresh();
-        Debug.Log($"{nameof(MakeJson)} Done");
     }
 }

@@ -2,18 +2,21 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LessonConfig", menuName = "Chang/GameBook/Lesson Config", order = 1)]
-public class LessonConfig : SerializedScriptableObject
+namespace Chang
 {
-    //s[ListDrawerSettings(Expanded = true)]
-    //[InlineEditor(Expanded = true)]
-    public List<Question> Questions;
-
-    public void OnValidate()
+    [CreateAssetMenu(fileName = "LessonConfig", menuName = "Chang/GameBook/Lesson Config", order = 1)]
+    public class LessonConfig : SerializedScriptableObject
     {
-        foreach (var question in Questions)
+        //s[ListDrawerSettings(Expanded = true)]
+        //[InlineEditor(Expanded = true)]
+        public List<Question> Questions;
+
+        public void OnValidate()
         {
-            question.Init();
+            foreach (var question in Questions)
+            {
+                question.Init();
+            }
         }
     }
 }

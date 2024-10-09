@@ -6,80 +6,82 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-public static class WordConfigFileCreator
+namespace Chang
 {
-    private static string RelativePath = "Project/Languages";
-    private static string AssetsFolder = "Assets";
-    private static string WordsFolder = "Words";
-    private static string NewFolder = "New";
-
-    private static string JsonFileName = "Words.json";
-
-    public static void CreateJson(Languages language, List<PhraseData> data)
+    public static class WordConfigFileCreator
     {
-        var path = GetWordsJsonFilePath(language);
-        var jsonData = JsonConvert.SerializeObject(data);
-        File.WriteAllText(path, jsonData);
-    }
+        private static string RelativePath = "Project/Languages";
+        private static string AssetsFolder = "Assets";
+        private static string WordsFolder = "Words";
+        private static string NewFolder = "New";
 
-    public async static void ReadJsongAndCreateConfigs(Languages language)
-    {
-        var path = GetWordsJsonFilePath(language);
-        if (!File.Exists(path))
+        private static string JsonFileName = "Words.json";
+
+        public static void CreateJson(Languages language, List<PhraseData> data)
         {
-            Debug.LogError($"File {path} does not exist");
-            return;
+            var path = GetWordsJsonFilePath(language);
+            var jsonData = JsonConvert.SerializeObject(data);
+            File.WriteAllText(path, jsonData);
         }
 
-        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-        var dataString = await new StreamReader(stream).ReadToEndAsync();
-        var data = JsonConvert.DeserializeObject<List<PhraseData>>(dataString);
-
-        try
+        public async static void ReadJsongAndCreateConfigs(Languages language)
         {
-            foreach (PhraseData phraseData in data)
+            var path = GetWordsJsonFilePath(language);
+            if (!File.Exists(path))
             {
-                Debug.Log($"{phraseData.Section}, {phraseData.Word}, {phraseData.Phonetic}, {phraseData.Meaning}");
-                CreateConfig(language, phraseData.Key, phraseData);
+                Debug.LogError($"File {path} does not exist");
+                return;
+            }
+
+            await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var dataString = await new StreamReader(stream).ReadToEndAsync();
+            var data = JsonConvert.DeserializeObject<List<PhraseData>>(dataString);
+
+            try
+            {
+                foreach (PhraseData phraseData in data)
+                {
+                    Debug.Log($"{phraseData.Section}, {phraseData.Word}, {phraseData.Phonetic}, {phraseData.Meaning}");
+                    CreateConfig(language, phraseData.Key, phraseData);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{e}");
+            }
+            finally
+            {
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
         }
-        catch (Exception e)
-        {
-            Debug.LogError($"{e}");
-        }
-        finally
-        {
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-    }
 
-    public async static Task<List<(string filename, string word)>> GetDatasetForAudio(Languages language)
-    {
-        var path = GetWordsJsonFilePath(language);
-        List<(string filename, string word)> dataset = new();
-        if (!File.Exists(path))
+        public async static Task<List<(string filename, string word)>> GetDatasetForAudio(Languages language)
         {
-            Debug.LogError($"File {path} does not exist");
+            var path = GetWordsJsonFilePath(language);
+            List<(string filename, string word)> dataset = new();
+            if (!File.Exists(path))
+            {
+                Debug.LogError($"File {path} does not exist");
+                return dataset;
+            }
+
+            await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var dataString = await new StreamReader(stream).ReadToEndAsync();
+            var data = JsonConvert.DeserializeObject<List<PhraseData>>(dataString);
+
+            // todo roman create dataset for audio
+            foreach (PhraseData phraseData in data)
+            {
+                dataset.Add((phraseData.Key, phraseData.Word));
+            }
+
             return dataset;
         }
 
-        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-        var dataString = await new StreamReader(stream).ReadToEndAsync();
-        var data = JsonConvert.DeserializeObject<List<PhraseData>>(dataString);
-
-        // todo roman create dataset for audio
-        foreach (PhraseData phraseData in data)
+        public static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
         {
-            dataset.Add((phraseData.Key, phraseData.Word));
-        }
-
-        return dataset;
-    }
-
-    public static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
-    {
-        var meanings = new List<Translation>
+            var meanings = new List<Translation>
         {
             new()
             {
@@ -88,42 +90,43 @@ public static class WordConfigFileCreator
             }
         };
 
-        var word = new WordConfig
-        {
-            EngWord = name,
-            Word = phraseData.Word,
-            Phonetic = phraseData.Phonetic,
-            Meanings = meanings
-        };
+            var word = new WordConfig
+            {
+                EngWord = name,
+                Word = phraseData.Word,
+                Phonetic = phraseData.Phonetic,
+                Meanings = meanings
+            };
 
-        var dataAsset = ScriptableObject.CreateInstance<PhraseConfig>();
-        if (withDirtyAndSafe)
-            EditorUtility.SetDirty(dataAsset);
+            var dataAsset = ScriptableObject.CreateInstance<PhraseConfig>();
+            if (withDirtyAndSafe)
+                EditorUtility.SetDirty(dataAsset);
 
-        dataAsset.Key = phraseData.Key;
-        dataAsset.Language = phraseData.Language;
-        dataAsset.AudioClip = phraseData.AudioClip;
-        dataAsset.Word = word;
+            dataAsset.Key = phraseData.Key;
+            dataAsset.Language = phraseData.Language;
+            dataAsset.AudioClip = phraseData.AudioClip;
+            dataAsset.Word = word;
 
-        var relativePath = Path.Combine(RelativePath, language.ToString(), WordsFolder, NewFolder, $"{name}.asset");
-        var assetRelativePath = Path.Combine(AssetsFolder, relativePath);
+            var relativePath = Path.Combine(RelativePath, language.ToString(), WordsFolder, NewFolder, $"{name}.asset");
+            var assetRelativePath = Path.Combine(AssetsFolder, relativePath);
 
-        var path = Path.Combine(Application.dataPath, relativePath);
+            var path = Path.Combine(Application.dataPath, relativePath);
 
-        Directory.CreateDirectory(Path.GetDirectoryName(path));
-        AssetDatabase.CreateAsset(dataAsset, assetRelativePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            AssetDatabase.CreateAsset(dataAsset, assetRelativePath);
 
-        if (withDirtyAndSafe)
-        {
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            if (withDirtyAndSafe)
+            {
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
         }
-    }
 
-    private static string GetWordsJsonFilePath(Languages language)
-    {
-        var relativePath = Path.Combine(RelativePath, language.ToString(), JsonFileName);
-        var path = Path.Combine(Application.dataPath, relativePath);
-        return path;
+        private static string GetWordsJsonFilePath(Languages language)
+        {
+            var relativePath = Path.Combine(RelativePath, language.ToString(), JsonFileName);
+            var path = Path.Combine(Application.dataPath, relativePath);
+            return path;
+        }
     }
 }
