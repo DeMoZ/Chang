@@ -6,6 +6,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 using Object = UnityEngine.Object;
 using Debug = UnityEngine.Debug;  // todo roman import logger
 using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Chang.Resources
 {
@@ -135,6 +136,42 @@ namespace Chang.Resources
         public void Dispose()
         {
             //Addressables.ReleaseInstance(this); 
+        }
+
+        public async UniTask<T> LoadAssetAsync<T>(string key) where T : Object
+        {
+             if (!IsAssetExists(key))
+            {
+                Debug.LogWarning($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): AssetReference '{key}' does not exist.");
+                return default;
+            }
+
+            AsyncOperationHandle<T> handle = default;
+            T result = default;
+
+            try
+            {
+                handle = Addressables.LoadAssetAsync<T>(key);
+                result = await handle;
+
+                if (result == null)
+                {
+                    Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with AssetReference '{key}'.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with AssetReference '{key}', ex: {ex}");
+            }
+            finally
+            {
+                if (handle.IsValid())
+                {
+                    Addressables.Release(handle);
+                }
+            }
+
+            return result;
         }
     }
 }

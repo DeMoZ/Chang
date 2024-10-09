@@ -1,4 +1,5 @@
 using Chang.Resources;
+using UnityEngine;
 using Zenject;
 
 namespace Chang
@@ -7,11 +8,14 @@ namespace Chang
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<SimpleResourceManager>()
-               .AsSingle();
-               
-            Container.BindInterfacesAndSelfTo<Game>()
-               .AsSingle();
+            Container.BindInterfacesAndSelfTo<SimpleResourceManager>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GameModel>().AsSingle();
+            Container.BindInterfacesAndSelfTo<Game>().AsSingle();
         }
+    }
+
+    public class UpdateLoopObject : MonoBehaviour
+    {
+
     }
 }

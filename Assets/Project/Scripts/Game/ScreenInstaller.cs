@@ -7,20 +7,38 @@ namespace Chang
     {
         [SerializeField] private GameBookView gameBookScreen;
 
+        [Space]
+
+        [SerializeField] private DemonstrationWordView demonstationScreen;
+        [SerializeField] private MatchWordsView matchWordScreen;
+        [SerializeField] private SelectWordView selectWordScreen;
+        [SerializeField] private PreloaderView preloaderScreen;
+
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(ScreenInstaller)} InstallBindings");
+            #region Views
+            Container.BindInstance(gameBookScreen).AsSingle();
 
-            Container.BindInstance(gameBookScreen)
-                .AsSingle();
+            Container.BindInstance(demonstationScreen).AsSingle();
+            Container.BindInstance(matchWordScreen).AsSingle();
+            Container.BindInstance(selectWordScreen).AsSingle();
 
+            Container.BindInstance(preloaderScreen).AsSingle();
 
+            #endregion
 
-            Container.BindInterfacesAndSelfTo<GameBookController>()
-                .AsSingle();
+            #region Controllers
+            Container.BindInterfacesAndSelfTo<GameBookController>().AsSingle();
 
-            Container.BindInterfacesAndSelfTo<ScreenManager>()
-                .AsSingle();
+            Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<PreloaderController>().AsSingle();
+            #endregion
+
+            Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
         }
     }
 }
