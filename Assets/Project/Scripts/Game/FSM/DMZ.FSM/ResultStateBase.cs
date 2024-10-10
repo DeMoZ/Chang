@@ -1,8 +1,7 @@
 using System;
-using DMZ.FSM;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
-namespace Chang.FSM
+namespace DMZ.FSM
 {
     public abstract class ResultStateBase<TState, TBus> : IResultState<TState> where TState : Enum
     {

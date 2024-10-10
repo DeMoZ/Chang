@@ -4,9 +4,8 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using Object = UnityEngine.Object;
-using Debug = UnityEngine.Debug;  // todo roman import logger
+using Debug = DMZ.DebugSystem.DMZLogger;
 using Cysharp.Threading.Tasks;
-using System.Threading.Tasks;
 
 namespace Chang.Resources
 {
@@ -29,12 +28,12 @@ namespace Chang.Resources
             {
                 if (locator.Locate(key.RuntimeKey, typeof(object), out IList<IResourceLocation> locations) && locations.Count > 0)
                 {
-                    Debug.Log($"[{nameof(SimpleResourceManager)}] {nameof(IsAssetExists)}() asset exists: true, key: {key}");
+                    Debug.Log($"{nameof(IsAssetExists)}() asset exists: true, key: {key}");
                     return true;
                 }
             }
 
-            Debug.Log($"[{nameof(SimpleResourceManager)}] {nameof(IsAssetExists)}() asset exists: false, key: {key}");
+            Debug.Log($"{nameof(IsAssetExists)}() asset exists: false, key: {key}");
             return false;
         }
 
@@ -42,7 +41,7 @@ namespace Chang.Resources
         {
             if (string.IsNullOrWhiteSpace(key))
             {
-                Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(IsAssetExists)}() asset key is null or empty.");
+                Debug.LogError($"{nameof(IsAssetExists)}() asset key is null or empty.");
                 return false;
             }
 
@@ -57,7 +56,7 @@ namespace Chang.Resources
                 }
             }
 
-            Debug.Log($"[{nameof(SimpleResourceManager)}] {nameof(IsAssetExists)}() asset exists {isExists} :{key}");
+            Debug.Log($"{nameof(IsAssetExists)}() asset exists {isExists} :{key}");
             return isExists;
         }
 
@@ -65,7 +64,7 @@ namespace Chang.Resources
         {
             if (!IsAssetExists(key))
             {
-                Debug.LogWarning($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Asset with key '{key}' does not exist.");
+                Debug.LogWarning($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Asset with key '{key}' does not exist.");
                 return null;
             }
 
@@ -79,12 +78,12 @@ namespace Chang.Resources
 
                 if (result == null)
                 {
-                    Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with key '{key}'.");
+                    Debug.LogError($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with key '{key}'.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with key '{key}', ex: {ex}");
+                Debug.LogError($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with key '{key}', ex: {ex}");
             }
             finally
             {
@@ -101,7 +100,7 @@ namespace Chang.Resources
         {
             if (!IsAssetExists(key))
             {
-                Debug.LogWarning($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): AssetReference '{key}' does not exist.");
+                Debug.LogWarning($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): AssetReference '{key}' does not exist.");
                 return null;
             }
 
@@ -115,12 +114,13 @@ namespace Chang.Resources
 
                 if (result == null)
                 {
-                    Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with AssetReference '{key}'.");
+                    Debug.LogError($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with AssetReference '{key}'.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with AssetReference '{key}', ex: {ex}");
+                Debug.LogError(
+                    $"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with AssetReference '{key}', ex: {ex}");
             }
             finally
             {
@@ -140,9 +140,10 @@ namespace Chang.Resources
 
         public async UniTask<T> LoadAssetAsync<T>(string key) where T : Object
         {
-             if (!IsAssetExists(key))
+            if (!IsAssetExists(key))
             {
-                Debug.LogWarning($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): AssetReference '{key}' does not exist.");
+                Debug.LogWarning(
+                    $"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): AssetReference '{key}' does not exist.");
                 return default;
             }
 
@@ -156,12 +157,12 @@ namespace Chang.Resources
 
                 if (result == null)
                 {
-                    Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with AssetReference '{key}'.");
+                    Debug.LogError($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with AssetReference '{key}'.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[{nameof(SimpleResourceManager)}] {nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with AssetReference '{key}', ex: {ex}");
+                Debug.LogError($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with AssetReference '{key}', ex: {ex}");
             }
             finally
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
-//using Debug = DMZ.Debug; // todo roman import debugger
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
