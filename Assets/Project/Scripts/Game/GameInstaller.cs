@@ -9,7 +9,7 @@ namespace Chang
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<SimpleResourceManager>().AsSingle();
-            Container.BindInterfacesAndSelfTo<GameModel>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
             Container.BindInterfacesAndSelfTo<Game>().AsSingle();
         }
     }

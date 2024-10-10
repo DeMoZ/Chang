@@ -7,17 +7,17 @@ using UnityEngine;
 
 namespace Chang.FSM
 {
-    public class PreloadState : ResultStateBase<StateType>
+    public class PreloadState : ResultStateBase<StateType, GameBus>
     {
         private readonly IResourcesManager _resourcesManager;
         private readonly PreloaderController _preloaderController;
 
-        public override StateType Type { get; } = StateType.Preload;
+        public override StateType Type => StateType.Preload;
 
-        public PreloadState(GameModel gameModel, Action<StateType> onStateResult, ScreenManager screenManager, IResourcesManager resourcesManager) : base(gameModel, onStateResult, screenManager)
+        public PreloadState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager) : base(gameBus, onStateResult)
         {
             _resourcesManager = resourcesManager;
-            _preloaderController = _screenManager.GetPreloaderController();
+            _preloaderController = gameBus.ScreenManager.PreloaderController;
         }
 
         public override void Enter()
@@ -39,12 +39,10 @@ namespace Chang.FSM
 
             _preloaderController.SetViewActive(true);
 
-            switch (_gameModel.PreloadType)
+            switch (Bus.PreloadFor)
             {
                 case PreloadType.Boot:
-                    List<LessonName> lessons = await LoadGameBookConfig();
-                    _gameModel.LessonNames = lessons;
-
+                    await LoadGameBookConfig();
                     OnStateResult.Invoke(StateType.Lobby);
                     break;
                 // case PreloadType.Lobby:
@@ -52,6 +50,7 @@ namespace Chang.FSM
                 //     break;
                 case PreloadType.Lesson:
                     await LoadLessonContent();
+                    OnStateResult.Invoke(StateType.PlayVocabulary);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -59,20 +58,18 @@ namespace Chang.FSM
             }
         }
 
-        private async UniTask<List<LessonName>> LoadGameBookConfig()
+        private async UniTask LoadGameBookConfig()
         {
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
-            await UniTask.Delay(5000);
-            return JsonConvert.DeserializeObject<List<LessonName>>(text.text);
+            Bus.LessonNames = JsonConvert.DeserializeObject<List<LessonName>>(text.text);
+            await UniTask.Delay(3000); // todo roman temp test
         }
 
         private async UniTask LoadLessonContent()
         {
-            await UniTask.Delay(5000);
-            var lessonConfig = await _resourcesManager.LoadAssetAsync<LessonConfig>(_gameModel.LessonNames[_gameModel.NextLessonIndex].FileName);
-
-            OnStateResult.Invoke(StateType.PlayerVocabulary);
+            Bus.ClickedLessonConfig = await _resourcesManager.LoadAssetAsync<LessonConfig>(Bus.ClickedLesson);
+            await UniTask.Delay(3000); // todo roman temp test
         }
     }
 }

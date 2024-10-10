@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using DMZ.Events;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace DMZ.FSM
 {
@@ -16,7 +16,6 @@ namespace DMZ.FSM
 
         public FSMResultBase()
         {
-            //_currentState.Subscribe(state => OnStateChanged(state.Type));
         }
 
         public void OnEnter()
@@ -45,7 +44,7 @@ namespace DMZ.FSM
         /// <summary>
         /// Triggered when current state has result
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="stateType"></param>
         protected void OnStateResult(T stateType)
         {
             _currentState.Value.Exit();
@@ -54,9 +53,9 @@ namespace DMZ.FSM
             _currentState.Value.Enter();
         }
 
-        protected virtual void OnStateChanged(T state)
+        protected virtual void OnStateChanged(T stateType)
         {
-            // switching logic is where?
+            Debug.Log($"New game stateType {stateType}");
         }
     }
 }

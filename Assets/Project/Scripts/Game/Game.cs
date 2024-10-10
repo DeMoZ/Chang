@@ -13,16 +13,16 @@ namespace Chang
     {
         private readonly IResourcesManager _resourcesManager;
         private readonly ScreenManager _screenManager;
-        private readonly GameModel _gameModel;
+        private readonly GameBus _gameBus;
 
         private GameFSM _gameFSM;
 
         [Inject]
-        public Game(IResourcesManager resourcesManager, ScreenManager screenManager, GameModel gameModel)
+        public Game(IResourcesManager resourcesManager, ScreenManager screenManager, GameBus gameBus)
         {
             _resourcesManager = resourcesManager;
             _screenManager = screenManager;
-            _gameModel = gameModel;
+            _gameBus = gameBus;
         }
 
         public async void Initialize()
@@ -33,7 +33,7 @@ namespace Chang
 
             await _resourcesManager.InitAsync();
 
-            _gameFSM = new GameFSM(_gameModel, _screenManager, _resourcesManager);
+            _gameFSM = new GameFSM(_gameBus, _resourcesManager);
             _gameFSM.Initialize();
 
             // var lessonNames = await LoadGameBookConfig();

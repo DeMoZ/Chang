@@ -4,41 +4,37 @@ namespace Chang
 {
     public class ScreenManager
     {
-        public GameBookController _gameBookController;
-        private DemonstrationWordController _demonstationScreen;
-        private MatchWordsController _matchTranslationScreen;
-        private SelectWordController _selectTranslationScreen;
+        private GameBookController _gameBookController;
         private PreloaderController _preloaderController;
+
+        private DemonstrationWordController _demonstrationController;
+        private MatchWordsController _matchTranslationController;
+        private SelectWordController _selectTranslationController;
 
         [Inject]
         public ScreenManager(GameBookController gameBookController,
-            DemonstrationWordController demonstationController,
+            PreloaderController preloaderController,
+            DemonstrationWordController demonstrationController,
             MatchWordsController matchTranslationController,
-            SelectWordController selectTranslationController,
-            PreloaderController preloaderController)
+            SelectWordController selectTranslationController)
         {
             _gameBookController = gameBookController;
-            _gameBookController.SetViewActive(false);
-
-            _demonstationScreen = demonstationController;
-            _matchTranslationScreen = matchTranslationController;
-            _selectTranslationScreen = selectTranslationController;
             _preloaderController = preloaderController;
-
-            _demonstationScreen.SetViewActive(false);
-            _matchTranslationScreen.SetViewActive(false);
-            _selectTranslationScreen.SetViewActive(false);
+            _gameBookController.SetViewActive(false);
             _preloaderController.SetViewActive(false);
+
+            _demonstrationController = demonstrationController;
+            _matchTranslationController = matchTranslationController;
+            _selectTranslationController = selectTranslationController;
+            _demonstrationController.SetViewActive(false);
+            _matchTranslationController.SetViewActive(false);
+            _selectTranslationController.SetViewActive(false);
         }
 
-        public GameBookController GetGameBookController()
-        {
-            return _gameBookController;
-        }
-
-        public PreloaderController GetPreloaderController()
-        {
-            return _preloaderController;
-        }
+        public GameBookController GameBookController => _gameBookController;
+        public PreloaderController PreloaderController => _preloaderController;
+        public DemonstrationWordController GetDemonstrationController => _demonstrationController;
+        public MatchWordsController GetMatchTranslationController => _matchTranslationController;
+        public SelectWordController GetSelectTranslationController => _selectTranslationController;
     }
 }

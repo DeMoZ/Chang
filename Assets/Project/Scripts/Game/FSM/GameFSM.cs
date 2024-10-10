@@ -8,16 +8,15 @@ namespace Chang.FSM
 {
     public class GameFSM : FSMResultBase<StateType>
     {
-        private readonly GameModel _gameModel;
+        private readonly GameBus _gameBus;
         private readonly IResourcesManager _resourcesManager;
         private readonly ScreenManager _screenManager;
         private StateType _defaultState => StateType.Preload;
 
-        public GameFSM(GameModel gameModel, ScreenManager screenManager, IResourcesManager resourcesManager, Action<StateType> stateChangedCallback = null)
+        public GameFSM(GameBus gameBus, IResourcesManager resourcesManager, Action<StateType> stateChangedCallback = null)
         {
-            _gameModel = gameModel;
+            _gameBus = gameBus;
             _resourcesManager = resourcesManager;
-            _screenManager = screenManager;
         }
 
         public void Initialize()
@@ -27,13 +26,13 @@ namespace Chang.FSM
 
         protected override void Init()
         {
-            _gameModel.PreloadType = PreloadType.Boot;
+            _gameBus.PreloadFor = PreloadType.Boot;
             
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
-                { StateType.Preload, new PreloadState( _gameModel, OnStateResult, _screenManager, _resourcesManager) },
-                { StateType.Lobby, new LobbyState( _gameModel, OnStateResult, _screenManager) },
-                // { States.PlayeVocabulary, new PlayeVocabularyState( ) },
+                { StateType.Preload, new PreloadState( _gameBus, OnStateResult, _resourcesManager) },
+                { StateType.Lobby, new LobbyState( _gameBus, OnStateResult) },
+                { StateType.PlayVocabulary, new VocabularyState( _gameBus, OnStateResult) },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));
@@ -47,19 +46,6 @@ namespace Chang.FSM
         protected override void OnStateChanged(StateType stateType)
         {
             Debug.Log($"New game stateType {stateType}");
-            // switch (state)
-            // {
-            //     case States.Idle:
-            //         break;
-            //     case States.Chase:
-            //         break;
-            //     case States.Attack:
-            //         break;
-            //     case States.Return:
-            //         break;
-            //     default:
-            //         throw new ArgumentOutOfRangeException(nameof(state), state, null);
-            // }
         }
     }
 }

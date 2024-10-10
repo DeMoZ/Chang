@@ -4,20 +4,18 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public abstract class ResultStateBase<T> : IResultState<T> where T : Enum
+    public abstract class ResultStateBase<TState, TBus> : IResultState<TState> where TState : Enum
     {
-        protected readonly GameModel _gameModel;
-        protected readonly ScreenManager _screenManager;
+        protected readonly TBus Bus;
 
-        public Action<T> OnStateResult { get; set; }
+        public Action<TState> OnStateResult { get; set; }
 
-        public virtual T Type { get; }
+        public virtual TState Type { get; }
 
 
-        public ResultStateBase(GameModel gameModel, Action<T> onStateResult, ScreenManager screenManager)
+        protected ResultStateBase(TBus bus, Action<TState> onStateResult)
         {
-            _gameModel = gameModel;
-            _screenManager = screenManager;
+            Bus = bus;
             OnStateResult = onStateResult;
         }
 
