@@ -25,7 +25,7 @@ namespace Chang.FSM
         {
             base.Enter();
 
-            StateBody().Forget();
+            StateBodyAsync().Forget();
         }
 
         public override void Exit()
@@ -33,7 +33,7 @@ namespace Chang.FSM
             _preloaderController.SetViewActive(false);
         }
 
-        public async UniTaskVoid StateBody()
+        public async UniTaskVoid StateBodyAsync()
         {
             // todo roman Show loading UI and some info on that UI
             // todo roman implement loading error catching
@@ -43,23 +43,22 @@ namespace Chang.FSM
             switch (Bus.PreloadFor)
             {
                 case PreloadType.Boot:
-                    await LoadGameBookConfig();
+                    await LoadGameBookConfigAsync();
                     OnStateResult.Invoke(StateType.Lobby);
                     break;
                 // case PreloadType.Lobby:
                 //     // _gameModel.Lessons are already in the model, so no need to call PlreloaderType.Lobby
                 //     break;
                 case PreloadType.Lesson:
-                    await LoadLessonContent();
+                    await LoadLessonContentAsync();
                     OnStateResult.Invoke(StateType.PlayVocabulary);
                     break;
                 default:
                     throw new NotImplementedException();
-                    break;
             }
         }
 
-        private async UniTask LoadGameBookConfig()
+        private async UniTask LoadGameBookConfigAsync()
         {
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
@@ -67,7 +66,7 @@ namespace Chang.FSM
             await UniTask.Delay(3000); // todo roman temp test
         }
 
-        private async UniTask LoadLessonContent()
+        private async UniTask LoadLessonContentAsync()
         {
             Bus.ClickedLessonConfig = await _resourcesManager.LoadAssetAsync<LessonConfig>(Bus.ClickedLesson);
             await UniTask.Delay(3000); // todo roman temp test

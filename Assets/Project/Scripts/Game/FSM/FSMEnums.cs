@@ -18,12 +18,12 @@ namespace Chang.FSM
         // Profile,
     }
 
-    public enum VocabularySubStates
-    {
-        PlayLogic,
-        DemonstrationWord = QuestionType.DemonstrationWord,
-        SelectWord = QuestionType.SelectWord,
-        MatchWords = QuestionType.MatchWords,
-        DemonstrationDialogue = QuestionType.DemonstrationDialogue,
-    }
+    // public enum VocabularySubStates
+    // {
+    //     PlayLogic,
+    //     DemonstrationWord = QuestionType.DemonstrationWord,
+    //     SelectWord = QuestionType.SelectWord,
+    //     MatchWords = QuestionType.MatchWords,
+    //     DemonstrationDialogue = QuestionType.DemonstrationDialogue,
+    //  }
 }

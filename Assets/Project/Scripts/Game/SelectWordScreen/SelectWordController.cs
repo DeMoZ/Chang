@@ -1,8 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Zenject;
 
 namespace Chang
 {
-    public class SelectWordController
+    public class SelectWordController : IViewController
     {
         private SelectWordView _view;
 
@@ -10,6 +12,13 @@ namespace Chang
         public SelectWordController(SelectWordView view)
         {
             _view = view;
+        }
+
+        // todo roman here should be a classes, not a configx
+        // todo roman refactoring is required
+        public void Init(PhraseConfig correctWord, List<PhraseConfig> mixWords, Action<QuestionTypeStateResult> onContinue)
+        {
+            _view.Init(correctWord, mixWords);
         }
 
         public void SetViewActive(bool active)

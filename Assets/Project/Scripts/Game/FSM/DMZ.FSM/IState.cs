@@ -3,7 +3,7 @@ using System;
 namespace DMZ.FSM
 {
     /// <summary>
-    /// base interface for states. Dont use it directly.
+    /// base interface for states. Don't use it directly.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IState<T>

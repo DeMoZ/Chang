@@ -10,30 +10,30 @@ namespace DMZ.FSM
         protected DMZState<IResultState<T>> _currentState = new();
         protected Dictionary<T, IResultState<T>> _states;
 
-        public virtual T DefaultStateType { get; }
+        protected abstract T _defaultStateType { get; }
 
         protected abstract void Init();
 
-        public FSMResultBase()
-        {
-        }
+        // protected FSMResultBase()
+        // {
+        // }
+        //
+        // public void OnEnter()
+        // {
+        //     _currentState.Value = _states[_defaultStateType];
+        //     _currentState.Value.OnStateResult += OnStateResult;
+        //
+        //     _currentState.Value.Enter();
+        // }
+        //
+        // public void OnExit()
+        // {
+        //     _currentState.Value.OnStateResult -= OnStateResult;
+        //
+        //     _currentState.Value.Exit();
+        // }
 
-        public void OnEnter()
-        {
-            _currentState.Value = _states[DefaultStateType];
-            _currentState.Value.OnStateResult += OnStateResult;
-
-            _currentState.Value.Enter();
-        }
-
-        public void OnExit()
-        {
-            _currentState.Value.OnStateResult -= OnStateResult;
-
-            _currentState.Value.Exit();
-        }
-
-        public IResultState<T> GetState => _currentState.Value;
+        //public IResultState<T> GetState => _currentState.Value;
 
         public void Dispose()
         {

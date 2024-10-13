@@ -40,7 +40,7 @@ namespace Chang
     public abstract class QuestBase
     {
         public virtual QuestionType QuestionType { get; } = QuestionType.None;
-        public GenderType GenderType;//{get;} = GenderType.None;
+        public GenderType GenderType;
 
         public string EditorInfo()
         {

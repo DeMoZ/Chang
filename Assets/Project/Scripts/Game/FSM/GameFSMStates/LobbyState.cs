@@ -20,7 +20,7 @@ namespace Chang.FSM
             base.Enter();
             // todo roman should be all the lobby view and controller, not only book
             _gameBookController = Bus.ScreenManager.GameBookController;
-            _gameBookController.Init(Bus.LessonNames, (index) => OnLessonClick(index).Forget());
+            _gameBookController.Init(Bus.LessonNames, (index) => OnLessonClickAsync(index).Forget());
             _gameBookController.SetViewActive(true);
         }
         
@@ -30,7 +30,7 @@ namespace Chang.FSM
         }
 
 
-        private async UniTaskVoid OnLessonClick(int index)
+        private async UniTaskVoid OnLessonClickAsync(int index)
         {
             if (_isLoading)
                 return;

@@ -11,7 +11,7 @@ namespace Chang.FSM
         private readonly GameBus _gameBus;
         private readonly IResourcesManager _resourcesManager;
         private readonly ScreenManager _screenManager;
-        private StateType _defaultState => StateType.Preload;
+        protected override StateType _defaultStateType => StateType.Preload;
 
         public GameFSM(GameBus gameBus, IResourcesManager resourcesManager, Action<StateType> stateChangedCallback = null)
         {
@@ -27,16 +27,16 @@ namespace Chang.FSM
         protected override void Init()
         {
             _gameBus.PreloadFor = PreloadType.Boot;
-            
+
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
-                { StateType.Preload, new PreloadState( _gameBus, OnStateResult, _resourcesManager) },
-                { StateType.Lobby, new LobbyState( _gameBus, OnStateResult) },
-                { StateType.PlayVocabulary, new VocabularyState( _gameBus, OnStateResult) },
+                { StateType.Preload, new PreloadState(_gameBus, OnStateResult, _resourcesManager) },
+                { StateType.Lobby, new LobbyState(_gameBus, OnStateResult) },
+                { StateType.PlayVocabulary, new VocabularyState(_gameBus, OnStateResult, _resourcesManager) },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));
-            _currentState.Value = _states[_defaultState];
+            _currentState.Value = _states[_defaultStateType];
             _currentState.Value.Enter();
         }
 

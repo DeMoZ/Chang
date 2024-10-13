@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Chang
 {
-    public class GameBookController
+    public class GameBookController : IViewController
     {
         private GameBookView _view;
         private Action<int> _onItemClick;

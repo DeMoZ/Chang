@@ -8,7 +8,9 @@ namespace Chang
         [SerializeField] private GameBookView gameBookScreen;
 
         [Space]
+        [SerializeField] private GameObject pagesContainer;
 
+        [Space]
         [SerializeField] private DemonstrationWordView demonstationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;
@@ -19,6 +21,8 @@ namespace Chang
             Debug.Log($"{nameof(ScreenInstaller)} InstallBindings");
             #region Views
             Container.BindInstance(gameBookScreen).AsSingle();
+
+            Container.BindInstance(pagesContainer).WithId("PagesContainer").AsSingle();
 
             Container.BindInstance(demonstationScreen).AsSingle();
             Container.BindInstance(matchWordScreen).AsSingle();

@@ -2,7 +2,7 @@ using Zenject;
 
 namespace Chang
 {
-    public class PreloaderController
+    public class PreloaderController : IViewController
     {
         private PreloaderView _view;
 

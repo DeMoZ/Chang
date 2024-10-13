@@ -5,16 +5,25 @@ using DMZ.FSM;
 
 namespace Chang.FSM
 {
-    public class VocabularyFSM : FSMResultBase<VocabularySubStates>
+    public class VocabularyFSM : FSMResultBase<QuestionType>
     {
         private readonly VocabularyBus _vocabularyBus;
-        private readonly IResourcesManager _resourcesManager;
-        private StateType _defaultState => StateType.Preload;
 
-        public VocabularyFSM(VocabularyBus vocabularyBus, IResourcesManager resourcesManager, Action<StateType> stateChangedCallback = null)
+        protected override QuestionType _defaultStateType => QuestionType.None;
+
+        private Question _currentQuestion;
+
+        public VocabularyFSM(VocabularyBus vocabularyBus, Action<StateType> stateChangedCallback = null)
         {
             _vocabularyBus = vocabularyBus;
-            _resourcesManager = resourcesManager;
+        }
+
+        public new void Dispose()
+        {
+            _currentState?.Value.Exit();
+            _currentState?.Dispose();
+
+            base.Dispose();
         }
 
         public void Initialize()
@@ -24,19 +33,17 @@ namespace Chang.FSM
 
         protected override void Init()
         {
-            //_vocabularyBus.PreloadFor = PreloadType.Boot;
-            
-            _states = new Dictionary<VocabularySubStates, IResultState<VocabularySubStates>>
+            _states = new Dictionary<QuestionType, IResultState<QuestionType>>
             {
-                //{ VocabularySubStates.PlayLogic, new PreloadState( _gameBus, OnStateResult, _resourcesManager) },
-                // { VocabularySubStates.DemonstrationWord, new LobbyState( _gameBus, OnStateResult) },
-                // { VocabularySubStates.SelectWord, new VocabularyState( _gameBus, OnStateResult) },
-                // { VocabularySubStates.MatchWords, new VocabularyState( _gameBus, OnStateResult) },
-                // { VocabularySubStates.DemonstrationDialogue, new VocabularyState( _gameBus, OnStateResult) },
+                // { QuestionType.DemonstrationWord, new State( _vocabularyBus, OnStateResult) },
+                 { QuestionType.SelectWord, new SelectWordState( _vocabularyBus, OnStateResult) },
+                // { QuestionType.MatchWords, new State( _vocabularyBus, OnStateResult) },
+                // { QuestionType.DemonstrationDialogue, new State( _vocabularyBus, OnStateResult) },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));
-            //_currentState.Value = _states[_defaultState];
+            _vocabularyBus.CurrentQuestion = _vocabularyBus.Questions.Dequeue();
+            _currentState.Value = _states[_vocabularyBus.CurrentQuestion.QuestionType];
             _currentState.Value.Enter();
         }
     }

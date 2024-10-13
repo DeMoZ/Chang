@@ -6,9 +6,7 @@ namespace DMZ.FSM
     public abstract class ResultStateBase<TState, TBus> : IResultState<TState> where TState : Enum
     {
         protected readonly TBus Bus;
-
         public Action<TState> OnStateResult { get; set; }
-
         public virtual TState Type { get; }
 
 

@@ -13,7 +13,6 @@ namespace Chang
         DemonstrationWord,
         SelectWord,
         MatchWords,
-
         DemonstrationDialogue,
     }
 

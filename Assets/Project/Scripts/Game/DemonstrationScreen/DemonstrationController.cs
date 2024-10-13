@@ -2,7 +2,8 @@ using Zenject;
 
 namespace Chang
 {
-    public class DemonstrationWordController
+
+    public class DemonstrationWordController : IViewController
     {
         private DemonstrationWordView _view;
 

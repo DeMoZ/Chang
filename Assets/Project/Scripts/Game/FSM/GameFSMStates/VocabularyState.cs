@@ -1,42 +1,48 @@
 using System;
-using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using Chang.Resources;
 using DMZ.FSM;
 
 namespace Chang.FSM
 {
-    public class VocabularyState : ResultStateBase<StateType, GameBus>
+    public class VocabularyState : ResultStateBase<StateType, GameBus>, IDisposable
     {
         public override StateType Type => StateType.PlayVocabulary;
 
-        private bool _isLoading;
+        private VocabularyBus _vocabularyBus;
+        private readonly IResourcesManager _resourcesManager;
+        private VocabularyFSM _vocabularyFSM;
 
-        public VocabularyState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
+        public VocabularyState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager) : base(gameBus, onStateResult)
         {
-            
+            _resourcesManager = resourcesManager;
+        }
+
+        public void Dispose()
+        {
+            _vocabularyFSM.Dispose();
         }
 
         public override void Enter()
         {
             base.Enter();
-            // todo roman implement PlayFSC here with different vocabulary screen
 
-            // var _vocabularyFSM = new VocabularyFSM(vocabularyBus, _screenManager, _resourcesManager);
-            //_vocabularyFSM.Initialize();
-            // var gameBookController = _screenManager.GetVocabularyController();
-            // gameBookController.Init(GameBus.LessonNames, (index) => OnLessonClick(index).Forget());
-            // gameBookController.SetViewActive(true);
+            Bus.ScreenManager.SetActivePagesContainer(true);
+
+            _vocabularyBus = new VocabularyBus();
+            _vocabularyBus.ScreenManager = Bus.ScreenManager;
+            _vocabularyBus.Questions = new Queue<Question>(Bus.ClickedLessonConfig.Questions);
+            _vocabularyBus.ResourcesManager = _resourcesManager;
+
+            _vocabularyFSM = new VocabularyFSM(_vocabularyBus);
+            _vocabularyFSM.Initialize();
         }
 
-        private async UniTaskVoid OnSomeClick()
+        public override void Exit()
         {
-            if (_isLoading)
-                return;
-
-            // _isLoading = true;
-            // await UniTask.DelayFrame(1);
-            //
-            // OnStateResult.Invoke(StateType.Preload);
-            _isLoading = false;
+            base.Exit();
+            
+            Bus.ScreenManager.SetActivePagesContainer(false);
         }
     }
 }

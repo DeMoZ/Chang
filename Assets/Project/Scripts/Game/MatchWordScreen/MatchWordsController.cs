@@ -2,7 +2,7 @@ using Zenject;
 
 namespace Chang
 {
-    public class MatchWordsController
+    public class MatchWordsController: IViewController
     {
         private MatchWordsView _view;
 
