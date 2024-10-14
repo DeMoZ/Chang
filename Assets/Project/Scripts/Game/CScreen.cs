@@ -4,20 +4,12 @@ using UnityEngine.UI;
 
 namespace Chang
 {
-    public enum ScreenType
-    {
-        DemostrationWord,
-        SelectWord,
-        MatchWords,
-    }
-
     public abstract class CScreen : MonoBehaviour
     {
-        public virtual ScreenType ScreenType { get; }
+        [SerializeField] protected CButton exitBtn;
+        [SerializeField] protected CToggle tnanscriptionTgl;
 
-        [SerializeField] private CButton exitBtn;
-        [SerializeField] private CToggle tnanscriptionTgl;
-
+        [field: SerializeField] public virtual QuestionType ScreenType { get; }
 
         [field: SerializeField] public CScreenContentBase ScreenContent { get; }
 
@@ -37,11 +29,14 @@ namespace Chang
         }
     }
 
+    [Serializable]
     public class CToggle
     {
+        [SerializeField] private Toggle toggle;
     }
 
 
+    [Serializable]
     public class CButton
     {
         [SerializeField] private Button button;

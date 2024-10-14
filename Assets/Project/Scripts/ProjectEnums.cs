@@ -16,6 +16,7 @@ namespace Chang
         DemonstrationDialogue,
     }
 
+    // todo roman use system languages
     public enum PreloadType
     {
         None,

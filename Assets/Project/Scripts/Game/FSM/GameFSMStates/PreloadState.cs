@@ -63,13 +63,13 @@ namespace Chang.FSM
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
             Bus.LessonNames = JsonConvert.DeserializeObject<List<LessonName>>(text.text);
-            await UniTask.Delay(3000); // todo roman temp test
+            await UniTask.Delay(1000); // todo roman temp test
         }
 
         private async UniTask LoadLessonContentAsync()
         {
             Bus.ClickedLessonConfig = await _resourcesManager.LoadAssetAsync<LessonConfig>(Bus.ClickedLesson);
-            await UniTask.Delay(3000); // todo roman temp test
+            await UniTask.Delay(1000); // todo roman temp test
         }
     }
 }

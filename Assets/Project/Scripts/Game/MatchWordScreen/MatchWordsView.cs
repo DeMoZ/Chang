@@ -2,6 +2,6 @@ namespace Chang
 {
     public class MatchWordsView : CScreen
     {
-        public override ScreenType ScreenType { get; } = ScreenType.MatchWords;
+        public override QuestionType ScreenType { get; } = QuestionType.MatchWords;
     }
 }
