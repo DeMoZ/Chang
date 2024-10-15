@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Zenject;
+using Chang.UI;
 
 namespace Chang
 {
@@ -16,9 +17,10 @@ namespace Chang
 
         // todo roman here should be a classes, not a configx
         // todo roman refactoring is required
-        public void Init(PhraseConfig correctWord, List<PhraseConfig> mixWords, Action<QuestionTypeStateResult> onContinue)
+        public void Init(bool questInStudiedLanguage, PhraseConfig correctWord, List<PhraseConfig> mixWords,
+            Action<QuestionTypeStateResult> onContinue)
         {
-            _view.Init(correctWord, mixWords);
+            _view.Init(questInStudiedLanguage, correctWord, mixWords);
         }
 
         public void SetViewActive(bool active)

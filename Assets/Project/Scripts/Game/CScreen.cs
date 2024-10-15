@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Chang
+namespace Chang.UI
 {
     public abstract class CScreen : MonoBehaviour
     {
@@ -27,20 +25,5 @@ namespace Chang
         {
 
         }
-    }
-
-    [Serializable]
-    public class CToggle
-    {
-        [SerializeField] private Toggle toggle;
-    }
-
-
-    [Serializable]
-    public class CButton
-    {
-        [SerializeField] private Button button;
-
-        public event Action OnClick;
     }
 }

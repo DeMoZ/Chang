@@ -1,8 +1,8 @@
 using Zenject;
+using Chang.UI;
 
 namespace Chang
 {
-
     public class DemonstrationWordController : IViewController
     {
         private DemonstrationWordView _view;

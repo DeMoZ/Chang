@@ -1,4 +1,4 @@
-namespace Chang
+namespace Chang.UI
 {
     public class MatchWordsView : CScreen
     {

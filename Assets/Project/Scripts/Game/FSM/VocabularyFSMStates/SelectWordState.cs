@@ -1,9 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Chang;
-using Chang.Resources;
 using DMZ.FSM;
-using Debug = DMZ.DebugSystem.DMZLogger;
 using System.Collections.Generic;
 
 namespace Chang.FSM
@@ -39,8 +36,11 @@ namespace Chang.FSM
 
             var questionData = (QuestSelectWord)Bus.CurrentQuestion.QuestionData;
             var correctWord = questionData.CorrectWord;
-            var mixWolrds = TempPopulateMixWords(); // todo roman this is very temp solution
-            _selectWordController.Init(correctWord, mixWolrds, OnContinue);
+            var mixWords = TempPopulateMixWords(); // todo roman this is very temp solution
+            Shuffle(mixWords);
+
+            var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
+            _selectWordController.Init(questInStudiedLanguage, correctWord, mixWords, OnContinue);
 
             _selectWordController.SetViewActive(true);
             // 2 await for input
@@ -49,7 +49,19 @@ namespace Chang.FSM
 
             // 4 OnStateResult.Invoke(success/not success);
 
-            // i dont need preloader because all the data will be loaded from cash
+            // I don't need preloader because all the data will be loaded from cash
+        }
+
+        private void Shuffle<T>(List<T> list)
+        {
+            var rng = new Random();
+            var n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (list[k], list[n]) = (list[n], list[k]);
+            }
         }
 
         private void OnContinue(QuestionTypeStateResult result)
@@ -69,6 +81,9 @@ namespace Chang.FSM
         private List<PhraseConfig> TempPopulateMixWords()
         {
             var rezult = new List<PhraseConfig>();
+            rezult.Add(((QuestSelectWord)Bus.CurrentQuestion.QuestionData).CorrectWord);
+            
+            // todo roman the flow needs to be from current word|lesson to previous
             foreach (Question q in Bus.Questions)
             {
                 if (q == Bus.CurrentQuestion) continue;

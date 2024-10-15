@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Chang
@@ -19,7 +20,9 @@ namespace Chang
     public class WordConfig
     {
         //[field: SerializeField] public string Name = string.Empty;
-
+        /// <summary>
+        /// Do not use this field
+        /// </summary>
         [Tooltip("Only to show in the inspector")]
         [field: SerializeField]
         public string EngWord { get; set; } = string.Empty;
@@ -27,6 +30,11 @@ namespace Chang
         [field: SerializeField] public string Word { get; set; } = string.Empty;
         [field: SerializeField] public string Phonetic { get; set; } = string.Empty;
         [field: SerializeField] public List<Translation> Meanings { get; set; }
+
+        public string GetTranslation()
+        {
+            return Meanings.FirstOrDefault(t => t.Language == Languages.English)?.Meaning;
+        } 
     }
 
     [Serializable]

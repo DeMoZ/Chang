@@ -1,5 +1,6 @@
 using UnityEngine;
 using Zenject;
+using Chang.UI;
 
 namespace Chang
 {
