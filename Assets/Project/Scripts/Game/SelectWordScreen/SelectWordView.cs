@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,12 +12,13 @@ namespace Chang.UI
         [SerializeField] private ChangText _questionWord;
         [SerializeField] private CToggle _mixWordPrefab;
         [SerializeField] private Transform _mixWordContent;
+        [SerializeField] private ToggleGroup _toggleGroup;
 
         [field: SerializeField] public override QuestionType ScreenType { get; } = QuestionType.SelectWord;
 
         // todo roman here should be a classes, not a configs
         // todo roman refactoring is required
-        public void Init(bool questInStudiedLanguage, PhraseConfig correctWord, List<PhraseConfig> mixWords)
+        public void Init(bool questInStudiedLanguage, PhraseConfig correctWord, List<PhraseConfig> mixWords, Action<int, bool> onToggleValueChanged)
         {
             Debug.Log("Init SelectWordView");
 
@@ -37,7 +39,7 @@ namespace Chang.UI
                 var index = i;
 
                 var word = questInStudiedLanguage ? mixWords[i].Word.GetTranslation() : mixWords[i].Word.Word;
-                mix.Set(word, mixWords[i].Word.Phonetic, isOn => OnToggleValueChanged(index, isOn));
+                mix.Set(word, mixWords[i].Word.Phonetic, _toggleGroup, isOn => onToggleValueChanged(index, isOn));
                 mix.EnablePhonetic(!questInStudiedLanguage);
             }
         }
@@ -46,11 +48,6 @@ namespace Chang.UI
         {
             // todo roman if the quest is from questInStudiedLanguage phonetic can be enabled
             // otherwise no phonetic
-        }
-
-        private void OnToggleValueChanged(int index, bool isOn)
-        {
-            Debug.Log($"toggle: {index}; isOn: {isOn}");
         }
     }
 }

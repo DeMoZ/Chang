@@ -4,8 +4,8 @@ namespace Chang.UI
 {
     public abstract class CScreen : MonoBehaviour
     {
-        [SerializeField] protected CButton exitBtn;
-        [SerializeField] protected CToggle tnanscriptionTgl;
+        // [SerializeField] protected CButton exitBtn;
+        // [SerializeField] protected CToggle tnanscriptionTgl;
 
         [field: SerializeField] public virtual QuestionType ScreenType { get; }
 

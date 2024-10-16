@@ -18,9 +18,9 @@ namespace Chang
         // todo roman here should be a classes, not a configx
         // todo roman refactoring is required
         public void Init(bool questInStudiedLanguage, PhraseConfig correctWord, List<PhraseConfig> mixWords,
-            Action<QuestionTypeStateResult> onContinue)
+            Action<int, bool> onToggleValueChanged/*, Action<QuestionTypeStateResult> onCheck*/)
         {
-            _view.Init(questInStudiedLanguage, correctWord, mixWords);
+            _view.Init(questInStudiedLanguage, correctWord, mixWords, onToggleValueChanged);
         }
 
         public void SetViewActive(bool active)

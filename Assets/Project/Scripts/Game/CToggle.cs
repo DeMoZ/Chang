@@ -18,11 +18,12 @@ namespace Chang.UI
             _toggle.onValueChanged.AddListener(OnToggleValueChanged);
         }
 
-        public void Set(string word, string phonetic, Action<bool> onValueChanged)
+        public void Set(string word, string phonetic, ToggleGroup toggleGroup, Action<bool> onValueChanged)
         {
             _word.text = word;
             _phonetic.text = phonetic;
             _onValueChanged = onValueChanged;
+            _toggle.group = toggleGroup;
         }
 
         private void OnToggleValueChanged(bool isOn)
@@ -30,14 +31,19 @@ namespace Chang.UI
             _onValueChanged?.Invoke(isOn);
         }
 
-        private void OnDestroy()
-        {
-            _toggle.onValueChanged.RemoveAllListeners();
-        }
-
         public void EnablePhonetic(bool enable)
         {
             _phonetic.gameObject.SetActive(enable);
+        }
+
+        public void SetInteractable(bool interactable)
+        {
+            _toggle.interactable = interactable;
+        }
+        
+        private void OnDestroy()
+        {
+            _toggle.onValueChanged.RemoveAllListeners();
         }
     }
 }

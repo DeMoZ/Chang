@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -9,6 +8,7 @@ namespace Chang
     {
         private GameBookController _gameBookController;
         private PreloaderController _preloaderController;
+        private GameOverlayController _gameOverlayController;
 
         private GameObject _pagesContainer;
 
@@ -18,9 +18,11 @@ namespace Chang
         private MatchWordsController _matchTranslationController;
         private SelectWordController _selectTranslationController;
 
+
         [Inject]
         public ScreenManager(GameBookController gameBookController,
             PreloaderController preloaderController,
+            GameOverlayController gameOverlayController,
             [Inject(Id = "PagesContainer")] GameObject pagesContainer,
             DemonstrationWordController demonstrationController,
             MatchWordsController matchTranslationController,
@@ -28,8 +30,10 @@ namespace Chang
         {
             _gameBookController = gameBookController;
             _preloaderController = preloaderController;
+            _gameOverlayController = gameOverlayController;
             _gameBookController.SetViewActive(false);
             _preloaderController.SetViewActive(false);
+            // _gameOverlayController.SetViewActive(false); // todo roman implement logic for enabling overlay on play state
 
             _pagesContainer = pagesContainer;
             SetActivePagesContainer(false);
@@ -58,6 +62,11 @@ namespace Chang
         public void SetActivePagesContainer(bool active)
         {
             _pagesContainer.SetActive(active);
+        }
+
+        public void EnableCheckButton(bool isOn)
+        {
+            _gameOverlayController.EnableCheckButton(isOn);
         }
     }
 }

@@ -2,12 +2,16 @@ using System;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using System.Collections.Generic;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
     public class SelectWordState : ResultStateBase<QuestionType, VocabularyBus>
     {
-        private SelectWordController _selectWordController;
+        private readonly SelectWordController _selectWordController;
+        
+        private List<PhraseConfig> _mixWords;
+        private PhraseConfig _correctWord;
 
         public override QuestionType Type => QuestionType.SelectWord;
 
@@ -35,12 +39,12 @@ namespace Chang.FSM
                 throw new ArgumentException("Question type doesnt match with state type");
 
             var questionData = (QuestSelectWord)Bus.CurrentQuestion.QuestionData;
-            var correctWord = questionData.CorrectWord;
-            var mixWords = TempPopulateMixWords(); // todo roman this is very temp solution
-            Shuffle(mixWords);
+            _correctWord = questionData.CorrectWord;
+            _mixWords = TempPopulateMixWords(); // todo roman this is very temp solution
+            Shuffle(_mixWords);
 
             var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
-            _selectWordController.Init(questInStudiedLanguage, correctWord, mixWords, OnContinue);
+            _selectWordController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
 
             _selectWordController.SetViewActive(true);
             // 2 await for input
@@ -50,6 +54,23 @@ namespace Chang.FSM
             // 4 OnStateResult.Invoke(success/not success);
 
             // I don't need preloader because all the data will be loaded from cash
+        }
+
+        private void OnToggleValueChanged(int index, bool isOn)
+        {
+            Debug.Log($"toggle: {index}; isOn: {isOn}");
+
+            Bus.ScreenManager.EnableCheckButton(isOn);
+            if (!isOn)
+            {
+                return;
+            }
+            
+            // need to check condition and enable check button
+        }
+
+        private void OnCheck(QuestionTypeStateResult result)
+        {
         }
 
         private void Shuffle<T>(List<T> list)
@@ -64,17 +85,6 @@ namespace Chang.FSM
             }
         }
 
-        private void OnContinue(QuestionTypeStateResult result)
-        {
-
-        }
-
-        private async UniTask LoadQuestionContentAsync()
-        {
-            // Bus.ClickedLessonConfig = await _resourcesManager.LoadAssetAsync<LessonConfig>(Bus.ClickedLesson);
-            // await UniTask.Delay(3000); // todo roman temp test
-        }
-
         /// <summary>
         /// todo roman this is very temp solution
         /// </summary>
@@ -82,7 +92,7 @@ namespace Chang.FSM
         {
             var rezult = new List<PhraseConfig>();
             rezult.Add(((QuestSelectWord)Bus.CurrentQuestion.QuestionData).CorrectWord);
-            
+
             // todo roman the flow needs to be from current word|lesson to previous
             foreach (Question q in Bus.Questions)
             {
@@ -119,5 +129,4 @@ namespace Chang.FSM
 // todo roman put this question result into bus
 public class QuestionTypeStateResult
 {
-
 }
