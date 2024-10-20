@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Chang.Resources;
 using DMZ.FSM;
 
 namespace Chang.FSM
@@ -42,8 +41,12 @@ namespace Chang.FSM
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));
-            _vocabularyBus.CurrentQuestion = _vocabularyBus.Questions.Dequeue();
-            _currentState.Value = _states[_vocabularyBus.CurrentQuestion.QuestionType];
+        }
+
+        public void SwitchState(QuestionType newStateType)
+        {
+            _currentState.Value?.Exit();
+            _currentState.Value = _states[newStateType];
             _currentState.Value.Enter();
         }
     }

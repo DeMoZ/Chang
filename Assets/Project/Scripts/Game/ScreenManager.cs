@@ -54,6 +54,7 @@ namespace Chang
 
         public GameBookController GameBookController => _gameBookController;
         public PreloaderController PreloaderController => _preloaderController;
+        public GameOverlayController GameOverlayController => _gameOverlayController;
 
         public DemonstrationWordController DemonstrationWordController => _demonstrationController;
         public MatchWordsController MatchWordsController => _matchTranslationController;

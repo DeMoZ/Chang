@@ -6,10 +6,24 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
+    public class SelectWordResult : IQuestionResult
+    {
+        public QuestionType Type => QuestionType.SelectWord;
+        public bool IsCorrect { get; }
+        public string Info { get; }
+
+        public SelectWordResult(bool isCorrect, string info)
+        {
+            IsCorrect = isCorrect;
+            Info = info;
+        }
+    }
+    
     public class SelectWordState : ResultStateBase<QuestionType, VocabularyBus>
     {
         private readonly SelectWordController _selectWordController;
-        
+        private readonly GameOverlayController _gameOverlayController;
+
         private List<PhraseConfig> _mixWords;
         private PhraseConfig _correctWord;
 
@@ -18,17 +32,18 @@ namespace Chang.FSM
         public SelectWordState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
             _selectWordController = Bus.ScreenManager.SelectWordController;
+            _gameOverlayController = Bus.ScreenManager.GameOverlayController;
         }
 
         public override void Enter()
         {
             base.Enter();
-
             StateBodyAsync().Forget();
         }
 
         public override void Exit()
         {
+            base.Exit();
             _selectWordController.SetViewActive(false);
         }
 
@@ -59,18 +74,11 @@ namespace Chang.FSM
         private void OnToggleValueChanged(int index, bool isOn)
         {
             Debug.Log($"toggle: {index}; isOn: {isOn}");
-
+            var isCorrect = _mixWords[index] == _correctWord;
+            var info = _correctWord.Word.Phonetic;
+            var result = new SelectWordResult(isCorrect, info);
+            Bus.QuestionResult = result;
             Bus.ScreenManager.EnableCheckButton(isOn);
-            if (!isOn)
-            {
-                return;
-            }
-            
-            // need to check condition and enable check button
-        }
-
-        private void OnCheck(QuestionTypeStateResult result)
-        {
         }
 
         private void Shuffle<T>(List<T> list)
@@ -124,9 +132,4 @@ namespace Chang.FSM
             return rezult;
         }
     }
-}
-
-// todo roman put this question result into bus
-public class QuestionTypeStateResult
-{
 }
