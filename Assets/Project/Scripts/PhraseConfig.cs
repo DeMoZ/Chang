@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Chang
 {
-    [CreateAssetMenu(menuName = "Chang/Phrase Config", fileName = "WordConfig")]
+    [CreateAssetMenu(menuName = "Chang/Phrase Config", fileName = "PhraseConfig")]
     public class PhraseConfig : ScriptableObject
     {
         [field: SerializeField] public string Key { get; set; } = string.Empty;

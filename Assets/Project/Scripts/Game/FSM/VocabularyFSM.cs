@@ -9,9 +9,7 @@ namespace Chang.FSM
         private readonly VocabularyBus _vocabularyBus;
 
         protected override QuestionType _defaultStateType => QuestionType.None;
-
-        private Question _currentQuestion;
-
+        
         public VocabularyFSM(VocabularyBus vocabularyBus, Action<StateType> stateChangedCallback = null)
         {
             _vocabularyBus = vocabularyBus;

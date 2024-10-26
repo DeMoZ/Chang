@@ -50,18 +50,22 @@ namespace Chang.FSM
         public async UniTaskVoid StateBodyAsync()
         {
             // 1 instantiate screen and initialise with data.
-            if (Bus.CurrentQuestion.QuestionType != Type)
+            if (Bus.CurrentLesson.CurrentQuestion.QuestionType != Type)
                 throw new ArgumentException("Question type doesnt match with state type");
 
-            var questionData = (QuestSelectWord)Bus.CurrentQuestion.QuestionData;
+            var questionData = (QuestSelectWord)Bus.CurrentLesson.CurrentQuestion;
             _correctWord = questionData.CorrectWord;
-            _mixWords = TempPopulateMixWords(); // todo roman this is very temp solution
+            _mixWords??=new List<PhraseConfig>();
+            _mixWords.Clear();
+            _mixWords.Add(_correctWord);
+            _mixWords.AddRange(questionData.MixWords); // TempPopulateMixWords(); // todo roman this is very temp solution
             Shuffle(_mixWords);
 
             var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
             _selectWordController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
 
             _selectWordController.SetViewActive(true);
+            
             // 2 await for input
 
             // 3 await for press "Continue"
@@ -98,38 +102,41 @@ namespace Chang.FSM
         /// </summary>
         private List<PhraseConfig> TempPopulateMixWords()
         {
-            var rezult = new List<PhraseConfig>();
-            rezult.Add(((QuestSelectWord)Bus.CurrentQuestion.QuestionData).CorrectWord);
+            ///
+            /*
+                      var rezult = new List<PhraseConfig>();
+                      rezult.Add(((QuestSelectWord)Bus.CurrentQuestion.QuestionData).CorrectWord);
 
-            // todo roman the flow needs to be from current word|lesson to previous
-            foreach (Question q in Bus.Questions)
-            {
-                if (q == Bus.CurrentQuestion) continue;
+                      // todo roman the flow needs to be from current word|lesson to previous
+                     foreach (Question q in Bus.Questions)
+                      {
+                          /// if (q == Bus.CurrentQuestion) continue;
 
-                var qType = q.QuestionType;
+                          var qType = q.QuestionType;
 
-                switch (qType)
-                {
-                    case QuestionType.DemonstrationWord:
-                        rezult.Add(((QuestDemonstration)q.QuestionData).PhraseConfig);
-                        break;
-                    case QuestionType.SelectWord:
-                        rezult.Add(((QuestSelectWord)q.QuestionData).CorrectWord);
-                        break;
-                    case QuestionType.MatchWords:
-                        // skip
-                        break;
-                    case QuestionType.DemonstrationDialogue:
-                        // skip
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(qType));
-                }
+                          switch (qType)
+                          {
+                              case QuestionType.DemonstrationWord:
+                                  rezult.Add(((QuestDemonstration)q.QuestionData).PhraseConfig);
+                                  break;
+                              case QuestionType.SelectWord:
+                                  rezult.Add(((QuestSelectWord)q.QuestionData).CorrectWord);
+                                  break;
+                              case QuestionType.MatchWords:
+                                  // skip
+                                  break;
+                              case QuestionType.DemonstrationDialogue:
+                                  // skip
+                                  break;
+                              default:
+                                  throw new ArgumentOutOfRangeException(nameof(qType));
+                          }
 
-                if (rezult.Count >= 6) break;
-            }
-
-            return rezult;
+                          if (rezult.Count >= 6) break;
+                      }
+          
+            return rezult;*/
+            return null;
         }
     }
 }

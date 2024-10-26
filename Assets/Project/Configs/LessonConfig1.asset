@@ -22,72 +22,66 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Questions:
-  - <QuestionType>k__BackingField: 1
-    info: 'Hello '
+  - <QuestionType>k__BackingField: 4
+    info: 
     QuestionData:
-      rid: 1288916258438774931
+      rid: 290935703071358984
   - <QuestionType>k__BackingField: 1
-    info: 'SuffixFemale '
+    info: SuffixFemale
     QuestionData:
       rid: 1288916258438774937
   - <QuestionType>k__BackingField: 1
-    info: 'SuffixMale '
+    info: SuffixMale
     QuestionData:
       rid: 1288916258438774933
   - <QuestionType>k__BackingField: 2
-    info: HelloFemale Female
+    info: HelloFemale
     QuestionData:
       rid: 1288916295122157569
   - <QuestionType>k__BackingField: 2
-    info: HelloMale Male
+    info: HelloMale
     QuestionData:
       rid: 1288916295122157570
   - <QuestionType>k__BackingField: 2
-    info: HelloFemale Female
+    info: HelloFemale
     QuestionData:
       rid: 1288916304686743552
   references:
     version: 2
     RefIds:
-    - rid: 1288916258438774931
-      type: {class: QuestDemonstration, ns: Chang, asm: Assembly-CSharp}
+    - rid: 290935703071358984
+      type: {class: QuestDemonstrationDialogue, ns: Chang, asm: Assembly-CSharp}
       data:
-        GenderType: 0
-        PhraseConfig: {fileID: 11400000, guid: e5b7d02ac04af4c6fa9fd7aec008efcc, type: 2}
+        Dialogue: []
         Sprite: {fileID: 0}
-        Explanation: A common greeting
+        Explanation: 
     - rid: 1288916258438774933
       type: {class: QuestDemonstration, ns: Chang, asm: Assembly-CSharp}
       data:
-        GenderType: 0
         PhraseConfig: {fileID: 11400000, guid: 6469a7b44b42f4e73ae3b10d4ecb6b90, type: 2}
         Sprite: {fileID: 0}
         Explanation: 
     - rid: 1288916258438774937
       type: {class: QuestDemonstration, ns: Chang, asm: Assembly-CSharp}
       data:
-        GenderType: 0
         PhraseConfig: {fileID: 11400000, guid: b09b39fb863814ae3a3faae976b55657, type: 2}
         Sprite: {fileID: 0}
         Explanation: 
     - rid: 1288916295122157569
       type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
       data:
-        GenderType: 2
         CorrectWord: {fileID: 11400000, guid: 99ce676ee0a674d57b6404f86e941f42, type: 2}
         MixWords:
         - {fileID: 11400000, guid: 9acc577b9d888471d97fc52f3ebe9257, type: 2}
     - rid: 1288916295122157570
       type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
       data:
-        GenderType: 1
         CorrectWord: {fileID: 11400000, guid: 9acc577b9d888471d97fc52f3ebe9257, type: 2}
         MixWords:
         - {fileID: 11400000, guid: 99ce676ee0a674d57b6404f86e941f42, type: 2}
     - rid: 1288916304686743552
       type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
       data:
-        GenderType: 2
         CorrectWord: {fileID: 11400000, guid: 99ce676ee0a674d57b6404f86e941f42, type: 2}
         MixWords:
         - {fileID: 11400000, guid: 9acc577b9d888471d97fc52f3ebe9257, type: 2}

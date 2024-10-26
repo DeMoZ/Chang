@@ -7,45 +7,34 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
-    [Serializable]
-    public class Question
-    {
-        [field: SerializeField, ReadOnly] public QuestionType QuestionType { get; private set; }
-        [SerializeField, ReadOnly] private string info = string.Empty;
-        [SerializeReference] public QuestBase QuestionData;
-
-        public void Init()
-        {
-
-            // if (QuestionData == null || QuestionData.GetQuestionType != QuestionType)
-            // {
-            //     Debug.Log("on validate QuestionMatchWord");
-            //     info = QuestionData.GetEditorInfo();
-
-            //     QuestionData = QuestionType switch
-            //     {
-            //         QuestionType.DemonstrationWord => new QuestDemonstration(),
-            //         QuestionType.SelectWord => new QuestSelectWord(),
-            //         QuestionType.MatchWords => new QuestMatchWord(),
-
-            //         QuestionType.DemonstrationDialogue => new QuestDemonstrationDialogue(),
-            //         _ => null,
-            //     };
-            // }
-            QuestionType = QuestionData == null ? QuestionType.None : QuestionData.QuestionType;
-            info = QuestionData == null ? string.Empty : QuestionData.EditorInfo();
-        }
-    }
+    // [Serializable]
+    // public class Question
+    // {
+    //     [field: SerializeField, ReadOnly] public QuestionType QuestionType { get; private set; }
+    //     [SerializeField, ReadOnly] private string info = string.Empty;
+    //
+    //     [SerializeReference, InlineEditor(Expanded = true)]
+    //     public QuestionConfig QuestionConfig;
+    //
+    //   //  [SerializeReference] public QuestBase QuestionData;
+    //
+    //     public void Init()
+    //     {
+    //         QuestionType = QuestionConfig == null ? QuestionType.None : QuestionConfig.QuestionType;
+    //         info = QuestionConfig == null ? string.Empty : QuestionConfig.Info;
+    //     }
+    // }
 
     public abstract class QuestBase
     {
         public virtual QuestionType QuestionType { get; } = QuestionType.None;
-        public GenderType GenderType;
+        // public GenderType GenderType;
 
         public string EditorInfo()
         {
-            var gender = GenderType == GenderType.None ? string.Empty : GenderType.ToString();
-            return $"{GetEditorInfo()} {gender}";
+            // var gender = GenderType == GenderType.None ? string.Empty : GenderType.ToString();
+            // return $"{GetEditorInfo()} {gender}";
+            return $"{GetEditorInfo()}";
         }
 
         protected abstract string GetEditorInfo();

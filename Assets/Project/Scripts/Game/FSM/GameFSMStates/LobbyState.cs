@@ -18,28 +18,29 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
-            // todo roman should be all the lobby view and controller, not only book
+            // todo roman should the lobby views and controller, not only book
             _gameBookController = Bus.ScreenManager.GameBookController;
-            _gameBookController.Init(Bus.LessonNames, (index) => OnLessonClickAsync(index).Forget());
+            _gameBookController.Init(Bus.BookData.Lessons, name => OnLessonClickAsync(name).Forget());
             _gameBookController.SetViewActive(true);
         }
-        
+
         public override void Exit()
         {
             _gameBookController.SetViewActive(false);
         }
 
 
-        private async UniTaskVoid OnLessonClickAsync(int index)
+        private async UniTaskVoid OnLessonClickAsync(string name)
         {
             if (_isLoading)
                 return;
 
             _isLoading = true;
             await UniTask.DelayFrame(1);
-            Bus.ClickedLessonIndex = index;
-            Bus.PreloadFor = PreloadType.Lesson;
+            Bus.CurrentLesson.SetFileName(name);
+            Bus.CurrentLesson.SetSimpQuesitons(Bus.Lessons[name].Questions);
 
+            Bus.PreloadFor = PreloadType.LessonConfig;
             OnStateResult.Invoke(StateType.Preload);
             _isLoading = false;
         }

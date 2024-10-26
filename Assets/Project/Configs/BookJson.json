@@ -1,10 +1,30 @@
-[
-  {
-    "FileName": "LessonConfig1",
-    "AssetPath": "Assets/Project/Configs/LessonConfig1.asset"
-  },
-  {
-    "FileName": "VocabOccupation",
-    "AssetPath": "Assets/Project/Configs/VocabOccupation.asset"
-  }
-]
+{
+  "FileName": "_GameBookConfig",
+  "Lessons": [
+    {
+      "FileName": "VocabOccupation",
+      "Questions": [
+        {
+          "CorrectWordFileName": "Doctor",
+          "MixWordsFileNames": [
+            "airport",
+            "barber",
+            "Boss"
+          ],
+          "QuestionType": 2,
+          "FileName": "SelectWordDoctor"
+        },
+        {
+          "CorrectWordFileName": "school",
+          "MixWordsFileNames": [
+            "Friend",
+            "Daughter",
+            "embassy"
+          ],
+          "QuestionType": 2,
+          "FileName": "SelectWordSchool"
+        }
+      ]
+    }
+  ]
+}

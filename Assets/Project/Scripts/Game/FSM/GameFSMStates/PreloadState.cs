@@ -1,5 +1,6 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Chang.Resources;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -33,7 +34,7 @@ namespace Chang.FSM
             _preloaderController.SetViewActive(false);
         }
 
-        public async UniTaskVoid StateBodyAsync()
+        private async UniTaskVoid StateBodyAsync()
         {
             // todo roman Show loading UI and some info on that UI
             // todo roman implement loading error catching
@@ -49,27 +50,38 @@ namespace Chang.FSM
                 // case PreloadType.Lobby:
                 //     // _gameModel.Lessons are already in the model, so no need to call PlreloaderType.Lobby
                 //     break;
-                case PreloadType.Lesson:
+                case PreloadType.LessonConfig:
                     await LoadLessonContentAsync();
                     OnStateResult.Invoke(StateType.PlayVocabulary);
                     break;
+                case PreloadType.QuestConfigs:
+                    await LoadQuestionsContentAsync();
+                    OnStateResult.Invoke(StateType.PlayVocabulary);
+                    break;
+                
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        private async UniTask LoadQuestionsContentAsync()
+        {
+            throw new NotImplementedException();
         }
 
         private async UniTask LoadGameBookConfigAsync()
         {
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
-            Bus.LessonNames = JsonConvert.DeserializeObject<List<LessonName>>(text.text);
+            Bus.BookData = JsonConvert.DeserializeObject<BookData>(text.text);
+            Bus.Lessons = Bus.BookData.Lessons.ToDictionary(lesson => lesson.FileName);
             await UniTask.Delay(1000); // todo roman temp test
         }
 
         private async UniTask LoadLessonContentAsync()
         {
-            Bus.ClickedLessonConfig = await _resourcesManager.LoadAssetAsync<LessonConfig>(Bus.ClickedLesson);
-            await UniTask.Delay(1000); // todo roman temp test
+            var lesson = Bus.Lessons[Bus.CurrentLesson.FileName];
+            await _resourcesManager.LoadAssetAsync<LessonConfig>(lesson.FileName);
         }
     }
 }

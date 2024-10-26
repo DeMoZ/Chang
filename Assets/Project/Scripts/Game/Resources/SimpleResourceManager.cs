@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -138,7 +139,7 @@ namespace Chang.Resources
             //Addressables.ReleaseInstance(this); 
         }
 
-        public async UniTask<T> LoadAssetAsync<T>(string key) where T : Object
+        public async UniTask<T> LoadAssetAsync<T>(string key, CancellationToken token) where T : Object
         {
             if (!IsAssetExists(key))
             {
@@ -152,6 +153,7 @@ namespace Chang.Resources
 
             try
             {
+                // todo roman implement with cancellation token
                 handle = Addressables.LoadAssetAsync<T>(key);
                 result = await handle;
 
@@ -159,6 +161,28 @@ namespace Chang.Resources
                 {
                     Debug.LogError($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with AssetReference '{key}'.");
                 }
+                
+                handle = Addressables.LoadAssetAsync<T>(key);
+
+                while (!handle.IsDone)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        token.ThrowIfCancellationRequested();
+                    }
+                    await UniTask.Yield();
+                }
+
+                result = handle.Result;
+
+                if (result == null)
+                {
+                    Debug.LogError($"Failed to load asset with key '{key}'.");
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.LogWarning($"Operation was canceled for asset with key '{key}'.");
             }
             catch (Exception ex)
             {

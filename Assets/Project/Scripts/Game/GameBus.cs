@@ -6,13 +6,11 @@ namespace Chang
     public class GameBus
     {
         public ScreenManager ScreenManager { get; }
-        public List<LessonName> LessonNames { get; set; }
+        public BookData BookData { get; set; }
+        public Dictionary<string, SimplifiedLessonData> Lessons { get; set; }
+        public Lesson CurrentLesson { get; set; } = new();
         public PreloadType PreloadFor { get; set; }
-        public int ClickedLessonIndex { get; set; }
-        public LessonConfig ClickedLessonConfig { get; set; }
-
-        public string ClickedLesson => LessonNames[ClickedLessonIndex].FileName;
-
+        
         [Inject]
         public GameBus(ScreenManager screenManager)
         {

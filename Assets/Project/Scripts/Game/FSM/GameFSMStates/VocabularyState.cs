@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Chang.Resources;
 using DMZ.FSM;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -35,13 +34,13 @@ namespace Chang.FSM
 
             Bus.ScreenManager.GameOverlayController.OnCheck += OnCheck;
             Bus.ScreenManager.GameOverlayController.OnContinue += OnContinue;
+            // todo roman implement phonetic toggle
             //Bus.ScreenManager.GameOverlayController.OnPhonetic += OnPhonetic;
             
             _vocabularyBus = new VocabularyBus
             {
                 ScreenManager = Bus.ScreenManager,
-                Questions = new Queue<Question>(Bus.ClickedLessonConfig.Questions),
-                ResourcesManager = _resourcesManager
+                CurrentLesson = Bus.CurrentLesson,
             };
 
             _vocabularyFSM = new VocabularyFSM(_vocabularyBus);
@@ -69,7 +68,7 @@ namespace Chang.FSM
             
             if (!isCorrect)
             {
-                _vocabularyBus.Questions.Enqueue(_vocabularyBus.CurrentQuestion);
+               _vocabularyBus.CurrentLesson.EnqueueCurrentQuestion();
             }
             
             var info = new ContinueButtonInfo
@@ -85,8 +84,10 @@ namespace Chang.FSM
         private void OnContinue()
         {
             // todo roman check for empty queue etc 
-            _vocabularyBus.CurrentQuestion = _vocabularyBus.Questions.Dequeue();
-            _vocabularyFSM.SwitchState(_vocabularyBus.CurrentQuestion.QuestionType);
+            _vocabularyBus.CurrentLesson.SetCurrentSimpQiestion();
+            var questionConfig = _resourcesManager.LoadAssetSync<QuestionConfig>(_vocabularyBus.CurrentLesson.CurrentSimpQuestion.FileName);
+            _vocabularyBus.CurrentLesson.SetCurrentQuestionConfig(questionConfig.QuestionData);
+            _vocabularyFSM.SwitchState(questionConfig.QuestionType);
         }
     }
 
