@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Chang.Utilities
 {
-    [CreateAssetMenu(fileName = "BookToJsonUtility", menuName = "Chang/GameBook/BookToJsonUtility", order = 0)]
+    //[CreateAssetMenu(fileName = "BookToJsonUtility", menuName = "Chang/GameBook/BookToJsonUtility", order = 0)]
     public class BookToJsonUtility : ScriptableObject
     {
         private const string WordPath = ""; // "Word/";
@@ -46,24 +46,6 @@ namespace Chang.Utilities
             AssetDatabase.Refresh();
             Debug.Log($"{nameof(MakeJsonOfLessonNames)} Done");
         }
-
-        // [Button("Make Json of book(WIP)")]
-        // private void MakeJsonOfBook()
-        // {
-        //     Debug.Log($"{nameof(MakeJsonOfBook)} Start");
-        //     var jSettings = new JsonSerializerSettings
-        //     {
-        //         NullValueHandling = NullValueHandling.Include,
-        //         Formatting = Formatting.Indented,
-        //         MissingMemberHandling = MissingMemberHandling.Ignore,
-        //     };
-        //
-        //     var json = JsonConvert.SerializeObject(GameBookConfig, jSettings);
-        //     File.WriteAllText(AssetDatabase.GetAssetPath(GameBookJson), json);
-        //
-        //     AssetDatabase.Refresh();
-        //     Debug.Log($"{nameof(MakeJsonOfBook)} Done");
-        // }
 
         [Button("Make Json depth")]
         private void MakeJsonDepth()
