@@ -1,4 +1,5 @@
 using Chang.Resources;
+using Chang.Profile;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +12,9 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<SimpleResourceManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
             Container.BindInterfacesAndSelfTo<Game>().AsSingle();
+            Container.BindInterfacesAndSelfTo<PlayerProfile>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
+            
         }
     }
 

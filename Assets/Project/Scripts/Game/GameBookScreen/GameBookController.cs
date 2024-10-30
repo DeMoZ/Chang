@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {

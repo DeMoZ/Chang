@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Chang.Profile;
 using Chang.Resources;
 using DMZ.FSM;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -11,12 +12,15 @@ namespace Chang.FSM
         private readonly GameBus _gameBus;
         private readonly IResourcesManager _resourcesManager;
         private readonly ScreenManager _screenManager;
+        private readonly ProfileService _profileService;
+        
         protected override StateType _defaultStateType => StateType.Preload;
 
-        public GameFSM(GameBus gameBus, IResourcesManager resourcesManager, Action<StateType> stateChangedCallback = null)
+        public GameFSM(GameBus gameBus, IResourcesManager resourcesManager, ProfileService profileService, Action<StateType> stateChangedCallback = null)
         {
             _gameBus = gameBus;
             _resourcesManager = resourcesManager;
+            _profileService = profileService;
         }
 
         public void Initialize()
@@ -30,9 +34,9 @@ namespace Chang.FSM
 
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
-                { StateType.Preload, new PreloadState(_gameBus, OnStateResult, _resourcesManager) },
+                { StateType.Preload, new PreloadState(_gameBus, OnStateResult, _resourcesManager, _profileService) },
                 { StateType.Lobby, new LobbyState(_gameBus, OnStateResult) },
-                { StateType.PlayVocabulary, new VocabularyState(_gameBus, OnStateResult, _resourcesManager) },
+                { StateType.PlayVocabulary, new VocabularyState(_gameBus, OnStateResult, _resourcesManager, _profileService) },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));

@@ -10,15 +10,15 @@ namespace Chang.FSM
     {
         public QuestionType Type => QuestionType.SelectWord;
         public bool IsCorrect { get; }
-        public string Info { get; }
+        public List<string> Info { get; }
 
-        public SelectWordResult(bool isCorrect, string info)
+        public SelectWordResult(bool isCorrect, List<string> info)
         {
             IsCorrect = isCorrect;
             Info = info;
         }
     }
-    
+
     public class SelectWordState : ResultStateBase<QuestionType, VocabularyBus>
     {
         private readonly SelectWordController _selectWordController;
@@ -55,7 +55,7 @@ namespace Chang.FSM
 
             var questionData = (QuestSelectWord)Bus.CurrentLesson.CurrentQuestion;
             _correctWord = questionData.CorrectWord;
-            _mixWords??=new List<PhraseConfig>();
+            _mixWords ??= new List<PhraseConfig>();
             _mixWords.Clear();
             _mixWords.Add(_correctWord);
             _mixWords.AddRange(questionData.MixWords); // TempPopulateMixWords(); // todo roman this is very temp solution
@@ -65,7 +65,7 @@ namespace Chang.FSM
             _selectWordController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
 
             _selectWordController.SetViewActive(true);
-            
+
             // 2 await for input
 
             // 3 await for press "Continue"
@@ -79,7 +79,7 @@ namespace Chang.FSM
         {
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index] == _correctWord;
-            var info = _correctWord.Word.Phonetic;
+            var info = new List<string> { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
             var result = new SelectWordResult(isCorrect, info);
             Bus.QuestionResult = result;
             Bus.ScreenManager.EnableCheckButton(isOn);
@@ -134,7 +134,7 @@ namespace Chang.FSM
 
                           if (rezult.Count >= 6) break;
                       }
-          
+
             return rezult;*/
             return null;
         }

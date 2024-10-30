@@ -1,4 +1,6 @@
 using System;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Asn1.Cms;
+using Chang.Profile;
 using Chang.Resources;
 using DMZ.FSM;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -11,14 +13,17 @@ namespace Chang.FSM
 
         private readonly IResourcesManager _resourcesManager;
         private readonly GameOverlayController _overlayController;
+        private readonly ProfileService _profileService;
 
         private VocabularyBus _vocabularyBus;
         private VocabularyFSM _vocabularyFSM;
-        
-        public VocabularyState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager) : base(gameBus, onStateResult)
+
+        public VocabularyState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager, ProfileService profileService) :
+            base(gameBus, onStateResult)
         {
             _overlayController = Bus.ScreenManager.GameOverlayController;
             _resourcesManager = resourcesManager;
+            _profileService = profileService;
         }
 
         public void Dispose()
@@ -36,7 +41,7 @@ namespace Chang.FSM
             Bus.ScreenManager.GameOverlayController.OnContinue += OnContinue;
             // todo roman implement phonetic toggle
             //Bus.ScreenManager.GameOverlayController.OnPhonetic += OnPhonetic;
-            
+
             _vocabularyBus = new VocabularyBus
             {
                 ScreenManager = Bus.ScreenManager,
@@ -61,22 +66,27 @@ namespace Chang.FSM
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
-            
+
             // if the answer is correct
-            var isCorrect = _vocabularyBus.QuestionResult.IsCorrect; 
-            Debug.Log($"The answer is <color=Yellow>{isCorrect}</color>");
+            var isCorrect = _vocabularyBus.QuestionResult.IsCorrect;
+            var isCorrectColor = isCorrect ? "Yellow" : "Red";
+            var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
+            Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
             
+            _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
+            _profileService.SavePrefs();
+
             if (!isCorrect)
             {
-               _vocabularyBus.CurrentLesson.EnqueueCurrentQuestion();
+                _vocabularyBus.CurrentLesson.EnqueueCurrentQuestion();
             }
-            
+
             var info = new ContinueButtonInfo
             {
                 IsCorrect = isCorrect,
-                InfoText = _vocabularyBus.QuestionResult.Info
+                InfoText = _vocabularyBus.QuestionResult.Info[0]
             };
-            
+
             _overlayController.SetContinueButtonInfo(info);
             _overlayController.EnableContinueButton(true);
         }

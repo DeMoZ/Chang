@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
+using Chang.Profile;
 using Chang.Resources;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -13,13 +13,16 @@ namespace Chang.FSM
     {
         private readonly IResourcesManager _resourcesManager;
         private readonly PreloaderController _preloaderController;
+        private readonly ProfileService _profileService;
 
         public override StateType Type => StateType.Preload;
 
-        public PreloadState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager) : base(gameBus, onStateResult)
+        public PreloadState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager, ProfileService profileService) :
+            base(gameBus, onStateResult)
         {
             _resourcesManager = resourcesManager;
             _preloaderController = gameBus.ScreenManager.PreloaderController;
+            _profileService = profileService;
         }
 
         public override void Enter()
@@ -44,6 +47,7 @@ namespace Chang.FSM
             switch (Bus.PreloadFor)
             {
                 case PreloadType.Boot:
+                    await LoadProfile();
                     await LoadGameBookConfigAsync();
                     OnStateResult.Invoke(StateType.Lobby);
                     break;
@@ -64,6 +68,11 @@ namespace Chang.FSM
             }
         }
 
+        private async UniTask LoadProfile()
+        {
+            await _profileService.LoadPrefsData();
+        }
+
         private async UniTask LoadQuestionsContentAsync()
         {
             throw new NotImplementedException();
@@ -75,7 +84,6 @@ namespace Chang.FSM
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
             Bus.BookData = JsonConvert.DeserializeObject<BookData>(text.text);
             Bus.Lessons = Bus.BookData.Lessons.ToDictionary(lesson => lesson.FileName);
-            await UniTask.Delay(1000); // todo roman temp test
         }
 
         private async UniTask LoadLessonContentAsync()
