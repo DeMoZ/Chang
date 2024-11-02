@@ -1,8 +1,10 @@
 using System;
+using Chang.Profile;
+using Chang.Services.SaveLoad;
 using Cysharp.Threading.Tasks;
 using DMZ.DebugSystem;
 
-namespace Chang.Profile
+namespace Chang.Services
 {
     public class ProfileService : IDisposable
     {
@@ -15,13 +17,13 @@ namespace Chang.Profile
         {
             _playerProfile = playerProfile;
             PrefsSaveLoad = new PrefsSaveLoad();
-            RemoteSaveLoad = new RemoteSaveLoad();
+            RemoteSaveLoad = new UnityCloudSaveLoad();
         }
 
         public void Dispose()
         {
             PrefsSaveLoad.Dispose();
-                RemoteSaveLoad.Dispose();
+            RemoteSaveLoad.Dispose();
         }
 
         public async UniTask LoadPrefsData()

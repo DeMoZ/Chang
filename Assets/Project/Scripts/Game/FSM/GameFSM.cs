@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Chang.Profile;
 using Chang.Resources;
+using Chang.Services;
 using DMZ.FSM;
 using Debug = DMZ.DebugSystem.DMZLogger;
 

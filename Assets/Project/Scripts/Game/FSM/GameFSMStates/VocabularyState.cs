@@ -2,6 +2,7 @@ using System;
 using BestHTTP.SecureProtocol.Org.BouncyCastle.Asn1.Cms;
 using Chang.Profile;
 using Chang.Resources;
+using Chang.Services;
 using DMZ.FSM;
 using Debug = DMZ.DebugSystem.DMZLogger;
 

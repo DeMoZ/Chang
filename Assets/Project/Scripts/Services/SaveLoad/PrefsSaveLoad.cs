@@ -1,16 +1,10 @@
-using System;
+using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Chang.Profile
+namespace Chang.Services.SaveLoad
 {
-    public interface ISaveLoad : IDisposable
-    {
-        UniTask<PlayerData> LoadData();
-        UniTask SaveData(PlayerData data);
-    }
-
     public class PrefsSaveLoad : ISaveLoad
     {
         private const string PlayerDataKey = "PlayerData";
@@ -32,25 +26,6 @@ namespace Chang.Profile
             
             var json = JsonConvert.SerializeObject(data, jSettings);
             PlayerPrefs.SetString(PlayerDataKey, json);
-        }
-
-        public void Dispose()
-        {
-            // TODO release managed resources here
-        }
-    }
-
-    // todo roman implement unity cloud save load
-    public class RemoteSaveLoad : ISaveLoad
-    {
-        public async UniTask<PlayerData> LoadData()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async UniTask SaveData(PlayerData data)
-        {
-            throw new NotImplementedException();
         }
 
         public void Dispose()
