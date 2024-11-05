@@ -71,7 +71,7 @@ namespace Chang.FSM
 
         private async UniTask LoadProfile()
         {
-            await _profileService.LoadPrefsData();
+            await _profileService.LoadStoredData();
         }
 
         private async UniTask LoadQuestionsContentAsync()
@@ -83,8 +83,8 @@ namespace Chang.FSM
         {
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
-            Bus.BookData = JsonConvert.DeserializeObject<BookData>(text.text);
-            Bus.Lessons = Bus.BookData.Lessons.ToDictionary(lesson => lesson.FileName);
+            Bus.SimplifiedBookData = JsonConvert.DeserializeObject<SimplifiedBookData>(text.text);
+            Bus.Lessons = Bus.SimplifiedBookData.Lessons.ToDictionary(lesson => lesson.FileName);
         }
 
         private async UniTask LoadLessonContentAsync()

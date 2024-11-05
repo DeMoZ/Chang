@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using Google.Type;
 using Newtonsoft.Json;
-using DateTime = System.DateTime;
+using UnityEngine;
 
 namespace Chang.Profile
 {
     public class PlayerProfile : IDisposable
     {
-        public PlayerData PlayerData;
+        public ProfileData ProfileData;
+        public ProgressData ProgressData;
 
         public PlayerProfile()
         {
@@ -26,33 +26,64 @@ namespace Chang.Profile
         }
     }
 
-    public class PlayerData
+    [Serializable]
+    public class ProfileData
     {
         /// <summary>
         /// if the player has played the field will be true, or may be need to check the authorization and get fresh progress from there 
         /// </summary>
-        public bool IsInitialized;
+        [field: SerializeField]
+        public bool IsInitialized { get; private set; }
 
         /// <summary>
         /// On any write SaveTime updated with current time. Used for profile synchronisation 
         /// </summary>
+        [field: SerializeField]
         public DateTime UtcTime { get; private set; }
 
-        public Dictionary<string, QuestLog> Questions;
+        /// <summary>
+        /// Unity Cloud Save Player Id
+        /// </summary>
+        [field: SerializeField]
+        public string UnityCloudSavePlayerId { get; private set; }
 
         [JsonConstructor]
-        public PlayerData(DateTime utcTime, Dictionary<string, QuestLog> questions, bool isInitialized)
+        public ProfileData(bool isInitialized, DateTime utcTime, string unityCloudSavePlayerId)
+        {
+            IsInitialized = isInitialized;
+            UtcTime = utcTime;
+            UnityCloudSavePlayerId = unityCloudSavePlayerId;
+        }
+
+        public ProfileData()
+        {
+            UtcTime = DateTime.UtcNow;
+            IsInitialized = true;
+        }
+    }
+
+    [Serializable]
+    public class ProgressData
+    {
+        /// <summary>
+        /// On any write SaveTime updated with current time. Used for profile synchronisation 
+        /// </summary>
+        [field: SerializeField]
+        public DateTime UtcTime { get; private set; }
+
+        public Dictionary<string, QuestLog> Questions { get; private set; }
+
+        [JsonConstructor]
+        public ProgressData(DateTime utcTime, Dictionary<string, QuestLog> questions)
         {
             UtcTime = utcTime;
-            Questions = questions?? new Dictionary<string, QuestLog>();
-            IsInitialized = isInitialized;
+            Questions = questions ?? new Dictionary<string, QuestLog>();
         }
-        
-        public PlayerData()
+
+        public ProgressData()
         {
             UtcTime = DateTime.UtcNow;
             Questions = new Dictionary<string, QuestLog>();
-            IsInitialized = true;
         }
 
         public void SetTime(DateTime utcTime)
@@ -61,6 +92,7 @@ namespace Chang.Profile
         }
     }
 
+    [Serializable]
     public class QuestLog
     {
         private const int LogLimit = 10;
@@ -68,10 +100,10 @@ namespace Chang.Profile
         private const int MinMark = 0;
         private const int MaxMark = 9;
 
-
         /// <summary>
         /// Last time quest approach
         /// </summary>
+        [field: SerializeField]
         public DateTime UtcTime { get; set; }
 
         /// <summary>
@@ -79,11 +111,12 @@ namespace Chang.Profile
         /// 0 - show demonstration again
         /// 9 - perfect, dont show the word for a long time again
         /// </summary>
+        [field: SerializeField]
         public int Mark { get; private set; }
 
-        public Queue<LogUnit> Log { get; private set; }
+        [field: SerializeField] public Queue<LogUnit> Log { get; private set; }
 
-        public string FileName { get; private set; }
+        [field: SerializeField] public string FileName { get; private set; }
 
         [JsonConstructor]
         public QuestLog(string fileName, int mark, Queue<LogUnit> log)
@@ -92,7 +125,7 @@ namespace Chang.Profile
             Mark = mark;
             Log = log ?? new Queue<LogUnit>();
         }
-        
+
         public QuestLog(string fileName)
         {
             FileName = fileName;
@@ -117,10 +150,11 @@ namespace Chang.Profile
         }
     }
 
+    [Serializable]
     public class LogUnit
     {
-        public DateTime UtcTime { get; private set; }
-        public bool IsCorrect { get; private set; }
+        [field: SerializeField] public DateTime UtcTime { get; private set; }
+        [field: SerializeField] public bool IsCorrect { get; private set; }
 
         public LogUnit(DateTime utcTime, bool isCorrect)
         {

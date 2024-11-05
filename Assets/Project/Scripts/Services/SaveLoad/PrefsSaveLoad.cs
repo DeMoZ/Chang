@@ -7,25 +7,37 @@ namespace Chang.Services.SaveLoad
 {
     public class PrefsSaveLoad : ISaveLoad
     {
-        private const string PlayerDataKey = "PlayerData";
-
-        public async UniTask<PlayerData> LoadData()
+        private JsonSerializerSettings _jSettings = new ()
         {
-            var json = PlayerPrefs.GetString(PlayerDataKey, "{}");
-            var data = JsonConvert.DeserializeObject<PlayerData>(json);
+            Formatting = Formatting.Indented,
+        };
+
+        public async UniTask<ProfileData> LoadProfileDataAsync()
+        {
+            var json = PlayerPrefs.GetString(SaveLoadConstants.ProfileDataKey, "{}");
+            var data = JsonConvert.DeserializeObject<ProfileData>(json);
 
             return data;
         }
 
-        public async UniTask SaveData(PlayerData data)
+        public async UniTask SaveProfileDataAsync(ProfileData data)
         {
-            var jSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-            };
-            
-            var json = JsonConvert.SerializeObject(data, jSettings);
-            PlayerPrefs.SetString(PlayerDataKey, json);
+            var json = JsonConvert.SerializeObject(data, _jSettings);
+            PlayerPrefs.SetString(SaveLoadConstants.ProfileDataKey, json);
+        }
+
+        public async UniTask<ProgressData> LoadProgressDataAsync()
+        {
+            var json = PlayerPrefs.GetString(SaveLoadConstants.ProgressDataKey, "{}");
+            var data = JsonConvert.DeserializeObject<ProgressData>(json);
+
+            return data;
+        }
+
+        public async UniTask SaveProgressDataAsync(ProgressData data)
+        {
+            var json = JsonConvert.SerializeObject(data, _jSettings);
+            PlayerPrefs.SetString(SaveLoadConstants.ProgressDataKey, json);
         }
 
         public void Dispose()

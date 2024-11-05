@@ -14,7 +14,7 @@ namespace Chang
          
          private void OnValidate()
          {
-             QuestionType = QuestionData == null ? QuestionType.None : QuestionData.QuestionType;
+             QuestionType = QuestionData?.QuestionType ?? QuestionType.None;
              Info = QuestionData == null ? string.Empty : QuestionData.EditorInfo();
          }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 
@@ -6,9 +7,15 @@ namespace Chang.Services.SaveLoad
 {
     public interface ISaveLoad : IDisposable
     {
-        UniTask<PlayerData> LoadData();
-        UniTask SaveData(PlayerData data);
+        UniTask<ProfileData> LoadProfileDataAsync();
+        UniTask SaveProfileDataAsync(ProfileData data);
+
+        UniTask<ProgressData> LoadProgressDataAsync();
+        UniTask SaveProgressDataAsync(ProgressData data);
     }
 
-    // todo roman implement unity cloud save load
+    public interface ISaveLoadWithInit : ISaveLoad
+    {
+        UniTask InitAsync(CancellationToken token);
+    }
 }

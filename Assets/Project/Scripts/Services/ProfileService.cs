@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Chang.Profile;
 using Chang.Services.SaveLoad;
 using Cysharp.Threading.Tasks;
@@ -6,49 +7,70 @@ using DMZ.DebugSystem;
 
 namespace Chang.Services
 {
-    public class ProfileService : IDisposable
+    public partial class ProfileService : IDisposable
     {
         private readonly PlayerProfile _playerProfile;
+        private readonly ISaveLoad _prefsSaveLoad;
+        private readonly ISaveLoadWithInit _unityCloudSaveLoad;
 
-        public ISaveLoad PrefsSaveLoad { get; private set; }
-        public ISaveLoad RemoteSaveLoad { get; private set; }
+        private CancellationTokenSource _cancellationTokenSource;
 
         public ProfileService(PlayerProfile playerProfile)
         {
             _playerProfile = playerProfile;
-            PrefsSaveLoad = new PrefsSaveLoad();
-            RemoteSaveLoad = new UnityCloudSaveLoad();
+            _prefsSaveLoad = new PrefsSaveLoad();
+            _unityCloudSaveLoad = new UnityCloudSaveLoad();
         }
 
         public void Dispose()
         {
-            PrefsSaveLoad.Dispose();
-            RemoteSaveLoad.Dispose();
+            _prefsSaveLoad.Dispose();
+            _unityCloudSaveLoad.Dispose();
         }
 
-        public async UniTask LoadPrefsData()
+        public async UniTask LoadStoredData()
         {
-            var pData = await PrefsSaveLoad.LoadData();
-            _playerProfile.PlayerData = !pData.IsInitialized ? new PlayerData() : pData;
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            var profileData = await _prefsSaveLoad.LoadProfileDataAsync();
+            var progressData = await _prefsSaveLoad.LoadProgressDataAsync();
+            _playerProfile.ProfileData = profileData;
+            _playerProfile.ProgressData = progressData; //!progressData.IsInitialized ? new ProgressData() : progressData;
+
+            await SaveIntoScriptableObject();
+
+            await _unityCloudSaveLoad.InitAsync(_cancellationTokenSource.Token);
+            await _unityCloudSaveLoad.LoadProfileDataAsync(); // todo roman Token
+            await _unityCloudSaveLoad.LoadProgressDataAsync(); // todo roman Token
+
+            // todo roman await MergePrefsAndUnityData();
         }
 
         public async UniTask SavePrefs()
         {
-            _playerProfile.PlayerData.SetTime(DateTime.UtcNow);
-            PrefsSaveLoad.SaveData(_playerProfile.PlayerData);
+            _playerProfile.ProgressData.SetTime(DateTime.UtcNow);
+
+            _prefsSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
+            _unityCloudSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
+
+            await SaveIntoScriptableObject();
         }
 
         public void AddLog(string key, LogUnit logUnit)
         {
-            if (!_playerProfile.PlayerData.Questions.TryGetValue(key, out var unit))
+            if (!_playerProfile.ProgressData.Questions.TryGetValue(key, out var unit))
             {
                 unit = new QuestLog(key);
-                _playerProfile.PlayerData.Questions[key] = unit;
+                _playerProfile.ProgressData.Questions[key] = unit;
             }
 
-            _playerProfile.PlayerData.SetTime(logUnit.UtcTime);
+            _playerProfile.ProgressData.SetTime(logUnit.UtcTime);
             unit.SetTime(logUnit.UtcTime);
             unit.AddLog(logUnit);
+        }
+
+        public void FirstMethod()
+        {
         }
     }
 }

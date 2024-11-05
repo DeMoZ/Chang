@@ -5,7 +5,7 @@ namespace Chang
     /// <summary>
     /// Used to serialize book into json 
     /// </summary>
-    public class BookData
+    public class SimplifiedBookData
     {
         public string FileName;
         public List<SimplifiedLessonData> Lessons;
