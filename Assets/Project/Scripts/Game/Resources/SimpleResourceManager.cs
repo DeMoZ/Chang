@@ -12,9 +12,12 @@ namespace Chang.Resources
 {
     public class SimpleResourceManager : IResourcesManager
     {
+        private bool _isInitialized = false;
+
         public async UniTask InitAsync()
         {
             await Addressables.InitializeAsync();
+            _isInitialized = true;
         }
 
         public bool IsAssetExists(AssetReference key)
@@ -141,6 +144,11 @@ namespace Chang.Resources
 
         public async UniTask<T> LoadAssetAsync<T>(string key, CancellationToken token) where T : Object
         {
+            while (!_isInitialized)
+            {
+                await UniTask.DelayFrame(1, cancellationToken: token);
+            }
+
             if (!IsAssetExists(key))
             {
                 Debug.LogWarning(
@@ -161,7 +169,7 @@ namespace Chang.Resources
                 {
                     Debug.LogError($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Failed to load asset with AssetReference '{key}'.");
                 }
-                
+
                 handle = Addressables.LoadAssetAsync<T>(key);
 
                 while (!handle.IsDone)
@@ -170,6 +178,7 @@ namespace Chang.Resources
                     {
                         token.ThrowIfCancellationRequested();
                     }
+
                     await UniTask.Yield();
                 }
 
@@ -186,7 +195,8 @@ namespace Chang.Resources
             }
             catch (Exception ex)
             {
-                Debug.LogError($"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with AssetReference '{key}', ex: {ex}");
+                Debug.LogError(
+                    $"{nameof(LoadAssetSync)}<{typeof(T).Name}>(): Exception occurred while loading asset with AssetReference '{key}', ex: {ex}");
             }
             finally
             {

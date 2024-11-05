@@ -1,5 +1,4 @@
 using System;
-using BestHTTP.SecureProtocol.Org.BouncyCastle.Asn1.Cms;
 using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
@@ -73,7 +72,7 @@ namespace Chang.FSM
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
             var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
-            
+
             _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
             _profileService.SavePrefs();
 
@@ -92,11 +91,15 @@ namespace Chang.FSM
             _overlayController.EnableContinueButton(true);
         }
 
-        private void OnContinue()
+        private async void OnContinue()
         {
             // todo roman check for empty queue etc 
             _vocabularyBus.CurrentLesson.SetCurrentSimpQiestion();
+#if UNITY_WEBGL
+            var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(_vocabularyBus.CurrentLesson.CurrentSimpQuestion.FileName);
+#else
             var questionConfig = _resourcesManager.LoadAssetSync<QuestionConfig>(_vocabularyBus.CurrentLesson.CurrentSimpQuestion.FileName);
+#endif
             _vocabularyBus.CurrentLesson.SetCurrentQuestionConfig(questionConfig.QuestionData);
             _vocabularyFSM.SwitchState(questionConfig.QuestionType);
         }
