@@ -13,9 +13,9 @@ namespace Chang
         /// </summary>
         public string FileName { get; private set; }
 
-        public SimpQuestionDataBase CurrentSimpQuestion { get; private set; }
-        public List<SimpQuestionDataBase> SimpQuestions { get; private set; }
-        public Queue<SimpQuestionDataBase> SimpQuestionQueue { get; private set; }
+        public SimpleQuestionDataBase CurrentSimpleQuestion { get; private set; }
+        public List<SimpleQuestionDataBase> SimpleQuestions { get; private set; }
+        public Queue<SimpleQuestionDataBase> SimpleQuestionQueue { get; private set; }
         public QuestBase CurrentQuestion { get; private set; }
 
         /// <summary>
@@ -26,8 +26,8 @@ namespace Chang
         public void Dispose()
         {
             FileName = null;
-            CurrentSimpQuestion = null;
-            SimpQuestionQueue.Clear();
+            CurrentSimpleQuestion = null;
+            SimpleQuestionQueue.Clear();
         }
 
         public void SetFileName(string fileName)
@@ -37,13 +37,13 @@ namespace Chang
 
         public void SetCurrentSimpQiestion()
         {
-            CurrentSimpQuestion = SimpQuestionQueue.Dequeue();
+            CurrentSimpleQuestion = SimpleQuestionQueue.Dequeue();
         }
 
-        public void SetSimpQuesitons(List<SimpQuestionDataBase> simpQuestions)
+        public void SetSimpQuesitons(List<SimpleQuestionDataBase> simpQuestions)
         {
-            SimpQuestions = simpQuestions;
-            SimpQuestionQueue = new Queue<SimpQuestionDataBase>(simpQuestions);
+            SimpleQuestions = simpQuestions;
+            SimpleQuestionQueue = new Queue<SimpleQuestionDataBase>(simpQuestions);
         }
 
         public void SetCurrentQuestionConfig(QuestBase question)
@@ -53,7 +53,7 @@ namespace Chang
 
         public void EnqueueCurrentQuestion()
         {
-            SimpQuestionQueue.Enqueue(CurrentSimpQuestion);
+            SimpleQuestionQueue.Enqueue(CurrentSimpleQuestion);
         }
     }
 }

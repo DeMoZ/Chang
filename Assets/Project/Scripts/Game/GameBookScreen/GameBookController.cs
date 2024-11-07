@@ -9,7 +9,7 @@ namespace Chang
     public class GameBookController : IViewController
     {
         private GameBookView _view;
-        private List<SimplifiedLessonData> _lessons;
+        private List<SimpleLessonData> _lessons;
         
         private Action<string> _onItemClick;
 
@@ -19,7 +19,7 @@ namespace Chang
             _view = view;
         }
 
-        public void Init(List<SimplifiedLessonData> lessons, Action<string> onItemClick)
+        public void Init(List<SimpleLessonData> lessons, Action<string> onItemClick)
         {
             _lessons = lessons;
             _onItemClick = onItemClick;
@@ -41,7 +41,7 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        internal void Init(List<SimplifiedLessonData> lessonNames, object onLessonClick)
+        internal void Init(List<SimpleLessonData> lessonNames, object onLessonClick)
         {
             throw new NotImplementedException();
         }

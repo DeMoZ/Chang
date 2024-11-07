@@ -83,8 +83,8 @@ namespace Chang.FSM
         {
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
-            Bus.SimplifiedBookData = JsonConvert.DeserializeObject<SimplifiedBookData>(text.text);
-            Bus.Lessons = Bus.SimplifiedBookData.Lessons.ToDictionary(lesson => lesson.FileName);
+            Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text);
+            Bus.Lessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
         }
 
         private async UniTask LoadLessonContentAsync()

@@ -4,9 +4,9 @@ using System.Threading;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
+using Cysharp.Threading.Tasks;
 using Object = UnityEngine.Object;
 using Debug = DMZ.DebugSystem.DMZLogger;
-using Cysharp.Threading.Tasks;
 
 namespace Chang.Resources
 {
@@ -147,6 +147,8 @@ namespace Chang.Resources
             while (!_isInitialized)
             {
                 await UniTask.DelayFrame(1, cancellationToken: token);
+                if (token.IsCancellationRequested)
+                    break;
             }
 
             if (!IsAssetExists(key))

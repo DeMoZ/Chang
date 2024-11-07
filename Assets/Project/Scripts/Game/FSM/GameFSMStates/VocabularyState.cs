@@ -73,7 +73,7 @@ namespace Chang.FSM
             var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
 
-            _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
+            _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpleQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
             _profileService.SavePrefs();
 
             if (!isCorrect)
@@ -93,15 +93,27 @@ namespace Chang.FSM
 
         private async void OnContinue()
         {
-            // todo roman check for empty queue etc 
-            _vocabularyBus.CurrentLesson.SetCurrentSimpQiestion();
+            var lesson = _vocabularyBus.CurrentLesson;
+
+            if (lesson.SimpleQuestionQueue.Count == 0)
+            {
+                // the lesson has finished
+                // todo roman implement ResultState. UML needs to be updated
+                
+                // todo remove Temporary solution with exit to lobby
+                OnStateResult.Invoke(StateType.Lobby);
+            }
+            else
+            {
+                lesson.SetCurrentSimpQiestion();
 #if UNITY_WEBGL
-            var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(_vocabularyBus.CurrentLesson.CurrentSimpQuestion.FileName);
+                var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(lesson.CurrentSimpleQuestion.FileName);
 #else
-            var questionConfig = _resourcesManager.LoadAssetSync<QuestionConfig>(_vocabularyBus.CurrentLesson.CurrentSimpQuestion.FileName);
+                var questionConfig = _resourcesManager.LoadAssetSync<QuestionConfig>(lesson.CurrentSimpQuestion.FileName);
 #endif
-            _vocabularyBus.CurrentLesson.SetCurrentQuestionConfig(questionConfig.QuestionData);
-            _vocabularyFSM.SwitchState(questionConfig.QuestionType);
+                lesson.SetCurrentQuestionConfig(questionConfig.QuestionData);
+                _vocabularyFSM.SwitchState(questionConfig.QuestionType);
+            }
         }
     }
 
