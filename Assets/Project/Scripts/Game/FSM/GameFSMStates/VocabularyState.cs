@@ -59,7 +59,7 @@ namespace Chang.FSM
 
             Bus.ScreenManager.SetActivePagesContainer(false);
             Bus.ScreenManager.GameOverlayController.OnCheck -= OnCheck;
-            Bus.ScreenManager.GameOverlayController.OnContinue += OnContinue;
+            Bus.ScreenManager.GameOverlayController.OnContinue -= OnContinue;
         }
 
         private void OnCheck()
