@@ -7,7 +7,7 @@ namespace Chang.Services.SaveLoad
 {
     public class PrefsSaveLoad : ISaveLoad
     {
-        private JsonSerializerSettings _jSettings = new ()
+        private JsonSerializerSettings _jSettings = new()
         {
             Formatting = Formatting.Indented,
         };
@@ -17,6 +17,8 @@ namespace Chang.Services.SaveLoad
             var json = PlayerPrefs.GetString(SaveLoadConstants.ProfileDataKey, "{}");
             var data = JsonConvert.DeserializeObject<ProfileData>(json);
 
+            await UniTask.Yield();
+
             return data;
         }
 
@@ -24,12 +26,16 @@ namespace Chang.Services.SaveLoad
         {
             var json = JsonConvert.SerializeObject(data, _jSettings);
             PlayerPrefs.SetString(SaveLoadConstants.ProfileDataKey, json);
+
+            await UniTask.Yield();
         }
 
         public async UniTask<ProgressData> LoadProgressDataAsync()
         {
             var json = PlayerPrefs.GetString(SaveLoadConstants.ProgressDataKey, "{}");
             var data = JsonConvert.DeserializeObject<ProgressData>(json);
+
+            await UniTask.Yield();
 
             return data;
         }
@@ -38,6 +44,8 @@ namespace Chang.Services.SaveLoad
         {
             var json = JsonConvert.SerializeObject(data, _jSettings);
             PlayerPrefs.SetString(SaveLoadConstants.ProgressDataKey, json);
+
+            await UniTask.Yield();
         }
 
         public void Dispose()

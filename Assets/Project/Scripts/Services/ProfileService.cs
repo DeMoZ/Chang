@@ -46,13 +46,12 @@ namespace Chang.Services
             // todo roman await MergePrefsAndUnityData();
         }
 
-        public async UniTask SavePrefs()
+        public async UniTask SaveAsync()
         {
             _playerProfile.ProgressData.SetTime(DateTime.UtcNow);
 
-            _prefsSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
-            _unityCloudSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
-
+            await _prefsSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
+            await _unityCloudSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
             await SaveIntoScriptableObject();
         }
 

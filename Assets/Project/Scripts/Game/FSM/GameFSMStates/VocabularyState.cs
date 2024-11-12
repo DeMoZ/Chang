@@ -62,7 +62,7 @@ namespace Chang.FSM
             Bus.ScreenManager.GameOverlayController.OnContinue -= OnContinue;
         }
 
-        private void OnCheck()
+        private async void OnCheck()
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
@@ -74,7 +74,10 @@ namespace Chang.FSM
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
 
             _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpleQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
-            _profileService.SavePrefs();
+            
+            // todo roman this is very temporary solution with save everywerere and need to replace with save only in prefs
+            //await _profileService.SavePrefsAsync();
+            await _profileService.SaveAsync();
 
             if (!isCorrect)
             {
