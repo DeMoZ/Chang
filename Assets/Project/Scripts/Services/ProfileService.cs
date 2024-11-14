@@ -3,7 +3,8 @@ using System.Threading;
 using Chang.Profile;
 using Chang.Services.SaveLoad;
 using Cysharp.Threading.Tasks;
-using DMZ.DebugSystem;
+using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Services
 {
@@ -15,6 +16,7 @@ namespace Chang.Services
 
         private CancellationTokenSource _cancellationTokenSource;
 
+        [Inject]
         public ProfileService(PlayerProfile playerProfile)
         {
             _playerProfile = playerProfile;

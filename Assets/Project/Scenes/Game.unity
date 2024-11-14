@@ -2298,6 +2298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9625bdbafa7944cc28b91421b31d628e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  content: {fileID: 0}
   toggleGroup: {fileID: 730930311}
   lessonsToggle: {fileID: 863572940}
   repetitionToggle: {fileID: 2040900009}
@@ -2542,6 +2543,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bac47ac8ee2334ed7a90488a23b85336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainUiScreen: {fileID: 1394104369}
+  repetitionScreen: {fileID: 2905783494241543941}
   gameBookScreen: {fileID: 1500397868}
   gameOverlayScreen: {fileID: 383225373}
   pagesContainer: {fileID: 661310075}
@@ -4010,6 +4013,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2905783494241543940}
+  - component: {fileID: 2905783494241543941}
   m_Layer: 0
   m_Name: RepetitionView
   m_TagString: Untagged
@@ -4131,6 +4135,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 50}
   m_SizeDelta: {x: 0, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2905783494241543941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800258527041465330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537ccecceb5dd4bd384624a0ea6bcc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3200415228522233987
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,10 +10,14 @@ namespace Chang.UI
         [SerializeField] private Toggle _toggle;
         [SerializeField] private TMP_Text _word;
 
-        public void Set(ToggleGroup toggleGroup, bool isOn)
+        public void Set(ToggleGroup toggleGroup)
         {
             _toggle.group = toggleGroup;
-            _toggle.isOn = isOn;
+        }
+
+        public void Activate()
+        {
+            _toggle.isOn = true;
         }
 
         public void AddListener(Action<bool> onValueChanged)

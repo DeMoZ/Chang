@@ -1,29 +1,26 @@
 using System;
 using System.Linq;
-using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 using DMZ.FSM;
+using Zenject;
 
 namespace Chang.FSM
 {
     public class PreloadState : ResultStateBase<StateType, GameBus>
     {
-        private readonly IResourcesManager _resourcesManager;
-        private readonly PreloaderController _preloaderController;
-        private readonly ProfileService _profileService;
+        [Inject] private readonly PreloaderController _preloaderController;
+        [Inject] private readonly ProfileService _profileService;
+        [Inject] private readonly IResourcesManager _resourcesManager;
 
         public override StateType Type => StateType.Preload;
 
-        public PreloadState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager, ProfileService profileService) :
-            base(gameBus, onStateResult)
+        public PreloadState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
-            _resourcesManager = resourcesManager;
-            _preloaderController = gameBus.ScreenManager.PreloaderController;
-            _profileService = profileService;
+
         }
 
         public override void Enter()
@@ -63,7 +60,7 @@ namespace Chang.FSM
                     await LoadQuestionsContentAsync();
                     OnStateResult.Invoke(StateType.PlayVocabulary);
                     break;
-                
+
                 default:
                     throw new NotImplementedException();
             }

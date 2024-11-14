@@ -12,6 +12,11 @@ namespace Chang
             _view = view;
         }
 
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);

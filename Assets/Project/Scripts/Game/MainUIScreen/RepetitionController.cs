@@ -2,7 +2,7 @@ using System;
 
 namespace Chang
 {
-    public class RepetitionController : IDisposable
+    public class RepetitionController : IViewController
     {
         private RepetitionView _view;
 
@@ -14,6 +14,16 @@ namespace Chang
         public void Dispose()
         {
             _view = null;
+        }
+
+        public void SetViewActive(bool active)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void Init()
+        {
+            throw new NotImplementedException();
         }
     }
 }

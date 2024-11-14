@@ -1,6 +1,8 @@
+using System;
+
 namespace Chang
 {
-    public interface IViewController
+    public interface IViewController : IDisposable
     {
         void SetViewActive(bool active);
     }

@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using System.Collections.Generic;
 using Debug = DMZ.DebugSystem.DMZLogger;
+using Zenject;
 
 namespace Chang.FSM
 {
@@ -21,8 +22,8 @@ namespace Chang.FSM
 
     public class SelectWordState : ResultStateBase<QuestionType, VocabularyBus>
     {
-        private readonly SelectWordController _selectWordController;
-        private readonly GameOverlayController _gameOverlayController;
+        [Inject] private readonly SelectWordController _selectWordController;
+        [Inject] private readonly GameOverlayController _gameOverlayController;
 
         private List<PhraseConfig> _mixWords;
         private PhraseConfig _correctWord;
@@ -31,8 +32,6 @@ namespace Chang.FSM
 
         public SelectWordState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
-            _selectWordController = Bus.ScreenManager.SelectWordController;
-            _gameOverlayController = Bus.ScreenManager.GameOverlayController;
         }
 
         public override void Enter()
@@ -65,14 +64,6 @@ namespace Chang.FSM
             _selectWordController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
 
             _selectWordController.SetViewActive(true);
-
-            // 2 await for input
-
-            // 3 await for press "Continue"
-
-            // 4 OnStateResult.Invoke(success/not success);
-
-            // I don't need preloader because all the data will be loaded from cash
         }
 
         private void OnToggleValueChanged(int index, bool isOn)
@@ -82,7 +73,7 @@ namespace Chang.FSM
             var info = new List<string> { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
             var result = new SelectWordResult(isCorrect, info);
             Bus.QuestionResult = result;
-            Bus.ScreenManager.EnableCheckButton(isOn);
+            _gameOverlayController.EnableCheckButton(isOn);
         }
 
         private void Shuffle<T>(List<T> list)

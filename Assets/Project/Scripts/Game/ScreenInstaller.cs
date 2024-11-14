@@ -6,6 +6,8 @@ namespace Chang
 {
     public class ScreenInstaller : MonoInstaller
     {
+        [SerializeField] private MainUiView mainUiScreen;
+        [SerializeField] private RepetitionView repetitionScreen;
         [SerializeField] private GameBookView gameBookScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
 
@@ -21,7 +23,12 @@ namespace Chang
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(ScreenInstaller)} InstallBindings");
+
+            Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
+
             #region Views
+            Container.BindInstance(mainUiScreen).AsSingle();
+            Container.BindInstance(repetitionScreen).AsSingle();
             Container.BindInstance(gameBookScreen).AsSingle();
             Container.BindInstance(gameOverlayScreen).AsSingle();
 
@@ -36,6 +43,8 @@ namespace Chang
             #endregion
 
             #region Controllers
+            Container.BindInterfacesAndSelfTo<MainUiController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RepetitionController>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBookController>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameOverlayController>().AsSingle();
 

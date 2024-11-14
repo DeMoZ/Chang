@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -8,14 +9,19 @@ namespace Chang
 {
     public class GameBookController : IViewController
     {
+        private readonly GameBus _gameBus;
+        private readonly MainScreenBus _mainScreenBus;
         private GameBookView _view;
         private List<SimpleLessonData> _lessons;
         
         private Action<string> _onItemClick;
+        private bool _isLoading;
 
         [Inject]
-        public GameBookController(GameBookView view)
+        public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view)
         {
+            _gameBus = gameBus;
+            _mainScreenBus = mainScreenBus;
             _view = view;
         }
 
@@ -41,7 +47,28 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        internal void Init(List<SimpleLessonData> lessonNames, object onLessonClick)
+        public void Init(List<SimpleLessonData> lessonNames, object onLessonClick)
+        {
+            throw new NotImplementedException();
+        }
+
+         // todo roman this from GameBookController
+         private async UniTaskVoid OnLessonClickAsync(string name)
+        {
+            if (_isLoading)
+                return;
+
+            _isLoading = true;
+            await UniTask.DelayFrame(1);
+            _gameBus.CurrentLesson.SetFileName(name);
+            _gameBus.CurrentLesson.SetSimpQuesitons(_gameBus.Lessons[name].Questions);
+
+            _gameBus.PreloadFor = PreloadType.LessonConfig;
+            
+            _isLoading = false;
+        }
+
+        public void Dispose()
         {
             throw new NotImplementedException();
         }

@@ -1,41 +1,77 @@
 using System;
+using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
-    public class MainUiController : IDisposable
+    public class MainUiController : IViewController
     {
+        private readonly GameBus _gameBus;
+        private readonly MainScreenBus _mainScreenBus;
         private readonly MainUiView _view;
         private readonly GameBookController _gameBookController;
         private readonly RepetitionController _repetitionController;
 
+        private bool _isLoading;
+
         /// <summary>
         /// should return to this tab after play any other game state
         /// </summary>
-        private MainTabType _currentTab = MainTabType.Lessons;
+        private MainTabType _currentTabType = MainTabType.Lessons;
+        private Action _onExitState;
 
-        public MainUiController(MainUiView view, GameBookController gameBookController, RepetitionController repetitionController)
+        [Inject]
+        public MainUiController(GameBus gameBus, MainScreenBus mainScreenBus, MainUiView view, GameBookController gameBookController, RepetitionController repetitionController)
         {
+            _gameBus = gameBus;
+            _mainScreenBus = mainScreenBus;
             _view = view;
             _gameBookController = gameBookController;
             _repetitionController = repetitionController;
-
-            _view.Init(OnToggleSelected);
         }
 
+        // todo roman on lobby enter trigger init method
+        public void Init(Action onExitState)
+        {
+            _onExitState = onExitState;
+            _view.Init(_currentTabType, OnToggleSelected);
+            _view.EnableToggleType(_currentTabType);
+        }
+
+        public void SetViewActive(bool active)
+        {
+            // todo roman show / hide main ui view
+            throw new NotImplementedException();
+        }
+
+
+        // todo roman on toggle selected i have to enable / disable one of the controllers
         private void OnToggleSelected(bool isOn, MainTabType lessons)
         {
-            if (isOn)
-                Debug.Log($"Toggle selected: {lessons}");
+            if (_isLoading)
+                return;
+
+            // if (isOn)
+            //     Debug.Log($"Toggle selected: {lessons}");
 
             switch (lessons)
             {
                 case MainTabType.Lessons:
-                    // Handle lessons tab selected
+                    if (isOn)
+                    {
+                        _gameBookController.Init(_gameBus.SimpleBookData.Lessons, _onExitState);
+                    }
+                    _gameBookController.SetViewActive(isOn);
                     break;
+
                 case MainTabType.Repetition:
-                    // Handle repetition tab selected
+                    if (isOn)
+                    {
+                        _repetitionController.Init();
+                    }
+                    _repetitionController.SetViewActive(isOn);
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lessons), lessons, null);
             }

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Chang.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +8,7 @@ namespace Chang
 {
     public class MainUiView : MonoBehaviour
     {
+        [SerializeField] private Transform content;
         [SerializeField] private ToggleGroup toggleGroup;
 
         [Space]
@@ -18,32 +18,45 @@ namespace Chang
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button exitButton;
 
-        public Action<bool, MainTabType> OnTabChanged { get; private set; }
+        private Action<bool, MainTabType> _onTabChanged;
 
-        private void Awake()
+        public void Init(MainTabType tabType, Action<bool, MainTabType> onTabChanged)
         {
-            lessonsToggle.Set(toggleGroup, isOn: true);
-            lessonsToggle.AddListener(isOn => OnTabChanged?.Invoke(isOn, MainTabType.Lessons));
+            _onTabChanged = onTabChanged;
+            content.gameObject.SetActive(true);
+        }
 
-            repetitionToggle.Set(toggleGroup, isOn: false);
-            repetitionToggle.AddListener(isOn => OnTabChanged?.Invoke(isOn, MainTabType.Repetition));
+        private void OnEnable()
+        {
+            lessonsToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Lessons));
+            repetitionToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Repetition));
 
             // settingsButton.onClick.AddListener(OnSettingsButtonClicked);
             // exitButton.onClick.AddListener(OnExitButtonClicked);
         }
 
-        public void Init(Action<bool, MainTabType> onTabChanged)
+        private void OnDisable()
         {
-            OnTabChanged = onTabChanged;
-        }
 
-        private void OnDestroy()
-        {
             lessonsToggle.RemoveAllListeners();
             repetitionToggle.RemoveAllListeners();
 
             // settingsButton.onClick.RemoveListener(OnSettingsButtonClicked);
             // exitButton.onClick.RemoveListener(OnExitButtonClicked);
+        }
+
+        public void EnableToggleType(MainTabType currentTabType)
+        {
+            if (currentTabType == MainTabType.Lessons)
+                lessonsToggle.Activate();
+
+            if (currentTabType == MainTabType.Repetition)
+                repetitionToggle.Activate();
+        }
+
+        private void OnTabChanged(bool isOn, MainTabType tabType)
+        {
+            _onTabChanged?.Invoke(isOn, tabType);
         }
 
         private void OnStartButtonClicked()
