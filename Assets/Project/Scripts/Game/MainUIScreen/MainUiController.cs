@@ -35,13 +35,12 @@ namespace Chang
         {
             _onExitState = onExitState;
             _view.Init(_currentTabType, OnToggleSelected);
-            _view.EnableToggleType(_currentTabType);
+            OnToggleSelected(true, _currentTabType);
         }
 
         public void SetViewActive(bool active)
         {
-            // todo roman show / hide main ui view
-            throw new NotImplementedException();
+            _view.gameObject.SetActive(active);
         }
 
 
@@ -59,7 +58,8 @@ namespace Chang
                 case MainTabType.Lessons:
                     if (isOn)
                     {
-                        _gameBookController.Init(_gameBus.SimpleBookData.Lessons, _onExitState);
+                        // _gameBookController.Init(_onExitState);
+                        _gameBookController.Init();
                     }
                     _gameBookController.SetViewActive(isOn);
                     break;

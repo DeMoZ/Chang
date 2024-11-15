@@ -25,12 +25,13 @@ namespace Chang
             _view = view;
         }
 
-        public void Init(List<SimpleLessonData> lessons, Action<string> onItemClick)
+        //public void Init(Action<string> onItemClick)
+        public void Init()
         {
-            _lessons = lessons;
-            _onItemClick = onItemClick;
+            _lessons = _gameBus.SimpleBookData.Lessons;
+            //_onItemClick = onItemClick;
 
-            var fileNames = lessons.Select(n => n.FileName).ToList();
+            var fileNames = _lessons.Select(n => n.FileName).ToList();
             _view.Init(OnItemClick);
             _view.Set(fileNames);
         }
@@ -45,11 +46,6 @@ namespace Chang
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
-        }
-
-        public void Init(List<SimpleLessonData> lessonNames, object onLessonClick)
-        {
-            throw new NotImplementedException();
         }
 
          // todo roman this from GameBookController

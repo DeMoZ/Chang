@@ -11,6 +11,11 @@ namespace Chang
             _view = view;
         }
 
+        public void Init()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             _view = null;
@@ -18,12 +23,7 @@ namespace Chang
 
         public void SetViewActive(bool active)
         {
-            throw new NotImplementedException();
-        }
-
-        internal void Init()
-        {
-            throw new NotImplementedException();
+            _view.gameObject.SetActive(active);
         }
     }
 }

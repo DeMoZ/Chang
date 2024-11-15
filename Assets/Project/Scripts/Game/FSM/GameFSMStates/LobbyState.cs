@@ -19,9 +19,7 @@ namespace Chang.FSM
         {
             base.Enter();
 
-            // todo roman should the lobby views and controller, not only book
-            //_mainUiController.Init(Bus.SimpleBookData.Lessons, name => OnLessonClickAsync(name).Forget());
-            _mainUiController.Init(ExitState);
+            _mainUiController.Init(OnExitState);
             _mainUiController.SetViewActive(true);
         }
 
@@ -30,7 +28,7 @@ namespace Chang.FSM
             _mainUiController.SetViewActive(false);
         }
 
-        private void ExitState()
+        private void OnExitState()
         {
             OnStateResult.Invoke(StateType.Preload);
         }
