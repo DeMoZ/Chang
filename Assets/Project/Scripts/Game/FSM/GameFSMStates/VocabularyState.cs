@@ -16,12 +16,15 @@ namespace Chang.FSM
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
         [Inject] private readonly IResourcesManager _resourcesManager;
-
+        
+        private readonly DiContainer _diContainer;
+        
         private VocabularyBus _vocabularyBus;
         private VocabularyFSM _vocabularyFSM;
 
-        public VocabularyState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
+        public VocabularyState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
+            _diContainer = diContainer;
         }
 
         public void Dispose()
@@ -46,7 +49,7 @@ namespace Chang.FSM
                 CurrentLesson = Bus.CurrentLesson,
             };
 
-            _vocabularyFSM = new VocabularyFSM(_vocabularyBus);
+            _vocabularyFSM = new VocabularyFSM(_diContainer, _vocabularyBus);
             _vocabularyFSM.Initialize();
             OnContinue();
         }

@@ -13,9 +13,6 @@ namespace Chang
         private readonly MainScreenBus _mainScreenBus;
         private GameBookView _view;
         private List<SimpleLessonData> _lessons;
-        
-        private Action<string> _onItemClick;
-        private bool _isLoading;
 
         [Inject]
         public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view)
@@ -25,11 +22,9 @@ namespace Chang
             _view = view;
         }
 
-        //public void Init(Action<string> onItemClick)
         public void Init()
         {
             _lessons = _gameBus.SimpleBookData.Lessons;
-            //_onItemClick = onItemClick;
 
             var fileNames = _lessons.Select(n => n.FileName).ToList();
             _view.Init(OnItemClick);
@@ -39,29 +34,13 @@ namespace Chang
         private void OnItemClick(int index)
         {
             Debug.Log($"Clicked on item {index}");
-            
-            _onItemClick?.Invoke(_lessons[index].FileName);
+
+            _mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
         }
 
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
-        }
-
-         // todo roman this from GameBookController
-         private async UniTaskVoid OnLessonClickAsync(string name)
-        {
-            if (_isLoading)
-                return;
-
-            _isLoading = true;
-            await UniTask.DelayFrame(1);
-            _gameBus.CurrentLesson.SetFileName(name);
-            _gameBus.CurrentLesson.SetSimpQuesitons(_gameBus.Lessons[name].Questions);
-
-            _gameBus.PreloadFor = PreloadType.LessonConfig;
-            
-            _isLoading = false;
         }
 
         public void Dispose()

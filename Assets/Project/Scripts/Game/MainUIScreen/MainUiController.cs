@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -28,6 +29,8 @@ namespace Chang
             _view = view;
             _gameBookController = gameBookController;
             _repetitionController = repetitionController;
+
+            _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClicked;
         }
 
         // todo roman on lobby enter trigger init method
@@ -42,7 +45,6 @@ namespace Chang
         {
             _view.gameObject.SetActive(active);
         }
-
 
         // todo roman on toggle selected i have to enable / disable one of the controllers
         private void OnToggleSelected(bool isOn, MainTabType lessons)
@@ -75,6 +77,27 @@ namespace Chang
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lessons), lessons, null);
             }
+        }
+
+        private void OnGameBookLessonClicked(string name)
+        {
+            OnGameBookLessonClickedAsync(name).Forget();
+        }
+
+        private async UniTaskVoid OnGameBookLessonClickedAsync(string name)
+        {
+            if (_isLoading)
+                return;
+
+            _isLoading = true;
+            await UniTask.DelayFrame(1);
+            _gameBus.CurrentLesson.SetFileName(name);
+            _gameBus.CurrentLesson.SetSimpQuesitons(_gameBus.Lessons[name].Questions);
+
+            _gameBus.PreloadFor = PreloadType.LessonConfig;
+            _isLoading = false;
+
+            _onExitState?.Invoke();
         }
 
         public void Dispose()

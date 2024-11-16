@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
 using DMZ.FSM;
+using Zenject;
 
 namespace Chang.FSM
 {
     public class VocabularyFSM : FSMResultBase<QuestionType>
     {
         private readonly VocabularyBus _vocabularyBus;
+        private readonly DiContainer _diContainer;
 
         protected override QuestionType _defaultStateType => QuestionType.None;
-        
-        public VocabularyFSM(VocabularyBus vocabularyBus, Action<StateType> stateChangedCallback = null)
+
+        public VocabularyFSM(DiContainer diContainer, VocabularyBus vocabularyBus, Action<StateType> stateChangedCallback = null)
         {
+            _diContainer = diContainer;
             _vocabularyBus = vocabularyBus;
         }
 
@@ -30,12 +33,24 @@ namespace Chang.FSM
 
         protected override void Init()
         {
+            // todo roman implement other states
+
+            //var demonstrationWordState = new DemostrationState( _vocabularyBus, OnStateResult) ;
+            var selectWordState = new SelectWordState(_vocabularyBus, OnStateResult);
+            //var matchWordsState = new MatchWordsState( _vocabularyBus, OnStateResult) ;
+            //var demonstrationDialogueState = new DemonstrationDialogueState( _vocabularyBus, OnStateResult) ;
+
+            //_diContainer.Inject(demonstrationWordState);
+            _diContainer.Inject(selectWordState);
+            //_diContainer.Inject(matchWordsState);
+            //_diContainer.Inject(demonstrationDialogueState);
+
             _states = new Dictionary<QuestionType, IResultState<QuestionType>>
             {
-                // { QuestionType.DemonstrationWord, new State( _vocabularyBus, OnStateResult) },
-                 { QuestionType.SelectWord, new SelectWordState( _vocabularyBus, OnStateResult) },
-                // { QuestionType.MatchWords, new State( _vocabularyBus, OnStateResult) },
-                // { QuestionType.DemonstrationDialogue, new State( _vocabularyBus, OnStateResult) },
+                // { QuestionType.DemonstrationWord, demonstrationWordState },
+                 { QuestionType.SelectWord, selectWordState },
+                // { QuestionType.MatchWords, matchWordsState },
+                // { QuestionType.DemonstrationDialogue, demonstrationDialogueState },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));

@@ -28,7 +28,7 @@ namespace Chang.FSM
         {
             _gameBus.PreloadFor = PreloadType.Boot;
 
-            var vocabularyState = new VocabularyState(_gameBus, OnStateResult);
+            var vocabularyState = new VocabularyState(_diContainer, _gameBus, OnStateResult);
             var preloaderState = new PreloadState(_gameBus, OnStateResult);
             var lobbyState = new LobbyState(_gameBus, OnStateResult);
 
