@@ -10,8 +10,10 @@ namespace Chang.Profile
     {
         private const int LogLimit = 10;
         private const int DefaultMark = 4;
-        private const int MinMark = 0;
-        private const int MaxMark = 9;
+        private const int DefaultSuccess = 0;
+
+        private readonly (int min, int max) MarkRange = (0, 10);
+        private readonly (int min, int max) SuccesSequeseRange = (0, 10);
 
         /// <summary>
         /// Last time quest approach
@@ -27,15 +29,21 @@ namespace Chang.Profile
         [field: SerializeField]
         public int Mark { get; private set; }
 
+        /// <summary>
+        /// Every correct answer increase this value, every wrong answer set this value to 0
+        /// </summary>
+        public int SuccesSequese { get; private set; }
+
         [field: SerializeField] public Queue<LogUnit> Log { get; private set; }
 
         [field: SerializeField] public string FileName { get; private set; }
 
         [JsonConstructor]
-        public QuestLog(string fileName, int mark, Queue<LogUnit> log)
+        public QuestLog(string fileName, int mark, int succesSequese, Queue<LogUnit> log)
         {
             FileName = fileName;
             Mark = mark;
+            SuccesSequese = succesSequese;
             Log = log ?? new Queue<LogUnit>();
         }
 
@@ -43,6 +51,7 @@ namespace Chang.Profile
         {
             FileName = fileName;
             Mark = DefaultMark;
+            SuccesSequese = DefaultSuccess;
             Log = new Queue<LogUnit>();
         }
 
@@ -54,12 +63,11 @@ namespace Chang.Profile
         public void AddLog(LogUnit unit)
         {
             Log.Enqueue(unit);
+            if (Log.Count > LogLimit) Log.Dequeue();
 
-            while (Log.Count > LogLimit)
-                Log.Dequeue();
-
-            Mark += unit.IsCorrect ? 1 : -1;
-            Math.Clamp(Mark, MinMark, MaxMark);
+            // todo roman fix wrong result for calculation
+            Mark = Math.Clamp(Mark + (unit.IsCorrect ? 1 : -1), MarkRange.min, MarkRange.max);
+            SuccesSequese = unit.IsCorrect ? Math.Clamp(SuccesSequese + 1, SuccesSequeseRange.min, SuccesSequeseRange.max) : 0;
         }
     }
 }

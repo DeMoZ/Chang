@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Chang.Services;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -36,12 +38,31 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        internal void Set()
+        public void Set()
         {
             // todo roman
             // read player data and sort
-            //var a = _gameBus.SimpleBookData.Lessons;
-            // var a = _profileService.GetProfile().
+            var progressQuestions = _profileService.GetProgress().Questions;
+            List<Profile.QuestLog> progressList = progressQuestions.Select(q => q.Value).Where(q => q.SuccesSequese < 10).ToList();
+
+            // var sortedWords = words
+            //     .OrderBy(word => word.Mark)
+            //     .ThenBy(word => word.LastReviewed)
+            //     .Take(10)
+            //     .ToList();
+
+            // todo roman what to count?
+            // 1. Iteration
+            // 2. Date
+            // 3. Mark
+
+
+            // todo roman should be sorted by the sequence and time  too
+            var sortedList = progressList.OrderBy(w => w.Mark)
+            //.ThenBy(w => w.UtcTime)
+            .Take(10).ToList();
+
+            _view.Set(sortedList);
         }
 
         private void OnItemClick(int index)
