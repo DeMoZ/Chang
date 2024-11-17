@@ -20,9 +20,13 @@ namespace Chang
 
         private Action<bool, MainTabType> _onTabChanged;
 
-        public void Init(MainTabType tabType, Action<bool, MainTabType> onTabChanged)
+        public void Init(Action<bool, MainTabType> onTabChanged)
         {
             _onTabChanged = onTabChanged;
+        }
+
+        public void Enter()
+        {
             content.gameObject.SetActive(true);
         }
 

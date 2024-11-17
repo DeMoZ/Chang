@@ -70,8 +70,9 @@ namespace Chang.Services
             unit.AddLog(logUnit);
         }
 
-        public void FirstMethod()
+        public ProgressData GetProgress()
         {
+            return _playerProfile.ProgressData;
         }
     }
 }

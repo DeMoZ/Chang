@@ -11,7 +11,7 @@ namespace Chang
     {
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
-        private GameBookView _view;
+        private readonly GameBookView _view;
         private List<SimpleLessonData> _lessons;
 
         [Inject]
@@ -22,12 +22,20 @@ namespace Chang
             _view = view;
         }
 
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Init()
         {
-            _lessons = _gameBus.SimpleBookData.Lessons;
-
-            var fileNames = _lessons.Select(n => n.FileName).ToList();
             _view.Init(OnItemClick);
+        }
+
+        public void Set()
+        {
+            _lessons = _gameBus.SimpleBookData.Lessons;
+            var fileNames = _lessons.Select(n => n.FileName).ToList();
             _view.Set(fileNames);
         }
 
@@ -41,11 +49,6 @@ namespace Chang
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

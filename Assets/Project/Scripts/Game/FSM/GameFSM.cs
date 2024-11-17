@@ -36,6 +36,8 @@ namespace Chang.FSM
             _diContainer.Inject(preloaderState);
             _diContainer.Inject(lobbyState);
 
+            lobbyState.Init();
+
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
                 { StateType.Preload, preloaderState },

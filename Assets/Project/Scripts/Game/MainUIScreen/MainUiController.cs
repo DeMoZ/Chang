@@ -33,11 +33,25 @@ namespace Chang
             _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClicked;
         }
 
-        // todo roman on lobby enter trigger init method
+        public void Dispose()
+        {
+            _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClicked;
+        }
+
         public void Init(Action onExitState)
         {
             _onExitState = onExitState;
-            _view.Init(_currentTabType, OnToggleSelected);
+
+            _view.Init(OnToggleSelected);
+            _gameBookController.Init();
+            _repetitionController.Init();
+        }
+
+        public void Enter()
+        {
+            SetViewActive(true);
+            _view.Enter();
+
             OnToggleSelected(true, _currentTabType);
         }
 
@@ -46,37 +60,31 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        // todo roman on toggle selected i have to enable / disable one of the controllers
         private void OnToggleSelected(bool isOn, MainTabType lessons)
         {
             if (_isLoading)
                 return;
 
-            // if (isOn)
-            //     Debug.Log($"Toggle selected: {lessons}");
-
-            switch (lessons)
+            if (!isOn)
             {
-                case MainTabType.Lessons:
-                    if (isOn)
-                    {
-                        // _gameBookController.Init(_onExitState);
-                        _gameBookController.Init();
-                    }
-                    _gameBookController.SetViewActive(isOn);
-                    break;
-
-                case MainTabType.Repetition:
-                    if (isOn)
-                    {
-                        _repetitionController.Init();
-                    }
-                    _repetitionController.SetViewActive(isOn);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(lessons), lessons, null);
+                return;
             }
+
+            if (lessons == MainTabType.Lessons)
+            {
+                _gameBookController.Set();
+            }
+            else if (lessons == MainTabType.Repetition)
+            {
+                _repetitionController.Set();
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(lessons), lessons, null);
+            }
+
+            _gameBookController.SetViewActive(lessons == MainTabType.Lessons);
+            _repetitionController.SetViewActive(lessons == MainTabType.Repetition);
         }
 
         private void OnGameBookLessonClicked(string name)
@@ -98,11 +106,6 @@ namespace Chang
             _isLoading = false;
 
             _onExitState?.Invoke();
-        }
-
-        public void Dispose()
-        {
-
         }
     }
 }
