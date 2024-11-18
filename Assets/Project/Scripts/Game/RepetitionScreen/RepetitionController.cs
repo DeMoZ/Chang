@@ -30,12 +30,7 @@ namespace Chang
 
         public void Init()
         {
-
-        }
-
-        public void SetViewActive(bool active)
-        {
-            _view.gameObject.SetActive(active);
+            _view.Init(_mainScreenBus.OnRepeatClicked);
         }
 
         public void Set()
@@ -60,9 +55,15 @@ namespace Chang
             // todo roman should be sorted by the sequence and time  too
             var sortedList = progressList.OrderBy(w => w.Mark)
             //.ThenBy(w => w.UtcTime)
-            .Take(10).ToList();
+            //.Take(10)
+            .ToList();
 
             _view.Set(sortedList);
+        }
+
+        public void SetViewActive(bool active)
+        {
+            _view.gameObject.SetActive(active);
         }
 
         private void OnItemClick(int index)

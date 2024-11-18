@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -30,12 +31,14 @@ namespace Chang
             _gameBookController = gameBookController;
             _repetitionController = repetitionController;
 
-            _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClicked;
+            _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClickedAsync;
+            _mainScreenBus.OnRepeatClicked += OnRepeatClickedAsync;
         }
 
         public void Dispose()
         {
-            _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClicked;
+            _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClickedAsync;
+            _mainScreenBus.OnRepeatClicked -= OnRepeatClickedAsync;
         }
 
         public void Init(Action onExitState)
@@ -87,12 +90,7 @@ namespace Chang
             _repetitionController.SetViewActive(lessons == MainTabType.Repetition);
         }
 
-        private void OnGameBookLessonClicked(string name)
-        {
-            OnGameBookLessonClickedAsync(name).Forget();
-        }
-
-        private async UniTaskVoid OnGameBookLessonClickedAsync(string name)
+        private async void OnGameBookLessonClickedAsync(string name)
         {
             if (_isLoading)
                 return;
@@ -103,6 +101,29 @@ namespace Chang
             _gameBus.CurrentLesson.SetSimpQuesitons(_gameBus.Lessons[name].Questions);
 
             _gameBus.PreloadFor = PreloadType.LessonConfig;
+            _isLoading = false;
+
+            _onExitState?.Invoke();
+        }
+
+        private async void OnRepeatClickedAsync()
+        {
+            if (_isLoading)
+                return;
+
+            _isLoading = true;
+            await UniTask.DelayFrame(1);
+
+            // todo roman need to create new lesson with questions from repetition
+            var questions = new List<QuestionConfig>();
+
+            // foreach (var quest in maidLesson)
+            // {
+            //     var question = await load question config quest.name
+            //     questions.Add(question);
+            // }
+
+            _gameBus.PreloadFor = PreloadType.QuestConfigs;
             _isLoading = false;
 
             _onExitState?.Invoke();
