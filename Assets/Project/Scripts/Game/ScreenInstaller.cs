@@ -43,7 +43,7 @@ namespace Chang
             #endregion
 
             #region Controllers
-            Container.BindInterfacesAndSelfTo<MainUiController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<LobbyController>().AsSingle();
             Container.BindInterfacesAndSelfTo<RepetitionController>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBookController>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameOverlayController>().AsSingle();

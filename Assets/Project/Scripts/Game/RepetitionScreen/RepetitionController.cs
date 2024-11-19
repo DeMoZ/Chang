@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Chang.Services;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -9,18 +7,24 @@ namespace Chang
 {
     public class RepetitionController : IViewController
     {
+        private const int ShowLogLimitAmount = 30;
+
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
         private readonly RepetitionView _view;
-        private readonly ProfileService _profileService;
+        private readonly RepetitionService _repetitionService;
 
         [Inject]
-        public RepetitionController(GameBus gameBus, MainScreenBus mainScreenBus, RepetitionView view, ProfileService profileService)
+        public RepetitionController(
+            GameBus gameBus,
+            MainScreenBus mainScreenBus,
+            RepetitionView view,
+            RepetitionService repetitionService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
-            _profileService = profileService;
+            _repetitionService = repetitionService;
         }
 
         public void Dispose()
@@ -35,29 +39,7 @@ namespace Chang
 
         public void Set()
         {
-            // todo roman
-            // read player data and sort
-            var progressQuestions = _profileService.GetProgress().Questions;
-            List<Profile.QuestLog> progressList = progressQuestions.Select(q => q.Value).Where(q => q.SuccesSequese < 10).ToList();
-
-            // var sortedWords = words
-            //     .OrderBy(word => word.Mark)
-            //     .ThenBy(word => word.LastReviewed)
-            //     .Take(10)
-            //     .ToList();
-
-            // todo roman what to count?
-            // 1. Iteration
-            // 2. Date
-            // 3. Mark
-
-
-            // todo roman should be sorted by the sequence and time  too
-            var sortedList = progressList.OrderBy(w => w.Mark)
-            //.ThenBy(w => w.UtcTime)
-            //.Take(10)
-            .ToList();
-
+            var sortedList = _repetitionService.GetGeneralRepetition(ShowLogLimitAmount);
             _view.Set(sortedList);
         }
 
@@ -72,7 +54,5 @@ namespace Chang
 
             //_mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
         }
-
-
     }
 }

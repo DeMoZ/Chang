@@ -9,7 +9,7 @@ namespace Chang.FSM
         public override StateType Type => StateType.Lobby;
 
         [Inject]
-        private readonly MainUiController _mainUiController;
+        private readonly LobbyController _mainUiController;
 
         public LobbyState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {

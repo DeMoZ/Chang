@@ -17,6 +17,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerProfile>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
         }
     }
 

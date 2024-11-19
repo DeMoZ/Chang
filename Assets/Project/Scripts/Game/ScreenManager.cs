@@ -6,7 +6,7 @@ namespace Chang
 {
     public class ScreenManager
     {
-        private MainUiController _mainUiController;
+        private LobbyController _mainUiController;
         private PreloaderController _preloaderController;
 
         private GameObject _pagesContainer;
@@ -14,7 +14,7 @@ namespace Chang
         private List<IViewController> _vocabularyControllers = new();
 
         [Inject]
-        public ScreenManager(MainUiController mainUiController,
+        public ScreenManager(LobbyController mainUiController,
             PreloaderController preloaderController,
             [Inject(Id = "PagesContainer")] GameObject pagesContainer,
             DemonstrationWordController demonstrationController,

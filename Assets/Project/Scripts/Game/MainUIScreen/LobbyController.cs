@@ -1,18 +1,22 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Zenject;
+using Chang.Services;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
-    public class MainUiController : IViewController
+    public class LobbyController : IViewController
     {
+        private const int GeneralRepetitionAmount = 10;
+
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
         private readonly MainUiView _view;
         private readonly GameBookController _gameBookController;
         private readonly RepetitionController _repetitionController;
+        private readonly RepetitionService _repetitionService;
 
         private bool _isLoading;
 
@@ -23,22 +27,29 @@ namespace Chang
         private Action _onExitState;
 
         [Inject]
-        public MainUiController(GameBus gameBus, MainScreenBus mainScreenBus, MainUiView view, GameBookController gameBookController, RepetitionController repetitionController)
+        public LobbyController(
+            GameBus gameBus,
+            MainScreenBus mainScreenBus,
+            MainUiView view,
+            GameBookController gameBookController,
+            RepetitionController repetitionController,
+            RepetitionService repetitionService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
             _gameBookController = gameBookController;
             _repetitionController = repetitionController;
+            _repetitionService = repetitionService;
 
             _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClickedAsync;
-            _mainScreenBus.OnRepeatClicked += OnRepeatClickedAsync;
+            _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClickedAsync;
         }
 
         public void Dispose()
         {
             _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClickedAsync;
-            _mainScreenBus.OnRepeatClicked -= OnRepeatClickedAsync;
+            _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClickedAsync;
         }
 
         public void Init(Action onExitState)
@@ -65,25 +76,19 @@ namespace Chang
 
         private void OnToggleSelected(bool isOn, MainTabType lessons)
         {
-            if (_isLoading)
+            if (_isLoading || !isOn)
                 return;
 
-            if (!isOn)
+            switch (lessons)
             {
-                return;
-            }
-
-            if (lessons == MainTabType.Lessons)
-            {
-                _gameBookController.Set();
-            }
-            else if (lessons == MainTabType.Repetition)
-            {
-                _repetitionController.Set();
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(lessons), lessons, null);
+                case MainTabType.Lessons:
+                    _gameBookController.Set();
+                    break;
+                case MainTabType.Repetition:
+                    _repetitionController.Set();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(lessons), lessons, null);
             }
 
             _gameBookController.SetViewActive(lessons == MainTabType.Lessons);
@@ -98,7 +103,7 @@ namespace Chang
             _isLoading = true;
             await UniTask.DelayFrame(1);
             _gameBus.CurrentLesson.SetFileName(name);
-            _gameBus.CurrentLesson.SetSimpQuesitons(_gameBus.Lessons[name].Questions);
+            _gameBus.CurrentLesson.SetSimpQuesitons(_gameBus.SimpleLessons[name].Questions);
 
             _gameBus.PreloadFor = PreloadType.LessonConfig;
             _isLoading = false;
@@ -106,24 +111,22 @@ namespace Chang
             _onExitState?.Invoke();
         }
 
-        private async void OnRepeatClickedAsync()
+        private async void OnGeneralRepeatClickedAsync()
         {
             if (_isLoading)
                 return;
 
             _isLoading = true;
+
             await UniTask.DelayFrame(1);
 
-            // todo roman need to create new lesson with questions from repetition
-            var questions = new List<QuestionConfig>();
+            _gameBus.CurrentLesson = new Lesson();
 
-            // foreach (var quest in maidLesson)
-            // {
-            //     var question = await load question config quest.name
-            //     questions.Add(question);
-            // }
-
+            var repetitions = _repetitionService.GetGeneralRepetition(GeneralRepetitionAmount);
+            var questions = repetitions.Select(q => _gameBus.SimpleQuestions[q.FileName]).ToList();
+            _gameBus.CurrentLesson.SetSimpQuesitons(questions);
             _gameBus.PreloadFor = PreloadType.QuestConfigs;
+
             _isLoading = false;
 
             _onExitState?.Invoke();

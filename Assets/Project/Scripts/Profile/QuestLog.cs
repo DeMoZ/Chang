@@ -8,9 +8,9 @@ namespace Chang.Profile
     [Serializable]
     public class QuestLog
     {
-        private const int LogLimit = 10;
-        private const int DefaultMark = 4;
-        private const int DefaultSuccess = 0;
+        private static readonly int LogLimit = 10;
+        private static readonly int DefaultMark = 4;
+        private static readonly int DefaultSuccess = 0;
 
         private readonly (int min, int max) MarkRange = (0, 10);
         private readonly (int min, int max) SuccesSequeseRange = (0, 10);

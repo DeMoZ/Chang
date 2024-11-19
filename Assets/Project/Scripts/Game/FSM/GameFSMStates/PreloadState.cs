@@ -71,23 +71,39 @@ namespace Chang.FSM
             await _profileService.LoadStoredData();
         }
 
-        private async UniTask LoadQuestionsContentAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         private async UniTask LoadGameBookConfigAsync()
         {
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
             Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text);
-            Bus.Lessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
+            Bus.SimpleLessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
+            
+            Bus.SimpleQuestions = Bus.SimpleBookData.Lessons
+                .SelectMany(lesson => lesson.Questions)
+                .GroupBy(question => question.FileName)
+                .Select(group => group.First())
+                .ToDictionary(question => question.FileName);
         }
 
+        /// <summary>
+        /// Loads lesson config but not to be used as it as,
+        /// but to also load contained question configs that will be called by the fileNames.
+        /// </summary>
         private async UniTask LoadLessonContentAsync()
         {
-            var lesson = Bus.Lessons[Bus.CurrentLesson.FileName];
+            var lesson = Bus.SimpleLessons[Bus.CurrentLesson.FileName];
             await _resourcesManager.LoadAssetAsync<LessonConfig>(lesson.FileName);
+        }
+
+        /// <summary>
+        /// Loads qeustion configs to cash it and load faster during game
+        /// </summary>
+        private async UniTask LoadQuestionsContentAsync()
+        {
+            foreach (var question in Bus.CurrentLesson.SimpleQuestions)
+            {
+                await _resourcesManager.LoadAssetAsync<QuestionConfig>(question.FileName);
+            }
         }
     }
 }

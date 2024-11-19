@@ -32,7 +32,7 @@ namespace Chang
             _onRepeatClick = onRepeatClick;
         }
 
-        private void OnEnagle(){
+        private void OnEnable(){
             repeatBtn.onClick.AddListener(OnRepeatClick);
         }
 
