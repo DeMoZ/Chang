@@ -15,6 +15,10 @@ namespace Chang
             _view = view;
         }
 
+        public void Dispose()
+        {
+        }
+
         // todo roman here should be a classes, not a configx
         // todo roman refactoring is required
         public void Init(bool questInStudiedLanguage, PhraseConfig correctWord, List<PhraseConfig> mixWords, Action<int, bool> onToggleValueChanged)

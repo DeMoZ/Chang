@@ -1,27 +1,22 @@
-using System;
 using System.Collections.Generic;
-using Chang.Profile;
-using Chang.Resources;
-using Chang.Services;
 using DMZ.FSM;
+using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
     public class GameFSM : FSMResultBase<StateType>
     {
-        private readonly GameBus _gameBus;
-        private readonly IResourcesManager _resourcesManager;
-        private readonly ScreenManager _screenManager;
-        private readonly ProfileService _profileService;
-        
         protected override StateType _defaultStateType => StateType.Preload;
 
-        public GameFSM(GameBus gameBus, IResourcesManager resourcesManager, ProfileService profileService, Action<StateType> stateChangedCallback = null)
+        private readonly DiContainer _diContainer;
+        private readonly GameBus _gameBus;
+
+        [Inject]
+        public GameFSM(DiContainer diContainer, GameBus gameBus)
         {
+            _diContainer = diContainer;
             _gameBus = gameBus;
-            _resourcesManager = resourcesManager;
-            _profileService = profileService;
         }
 
         public void Initialize()
@@ -33,11 +28,21 @@ namespace Chang.FSM
         {
             _gameBus.PreloadFor = PreloadType.Boot;
 
+            var vocabularyState = new VocabularyState(_diContainer, _gameBus, OnStateResult);
+            var preloaderState = new PreloadState(_gameBus, OnStateResult);
+            var lobbyState = new LobbyState(_gameBus, OnStateResult);
+
+            _diContainer.Inject(vocabularyState);
+            _diContainer.Inject(preloaderState);
+            _diContainer.Inject(lobbyState);
+
+            lobbyState.Init();
+
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
-                { StateType.Preload, new PreloadState(_gameBus, OnStateResult, _resourcesManager, _profileService) },
-                { StateType.Lobby, new LobbyState(_gameBus, OnStateResult) },
-                { StateType.PlayVocabulary, new VocabularyState(_gameBus, OnStateResult, _resourcesManager, _profileService) },
+                { StateType.Preload, preloaderState },
+                { StateType.Lobby, lobbyState},
+                { StateType.PlayVocabulary, vocabularyState },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));

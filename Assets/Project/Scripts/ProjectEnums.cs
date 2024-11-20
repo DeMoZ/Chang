@@ -36,4 +36,11 @@ namespace Chang
         Franche,
         Thai
     }
+
+    public enum MainTabType
+    {
+        None,
+        Lessons,
+        Repetition,
+    }
 }

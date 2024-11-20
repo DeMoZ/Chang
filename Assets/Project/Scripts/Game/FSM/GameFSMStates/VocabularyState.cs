@@ -3,6 +3,7 @@ using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
 using DMZ.FSM;
+using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
@@ -11,19 +12,19 @@ namespace Chang.FSM
     {
         public override StateType Type => StateType.PlayVocabulary;
 
-        private readonly IResourcesManager _resourcesManager;
-        private readonly GameOverlayController _overlayController;
-        private readonly ProfileService _profileService;
-
+        [Inject] private readonly GameOverlayController _gameOverlayController;
+        [Inject] private readonly ProfileService _profileService;
+        [Inject] private readonly ScreenManager _screenManager;
+        [Inject] private readonly IResourcesManager _resourcesManager;
+        
+        private readonly DiContainer _diContainer;
+        
         private VocabularyBus _vocabularyBus;
         private VocabularyFSM _vocabularyFSM;
 
-        public VocabularyState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager, ProfileService profileService) :
-            base(gameBus, onStateResult)
+        public VocabularyState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
-            _overlayController = Bus.ScreenManager.GameOverlayController;
-            _resourcesManager = resourcesManager;
-            _profileService = profileService;
+            _diContainer = diContainer;
         }
 
         public void Dispose()
@@ -35,20 +36,20 @@ namespace Chang.FSM
         {
             base.Enter();
 
-            Bus.ScreenManager.SetActivePagesContainer(true);
+            _screenManager.SetActivePagesContainer(true);
 
-            Bus.ScreenManager.GameOverlayController.OnCheck += OnCheck;
-            Bus.ScreenManager.GameOverlayController.OnContinue += OnContinue;
+            _gameOverlayController.OnCheck += OnCheck;
+            _gameOverlayController.OnContinue += OnContinue;
             // todo roman implement phonetic toggle
             //Bus.ScreenManager.GameOverlayController.OnPhonetic += OnPhonetic;
 
             _vocabularyBus = new VocabularyBus
             {
-                ScreenManager = Bus.ScreenManager,
+                // ScreenManager = _screenManager,
                 CurrentLesson = Bus.CurrentLesson,
             };
 
-            _vocabularyFSM = new VocabularyFSM(_vocabularyBus);
+            _vocabularyFSM = new VocabularyFSM(_diContainer, _vocabularyBus);
             _vocabularyFSM.Initialize();
             OnContinue();
         }
@@ -57,12 +58,12 @@ namespace Chang.FSM
         {
             base.Exit();
 
-            Bus.ScreenManager.SetActivePagesContainer(false);
-            Bus.ScreenManager.GameOverlayController.OnCheck -= OnCheck;
-            Bus.ScreenManager.GameOverlayController.OnContinue -= OnContinue;
+            _screenManager.SetActivePagesContainer(false);
+            _gameOverlayController.OnCheck -= OnCheck;
+            _gameOverlayController.OnContinue -= OnContinue;
         }
 
-        private void OnCheck()
+        private async void OnCheck()
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
@@ -74,7 +75,10 @@ namespace Chang.FSM
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
 
             _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpleQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
-            _profileService.SavePrefs();
+
+            // todo roman this is very temporary solution with save everywerere and need to replace with save only in prefs
+            //await _profileService.SavePrefsAsync();
+            await _profileService.SaveAsync();
 
             if (!isCorrect)
             {
@@ -87,8 +91,8 @@ namespace Chang.FSM
                 InfoText = _vocabularyBus.QuestionResult.Info[0]
             };
 
-            _overlayController.SetContinueButtonInfo(info);
-            _overlayController.EnableContinueButton(true);
+            _gameOverlayController.SetContinueButtonInfo(info);
+            _gameOverlayController.EnableContinueButton(true);
         }
 
         private async void OnContinue()
@@ -99,7 +103,7 @@ namespace Chang.FSM
             {
                 // the lesson has finished
                 // todo roman implement ResultState. UML needs to be updated
-                
+
                 // todo remove Temporary solution with exit to lobby
                 OnStateResult.Invoke(StateType.Lobby);
             }

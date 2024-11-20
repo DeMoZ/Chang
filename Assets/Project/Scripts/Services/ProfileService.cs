@@ -3,7 +3,8 @@ using System.Threading;
 using Chang.Profile;
 using Chang.Services.SaveLoad;
 using Cysharp.Threading.Tasks;
-using DMZ.DebugSystem;
+using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Services
 {
@@ -15,6 +16,7 @@ namespace Chang.Services
 
         private CancellationTokenSource _cancellationTokenSource;
 
+        [Inject]
         public ProfileService(PlayerProfile playerProfile)
         {
             _playerProfile = playerProfile;
@@ -46,13 +48,12 @@ namespace Chang.Services
             // todo roman await MergePrefsAndUnityData();
         }
 
-        public async UniTask SavePrefs()
+        public async UniTask SaveAsync()
         {
             _playerProfile.ProgressData.SetTime(DateTime.UtcNow);
 
-            _prefsSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
-            _unityCloudSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
-
+            await _prefsSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
+            await _unityCloudSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
             await SaveIntoScriptableObject();
         }
 
@@ -69,8 +70,9 @@ namespace Chang.Services
             unit.AddLog(logUnit);
         }
 
-        public void FirstMethod()
+        public ProgressData GetProgress()
         {
+            return _playerProfile.ProgressData;
         }
     }
 }

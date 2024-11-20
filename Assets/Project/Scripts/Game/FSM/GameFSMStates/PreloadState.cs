@@ -1,29 +1,26 @@
 using System;
 using System.Linq;
-using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 using DMZ.FSM;
+using Zenject;
 
 namespace Chang.FSM
 {
     public class PreloadState : ResultStateBase<StateType, GameBus>
     {
-        private readonly IResourcesManager _resourcesManager;
-        private readonly PreloaderController _preloaderController;
-        private readonly ProfileService _profileService;
+        [Inject] private readonly PreloaderController _preloaderController;
+        [Inject] private readonly ProfileService _profileService;
+        [Inject] private readonly IResourcesManager _resourcesManager;
 
         public override StateType Type => StateType.Preload;
 
-        public PreloadState(GameBus gameBus, Action<StateType> onStateResult, IResourcesManager resourcesManager, ProfileService profileService) :
-            base(gameBus, onStateResult)
+        public PreloadState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
-            _resourcesManager = resourcesManager;
-            _preloaderController = gameBus.ScreenManager.PreloaderController;
-            _profileService = profileService;
+
         }
 
         public override void Enter()
@@ -63,7 +60,7 @@ namespace Chang.FSM
                     await LoadQuestionsContentAsync();
                     OnStateResult.Invoke(StateType.PlayVocabulary);
                     break;
-                
+
                 default:
                     throw new NotImplementedException();
             }
@@ -74,23 +71,39 @@ namespace Chang.FSM
             await _profileService.LoadStoredData();
         }
 
-        private async UniTask LoadQuestionsContentAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         private async UniTask LoadGameBookConfigAsync()
         {
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
             Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text);
-            Bus.Lessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
+            Bus.SimpleLessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
+            
+            Bus.SimpleQuestions = Bus.SimpleBookData.Lessons
+                .SelectMany(lesson => lesson.Questions)
+                .GroupBy(question => question.FileName)
+                .Select(group => group.First())
+                .ToDictionary(question => question.FileName);
         }
 
+        /// <summary>
+        /// Loads lesson config but not to be used as it as,
+        /// but to also load contained question configs that will be called by the fileNames.
+        /// </summary>
         private async UniTask LoadLessonContentAsync()
         {
-            var lesson = Bus.Lessons[Bus.CurrentLesson.FileName];
+            var lesson = Bus.SimpleLessons[Bus.CurrentLesson.FileName];
             await _resourcesManager.LoadAssetAsync<LessonConfig>(lesson.FileName);
+        }
+
+        /// <summary>
+        /// Loads qeustion configs to cash it and load faster during game
+        /// </summary>
+        private async UniTask LoadQuestionsContentAsync()
+        {
+            foreach (var question in Bus.CurrentLesson.SimpleQuestions)
+            {
+                await _resourcesManager.LoadAssetAsync<QuestionConfig>(question.FileName);
+            }
         }
     }
 }

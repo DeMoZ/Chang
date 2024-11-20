@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -8,42 +9,46 @@ namespace Chang
 {
     public class GameBookController : IViewController
     {
-        private GameBookView _view;
+        private readonly GameBus _gameBus;
+        private readonly MainScreenBus _mainScreenBus;
+        private readonly GameBookView _view;
         private List<SimpleLessonData> _lessons;
-        
-        private Action<string> _onItemClick;
 
         [Inject]
-        public GameBookController(GameBookView view)
+        public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view)
         {
+            _gameBus = gameBus;
+            _mainScreenBus = mainScreenBus;
             _view = view;
         }
 
-        public void Init(List<SimpleLessonData> lessons, Action<string> onItemClick)
+        public void Dispose()
         {
-            _lessons = lessons;
-            _onItemClick = onItemClick;
+            throw new NotImplementedException();
+        }
 
-            var fileNames = lessons.Select(n => n.FileName).ToList();
+        public void Init()
+        {
             _view.Init(OnItemClick);
+        }
+
+        public void Set()
+        {
+            _lessons = _gameBus.SimpleBookData.Lessons;
+            var fileNames = _lessons.Select(n => n.FileName).ToList();
             _view.Set(fileNames);
         }
 
         private void OnItemClick(int index)
         {
             Debug.Log($"Clicked on item {index}");
-            
-            _onItemClick?.Invoke(_lessons[index].FileName);
+
+            _mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
         }
 
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
-        }
-
-        internal void Init(List<SimpleLessonData> lessonNames, object onLessonClick)
-        {
-            throw new NotImplementedException();
         }
     }
 }

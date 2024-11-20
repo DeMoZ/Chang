@@ -1,6 +1,6 @@
 using System;
-using Cysharp.Threading.Tasks;
 using DMZ.FSM;
+using Zenject;
 
 namespace Chang.FSM
 {
@@ -8,41 +8,34 @@ namespace Chang.FSM
     {
         public override StateType Type => StateType.Lobby;
 
-        private bool _isLoading;
-        private GameBookController _gameBookController;
+        [Inject]
+        private readonly LobbyController _mainUiController;
 
         public LobbyState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
+
+        }
+
+        public void Init()
+        {
+            _mainUiController.Init(OnExitState);
         }
 
         public override void Enter()
         {
             base.Enter();
-            // todo roman should the lobby views and controller, not only book
-            _gameBookController = Bus.ScreenManager.GameBookController;
-            _gameBookController.Init(Bus.SimpleBookData.Lessons, name => OnLessonClickAsync(name).Forget());
-            _gameBookController.SetViewActive(true);
+
+            _mainUiController.Enter();
         }
 
         public override void Exit()
         {
-            _gameBookController.SetViewActive(false);
+            _mainUiController.SetViewActive(false);
         }
 
-
-        private async UniTaskVoid OnLessonClickAsync(string name)
+        private void OnExitState()
         {
-            if (_isLoading)
-                return;
-
-            _isLoading = true;
-            await UniTask.DelayFrame(1);
-            Bus.CurrentLesson.SetFileName(name);
-            Bus.CurrentLesson.SetSimpQuesitons(Bus.Lessons[name].Questions);
-
-            Bus.PreloadFor = PreloadType.LessonConfig;
             OnStateResult.Invoke(StateType.Preload);
-            _isLoading = false;
         }
     }
 }
