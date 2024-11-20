@@ -74,12 +74,12 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        private void OnToggleSelected(bool isOn, MainTabType lessons)
+        private void OnToggleSelected(bool isOn, MainTabType tabType)
         {
             if (_isLoading || !isOn)
                 return;
 
-            switch (lessons)
+            switch (tabType)
             {
                 case MainTabType.Lessons:
                     _gameBookController.Set();
@@ -88,11 +88,12 @@ namespace Chang
                     _repetitionController.Set();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(lessons), lessons, null);
+                    throw new ArgumentOutOfRangeException(nameof(tabType), tabType, null);
             }
-
-            _gameBookController.SetViewActive(lessons == MainTabType.Lessons);
-            _repetitionController.SetViewActive(lessons == MainTabType.Repetition);
+            
+            _gameBookController.SetViewActive(tabType == MainTabType.Lessons);
+            _repetitionController.SetViewActive(tabType == MainTabType.Repetition);
+            _currentTabType = tabType;
         }
 
         private async void OnGameBookLessonClickedAsync(string name)
