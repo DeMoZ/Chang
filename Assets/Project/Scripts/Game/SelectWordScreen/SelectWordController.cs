@@ -17,7 +17,6 @@ namespace Chang
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         // todo roman here should be a classes, not a configx
