@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Chang.Utilities
 {
-    //[CreateAssetMenu(fileName = "BookToJsonUtility", menuName = "Chang/GameBook/BookToJsonUtility", order = 0)]
+    [CreateAssetMenu(fileName = "BookToJsonUtility", menuName = "Chang/GameBook/BookToJsonUtility", order = 0)]
     public class BookToJsonUtility : ScriptableObject
     {
         private const string WordPath = ""; // "Word/";
@@ -17,7 +17,8 @@ namespace Chang.Utilities
         public GameBookConfig GameBookConfig;
         public TextAsset GameBookJson;
 
-        [Button("Make Json of lesson names")]
+        //[Button("Make Json of lesson names")]
+        [Obsolete]
         private void MakeJsonOfLessonNames()
         {
             Debug.Log($"{nameof(MakeJsonOfLessonNames)} Start");
@@ -47,7 +48,7 @@ namespace Chang.Utilities
             Debug.Log($"{nameof(MakeJsonOfLessonNames)} Done");
         }
 
-        [Button("Make Json depth")]
+        [Button("Make Book Json")]
         private void MakeJsonDepth()
         {
             Debug.Log($"{nameof(MakeJsonDepth)} Start");
