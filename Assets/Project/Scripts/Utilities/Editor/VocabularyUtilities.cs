@@ -162,7 +162,7 @@ namespace Chang
             if (key.Length > 20)
             {
                 key = key.Substring(0, 15);
-                var uniqueSuffix = Guid.NewGuid().ToString().Substring(0, 5);
+                var uniqueSuffix = GetHash(key);
                 key = $"{key}_{uniqueSuffix}";
             }
 
@@ -176,6 +176,22 @@ namespace Chang
                 Meaning = columns[3].ToString(),
             };
         }
+        
+        private static int GetHash(string str)
+        {
+            unchecked
+            {
+                var hash = 23;
+
+                foreach (var c in str)
+                {
+                    hash = (hash * 31) + c;
+                    hash ^= (hash << 5) | (hash >> 3);
+                }
+
+                return hash < 0 ? -hash : hash; // Ensure the hash is positive
+            }
+        }
     }
 
     [Serializable]
@@ -183,7 +199,7 @@ namespace Chang
     {
         public string Key { get; set; }
         public Languages Language { get; set; }
-        public string Section { get; set; } // Verbs, Objects, Quesction, Preposition...
+        public string Section { get; set; } // Verbs, Objects, Question, Preposition...
         public string Word { get; set; }
         public string Phonetic { get; set; }
         public string Meaning { get; set; }

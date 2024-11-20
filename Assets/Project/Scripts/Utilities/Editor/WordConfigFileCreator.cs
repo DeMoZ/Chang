@@ -16,11 +16,16 @@ namespace Chang
         private static string NewFolder = "New";
 
         private static string JsonFileName = "Words.json";
+        
+        private static JsonSerializerSettings JsonSettings = new()
+        {
+            Formatting = Formatting.Indented,
+        };
 
         public static void CreateJson(Languages language, List<PhraseData> data)
         {
             var path = GetWordsJsonFilePath(language);
-            var jsonData = JsonConvert.SerializeObject(data);
+            var jsonData = JsonConvert.SerializeObject(data, JsonSettings);
             File.WriteAllText(path, jsonData);
         }
 

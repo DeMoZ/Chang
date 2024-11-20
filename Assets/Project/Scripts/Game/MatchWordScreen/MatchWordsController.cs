@@ -15,7 +15,6 @@ namespace Chang
 
         public void Dispose()
         {
-            throw new System.NotImplementedException();
         }
 
         public void SetViewActive(bool active)
