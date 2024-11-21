@@ -24,6 +24,7 @@ namespace Chang
         /// should return to this tab after play any other game state
         /// </summary>
         private MainTabType _currentTabType = MainTabType.Lessons;
+
         private Action _onExitState;
 
         [Inject]
@@ -90,7 +91,7 @@ namespace Chang
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tabType), tabType, null);
             }
-            
+
             _gameBookController.SetViewActive(tabType == MainTabType.Lessons);
             _repetitionController.SetViewActive(tabType == MainTabType.Repetition);
             _currentTabType = tabType;
@@ -125,9 +126,10 @@ namespace Chang
 
             var repetitions = _repetitionService.GetGeneralRepetition(GeneralRepetitionAmount);
             var questions = repetitions.Select(q => _gameBus.SimpleQuestions[q.FileName]).ToList();
+            // _gameBus.CurrentLesson.SetFileName(string.Empty); // todo roman need to not to mark lesson as finished on end repetition
             _gameBus.CurrentLesson.SetSimpQuesitons(questions);
-            _gameBus.PreloadFor = PreloadType.QuestConfigs;
 
+            _gameBus.PreloadFor = PreloadType.QuestConfigs;
             _isLoading = false;
 
             _onExitState?.Invoke();
