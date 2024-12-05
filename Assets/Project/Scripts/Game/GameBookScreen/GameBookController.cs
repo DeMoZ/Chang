@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cysharp.Threading.Tasks;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -24,7 +23,6 @@ namespace Chang
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         public void Init()

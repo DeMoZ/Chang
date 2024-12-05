@@ -1,6 +1,7 @@
 using UnityEngine;
 using Zenject;
 using Chang.UI;
+using DMZ.Legacy.LoginScreen;
 
 namespace Chang
 {
@@ -11,14 +12,14 @@ namespace Chang
         [SerializeField] private GameBookView gameBookScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
 
-        [Space]
-        [SerializeField] private GameObject pagesContainer;
+        [Space] [SerializeField] private GameObject pagesContainer;
 
-        [Space]
-        [SerializeField] private DemonstrationWordView demonstrationScreen;
+        [Space] [SerializeField] private DemonstrationWordView demonstrationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;
         [SerializeField] private PreloaderView preloaderScreen;
+
+        [Space] [SerializeField] private LogInView logInScreen;
 
         public override void InstallBindings()
         {
@@ -27,35 +28,44 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
 
             #region Views
+
             Container.BindInstance(mainUiScreen).AsSingle();
             Container.BindInstance(repetitionScreen).AsSingle();
             Container.BindInstance(gameBookScreen).AsSingle();
             Container.BindInstance(gameOverlayScreen).AsSingle();
-
             Container.BindInstance(pagesContainer).WithId("PagesContainer").AsSingle();
-
             Container.BindInstance(demonstrationScreen).AsSingle();
             Container.BindInstance(matchWordScreen).AsSingle();
             Container.BindInstance(selectWordScreen).AsSingle();
-
             Container.BindInstance(preloaderScreen).AsSingle();
+            Container.BindInstance(logInScreen).AsSingle();
 
             #endregion
 
             #region Controllers
+
             Container.BindInterfacesAndSelfTo<LobbyController>().AsSingle();
             Container.BindInterfacesAndSelfTo<RepetitionController>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBookController>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameOverlayController>().AsSingle();
-
             Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
-
             Container.BindInterfacesAndSelfTo<PreloaderController>().AsSingle();
             #endregion
 
             Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
+
+            BindLogin();
+        }
+
+        private void BindLogin()
+        {
+            var loginModel = new LogInModel();
+            var loginController = new LogInController(loginModel);
+            Container.BindInstance(loginModel).AsSingle();
+            logInScreen.Init(loginModel);
+            Container.BindInstance(loginController).AsSingle();
         }
     }
 }
