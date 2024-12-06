@@ -1,4 +1,4 @@
-using Chang.Services.SaveLoad;
+using Chang.Services.DataProvider;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 
@@ -8,29 +8,29 @@ namespace Chang.Services
     {
         private const string AssetPath = "Assets/Project/EditorCheckSaveLoad.asset";
         
-        private ISaveLoad _scriptableObjectSaveLoad;
+        private IDataProvider _scriptableObjectDataProvider;
 
-        private ISaveLoad ScriptableObjectSaveLoad
+        private IDataProvider ScriptableObjectDataProvider
         {
             get
             {
 #if UNITY_EDITOR
-                _scriptableObjectSaveLoad ??= AssetDatabase.LoadAssetAtPath<ScriptableObjectSaveLoadEditor>(AssetPath);
+                _scriptableObjectDataProvider ??= AssetDatabase.LoadAssetAtPath<ScriptableObjectDataProviderEditor>(AssetPath);
 #endif
-                return _scriptableObjectSaveLoad;
+                return _scriptableObjectDataProvider;
             }
         }
 
         private async UniTask SaveIntoScriptableObject()
         {
-            if (ScriptableObjectSaveLoad == null)
+            if (ScriptableObjectDataProvider == null)
                 return;
 
-            await ScriptableObjectSaveLoad.SaveProfileDataAsync(_playerProfile.ProfileData);
-            await ScriptableObjectSaveLoad.SaveProgressDataAsync(_playerProfile.ProgressData);
+            await ScriptableObjectDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData);
+            await ScriptableObjectDataProvider.SaveProgressDataAsync(_playerProfile.ProgressData);
             
 #if UNITY_EDITOR
-            EditorUtility.SetDirty(_scriptableObjectSaveLoad as ScriptableObjectSaveLoadEditor);
+            EditorUtility.SetDirty(_scriptableObjectDataProvider as ScriptableObjectDataProviderEditor);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 #endif

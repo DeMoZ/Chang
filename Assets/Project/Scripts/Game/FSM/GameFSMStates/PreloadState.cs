@@ -14,7 +14,7 @@ namespace Chang.FSM
     {
         [Inject] private readonly PreloaderController _preloaderController;
         [Inject] private readonly ProfileService _profileService;
-        [Inject] private readonly AuthorizationService _authenticationService;
+        [Inject] private readonly AuthorizationService _authorizationService;
         [Inject] private readonly IResourcesManager _resourcesManager;
 
         public override StateType Type => StateType.Preload;
@@ -47,7 +47,7 @@ namespace Chang.FSM
             {
                 case PreloadType.Boot:
                     await LoadGameBookConfigAsync();
-                    await AuthenticateAsync();
+                    await AuthorizeAsync();
                     await LoadProfileAsync();
                     OnStateResult.Invoke(StateType.Lobby);
                     break;
@@ -68,9 +68,9 @@ namespace Chang.FSM
             }
         }
         
-        private async UniTask AuthenticateAsync()
+        private async UniTask AuthorizeAsync()
         {
-            await _authenticationService.AuthenticateAsync();
+            await _authorizationService.AuthenticateAsync();
         }
         
         private async UniTask LoadProfileAsync()

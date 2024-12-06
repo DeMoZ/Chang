@@ -1,4 +1,4 @@
-namespace Chang.Services.SaveLoad
+namespace Chang.Services.DataProvider
 {
     public class SaveLoadConstants
     {

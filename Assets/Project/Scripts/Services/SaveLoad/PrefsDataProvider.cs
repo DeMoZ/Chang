@@ -1,16 +1,22 @@
+using System.Threading;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Chang.Services.SaveLoad
+namespace Chang.Services.DataProvider
 {
-    public class PrefsSaveLoad : ISaveLoad
+    public class PrefsDataProvider : IDataProvider
     {
         private JsonSerializerSettings _jSettings = new()
         {
             Formatting = Formatting.Indented,
         };
+
+        public async UniTask InitAsync(CancellationToken ct)
+        {
+            
+        }
 
         public async UniTask<ProfileData> LoadProfileDataAsync()
         {

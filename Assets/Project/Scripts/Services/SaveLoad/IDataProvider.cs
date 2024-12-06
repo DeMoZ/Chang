@@ -3,19 +3,16 @@ using System.Threading;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 
-namespace Chang.Services.SaveLoad
+namespace Chang.Services.DataProvider
 {
-    public interface ISaveLoad : IDisposable
+    public interface IDataProvider : IDisposable
     {
+        UniTask InitAsync(CancellationToken ct);
+        
         UniTask<ProfileData> LoadProfileDataAsync();
         UniTask SaveProfileDataAsync(ProfileData data);
 
         UniTask<ProgressData> LoadProgressDataAsync();
         UniTask SaveProgressDataAsync(ProgressData data);
-    }
-
-    public interface ISaveLoadWithInit : ISaveLoad
-    {
-        UniTask InitAsync(CancellationToken token);
     }
 }

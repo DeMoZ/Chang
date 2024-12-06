@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
-namespace Chang.Services.SaveLoad
+namespace Chang.Services.DataProvider
 {
     [CreateAssetMenu(menuName = "Chang/Services/SaveLoad Config", fileName = "SaveLoadConfig")]
-    public class ScriptableObjectSaveLoadEditor : ScriptableObject, ISaveLoad
+    public class ScriptableObjectDataProviderEditor : ScriptableObject, IDataProvider
     {
         private JsonSerializerSettings _jSettings = new()
         {
@@ -18,6 +19,11 @@ namespace Chang.Services.SaveLoad
         
         public ProfileData ProfileData;
         public SerializableProgressData ProgressData;
+
+        public async UniTask InitAsync(CancellationToken ct)
+        {
+            
+        }
 
         public UniTask<ProfileData> LoadProfileDataAsync()
         {
