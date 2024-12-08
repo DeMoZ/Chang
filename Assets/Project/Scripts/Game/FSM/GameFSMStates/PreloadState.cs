@@ -46,10 +46,10 @@ namespace Chang.FSM
             switch (Bus.PreloadFor)
             {
                 case PreloadType.Boot:
-                    await LoadGameBookConfigAsync();
+                    // await LoadGameBookConfigAsync();
                     await AuthorizeAsync();
-                    await LoadProfileAsync();
-                    OnStateResult.Invoke(StateType.Lobby);
+                    //await LoadProfileAsync();
+                    //OnStateResult.Invoke(StateType.Lobby);
                     break;
                 // case PreloadType.Lobby:
                 //     // _gameModel.Lessons are already in the model, so no need to call PlreloaderType.Lobby
@@ -70,7 +70,9 @@ namespace Chang.FSM
         
         private async UniTask AuthorizeAsync()
         {
+            Debug.Log("AuthorizeAsync start");
             await _authorizationService.AuthenticateAsync();
+            Debug.Log("AuthorizeAsync end");
         }
         
         private async UniTask LoadProfileAsync()
@@ -80,6 +82,7 @@ namespace Chang.FSM
 
         private async UniTask LoadGameBookConfigAsync()
         {
+            Debug.Log("LoadGameBookConfigAsync start");
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
             Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text);
@@ -90,6 +93,7 @@ namespace Chang.FSM
                 .GroupBy(question => question.FileName)
                 .Select(group => group.First())
                 .ToDictionary(question => question.FileName);
+            Debug.Log("LoadGameBookConfigAsync end");
         }
 
         /// <summary>
