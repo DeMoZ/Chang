@@ -46,10 +46,11 @@ namespace Chang.FSM
             switch (Bus.PreloadFor)
             {
                 case PreloadType.Boot:
-                    // await LoadGameBookConfigAsync();
+                    // todo roman this logic supposed to be in main game logic, not in the FSM
+                    await LoadGameBookConfigAsync();
                     await AuthorizeAsync();
-                    //await LoadProfileAsync();
-                    //OnStateResult.Invoke(StateType.Lobby);
+                    await LoadProfileAsync();
+                    OnStateResult.Invoke(StateType.Lobby);
                     break;
                 // case PreloadType.Lobby:
                 //     // _gameModel.Lessons are already in the model, so no need to call PlreloaderType.Lobby

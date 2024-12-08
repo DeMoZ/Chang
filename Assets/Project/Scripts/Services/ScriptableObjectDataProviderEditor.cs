@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -19,11 +18,6 @@ namespace Chang.Services.DataProvider
         
         public ProfileData ProfileData;
         public SerializableProgressData ProgressData;
-
-        public async UniTask InitAsync(CancellationToken ct)
-        {
-            
-        }
 
         public UniTask<ProfileData> LoadProfileDataAsync()
         {

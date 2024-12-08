@@ -1,4 +1,3 @@
-using System.Threading;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -12,11 +11,6 @@ namespace Chang.Services.DataProvider
         {
             Formatting = Formatting.Indented,
         };
-
-        public async UniTask InitAsync(CancellationToken ct)
-        {
-            
-        }
 
         public async UniTask<ProfileData> LoadProfileDataAsync()
         {

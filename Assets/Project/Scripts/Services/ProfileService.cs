@@ -41,7 +41,6 @@ namespace Chang.Services
 
             await SaveIntoScriptableObject();
 
-            await _unityCloudDataProvider.InitAsync(_cancellationTokenSource.Token);
             await _unityCloudDataProvider.LoadProfileDataAsync(); // todo roman Token
             await _unityCloudDataProvider.LoadProgressDataAsync(); // todo roman Token
 

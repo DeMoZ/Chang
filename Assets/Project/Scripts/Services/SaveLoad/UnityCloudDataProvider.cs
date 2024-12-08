@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -11,19 +10,12 @@ namespace Chang.Services.DataProvider
 {
     public class UnityCloudDataProvider : IDataProvider
     {
-        private bool _isInitialized;
-
         private JsonSerializerSettings _jSettings = new()
         {
             Formatting = Formatting.Indented,
         };
         
-        public async UniTask InitAsync(CancellationToken token)
-        {
-            _isInitialized = true;
-        }
-
-        private async UniTask<bool> CheckSession()
+        private bool CheckSession()
         {
             return AuthenticationService.Instance.IsSignedIn;
         }
@@ -40,7 +32,7 @@ namespace Chang.Services.DataProvider
 
         public async UniTask<ProgressData> LoadProgressDataAsync()
         {
-            var isOk = await CheckSession();
+            var isOk = CheckSession();
             if (!isOk)
                 return null;
 
@@ -49,7 +41,7 @@ namespace Chang.Services.DataProvider
 
         public async UniTask<ProfileData> LoadProfileDataAsync()
         {
-            var isOk = await CheckSession();
+            var isOk = CheckSession();
             if (!isOk)
                 return null;
 
@@ -58,7 +50,7 @@ namespace Chang.Services.DataProvider
 
         private async UniTask SaveProgressDataAsync<T>(string key, T data)
         {
-            var isOk = await CheckSession();
+            var isOk = CheckSession();
             if (!isOk)
                 return;
 
