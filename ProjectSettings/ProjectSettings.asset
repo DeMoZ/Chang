@@ -140,8 +140,9 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 1.0.004
-  preloadedAssets: []
+  bundleVersion: 0.0.7
+  preloadedAssets:
+  - {fileID: -8925349760895711129, guid: 4d5b8b6c12c214ebaa5d1279f554ce5b, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -165,7 +166,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.roman.kolychev.Chang
     Lumin: com.DefaultCompany.com.unity.template.mobile2D
-    Standalone: com.DefaultCompany.com.unity.template.mobile2D
+    Standalone: com.roman.kolychev.Chang
     iPhone: com.DefaultCompany.com.unity.template.mobile2D
     tvOS: com.DefaultCompany.com.unity.template.mobile2D
   buildNumber:
@@ -814,21 +815,24 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Android: TextMeshPro;ODIN_VALIDATOR;ODIN_VALIDATOR_3_1;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
-    EmbeddedLinux: TextMeshPro
+    Android: ENABLE_JSON_CATALOG;TextMeshPro;ODIN_VALIDATOR;ODIN_VALIDATOR_3_1;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
+    EmbeddedLinux: ENABLE_JSON_CATALOG;TextMeshPro
     GameCoreXboxOne: TextMeshPro
-    Nintendo Switch: TextMeshPro
-    PS4: TextMeshPro
+    LinuxHeadlessSimulation: ENABLE_JSON_CATALOG
+    Nintendo Switch: ENABLE_JSON_CATALOG;TextMeshPro
+    PS4: ENABLE_JSON_CATALOG;TextMeshPro
     PS5: TextMeshPro
-    QNX: TextMeshPro
+    QNX: ENABLE_JSON_CATALOG;TextMeshPro
     ReservedCFE: TextMeshPro
+    Server: ENABLE_JSON_CATALOG
     Stadia: TextMeshPro
-    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_VALIDATOR;ODIN_VALIDATOR_3_1;TextMeshPro
+    Standalone: ENABLE_JSON_CATALOG;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_VALIDATOR;ODIN_VALIDATOR_3_1;TextMeshPro
     VisionOS: TextMeshPro
-    WebGL: TextMeshPro;ODIN_VALIDATOR;ODIN_VALIDATOR_3_1;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
-    XboxOne: TextMeshPro
-    iPhone: TextMeshPro
-    tvOS: TextMeshPro
+    WebGL: ENABLE_JSON_CATALOG;TextMeshPro;ODIN_VALIDATOR;ODIN_VALIDATOR_3_1;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
+    Windows Store Apps: ENABLE_JSON_CATALOG
+    XboxOne: ENABLE_JSON_CATALOG;TextMeshPro
+    iPhone: ENABLE_JSON_CATALOG;TextMeshPro
+    tvOS: ENABLE_JSON_CATALOG;TextMeshPro
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
