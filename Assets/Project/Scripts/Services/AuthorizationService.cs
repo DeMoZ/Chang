@@ -27,9 +27,7 @@ namespace Chang.Services
         public async UniTask AuthenticateAsync()
         {
             _logInController.SetViewActive(true);
-            _logInController.Login(_cts);
-
-            await UniTask.WaitUntilCanceled(_cts.Token);
+            await _logInController.Login();
             
             _logInController.SetViewActive(false);
         }
