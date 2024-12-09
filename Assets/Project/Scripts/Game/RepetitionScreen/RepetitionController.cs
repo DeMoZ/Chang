@@ -29,7 +29,6 @@ namespace Chang
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         public void Init()

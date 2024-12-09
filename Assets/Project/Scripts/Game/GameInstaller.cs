@@ -18,6 +18,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<PlayerProfile>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
             Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<AuthorizationService>().AsSingle();
         }
     }
 

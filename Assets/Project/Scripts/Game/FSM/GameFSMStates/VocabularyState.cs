@@ -113,7 +113,7 @@ namespace Chang.FSM
 #if UNITY_WEBGL
                 var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(lesson.CurrentSimpleQuestion.FileName);
 #else
-                var questionConfig = _resourcesManager.LoadAssetSync<QuestionConfig>(lesson.CurrentSimpQuestion.FileName);
+                var questionConfig = _resourcesManager.LoadAssetSync<QuestionConfig>(lesson.CurrentSimpleQuestion.FileName);
 #endif
                 lesson.SetCurrentQuestionConfig(questionConfig.QuestionData);
                 _vocabularyFSM.SwitchState(questionConfig.QuestionType);
