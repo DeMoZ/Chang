@@ -16,6 +16,7 @@ namespace Chang
         private readonly MainUiView _view;
         private readonly GameBookController _gameBookController;
         private readonly RepetitionController _repetitionController;
+        private readonly ProfileController _profileController;
         private readonly RepetitionService _repetitionService;
 
         private bool _isLoading;
@@ -34,6 +35,7 @@ namespace Chang
             MainUiView view,
             GameBookController gameBookController,
             RepetitionController repetitionController,
+            ProfileController profileController,
             RepetitionService repetitionService)
         {
             _gameBus = gameBus;
@@ -41,6 +43,7 @@ namespace Chang
             _view = view;
             _gameBookController = gameBookController;
             _repetitionController = repetitionController;
+            _profileController = profileController;
             _repetitionService = repetitionService;
 
             _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClickedAsync;
@@ -60,6 +63,7 @@ namespace Chang
             _view.Init(OnToggleSelected);
             _gameBookController.Init();
             _repetitionController.Init();
+            _profileController.Init();
         }
 
         public void Enter()
@@ -85,8 +89,13 @@ namespace Chang
                 case MainTabType.Lessons:
                     _gameBookController.Set();
                     break;
+                
                 case MainTabType.Repetition:
                     _repetitionController.Set();
+                    break;
+                
+                case MainTabType.Profile:
+                    _profileController.Set();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tabType), tabType, null);
@@ -94,6 +103,7 @@ namespace Chang
 
             _gameBookController.SetViewActive(tabType == MainTabType.Lessons);
             _repetitionController.SetViewActive(tabType == MainTabType.Repetition);
+            _profileController.SetViewActive(tabType == MainTabType.Profile);
             _currentTabType = tabType;
         }
 

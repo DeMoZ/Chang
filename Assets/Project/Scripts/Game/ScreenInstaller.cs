@@ -9,6 +9,7 @@ namespace Chang
     {
         [SerializeField] private MainUiView mainUiScreen;
         [SerializeField] private RepetitionView repetitionScreen;
+        [SerializeField] private ProfileView profileScreen;
         [SerializeField] private GameBookView gameBookScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
 
@@ -39,6 +40,7 @@ namespace Chang
             Container.BindInstance(selectWordScreen).AsSingle();
             Container.BindInstance(preloaderScreen).AsSingle();
             Container.BindInstance(logInScreen).AsSingle();
+            Container.BindInstance(profileScreen).AsSingle();
 
             #endregion
 
@@ -52,6 +54,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<PreloaderController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ProfileController>().AsSingle();
             #endregion
 
             Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();

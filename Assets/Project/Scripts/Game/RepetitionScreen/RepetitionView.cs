@@ -13,8 +13,7 @@ namespace Chang
         [SerializeField] private OverviewItem sentences;
         [SerializeField] private Transform logContainer;
 
-        [Space]
-        [SerializeField] private OverviewLogItem overviewLogItemPrefab;
+        [Space] [SerializeField] private OverviewLogItem overviewLogItemPrefab;
         [SerializeField] private Button repeatBtn;
         private Action _onRepeatClick;
 
@@ -23,7 +22,8 @@ namespace Chang
             foreach (var questLog in sortedList)
             {
                 var overviewLogItem = Instantiate(overviewLogItemPrefab, logContainer);
-                overviewLogItem.Set(questLog.FileName, questLog.Mark.ToString(), questLog.Log.Count.ToString(), questLog.UtcTime.ToString(), questLog.SuccesSequese.ToString());
+                overviewLogItem.Set(questLog.FileName, questLog.Mark.ToString(), questLog.Log.Count.ToString(), questLog.UtcTime.ToString(),
+                    questLog.SuccesSequese.ToString());
             }
         }
 
@@ -32,7 +32,8 @@ namespace Chang
             _onRepeatClick = onRepeatClick;
         }
 
-        private void OnEnable(){
+        private void OnEnable()
+        {
             repeatBtn.onClick.AddListener(OnRepeatClick);
         }
 

@@ -42,5 +42,6 @@ namespace Chang
         None,
         Lessons,
         Repetition,
+        Profile,
     }
 }

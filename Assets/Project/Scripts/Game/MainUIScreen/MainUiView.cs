@@ -14,9 +14,10 @@ namespace Chang
         [Space]
         [SerializeField] private TabToggle lessonsToggle;
         [SerializeField] private TabToggle repetitionToggle;
+        [SerializeField] private TabToggle profileToggle;
 
-        [SerializeField] private Button settingsButton;
-        [SerializeField] private Button exitButton;
+        // [SerializeField] private Button settingsButton;
+        // [SerializeField] private Button exitButton;
 
         private Action<bool, MainTabType> _onTabChanged;
 
@@ -34,6 +35,7 @@ namespace Chang
         {
             lessonsToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Lessons));
             repetitionToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Repetition));
+            profileToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Profile));
 
             // settingsButton.onClick.AddListener(OnSettingsButtonClicked);
             // exitButton.onClick.AddListener(OnExitButtonClicked);
@@ -44,6 +46,7 @@ namespace Chang
 
             lessonsToggle.RemoveAllListeners();
             repetitionToggle.RemoveAllListeners();
+            profileToggle.RemoveAllListeners();
 
             // settingsButton.onClick.RemoveListener(OnSettingsButtonClicked);
             // exitButton.onClick.RemoveListener(OnExitButtonClicked);
@@ -56,6 +59,9 @@ namespace Chang
 
             if (currentTabType == MainTabType.Repetition)
                 repetitionToggle.Activate();
+            
+            if (currentTabType == MainTabType.Profile)
+                profileToggle.Activate();
         }
 
         private void OnTabChanged(bool isOn, MainTabType tabType)
