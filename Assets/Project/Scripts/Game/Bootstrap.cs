@@ -13,8 +13,10 @@ namespace Chang
         {
             await BootstrapProcesses();
 
-            var handle = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Single);
-            await UniTask.WaitUntil(() => handle.isDone, PlayerLoopTiming.Update);
+            SceneManager.LoadScene("Game", LoadSceneMode.Single);
+            
+            // var handle = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Single);
+            // await UniTask.WaitUntil(() => handle.isDone, PlayerLoopTiming.Update);
         }
 
         private async UniTask BootstrapProcesses()

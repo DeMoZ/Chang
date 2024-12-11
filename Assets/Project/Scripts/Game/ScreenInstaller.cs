@@ -13,14 +13,20 @@ namespace Chang
         [SerializeField] private GameBookView gameBookScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
 
-        [Space] [SerializeField] private GameObject pagesContainer;
+        [Space] 
+        [SerializeField] private GameObject pagesContainer;
 
-        [Space] [SerializeField] private DemonstrationWordView demonstrationScreen;
+        [Space] 
+        [SerializeField] private DemonstrationWordView demonstrationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;
         [SerializeField] private PreloaderView preloaderScreen;
 
-        [Space] [SerializeField] private LogInView logInScreen;
+        [Space] 
+        [SerializeField] private LogInView logInScreen;
+
+        private LogInController _loginController;
+
 
         public override void InstallBindings()
         {
@@ -65,10 +71,15 @@ namespace Chang
         private void BindLogin()
         {
             var loginModel = new LogInModel();
-            var loginController = new LogInController(loginModel);
+            _loginController = new LogInController(loginModel);
             Container.BindInstance(loginModel).AsSingle();
             logInScreen.Init(loginModel);
-            Container.BindInstance(loginController).AsSingle();
+            Container.BindInstance(_loginController).AsSingle();
+        }
+
+        public void OnDestroy()
+        {
+            _loginController?.Dispose();
         }
     }
 }
