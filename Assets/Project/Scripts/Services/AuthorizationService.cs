@@ -35,11 +35,9 @@ namespace Chang.Services
 
         public async UniTask AuthenticateAsync()
         {
-            Debug.LogError("AuthenticateAsync start");
             _logInController.SetViewActive(true);
             await _logInController.LoginAsync();
             _logInController.SetViewActive(false);
-            Debug.LogError("AuthenticateAsync end");
         }
 
         private void OnLogOutClicked()
