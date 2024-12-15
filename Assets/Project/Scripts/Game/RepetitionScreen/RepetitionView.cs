@@ -23,7 +23,7 @@ namespace Chang
             {
                 var overviewLogItem = Instantiate(overviewLogItemPrefab, logContainer);
                 overviewLogItem.Set(questLog.FileName, questLog.Mark.ToString(), questLog.Log.Count.ToString(), questLog.UtcTime.ToString(),
-                    questLog.SuccesSequese.ToString());
+                    questLog.SuccessSequence.ToString());
             }
         }
 

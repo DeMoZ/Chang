@@ -27,7 +27,7 @@ namespace Chang.Services
         public List<QuestLog> GetGeneralRepetition(int amount)
         {
             var progressQuestions = _profileService.GetProgress().Questions;
-            var progressList = progressQuestions.Select(q => q.Value).Where(q => q.SuccesSequese < 10);
+            var progressList = progressQuestions.Select(q => q.Value).Where(q => q.SuccessSequence < 10);
 
             // var sortedWords = words
             //     .OrderBy(word => word.Mark)

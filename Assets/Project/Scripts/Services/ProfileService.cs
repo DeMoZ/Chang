@@ -14,7 +14,7 @@ namespace Chang.Services
         private readonly IDataProvider _prefsDataProvider;
         private readonly IDataProvider _unityCloudDataProvider;
 
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cts;
 
         [Inject]
         public ProfileService(PlayerProfile playerProfile)
@@ -26,25 +26,26 @@ namespace Chang.Services
 
         public void Dispose()
         {
+            _cts?.Cancel();
+            _cts?.Dispose();
             _prefsDataProvider.Dispose();
             _unityCloudDataProvider.Dispose();
         }
 
         public async UniTask LoadStoredData()
         {
-            _cancellationTokenSource = new CancellationTokenSource();
+            _cts = new CancellationTokenSource();
 
-            var profileData = await _prefsDataProvider.LoadProfileDataAsync();
-            var progressData = await _prefsDataProvider.LoadProgressDataAsync();
-            _playerProfile.ProfileData = profileData;
-            _playerProfile.ProgressData = progressData; //!progressData.IsInitialized ? new ProgressData() : progressData;
+            //var prefsProfileData = await _prefsDataProvider.LoadProfileDataAsync(_cts.Token);
+            //var prefsProgressData = await _prefsDataProvider.LoadProgressDataAsync(_cts.Token);
+            
+            var unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(_cts.Token);
+            var unityProgressData = await _unityCloudDataProvider.LoadProgressDataAsync(_cts.Token);
 
-            await SaveIntoScriptableObject();
-
-            await _unityCloudDataProvider.LoadProfileDataAsync(); // todo roman Token
-            await _unityCloudDataProvider.LoadProgressDataAsync(); // todo roman Token
-
-            // todo roman await MergePrefsAndUnityData();
+            // todo roman merge data with prefs. But for now will use only cloud data
+            
+            _playerProfile.ProfileData = unityProfileData;
+            _playerProfile.ProgressData = unityProgressData;
         }
 
         public async UniTask SaveAsync()
@@ -61,6 +62,7 @@ namespace Chang.Services
             if (!_playerProfile.ProgressData.Questions.TryGetValue(key, out var unit))
             {
                 unit = new QuestLog(key);
+                // unit.SetDefaultData(key);
                 _playerProfile.ProgressData.Questions[key] = unit;
             }
 

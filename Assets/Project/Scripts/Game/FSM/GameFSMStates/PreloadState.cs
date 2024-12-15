@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using DMZ.FSM;
 using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
@@ -48,8 +49,8 @@ namespace Chang.FSM
                 case PreloadType.Boot:
                     // todo roman this logic supposed to be in main game logic, not in the FSM
                     await LoadGameBookConfigAsync();
-                    await AuthorizeAsync();
-                    await LoadProfileAsync();
+                    await _authorizationService.AuthenticateAsync();
+                    await _profileService.LoadStoredData();
                     OnStateResult.Invoke(StateType.Lobby);
                     break;
                 // case PreloadType.Lobby:
@@ -69,18 +70,7 @@ namespace Chang.FSM
             }
         }
         
-        private async UniTask AuthorizeAsync()
-        {
-            Debug.Log("AuthorizeAsync start");
-            await _authorizationService.AuthenticateAsync();
-            Debug.Log("AuthorizeAsync end");
-        }
-        
-        private async UniTask LoadProfileAsync()
-        {
-            await _profileService.LoadStoredData();
-        }
-
+        // todo roman think about to move this logic to the resource manager as the other services to the job inside
         private async UniTask LoadGameBookConfigAsync()
         {
             Debug.Log("LoadGameBookConfigAsync start");

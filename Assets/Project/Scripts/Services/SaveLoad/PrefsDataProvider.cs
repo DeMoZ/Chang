@@ -1,3 +1,4 @@
+using System.Threading;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -12,9 +13,9 @@ namespace Chang.Services.DataProvider
             Formatting = Formatting.Indented,
         };
 
-        public async UniTask<ProfileData> LoadProfileDataAsync()
+        public async UniTask<ProfileData> LoadProfileDataAsync(CancellationToken ct)
         {
-            var json = PlayerPrefs.GetString(SaveLoadConstants.ProfileDataKey, "{}");
+            var json = PlayerPrefs.GetString(DataProviderConstants.ProfileDataKey, "{}");
             var data = JsonConvert.DeserializeObject<ProfileData>(json);
 
             await UniTask.Yield();
@@ -25,14 +26,14 @@ namespace Chang.Services.DataProvider
         public async UniTask SaveProfileDataAsync(ProfileData data)
         {
             var json = JsonConvert.SerializeObject(data, _jSettings);
-            PlayerPrefs.SetString(SaveLoadConstants.ProfileDataKey, json);
+            PlayerPrefs.SetString(DataProviderConstants.ProfileDataKey, json);
 
             await UniTask.Yield();
         }
 
-        public async UniTask<ProgressData> LoadProgressDataAsync()
+        public async UniTask<ProgressData> LoadProgressDataAsync(CancellationToken ct)
         {
-            var json = PlayerPrefs.GetString(SaveLoadConstants.ProgressDataKey, "{}");
+            var json = PlayerPrefs.GetString(DataProviderConstants.ProgressDataKey, "{}");
             var data = JsonConvert.DeserializeObject<ProgressData>(json);
 
             await UniTask.Yield();
@@ -43,7 +44,7 @@ namespace Chang.Services.DataProvider
         public async UniTask SaveProgressDataAsync(ProgressData data)
         {
             var json = JsonConvert.SerializeObject(data, _jSettings);
-            PlayerPrefs.SetString(SaveLoadConstants.ProgressDataKey, json);
+            PlayerPrefs.SetString(DataProviderConstants.ProgressDataKey, json);
 
             await UniTask.Yield();
         }
