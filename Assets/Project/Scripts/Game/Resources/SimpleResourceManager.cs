@@ -60,7 +60,7 @@ namespace Chang.Resources
                 }
             }
 
-            Debug.Log($"{nameof(IsAssetExists)}() asset exists {isExists} :{key}");
+            Debug.Log($"{nameof(IsAssetExists)}() asset exists {isExists} : {key}");
             return isExists;
         }
 

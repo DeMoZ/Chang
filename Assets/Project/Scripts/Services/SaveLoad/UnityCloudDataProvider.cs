@@ -78,6 +78,10 @@ namespace Chang.Services.DataProvider
         private async UniTask<T> LoadDataAsync<T>(string key) where T : class
         {
             var savedData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { key });
+            
+            var wholeJson = JsonConvert.SerializeObject(savedData, _jSettings);
+            Debug.Log($"Loaded data for key {key}:\n {wholeJson}");
+            
             if (savedData.TryGetValue(key, out var value))
             {
                 var valString = JsonConvert.SerializeObject(value, _jSettings);

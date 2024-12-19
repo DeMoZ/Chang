@@ -22,7 +22,6 @@ namespace Chang.FSM
 
         public PreloadState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
-
         }
 
         public override void Enter()
@@ -69,7 +68,7 @@ namespace Chang.FSM
                     throw new NotImplementedException();
             }
         }
-        
+
         // todo roman think about to move this logic to the resource manager as the other services to the job inside
         private async UniTask LoadGameBookConfigAsync()
         {
@@ -78,13 +77,26 @@ namespace Chang.FSM
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
             Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text);
             Bus.SimpleLessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
-            
+
             Bus.SimpleQuestions = Bus.SimpleBookData.Lessons
                 .SelectMany(lesson => lesson.Questions)
                 .GroupBy(question => question.FileName)
                 .Select(group => group.First())
                 .ToDictionary(question => question.FileName);
             Debug.Log("LoadGameBookConfigAsync end");
+
+            // todo test mock loading of assets
+            await Test_LoadingAssets<TextAsset>("BookJson");
+            await Test_LoadingAssets<LessonConfig>("AdjectiveAdverb 0");
+            await Test_LoadingAssets<QuestionConfig>("Hot");
+            await Test_LoadingAssets<PhraseConfig>("go");
+        }
+
+        private async UniTask Test_LoadingAssets<T>(string key) where T : UnityEngine.Object
+        {
+            Debug.Log($"[Test] Start Test_LoadingAsset: {key}, type: {typeof(T)}");
+            await _resourcesManager.LoadAssetAsync<T>(key);
+            Debug.Log($"[Test] End   Test_LoadingAsset: {key}, type: {typeof(T)}");
         }
 
         /// <summary>
