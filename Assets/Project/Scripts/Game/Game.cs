@@ -2,9 +2,9 @@ using System;
 using Chang.FSM;
 using Chang.Resources;
 using Chang.Services;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
@@ -27,9 +27,14 @@ namespace Chang
 
         public async void Initialize()
         {
-            Debug.Log($"{nameof(Game)} Initialize");
-
+            Debug.Log($"Initialize");
             await _resourcesManager.InitAsync();
+
+#if DEVELOPMENT
+            var tests = new Tests(_resourcesManager);
+            await tests.Run();
+            tests.Dispose();
+#endif
 
             _gameFSM.Initialize();
         }
