@@ -68,12 +68,12 @@ namespace Chang.FSM
 
         private void OnToggleValueChanged(int index, bool isOn)
         {
+            _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index] == _correctWord;
             var info = new List<string> { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
             var result = new SelectWordResult(isCorrect, info);
             Bus.QuestionResult = result;
-            _gameOverlayController.EnableCheckButton(isOn);
         }
 
         private void Shuffle<T>(List<T> list)

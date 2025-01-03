@@ -76,10 +76,6 @@ namespace Chang.FSM
 
             _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpleQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
 
-            // todo roman this is very temporary solution with save everywerere and need to replace with save only in prefs
-            //await _profileService.SavePrefsAsync();
-            await _profileService.SaveAsync();
-
             if (!isCorrect)
             {
                 _vocabularyBus.CurrentLesson.EnqueueCurrentQuestion();
@@ -90,9 +86,13 @@ namespace Chang.FSM
                 IsCorrect = isCorrect,
                 InfoText = _vocabularyBus.QuestionResult.Info[0]
             };
-
+            
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
+            
+            // todo roman this is very temporary solution with save everywerere and need to replace with save only in prefs
+            //await _profileService.SavePrefsAsync();
+            await _profileService.SaveAsync();
         }
 
         private async void OnContinue()
