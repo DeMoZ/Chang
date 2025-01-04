@@ -16,9 +16,9 @@ namespace Chang.FSM
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
         [Inject] private readonly IResourcesManager _resourcesManager;
-        
+
         private readonly DiContainer _diContainer;
-        
+
         private VocabularyBus _vocabularyBus;
         private VocabularyFSM _vocabularyFSM;
 
@@ -84,14 +84,12 @@ namespace Chang.FSM
             var info = new ContinueButtonInfo
             {
                 IsCorrect = isCorrect,
-                InfoText = _vocabularyBus.QuestionResult.Info[0]
+                InfoText = (string)_vocabularyBus.QuestionResult.Info[0]
             };
-            
+
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
-            
-            // todo roman this is very temporary solution with save everywerere and need to replace with save only in prefs
-            //await _profileService.SavePrefsAsync();
+
             await _profileService.SaveAsync();
         }
 
@@ -109,14 +107,31 @@ namespace Chang.FSM
             }
             else
             {
-                lesson.SetCurrentSimpQiestion();
-#if UNITY_WEBGL
-                var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(lesson.CurrentSimpleQuestion.FileName);
-#else
-                var questionConfig = _resourcesManager.LoadAssetSync<QuestionConfig>(lesson.CurrentSimpleQuestion.FileName);
-#endif
+                var nextQuestion = lesson.PeekNextQuestion();
+                var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(nextQuestion.FileName);
+
+                if (nextQuestion.QuestionType == QuestionType.SelectWord && IsNeedDemonstration(nextQuestion))
+                {
+                    var demonstration = new SimpleQuestDemonstrationWord
+                    {
+                        FileName = nextQuestion.FileName
+                    };
+
+                    lesson.InsertNextQuest(demonstration);
+                    questionConfig.OverrideType(QuestionType.DemonstrationWord);
+                }
+
+                lesson.DequeueAndSetSipmQiestion();
                 lesson.SetCurrentQuestionConfig(questionConfig.QuestionData);
                 _vocabularyFSM.SwitchState(questionConfig.QuestionType);
+            }
+
+            return;
+
+            // if no records stored about this question or the question mark is 1 (or 0)
+            bool IsNeedDemonstration(SimpleQuestionBase question)
+            {
+                return !_profileService.TryGetLog(question.FileName, out var questLog) || questLog.Mark < 1;
             }
         }
     }

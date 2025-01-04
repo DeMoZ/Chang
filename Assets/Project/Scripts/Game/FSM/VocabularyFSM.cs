@@ -33,22 +33,23 @@ namespace Chang.FSM
 
         protected override void Init()
         {
-            // todo roman implement other states
-
-            //var demonstrationWordState = new DemostrationState( _vocabularyBus, OnStateResult) ;
+            var demonstrationWordState = new DemonstrationState(_vocabularyBus, OnStateResult);
             var selectWordState = new SelectWordState(_vocabularyBus, OnStateResult);
+            
+            _diContainer.Inject(demonstrationWordState);
+            _diContainer.Inject(selectWordState);
+            
+            // todo roman implement other states
             //var matchWordsState = new MatchWordsState( _vocabularyBus, OnStateResult) ;
             //var demonstrationDialogueState = new DemonstrationDialogueState( _vocabularyBus, OnStateResult) ;
 
-            //_diContainer.Inject(demonstrationWordState);
-            _diContainer.Inject(selectWordState);
             //_diContainer.Inject(matchWordsState);
             //_diContainer.Inject(demonstrationDialogueState);
 
             _states = new Dictionary<QuestionType, IResultState<QuestionType>>
             {
-                // { QuestionType.DemonstrationWord, demonstrationWordState },
-                 { QuestionType.SelectWord, selectWordState },
+                { QuestionType.DemonstrationWord, demonstrationWordState },
+                { QuestionType.SelectWord, selectWordState },
                 // { QuestionType.MatchWords, matchWordsState },
                 // { QuestionType.DemonstrationDialogue, demonstrationDialogueState },
             };

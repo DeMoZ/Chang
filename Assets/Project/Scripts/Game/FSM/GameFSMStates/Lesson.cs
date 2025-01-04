@@ -13,9 +13,9 @@ namespace Chang
         /// </summary>
         public string FileName { get; private set; }
 
-        public SimpleQuestionDataBase CurrentSimpleQuestion { get; private set; }
-        public List<SimpleQuestionDataBase> SimpleQuestions { get; private set; }
-        public Queue<SimpleQuestionDataBase> SimpleQuestionQueue { get; private set; }
+        public SimpleQuestionBase CurrentSimpleQuestion { get; private set; }
+        public List<SimpleQuestionBase> SimpleQuestions { get; private set; }
+        public Queue<SimpleQuestionBase> SimpleQuestionQueue { get; private set; }
         public QuestBase CurrentQuestion { get; private set; }
 
         /// <summary>
@@ -35,20 +35,35 @@ namespace Chang
             FileName = fileName;
         }
 
-        public void SetCurrentSimpQiestion()
+        public void DequeueAndSetSipmQiestion()
         {
             CurrentSimpleQuestion = SimpleQuestionQueue.Dequeue();
         }
 
-        public void SetSimpQuesitons(List<SimpleQuestionDataBase> simpQuestions)
+        public SimpleQuestionBase PeekNextQuestion()
         {
-            SimpleQuestions = simpQuestions;
-            SimpleQuestionQueue = new Queue<SimpleQuestionDataBase>(simpQuestions);
+            return SimpleQuestionQueue.Peek();
+        }
+        
+        /// <summary>
+        /// Add quest to the beginning of the queue (example: add demonstration screen)
+        /// </summary> 
+        public void InsertNextQuest(SimpleQuestionBase quest)
+        {
+            var tempList = new List<SimpleQuestionBase>(SimpleQuestionQueue);
+            tempList.Insert(0, quest);
+            SimpleQuestionQueue = new Queue<SimpleQuestionBase>(tempList);
         }
 
-        public void SetCurrentQuestionConfig(QuestBase question)
+        public void SetSimpleQuestions(List<SimpleQuestionBase> questions)
         {
-            CurrentQuestion = question;
+            SimpleQuestions = questions;
+            SimpleQuestionQueue = new Queue<SimpleQuestionBase>(questions);
+        }
+
+        public void SetCurrentQuestionConfig(QuestBase quest)
+        {
+            CurrentQuestion = quest;
         }
 
         public void EnqueueCurrentQuestion()

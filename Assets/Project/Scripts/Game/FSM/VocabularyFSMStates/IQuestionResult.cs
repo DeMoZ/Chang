@@ -6,6 +6,6 @@ namespace Chang.FSM
     {
         public bool IsCorrect { get; }
         public QuestionType Type { get; }
-        public List<string> Info { get; }
+        object[] Info { get; }
     }
 }
