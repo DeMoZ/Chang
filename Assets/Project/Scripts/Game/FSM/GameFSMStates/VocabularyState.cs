@@ -45,7 +45,6 @@ namespace Chang.FSM
 
             _vocabularyBus = new VocabularyBus
             {
-                // ScreenManager = _screenManager,
                 CurrentLesson = Bus.CurrentLesson,
             };
 
@@ -58,6 +57,8 @@ namespace Chang.FSM
         {
             base.Exit();
 
+            _vocabularyBus = null;
+            _vocabularyFSM.Dispose();
             _screenManager.SetActivePagesContainer(false);
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
@@ -81,16 +82,13 @@ namespace Chang.FSM
                 _vocabularyBus.CurrentLesson.EnqueueCurrentQuestion();
             }
 
-            var info = new ContinueButtonInfo
-            {
-                IsCorrect = isCorrect,
-                InfoText = (string)_vocabularyBus.QuestionResult.Info[0]
-            };
+            var info = new ContinueButtonInfo();
+            info.IsCorrect = isCorrect;
+            info.InfoText = (string)_vocabularyBus.QuestionResult.Info[0];
 
             _gameOverlayController.SetContinueButtonInfo(info);
-            _gameOverlayController.EnableContinueButton(true);
-
             await _profileService.SaveAsync();
+            _gameOverlayController.EnableContinueButton(true);
         }
 
         private async void OnContinue()
@@ -109,6 +107,7 @@ namespace Chang.FSM
             {
                 var nextQuestion = lesson.PeekNextQuestion();
                 var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(nextQuestion.FileName);
+                var questionData = questionConfig.GetQuestData();
 
                 if (nextQuestion.QuestionType == QuestionType.SelectWord && IsNeedDemonstration(nextQuestion))
                 {
@@ -118,12 +117,13 @@ namespace Chang.FSM
                     };
 
                     lesson.InsertNextQuest(demonstration);
-                    questionConfig.OverrideType(QuestionType.DemonstrationWord);
+                    var questionSelectWordData = (QuestSelectWordData)questionData;
+                    questionData = new QuestDemonstrateWordData(questionSelectWordData.CorrectWord);
                 }
 
                 lesson.DequeueAndSetSipmQiestion();
-                lesson.SetCurrentQuestionConfig(questionConfig.QuestionData);
-                _vocabularyFSM.SwitchState(questionConfig.QuestionType);
+                lesson.SetCurrentQuestionConfig(questionData);
+                _vocabularyFSM.SwitchState(questionData.QuestionType);
             }
 
             return;

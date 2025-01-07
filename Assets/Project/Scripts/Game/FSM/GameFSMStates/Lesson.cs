@@ -16,7 +16,7 @@ namespace Chang
         public SimpleQuestionBase CurrentSimpleQuestion { get; private set; }
         public List<SimpleQuestionBase> SimpleQuestions { get; private set; }
         public Queue<SimpleQuestionBase> SimpleQuestionQueue { get; private set; }
-        public QuestBase CurrentQuestion { get; private set; }
+        public QuestDataBase CurrentQuestion { get; private set; }
 
         /// <summary>
         /// todo roman if this lesson is not preconfigured, the content should be loaded in the other way ?
@@ -61,7 +61,7 @@ namespace Chang
             SimpleQuestionQueue = new Queue<SimpleQuestionBase>(questions);
         }
 
-        public void SetCurrentQuestionConfig(QuestBase quest)
+        public void SetCurrentQuestionConfig(QuestDataBase quest)
         {
             CurrentQuestion = quest;
         }

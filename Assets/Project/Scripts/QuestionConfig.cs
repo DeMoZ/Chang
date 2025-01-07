@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Chang
 {
@@ -8,24 +9,18 @@ namespace Chang
     {
         [field: SerializeField] public QuestionType QuestionType { get; private set; }
         [field: SerializeField, ReadOnly] public string Info { get; private set; } = string.Empty;
-        [SerializeReference] public QuestBase QuestionData;
+        [FormerlySerializedAs("QuestionData")] [SerializeReference] public QuestBase Question;
 
         public void Init() => OnValidate();
 
-        public void OverrideType(QuestionType type)
-        {
-            QuestionType = type;
-            QuestionData.OverrideType(type);
-        }
-
         private void OnValidate()
         {
-            // if (QuestionData != null)
-            //     QuestionType = QuestionData.QuestionType;
-            // else
-            //     QuestionType = QuestionType.None;
-
-            Info = QuestionData == null ? string.Empty : QuestionData.EditorInfo();
+            Info = Question == null ? string.Empty : Question.EditorInfo();
+        }
+        
+        public QuestDataBase GetQuestData()
+        {
+            return Question?.GetQuestData();
         }
     }
 }

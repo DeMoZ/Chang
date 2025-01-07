@@ -24,8 +24,8 @@ namespace Chang.FSM
         [Inject] private readonly SelectWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
 
-        private List<PhraseConfig> _mixWords;
-        private PhraseConfig _correctWord;
+        private List<PhraseData> _mixWords;
+        private PhraseData _correctWord;
 
         public override QuestionType Type => QuestionType.SelectWord;
 
@@ -51,12 +51,12 @@ namespace Chang.FSM
             if (Bus.CurrentLesson.CurrentQuestion.QuestionType != Type)
                 throw new ArgumentException("Question type doesnt match with state type");
 
-            var questionData = (QuestSelectWord)Bus.CurrentLesson.CurrentQuestion;
+            var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestion;
             _correctWord = questionData.CorrectWord;
-            _mixWords ??= new List<PhraseConfig>();
+            _mixWords ??= new List<PhraseData>();
             _mixWords.Clear();
             _mixWords.Add(_correctWord);
-            _mixWords.AddRange(questionData.MixWords); // TempPopulateMixWords(); // todo roman this is very temp solution
+            _mixWords.AddRange(questionData.MixWords);
             Shuffle(_mixWords);
 
             var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai

@@ -65,12 +65,12 @@ namespace Chang.Utilities
                             throw new NotImplementedException();
                         
                         case QuestionType.SelectWord:
-                            var qData = question.QuestionData as QuestSelectWord;
+                            var qData = question.Question as QuestSelectWord;
                             var data = new QuestSelectWordData
                             {
                                 FileName = question.name,
-                                CorrectWordFileName = $"{WordPath}{qData.CorrectWord.name}",
-                                MixWordsFileNames = qData.MixWords.Select(c => $"{WordPath}{c.name}").ToList()
+                                CorrectWordFileName = $"{WordPath}{qData.CorrectWord.Key}",
+                                MixWordsFileNames = qData.MixWords.Select(c => $"{WordPath}{c.Key}").ToList()
                             };
                             questionData.Add(data);
                             break;

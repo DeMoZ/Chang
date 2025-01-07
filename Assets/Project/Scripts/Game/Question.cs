@@ -2,36 +2,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
-using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
+/// <summary>
+/// Questions data used in Configs only
+/// </summary>
 namespace Chang
 {
     public abstract class QuestBase
     {
-        public virtual QuestionType QuestionType { get; protected set; } = QuestionType.None;
-
-        public void OverrideType(QuestionType type)
-        {
-            QuestionType = type;
-        }
-
+        public QuestionType QuestionType { get; protected set; }
+        
         public string EditorInfo()
         {
-            // var gender = GenderType == GenderType.None ? string.Empty : GenderType.ToString();
-            // return $"{GetEditorInfo()} {gender}";
             return $"{GetEditorInfo()}";
         }
+
+        public abstract QuestDataBase GetQuestData();
 
         protected abstract string GetEditorInfo();
     }
 
     public class QuestSelectWord : QuestBase
     {
-        public override QuestionType QuestionType { get; protected set; } = QuestionType.SelectWord;
+        public QuestSelectWord()
+        {
+            QuestionType = QuestionType.SelectWord;
+        }
 
         [InlineEditor(Expanded = true)] public PhraseConfig CorrectWord;
         public List<PhraseConfig> MixWords;
+
+        public override QuestDataBase GetQuestData()
+        {
+            return new QuestSelectWordData
+            {
+                CorrectWord = CorrectWord.PhraseData,
+                MixWords = MixWords?.Select(m => m.PhraseData).ToList()
+            };
+        }
 
         protected override string GetEditorInfo()
         {
@@ -41,9 +50,22 @@ namespace Chang
 
     public class QuestMatchWord : QuestBase
     {
-        public override QuestionType QuestionType { get; protected set; } = QuestionType.MatchWords;
+        public QuestMatchWord()
+        {
+            QuestionType = QuestionType.MatchWords;
+        }
+
         public string Question = "Select words";
         public bool C;
+
+        public override QuestDataBase GetQuestData()
+        {
+            return new QuestMatchData
+            {
+                Question = Question,
+                C = C
+            };
+        }
 
         protected override string GetEditorInfo()
         {

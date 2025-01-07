@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Chang
@@ -9,11 +8,14 @@ namespace Chang
     public class PhraseConfig : ScriptableObject
     {
         [field: SerializeField] public string Key { get; set; } = string.Empty;
+
         /*[field: SerializeField]*/
         public Languages Language { get; set; } = Languages.Thai;
         [field: SerializeField] public AudioClip AudioClip { get; set; }
         [field: SerializeField] public Sprite Sprite { get; set; }
         [field: SerializeField] public WordConfig Word { get; set; }
+
+        public PhraseData PhraseData => new(Key, AudioClip, Sprite, Word.WordData);
     }
 
     [Serializable]
@@ -31,10 +33,7 @@ namespace Chang
         [field: SerializeField] public string Phonetic { get; set; } = string.Empty;
         [field: SerializeField] public List<Translation> Meanings { get; set; }
 
-        public string GetTranslation()
-        {
-            return Meanings.FirstOrDefault(t => t.Language == Languages.English)?.Meaning;
-        } 
+        public WordData WordData => new(EngWord, Word, Phonetic, Meanings);
     }
 
     [Serializable]

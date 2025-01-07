@@ -23,9 +23,9 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        public void Init(bool questInStudiedLanguage, PhraseConfig correctWord, Action<bool> onToggleValueChanged)
+        public void Init(bool questInStudiedLanguage, PhraseData correctWord, Action<bool> onToggleValueChanged)
         {
-            throw new NotImplementedException(); 
+            _view.Init(questInStudiedLanguage, correctWord, onToggleValueChanged);
         }
     }
 }

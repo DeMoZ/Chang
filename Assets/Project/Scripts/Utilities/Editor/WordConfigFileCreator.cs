@@ -1,12 +1,12 @@
-using System.IO;
-using UnityEngine;
-using UnityEditor;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using UnityEditor;
+using UnityEngine;
 
-namespace Chang
+namespace Chang.Utilities
 {
     public static class WordConfigFileCreator
     {
@@ -16,7 +16,7 @@ namespace Chang
         private static string NewFolder = "New";
 
         private static string JsonFileName = "Words.json";
-        
+
         private static JsonSerializerSettings JsonSettings = new()
         {
             Formatting = Formatting.Indented,
@@ -87,13 +87,13 @@ namespace Chang
         public static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
         {
             var meanings = new List<Translation>
-        {
-            new()
             {
-                Language = Languages.English,
-                Meaning = phraseData.Meaning
-            }
-        };
+                new()
+                {
+                    Language = Languages.English,
+                    Meaning = phraseData.Meaning
+                }
+            };
 
             var word = new WordConfig
             {
