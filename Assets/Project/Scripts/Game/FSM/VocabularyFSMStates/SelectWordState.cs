@@ -1,5 +1,4 @@
 using System;
-using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using System.Collections.Generic;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -11,9 +10,9 @@ namespace Chang.FSM
     {
         public QuestionType Type => QuestionType.SelectWord;
         public bool IsCorrect { get; }
-        public List<string> Info { get; }
+        public object[] Info { get; }
 
-        public SelectWordResult(bool isCorrect, List<string> info)
+        public SelectWordResult(bool isCorrect, params object[] info)
         {
             IsCorrect = isCorrect;
             Info = info;
@@ -22,11 +21,11 @@ namespace Chang.FSM
 
     public class SelectWordState : ResultStateBase<QuestionType, VocabularyBus>
     {
-        [Inject] private readonly SelectWordController _selectWordController;
+        [Inject] private readonly SelectWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
 
-        private List<PhraseConfig> _mixWords;
-        private PhraseConfig _correctWord;
+        private List<PhraseData> _mixWords;
+        private PhraseData _correctWord;
 
         public override QuestionType Type => QuestionType.SelectWord;
 
@@ -37,33 +36,32 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
-            StateBodyAsync().Forget();
+            StateBody();
         }
 
         public override void Exit()
         {
             base.Exit();
-            _selectWordController.SetViewActive(false);
+            _stateController.SetViewActive(false);
         }
 
-        public async UniTaskVoid StateBodyAsync()
+        private void StateBody()
         {
             // 1 instantiate screen and initialise with data.
             if (Bus.CurrentLesson.CurrentQuestion.QuestionType != Type)
                 throw new ArgumentException("Question type doesnt match with state type");
 
-            var questionData = (QuestSelectWord)Bus.CurrentLesson.CurrentQuestion;
+            var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestion;
             _correctWord = questionData.CorrectWord;
-            _mixWords ??= new List<PhraseConfig>();
+            _mixWords ??= new List<PhraseData>();
             _mixWords.Clear();
             _mixWords.Add(_correctWord);
-            _mixWords.AddRange(questionData.MixWords); // TempPopulateMixWords(); // todo roman this is very temp solution
+            _mixWords.AddRange(questionData.MixWords);
             Shuffle(_mixWords);
 
             var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
-            _selectWordController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
-
-            _selectWordController.SetViewActive(true);
+            _stateController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
+            _stateController.SetViewActive(true);
         }
 
         private void OnToggleValueChanged(int index, bool isOn)
@@ -71,7 +69,7 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index] == _correctWord;
-            var info = new List<string> { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
+            object[] info = { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
             var result = new SelectWordResult(isCorrect, info);
             Bus.QuestionResult = result;
         }
@@ -86,48 +84,6 @@ namespace Chang.FSM
                 int k = rng.Next(n + 1);
                 (list[k], list[n]) = (list[n], list[k]);
             }
-        }
-
-        /// <summary>
-        /// todo roman this is very temp solution
-        /// </summary>
-        private List<PhraseConfig> TempPopulateMixWords()
-        {
-            ///
-            /*
-                      var rezult = new List<PhraseConfig>();
-                      rezult.Add(((QuestSelectWord)Bus.CurrentQuestion.QuestionData).CorrectWord);
-
-                      // todo roman the flow needs to be from current word|lesson to previous
-                     foreach (Question q in Bus.Questions)
-                      {
-                          /// if (q == Bus.CurrentQuestion) continue;
-
-                          var qType = q.QuestionType;
-
-                          switch (qType)
-                          {
-                              case QuestionType.DemonstrationWord:
-                                  rezult.Add(((QuestDemonstration)q.QuestionData).PhraseConfig);
-                                  break;
-                              case QuestionType.SelectWord:
-                                  rezult.Add(((QuestSelectWord)q.QuestionData).CorrectWord);
-                                  break;
-                              case QuestionType.MatchWords:
-                                  // skip
-                                  break;
-                              case QuestionType.DemonstrationDialogue:
-                                  // skip
-                                  break;
-                              default:
-                                  throw new ArgumentOutOfRangeException(nameof(qType));
-                          }
-
-                          if (rezult.Count >= 6) break;
-                      }
-
-            return rezult;*/
-            return null;
         }
     }
 }

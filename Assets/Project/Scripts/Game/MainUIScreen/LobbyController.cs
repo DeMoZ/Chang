@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Zenject;
@@ -115,7 +116,7 @@ namespace Chang
             _isLoading = true;
             await UniTask.DelayFrame(1);
             _gameBus.CurrentLesson.SetFileName(name);
-            _gameBus.CurrentLesson.SetSimpQuesitons(_gameBus.SimpleLessons[name].Questions);
+            _gameBus.CurrentLesson.SetSimpleQuestions(_gameBus.SimpleLessons[name].Questions);
 
             _gameBus.PreloadFor = PreloadType.LessonConfig;
             _isLoading = false;
@@ -135,9 +136,9 @@ namespace Chang
             _gameBus.CurrentLesson = new Lesson();
 
             var repetitions = _repetitionService.GetGeneralRepetition(GeneralRepetitionAmount);
-            var questions = repetitions.Select(q => _gameBus.SimpleQuestions[q.FileName]).ToList();
+            List<SimpleQuestionBase> questions = repetitions.Select(q => _gameBus.SimpleQuestions[q.FileName]).ToList();
             // _gameBus.CurrentLesson.SetFileName(string.Empty); // todo roman need to not to mark lesson as finished on end repetition
-            _gameBus.CurrentLesson.SetSimpQuesitons(questions);
+            _gameBus.CurrentLesson.SetSimpleQuestions(questions);
 
             _gameBus.PreloadFor = PreloadType.QuestConfigs;
             _isLoading = false;

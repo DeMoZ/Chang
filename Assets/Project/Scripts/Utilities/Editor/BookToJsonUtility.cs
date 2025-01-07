@@ -17,37 +17,6 @@ namespace Chang.Utilities
         public GameBookConfig GameBookConfig;
         public TextAsset GameBookJson;
 
-        //[Button("Make Json of lesson names")]
-        [Obsolete]
-        private void MakeJsonOfLessonNames()
-        {
-            Debug.Log($"{nameof(MakeJsonOfLessonNames)} Start");
-            var result = new List<LessonData>();
-
-            foreach (var lesson in GameBookConfig.Lessons)
-            {
-                var assetPath = AssetDatabase.GetAssetPath(lesson);
-                var fileName = Path.GetFileNameWithoutExtension(assetPath);
-
-                result.Add(new LessonData()
-                {
-                    FileName = fileName,
-                });
-            }
-
-            var jSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-            };
-
-            var json = JsonConvert.SerializeObject(result, jSettings);
-
-            File.WriteAllText(AssetDatabase.GetAssetPath(GameBookJson), json);
-
-            AssetDatabase.Refresh();
-            Debug.Log($"{nameof(MakeJsonOfLessonNames)} Done");
-        }
-
         [Button("Make Book Json")]
         private void MakeJsonDepth()
         {
@@ -96,13 +65,12 @@ namespace Chang.Utilities
                             throw new NotImplementedException();
                         
                         case QuestionType.SelectWord:
-                            var qData = question.QuestionData as QuestSelectWord;
+                            var qData = question.Question as QuestSelectWord;
                             var data = new QuestSelectWordData
                             {
-                                QuestionType = qData!.QuestionType,
                                 FileName = question.name,
-                                CorrectWordFileName = $"{WordPath}{qData.CorrectWord.name}",
-                                MixWordsFileNames = qData.MixWords.Select(c => $"{WordPath}{c.name}").ToList()
+                                CorrectWordFileName = $"{WordPath}{qData.CorrectWord.Key}",
+                                MixWordsFileNames = qData.MixWords.Select(c => $"{WordPath}{c.Key}").ToList()
                             };
                             questionData.Add(data);
                             break;
@@ -140,13 +108,13 @@ namespace Chang.Utilities
 
         public interface IQuestionData
         {
-            QuestionType QuestionType { get; set; }
+            QuestionType QuestionType { get; }
             string FileName { get; set; }
         }
 
         public class QuestSelectWordData : IQuestionData
         {
-            public QuestionType QuestionType { get; set; }
+            public QuestionType QuestionType => QuestionType.SelectWord;
             public string FileName { get; set; }
             
             public string CorrectWordFileName;

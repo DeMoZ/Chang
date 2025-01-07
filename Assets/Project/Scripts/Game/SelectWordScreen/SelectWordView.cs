@@ -16,9 +16,7 @@ namespace Chang.UI
 
         [field: SerializeField] public override QuestionType ScreenType { get; } = QuestionType.SelectWord;
 
-        // todo roman here should be a classes, not a configs
-        // todo roman refactoring is required
-        public void Init(bool questInStudiedLanguage, PhraseConfig correctWord, List<PhraseConfig> mixWords, Action<int, bool> onToggleValueChanged)
+        public void Init(bool questInStudiedLanguage, PhraseData correctWord, List<PhraseData> mixWords, Action<int, bool> onToggleValueChanged)
         {
             Debug.Log("Init SelectWordView");
 

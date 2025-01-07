@@ -10,7 +10,7 @@ using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
 using UnityEngine;
 
-namespace Chang
+namespace Chang.Utilities
 {
     public class GoogleSheetToJson
     {

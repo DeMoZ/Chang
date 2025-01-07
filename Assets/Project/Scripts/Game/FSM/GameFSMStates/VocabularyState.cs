@@ -16,9 +16,9 @@ namespace Chang.FSM
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
         [Inject] private readonly IResourcesManager _resourcesManager;
-        
+
         private readonly DiContainer _diContainer;
-        
+
         private VocabularyBus _vocabularyBus;
         private VocabularyFSM _vocabularyFSM;
 
@@ -45,7 +45,6 @@ namespace Chang.FSM
 
             _vocabularyBus = new VocabularyBus
             {
-                // ScreenManager = _screenManager,
                 CurrentLesson = Bus.CurrentLesson,
             };
 
@@ -58,6 +57,8 @@ namespace Chang.FSM
         {
             base.Exit();
 
+            _vocabularyBus = null;
+            _vocabularyFSM.Dispose();
             _screenManager.SetActivePagesContainer(false);
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
@@ -81,18 +82,13 @@ namespace Chang.FSM
                 _vocabularyBus.CurrentLesson.EnqueueCurrentQuestion();
             }
 
-            var info = new ContinueButtonInfo
-            {
-                IsCorrect = isCorrect,
-                InfoText = _vocabularyBus.QuestionResult.Info[0]
-            };
-            
+            var info = new ContinueButtonInfo();
+            info.IsCorrect = isCorrect;
+            info.InfoText = (string)_vocabularyBus.QuestionResult.Info[0];
+
             _gameOverlayController.SetContinueButtonInfo(info);
-            _gameOverlayController.EnableContinueButton(true);
-            
-            // todo roman this is very temporary solution with save everywerere and need to replace with save only in prefs
-            //await _profileService.SavePrefsAsync();
             await _profileService.SaveAsync();
+            _gameOverlayController.EnableContinueButton(true);
         }
 
         private async void OnContinue()
@@ -109,14 +105,48 @@ namespace Chang.FSM
             }
             else
             {
-                lesson.SetCurrentSimpQiestion();
-#if UNITY_WEBGL
-                var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(lesson.CurrentSimpleQuestion.FileName);
-#else
-                var questionConfig = _resourcesManager.LoadAssetSync<QuestionConfig>(lesson.CurrentSimpleQuestion.FileName);
-#endif
-                lesson.SetCurrentQuestionConfig(questionConfig.QuestionData);
-                _vocabularyFSM.SwitchState(questionConfig.QuestionType);
+                var nextQuestion = lesson.PeekNextQuestion();
+                var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(nextQuestion.FileName);
+                var questionData = questionConfig.GetQuestData();
+
+                if (nextQuestion.QuestionType == QuestionType.SelectWord && IsNeedDemonstration(nextQuestion))
+                {
+                    var demonstration = new SimpleQuestDemonstrationWord
+                    {
+                        FileName = nextQuestion.FileName
+                    };
+
+                    lesson.InsertNextQuest(demonstration);
+                    var questionSelectWordData = (QuestSelectWordData)questionData;
+                    questionData = new QuestDemonstrateWordData(questionSelectWordData.CorrectWord);
+                }
+
+                lesson.DequeueAndSetSipmQiestion();
+                lesson.SetCurrentQuestionConfig(questionData);
+                _vocabularyFSM.SwitchState(questionData.QuestionType);
+            }
+
+            return;
+
+            // if no records stored about this question or the question mark is 1 (or 0)
+            bool IsNeedDemonstration(SimpleQuestionBase question)
+            {
+                bool logExists = _profileService.TryGetLog(question.FileName, out var questLog);
+
+                if (!logExists)
+                {
+                    Debug.Log($"Demonstration required. No log for: {question.FileName}");
+                    return true;
+                }
+
+                bool isSmallMark = questLog.Mark < 1;
+
+                if (isSmallMark)
+                {
+                    Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {question.FileName}");
+                }
+
+                return isSmallMark;
             }
         }
     }

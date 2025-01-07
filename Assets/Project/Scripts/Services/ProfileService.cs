@@ -75,5 +75,10 @@ namespace Chang.Services
         {
             return _playerProfile.ProgressData;
         }
+        
+        public bool TryGetLog(string key, out QuestLog questLog)
+        {
+            return _playerProfile.ProgressData.Questions.TryGetValue(key, out questLog);
+        }
     }
 }

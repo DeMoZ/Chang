@@ -1,15 +1,14 @@
-using UnityEditor;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
-using System.Net.Http;
-
-namespace Chang
+namespace Chang.Utilities
 {
     public class VocabularyUtilities
     {

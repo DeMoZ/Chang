@@ -14,19 +14,25 @@ namespace Chang
     public class SimpleLessonData
     {
         public string FileName;
-        public List<SimpleQuestionDataBase> Questions;
+        public List<SimpleQuestionBase> Questions;
+    }
+    
+    public class SimpleQuestionBase
+    { 
+        public string FileName { get; set; }
+        public virtual QuestionType QuestionType { get; set; } // set for dissetialization
     }
 
-    public class SimpleQuestionDataBase
+    public class SimpleQuestSelectWord : SimpleQuestionBase
     {
-        public string FileName;
-        public virtual QuestionType QuestionType { get; }
-    }
-
-    public class SimpleQuestSelectWordData : SimpleQuestionDataBase
-    {
-        public override QuestionType QuestionType => QuestionType.None;
+        public override QuestionType QuestionType => QuestionType.SelectWord;
         public string CorrectWordFileName;
         public List<string> MixWordsFileName;
+    }
+    
+    public class SimpleQuestDemonstrationWord : SimpleQuestionBase
+    {
+        public override QuestionType QuestionType => QuestionType.DemonstrationWord;
+        public string CorrectWordFileName;
     }
 }
