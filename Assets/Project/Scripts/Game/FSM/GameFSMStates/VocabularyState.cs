@@ -131,7 +131,22 @@ namespace Chang.FSM
             // if no records stored about this question or the question mark is 1 (or 0)
             bool IsNeedDemonstration(SimpleQuestionBase question)
             {
-                return !_profileService.TryGetLog(question.FileName, out var questLog) || questLog.Mark < 1;
+                bool logExists = _profileService.TryGetLog(question.FileName, out var questLog);
+
+                if (!logExists)
+                {
+                    Debug.Log($"Demonstration required. No log for: {question.FileName}");
+                    return true;
+                }
+
+                bool isSmallMark = questLog.Mark < 1;
+
+                if (isSmallMark)
+                {
+                    Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {question.FileName}");
+                }
+
+                return isSmallMark;
             }
         }
     }
