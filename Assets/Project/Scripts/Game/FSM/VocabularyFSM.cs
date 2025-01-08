@@ -20,7 +20,7 @@ namespace Chang.FSM
 
         public new void Dispose()
         {
-            _currentState?.Value.Exit();
+            _currentState?.Value?.Exit();
             _currentState?.Dispose();
 
             base.Dispose();
