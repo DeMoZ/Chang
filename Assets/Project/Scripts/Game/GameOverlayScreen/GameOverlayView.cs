@@ -12,6 +12,7 @@ namespace Chang.UI
         [SerializeField] private GameObject _blocker;
         [SerializeField] private Button _returnBtn;
         [SerializeField] private Toggle _phoneticTgl;
+
         [Space] [SerializeField] private Button _checkBtn;
 
         [SerializeField] private VocabularyContinueView _continue;
@@ -21,8 +22,7 @@ namespace Chang.UI
         private UnityAction _returnBtnListener;
         private UnityAction<bool> _phoneticTglListener;
 
-        public void Init(
-            Action onCheck,
+        public void Init(Action onCheck,
             Action onContinue,
             Action onReturn,
             Action<bool> onPhonetic)

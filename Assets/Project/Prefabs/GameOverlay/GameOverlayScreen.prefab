@@ -133,6 +133,9 @@ MonoBehaviour:
   _phoneticTgl: {fileID: 2870436126469730102}
   _checkBtn: {fileID: 1865553102146211290}
   _continue: {fileID: 3294720665364555319}
+  _confirmPopup: {fileID: 0}
+  _confirmBtn: {fileID: 0}
+  _unconfirmBtn: {fileID: 0}
 --- !u!1001 &789465906893878595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -280,7 +283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3814294342853625469, guid: b7074f622b4214f81a279df1a9af9f7f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6969243669447669629, guid: b7074f622b4214f81a279df1a9af9f7f, type: 3}
       propertyPath: m_Pivot.x
