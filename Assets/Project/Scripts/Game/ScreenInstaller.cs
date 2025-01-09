@@ -18,6 +18,7 @@ namespace Chang
         [SerializeField] private GameObject pagesContainer;
 
         [Space] 
+        [SerializeField] private PlayResultView playResultScreen;
         [SerializeField] private DemonstrationWordView demonstrationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;

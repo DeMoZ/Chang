@@ -4175,10 +4175,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1526929537}
+  - {fileID: 6033955828588999604}
   - {fileID: 2026967168}
   - {fileID: 685446961}
   - {fileID: 1840725778}
-  - {fileID: 6033955828588999604}
   m_Father: {fileID: 661310079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4251,6 +4251,7 @@ MonoBehaviour:
   gameOverlayScreen: {fileID: 383225373}
   systemUiScreen: {fileID: 2623202885947019543}
   pagesContainer: {fileID: 661310075}
+  playResultScreen: {fileID: 2624230485719386419}
   demonstrationScreen: {fileID: 2026967169}
   matchWordScreen: {fileID: 685446962}
   selectWordScreen: {fileID: 1840725779}
@@ -6211,6 +6212,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58cabeea884a144c183b3f4577ce5869, type: 3}
+--- !u!114 &2624230485719386419 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7584202702929577579, guid: 58cabeea884a144c183b3f4577ce5869, type: 3}
+  m_PrefabInstance: {fileID: 2624230485719386418}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c290c9d2e3aea49a9ad851ad163b9408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2882185147370430146
 RectTransform:
   m_ObjectHideFlags: 0

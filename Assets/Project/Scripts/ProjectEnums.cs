@@ -14,6 +14,8 @@ namespace Chang
         SelectWord,
         MatchWords,
         DemonstrationDialogue,
+        
+        Result = 100,
     }
 
     // todo roman use system languages

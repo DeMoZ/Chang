@@ -33,6 +33,7 @@ namespace Chang.FSM
 
         protected override void Init()
         {
+            var playResultState = new PlayResultState(_vocabularyBus, OnStateResult);
             var demonstrationWordState = new DemonstrationState(_vocabularyBus, OnStateResult);
             var selectWordState = new SelectWordState(_vocabularyBus, OnStateResult);
             
@@ -48,6 +49,7 @@ namespace Chang.FSM
 
             _states = new Dictionary<QuestionType, IResultState<QuestionType>>
             {
+                { QuestionType.Result, selectWordState },
                 { QuestionType.DemonstrationWord, demonstrationWordState },
                 { QuestionType.SelectWord, selectWordState },
                 // { QuestionType.MatchWords, matchWordsState },
