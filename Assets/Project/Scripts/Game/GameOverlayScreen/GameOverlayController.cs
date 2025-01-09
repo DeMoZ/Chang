@@ -18,7 +18,7 @@ namespace Chang
         public Action<bool> OnPhonetic;
 
         [Inject]
-        public GameOverlayController(GameOverlayView view, SystemUiController systemUiController)
+        public GameOverlayController(GameOverlayView view, GameBus gameBus, SystemUiController systemUiController)
         {
             _view = view;
             _systemUiController = systemUiController;
@@ -30,6 +30,11 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
+        public void EnableReturnButton(bool enable)
+        {
+            _view.EnableReturnButton(enable);
+        }
+        
         public void EnableCheckButton(bool enable)
         {
             _view.EnableCheckButton(enable);
@@ -67,7 +72,6 @@ namespace Chang
                 message: new() { "Are you sure want to exit the lesson" },
                 sureBtnText: "Yes", notSureBtnText: "No");
         }
-
 
         private void OnConfirmReturn(bool confirm)
         {

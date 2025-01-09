@@ -22,7 +22,8 @@ namespace Chang.FSM
         private VocabularyBus _vocabularyBus;
         private VocabularyFSM _vocabularyFSM;
 
-        public VocabularyState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
+        public VocabularyState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult)
+            : base(gameBus, onStateResult)
         {
             _diContainer = diContainer;
         }
@@ -40,8 +41,12 @@ namespace Chang.FSM
 
             _gameOverlayController.OnCheck += OnCheck;
             _gameOverlayController.OnContinue += OnContinue;
+            _gameOverlayController.OnReturnFromGame += ExitToLobby;
+            
+            _gameOverlayController.EnableReturnButton(true);
+
             // todo roman implement phonetic toggle
-            //Bus.ScreenManager.GameOverlayController.OnPhonetic += OnPhonetic;
+            //gameOverlayController.OnPhonetic += OnPhonetic;
 
             _vocabularyBus = new VocabularyBus
             {
@@ -62,8 +67,17 @@ namespace Chang.FSM
             _screenManager.SetActivePagesContainer(false);
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
+            _gameOverlayController.OnReturnFromGame -= ExitToLobby;
+            
+            _gameOverlayController.EnableReturnButton(false);
         }
 
+        private void ExitToLobby()
+        {
+            // todo remove Temporary solution with exit to lobby, and add game result popup
+            OnStateResult.Invoke(StateType.Lobby);
+        }
+        
         private async void OnCheck()
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
@@ -99,9 +113,8 @@ namespace Chang.FSM
             {
                 // the lesson has finished
                 // todo roman implement ResultState. UML needs to be updated
-
-                // todo remove Temporary solution with exit to lobby
-                OnStateResult.Invoke(StateType.Lobby);
+                
+                ExitToLobby();
             }
             else
             {

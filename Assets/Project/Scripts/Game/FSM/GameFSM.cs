@@ -41,7 +41,7 @@ namespace Chang.FSM
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
                 { StateType.Preload, preloaderState },
-                { StateType.Lobby, lobbyState},
+                { StateType.Lobby, lobbyState },
                 { StateType.PlayVocabulary, vocabularyState },
             };
 

@@ -51,6 +51,11 @@ namespace Chang.UI
             _blocker.SetActive(enable);
         }
 
+        public void EnableReturnButton(bool enable)
+        {
+            _returnBtn.gameObject.SetActive(enable);
+        }
+        
         public void EnableCheckButton(bool enable)
         {
             _checkBtn.gameObject.SetActive(enable);

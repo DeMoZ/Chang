@@ -10,7 +10,7 @@ public class SystemUiController : IDisposable
     private Stack<MonoBehaviour> _popupStack = new Stack<MonoBehaviour>();
 
     [Inject]
-    public  SystemUiController(SystemUiScreen view)
+    public SystemUiController(SystemUiScreen view)
     {
         _view = view;
     }
@@ -25,14 +25,24 @@ public class SystemUiController : IDisposable
         confirmPopup.Set(onConfirm, headerText, message, sureBtnText, notSureBtnText);
         confirmPopup.gameObject.SetActive(true);
         _popupStack.Push(confirmPopup);
+
+        if (_popupStack.Count == 1)
+        {
+            _view.EnableBlocker(true);
+        }
     }
-    
+
     public void ClosePopup()
     {
         if (_popupStack.Count > 0)
         {
             var popup = _popupStack.Pop();
-            Object.Destroy(popup);
+            Object.Destroy(popup.gameObject);
+        }
+
+        if (_popupStack.Count == 0)
+        {
+            _view.EnableBlocker(false);
         }
     }
 
