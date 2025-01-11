@@ -7,12 +7,14 @@ namespace Chang.FSM
 {
     public class DemonstrationWordResult : IQuestionResult
     {
+        public string Word { get; }
         public QuestionType Type => QuestionType.DemonstrationWord;
         public bool IsCorrect => true;
         public object[] Info { get; }
 
-        public DemonstrationWordResult(params object[] info)
+        public DemonstrationWordResult(string word, params object[] info)
         {
+            Word = word;
             Info = info;
         }
     }
@@ -61,7 +63,7 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
             object[] info = { _correctWord.Word.Phonetic };
-            var result = new DemonstrationWordResult(info);
+            var result = new DemonstrationWordResult(_correctWord.Word.Word ,info);
             Bus.QuestionResult = result;
         }
     }

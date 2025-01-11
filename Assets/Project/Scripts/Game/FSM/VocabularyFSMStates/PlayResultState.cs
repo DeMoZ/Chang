@@ -1,27 +1,27 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
-using Debug = DMZ.DebugSystem.DMZLogger;
+using System.Linq;
 using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    // public class PlayResultResult : IQuestionResult
-    // {
-    //     public QuestionType Type => QuestionType.SelectWord;
-    //     public bool IsCorrect { get; }
-    //     public object[] Info { get; }
-    //
-    //     public PlayResultResult(bool isCorrect, params object[] info)
-    //     {
-    //         IsCorrect = isCorrect;
-    //         Info = info;
-    //     }
-    // }
+    public class ResultItem
+    {
+        public string Word { get; }
+        public bool IsCorrect { get; }
+
+        public ResultItem(string word, bool isCorrect)
+        {
+            Word = word;
+            IsCorrect = isCorrect;
+        }
+    }
 
     public class PlayResultState : ResultStateBase<QuestionType, VocabularyBus>
     {
-        [Inject] private readonly SelectWordController _stateController;
+        [Inject] private readonly PlayResultController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
 
         private List<PhraseData> _mixWords;
@@ -47,31 +47,9 @@ namespace Chang.FSM
 
         private void StateBody()
         {
-            // 1 instantiate screen and initialise with data.
-            // if (Bus.CurrentLesson.CurrentQuestion.QuestionType != Type)
-            //     throw new ArgumentException("Question type doesnt match with state type");
-            //
-            // var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestion;
-            // _correctWord = questionData.CorrectWord;
-            // _mixWords ??= new List<PhraseData>();
-            // _mixWords.Clear();
-            // _mixWords.Add(_correctWord);
-            // _mixWords.AddRange(questionData.MixWords);
-            // Shuffle(_mixWords);
-            //
-            // var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
-            // _stateController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
-            // _stateController.SetViewActive(true);
-        }
-
-        private void OnToggleValueChanged(int index, bool isOn)
-        {
-            // _gameOverlayController.EnableCheckButton(isOn);
-            // Debug.Log($"toggle: {index}; isOn: {isOn}");
-            // var isCorrect = _mixWords[index] == _correctWord;
-            // object[] info = { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
-            // var result = new SelectWordResult(isCorrect, info);
-            // Bus.QuestionResult = result;
+            var log = Bus.LessonLog.Select(r => new ResultItem(r.Word, r.IsCorrect)).ToList();
+            _stateController.Init(log);
+            _stateController.SetViewActive(true);
         }
     }
 }

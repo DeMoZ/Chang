@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -13,7 +14,7 @@ namespace Chang.UI
         [SerializeField] private Transform _mixWordContent;
         [SerializeField] private ToggleGroup _toggleGroup;
 
-        public override QuestionType ScreenType { get; } = QuestionType.DemonstrationWord;
+        [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.DemonstrationWord;
 
         public void Init(bool questInStudiedLanguage, PhraseData correctWord, Action<bool> onToggleValueChanged)
         {

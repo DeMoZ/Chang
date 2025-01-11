@@ -22,6 +22,7 @@ namespace Chang
         [SerializeField] private DemonstrationWordView demonstrationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;
+        
         [SerializeField] private PreloaderView preloaderScreen;
 
         [Space] 
@@ -43,6 +44,7 @@ namespace Chang
             Container.BindInstance(gameBookScreen).AsSingle();
             Container.BindInstance(gameOverlayScreen).AsSingle();
             Container.BindInstance(pagesContainer).WithId("PagesContainer").AsSingle();
+            Container.BindInstance(playResultScreen).AsSingle();
             Container.BindInstance(demonstrationScreen).AsSingle();
             Container.BindInstance(matchWordScreen).AsSingle();
             Container.BindInstance(selectWordScreen).AsSingle();
@@ -59,6 +61,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<RepetitionController>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBookController>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameOverlayController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<PlayResultController>().AsSingle();
             Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();

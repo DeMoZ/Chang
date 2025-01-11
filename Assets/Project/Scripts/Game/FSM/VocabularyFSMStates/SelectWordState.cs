@@ -8,12 +8,14 @@ namespace Chang.FSM
 {
     public class SelectWordResult : IQuestionResult
     {
+        public string Word { get; }
         public QuestionType Type => QuestionType.SelectWord;
         public bool IsCorrect { get; }
         public object[] Info { get; }
 
-        public SelectWordResult(bool isCorrect, params object[] info)
+        public SelectWordResult(string word, bool isCorrect, params object[] info)
         {
+            Word = word;
             IsCorrect = isCorrect;
             Info = info;
         }
@@ -70,7 +72,7 @@ namespace Chang.FSM
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index] == _correctWord;
             object[] info = { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
-            var result = new SelectWordResult(isCorrect, info);
+            var result = new SelectWordResult( _correctWord.Word.Word, isCorrect, info);
             Bus.QuestionResult = result;
         }
 

@@ -1,16 +1,36 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PlayResultView : MonoBehaviour
+namespace Chang.UI
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class PlayResultView : CScreen
     {
-        
-    }
+        [SerializeField] private Transform _contentParent;
+        [SerializeField] private ResultItem _itemPrefab;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.Result;
+
+        public void AddItem(string word, string mark = null, bool? isUp = null)
+        {
+            var item = Instantiate(_itemPrefab, _contentParent);
+            item.Set(word, mark, isUp);
+        }
+
+        public void Init()
+        {
+        }
+
+        public void OnDisable()
+        {
+            Clear();
+        }
+
+        public void Clear()
+        {
+            foreach (Transform child in _contentParent)
+            {
+                Destroy(child.gameObject);
+            }
+        }
     }
 }

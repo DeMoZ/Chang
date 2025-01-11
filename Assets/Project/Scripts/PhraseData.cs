@@ -6,7 +6,7 @@ namespace Chang
 {
     public class PhraseData
     {
-        public string Key { get; private set; } = string.Empty;
+        public string Key { get; private set; }
         public Languages Language { get; private set; } = Languages.Thai;
         public AudioClip AudioClip { get; private set; }
         public Sprite Sprite { get; private set; }
