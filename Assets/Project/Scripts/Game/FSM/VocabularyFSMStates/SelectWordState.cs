@@ -1,8 +1,8 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
-using Debug = DMZ.DebugSystem.DMZLogger;
 using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {

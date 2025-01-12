@@ -1,3 +1,4 @@
+using System;
 using Zenject;
 using Chang.UI;
 
@@ -20,6 +21,11 @@ namespace Chang
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
+        }
+
+        public void Init(bool questInStudiedLanguage, PhraseData correctWord, Action<bool> onToggleValueChanged)
+        {
+            //_view.Init(questInStudiedLanguage, correctWord, onToggleValueChanged);
         }
     }
 }

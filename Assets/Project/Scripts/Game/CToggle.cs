@@ -8,6 +8,7 @@ namespace Chang.UI
     public class CToggle : MonoBehaviour
     {
         [SerializeField] private Toggle _toggle;
+        [SerializeField] private Image _inactive;
         [SerializeField] private TMP_Text _word;
         [SerializeField] private TMP_Text _phonetic;
 
@@ -16,6 +17,7 @@ namespace Chang.UI
         private void Awake()
         {
             _toggle.onValueChanged.AddListener(OnToggleValueChanged);
+            _inactive.gameObject.SetActive(false);
         }
 
         public void Set(string word, string phonetic, ToggleGroup toggleGroup, Action<bool> onValueChanged)
@@ -26,11 +28,6 @@ namespace Chang.UI
             _toggle.group = toggleGroup;
         }
 
-        private void OnToggleValueChanged(bool isOn)
-        {
-            _onValueChanged?.Invoke(isOn);
-        }
-
         public void EnablePhonetic(bool enable)
         {
             _phonetic.gameObject.SetActive(enable);
@@ -39,6 +36,16 @@ namespace Chang.UI
         public void SetInteractable(bool interactable)
         {
             _toggle.interactable = interactable;
+        }
+        
+        public void SetActive(bool active)
+        {
+            _inactive.gameObject.SetActive(!active);
+        }
+        
+        private void OnToggleValueChanged(bool isOn)
+        {
+            _onValueChanged?.Invoke(isOn);
         }
         
         private void OnDestroy()
