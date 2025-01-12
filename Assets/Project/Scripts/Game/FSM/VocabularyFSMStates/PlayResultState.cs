@@ -27,7 +27,7 @@ namespace Chang.FSM
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
 
-        public override QuestionType Type => QuestionType.SelectWord;
+        public override QuestionType Type => QuestionType.Result;
 
         public PlayResultState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
@@ -48,8 +48,9 @@ namespace Chang.FSM
         private void StateBody()
         {
             var log = Bus.LessonLog.Select(r => new ResultItem(r.Word, r.IsCorrect)).ToList();
-            _stateController.Init(log);
+            _stateController.Init(log, () => _gameOverlayController.OnContinue?.Invoke());
             _stateController.SetViewActive(true);
+            _gameOverlayController.EnableReturnButton(false);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Chang.UI;
 using Zenject;
@@ -23,14 +24,14 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        public void Init(List<Chang.FSM.ResultItem> lessonLog)
+        public void Init(List<Chang.FSM.ResultItem> lessonLog, Action onContinueClick)
         {
+            _view.Init(onContinueClick);
+            
             foreach (var item in lessonLog)
             {
                 _view.AddItem(item.Word, isUp: item.IsCorrect);
             }
-
-            _view.Init();
         }
     }
 }

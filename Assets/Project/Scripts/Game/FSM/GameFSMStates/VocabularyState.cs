@@ -113,6 +113,7 @@ namespace Chang.FSM
             if(_vocabularyFSM.CurrentStateType == QuestionType.Result)
             {
                 ExitToLobby();
+                return;
             }
             
             var lesson = _vocabularyBus.CurrentLesson;

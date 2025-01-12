@@ -1,5 +1,7 @@
+using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Chang.UI
 {
@@ -7,6 +9,7 @@ namespace Chang.UI
     {
         [SerializeField] private Transform _contentParent;
         [SerializeField] private ResultItem _itemPrefab;
+        [SerializeField] private Button _continuteBtn;
 
         [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.Result;
 
@@ -16,16 +19,19 @@ namespace Chang.UI
             item.Set(word, mark, isUp);
         }
 
-        public void Init()
+        public void Init(Action onContinueClick)
         {
+            Clear();
+            _continuteBtn.onClick.AddListener(() => onContinueClick());
         }
-
+        
         public void OnDisable()
         {
             Clear();
+            _continuteBtn.onClick.RemoveAllListeners();
         }
 
-        public void Clear()
+        private void Clear()
         {
             foreach (Transform child in _contentParent)
             {
