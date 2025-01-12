@@ -22,7 +22,8 @@ namespace Chang.FSM
         private VocabularyBus _vocabularyBus;
         private VocabularyFSM _vocabularyFSM;
 
-        public VocabularyState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
+        public VocabularyState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult)
+            : base(gameBus, onStateResult)
         {
             _diContainer = diContainer;
         }
@@ -30,6 +31,7 @@ namespace Chang.FSM
         public void Dispose()
         {
             _vocabularyFSM.Dispose();
+            _vocabularyBus.Dispose();
         }
 
         public override void Enter()
@@ -40,8 +42,12 @@ namespace Chang.FSM
 
             _gameOverlayController.OnCheck += OnCheck;
             _gameOverlayController.OnContinue += OnContinue;
+            _gameOverlayController.OnReturnFromGame += ExitToLobby;
+
+            _gameOverlayController.EnableReturnButton(true);
+
             // todo roman implement phonetic toggle
-            //Bus.ScreenManager.GameOverlayController.OnPhonetic += OnPhonetic;
+            //gameOverlayController.OnPhonetic += OnPhonetic;
 
             _vocabularyBus = new VocabularyBus
             {
@@ -62,6 +68,15 @@ namespace Chang.FSM
             _screenManager.SetActivePagesContainer(false);
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
+            _gameOverlayController.OnReturnFromGame -= ExitToLobby;
+
+            _gameOverlayController.EnableReturnButton(false);
+        }
+
+        private void ExitToLobby()
+        {
+            // todo remove Temporary solution with exit to lobby, and add game result popup
+            OnStateResult.Invoke(StateType.Lobby);
         }
 
         private async void OnCheck()
@@ -86,22 +101,28 @@ namespace Chang.FSM
             info.IsCorrect = isCorrect;
             info.InfoText = (string)_vocabularyBus.QuestionResult.Info[0];
 
+            _vocabularyBus.LessonLog.Add(_vocabularyBus.QuestionResult);
+                
             _gameOverlayController.SetContinueButtonInfo(info);
-            await _profileService.SaveAsync();
             _gameOverlayController.EnableContinueButton(true);
+            await _profileService.SaveAsync(); // todo roman in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
 
         private async void OnContinue()
         {
+            if(_vocabularyFSM.CurrentStateType == QuestionType.Result)
+            {
+                ExitToLobby();
+                return;
+            }
+            
             var lesson = _vocabularyBus.CurrentLesson;
 
             if (lesson.SimpleQuestionQueue.Count == 0)
             {
                 // the lesson has finished
-                // todo roman implement ResultState. UML needs to be updated
-
-                // todo remove Temporary solution with exit to lobby
-                OnStateResult.Invoke(StateType.Lobby);
+                // todo roman UML needs to be updated
+                _vocabularyFSM.SwitchState(QuestionType.Result);
             }
             else
             {
@@ -125,35 +146,34 @@ namespace Chang.FSM
                 lesson.SetCurrentQuestionConfig(questionData);
                 _vocabularyFSM.SwitchState(questionData.QuestionType);
             }
+        }
 
-            return;
+        // if no records stored about this question or the question mark is 1 (or 0)
+        private bool IsNeedDemonstration(SimpleQuestionBase question)
+        {
+            bool logExists = _profileService.TryGetLog(question.FileName, out var questLog);
 
-            // if no records stored about this question or the question mark is 1 (or 0)
-            bool IsNeedDemonstration(SimpleQuestionBase question)
+            if (!logExists)
             {
-                bool logExists = _profileService.TryGetLog(question.FileName, out var questLog);
-
-                if (!logExists)
-                {
-                    Debug.Log($"Demonstration required. No log for: {question.FileName}");
-                    return true;
-                }
-
-                bool isSmallMark = questLog.Mark < 1;
-
-                if (isSmallMark)
-                {
-                    Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {question.FileName}");
-                }
-
-                return isSmallMark;
+                Debug.Log($"Demonstration required. No log for: {question.FileName}");
+                return true;
             }
+
+            bool isSmallMark = questLog.Mark < 1;
+
+            if (isSmallMark)
+            {
+                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {question.FileName}");
+            }
+
+            return isSmallMark;
         }
     }
-
-    public struct ContinueButtonInfo
-    {
-        public bool IsCorrect;
-        public string InfoText;
-    }
 }
+
+public struct ContinueButtonInfo
+{
+    public bool IsCorrect;
+    public string InfoText;
+}
+
