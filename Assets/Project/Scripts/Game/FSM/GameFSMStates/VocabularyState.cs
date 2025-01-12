@@ -70,7 +70,7 @@ namespace Chang.FSM
             _gameOverlayController.OnContinue -= OnContinue;
             _gameOverlayController.OnReturnFromGame -= ExitToLobby;
 
-            _gameOverlayController.EnableReturnButton(false);
+            _gameOverlayController.OnExitToLobby();
         }
 
         private void ExitToLobby()

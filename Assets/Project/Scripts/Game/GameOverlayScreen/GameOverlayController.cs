@@ -1,5 +1,4 @@
 using System;
-using Chang.FSM;
 using Chang.UI;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -30,6 +29,13 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
+        public void OnExitToLobby()
+        {
+            EnableReturnButton(false);
+            EnableCheckButton(false);
+            EnableContinueButton(false);
+        }
+        
         public void EnableReturnButton(bool enable)
         {
             _view.EnableReturnButton(enable);
