@@ -7,14 +7,14 @@ namespace Chang.FSM
 {
     public class DemonstrationWordResult : IQuestionResult
     {
-        public string Word { get; }
+        public string Key { get; }
         public QuestionType Type => QuestionType.DemonstrationWord;
         public bool IsCorrect => true;
         public object[] Info { get; }
 
-        public DemonstrationWordResult(string word, params object[] info)
+        public DemonstrationWordResult(string key, params object[] info)
         {
-            Word = word;
+            Key = key;
             Info = info;
         }
     }

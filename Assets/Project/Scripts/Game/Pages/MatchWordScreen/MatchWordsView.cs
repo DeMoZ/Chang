@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,15 +13,18 @@ namespace Chang.UI
         [SerializeField] private ToggleGroup _leftTogglesGroup;
         [SerializeField] private ToggleGroup _rightTogglesGroup;
         [SerializeField] private Button _continuteBtn;
-        
+
         public override QuestionType ScreenType { get; } = QuestionType.MatchWords;
 
-        public void Init(Action onContinueClick)
+        private Action<bool, int, bool> _onToggleValueChanged;
+
+        public void Init(Action<bool, int, bool> onToggleValueChanged, Action onContinueClick)
         {
             Clear();
+            _onToggleValueChanged = onToggleValueChanged;
             _continuteBtn.onClick.AddListener(() => onContinueClick());
         }
-        
+
         public void OnDisable()
         {
             Clear();
@@ -33,17 +37,18 @@ namespace Chang.UI
             {
                 Destroy(child.gameObject);
             }
-            
+
             foreach (Transform child in _rightWordsContent)
             {
                 Destroy(child.gameObject);
             }
         }
 
-        public void AddItem(bool isLeft, string word, string mark = null, bool? isUp = null)
+        public CToggle AddItem(bool isLeft)
         {
-            var item = Instantiate(_matchWordPrefab, isLeft? _leftWordsContent : _rightWordsContent);
-            //item.Set(word, mark, isUp);
+            var toggle = Instantiate(_matchWordPrefab, isLeft ? _leftWordsContent : _rightWordsContent);
+            toggle.SetGroup(isLeft ? _leftTogglesGroup : _rightTogglesGroup);
+            return toggle;
         }
     }
 }

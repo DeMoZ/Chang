@@ -32,7 +32,7 @@ namespace Chang
         }
     }
 
-    public class QuestMatchData : QuestDataBase
+    public class QuestMatchWordsData : QuestDataBase
     {
         public string Question;
         public bool C;

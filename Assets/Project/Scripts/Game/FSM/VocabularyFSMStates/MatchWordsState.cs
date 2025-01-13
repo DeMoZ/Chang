@@ -8,9 +8,10 @@ namespace Chang.FSM
 {
     public class MatchWordsStateResult : IQuestionResult
     {
-        public string Word { get; }
+        public string Key { get; }
         public QuestionType Type => QuestionType.MatchWords;
         public bool IsCorrect { get; }
+
         public object[] Info { get; }
         //
         // public MatchWordsStateResult(string word, bool isCorrect, params object[] info)
@@ -25,9 +26,6 @@ namespace Chang.FSM
     {
         [Inject] private readonly MatchWordsController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
-
-        private List<PhraseData> _mixWords;
-        private PhraseData _correctWord;
 
         public override QuestionType Type => QuestionType.MatchWords;
 
@@ -64,9 +62,20 @@ namespace Chang.FSM
             // var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
             // _stateController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
             // _stateController.SetViewActive(true);
+
+            var left = new List<WordData>();
+            var right = new List<WordData>();
+            
+            // todo roman populate left and right lists and shafle them
+            var questionData = (QuestMatchWordsData)Bus.CurrentLesson.CurrentQuestion;
+            
+            
+            bool isLeft = UnityEngine.Random.Range(0, 2) == 0;
+            _stateController.Init(isLeft, left, right, OnToggleValueChanged, OnContinueClicked);
+            _stateController.SetViewActive(true);
         }
 
-        private void OnToggleValueChanged(int index, bool isOn)
+        private void OnToggleValueChanged(bool isLeft, int index, bool isOn)
         {
             // _gameOverlayController.EnableCheckButton(isOn);
             // Debug.Log($"toggle: {index}; isOn: {isOn}");
@@ -74,6 +83,11 @@ namespace Chang.FSM
             // object[] info = { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
             // var result = new SelectWordResult( _correctWord.Word.Word, isCorrect, info);
             // Bus.QuestionResult = result;
+        }
+
+        private void OnContinueClicked()
+        {
+            
         }
 
         private void Shuffle<T>(List<T> list)

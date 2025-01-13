@@ -9,12 +9,12 @@ namespace Chang.FSM
 {
     public class ResultItem
     {
-        public string Word { get; }
+        public string Key { get; }
         public bool IsCorrect { get; }
 
-        public ResultItem(string word, bool isCorrect)
+        public ResultItem(string key, bool isCorrect)
         {
-            Word = word;
+            Key = key;
             IsCorrect = isCorrect;
         }
     }
@@ -47,7 +47,13 @@ namespace Chang.FSM
 
         private void StateBody()
         {
-            var log = Bus.LessonLog.Select(r => new ResultItem(r.Word, r.IsCorrect)).ToList();
+            List<ResultItem> log = new();
+            
+            foreach (var result in Bus.LessonLog)
+            {
+                log.Add(new ResultItem(result.Key, result.IsCorrect));
+            }
+            
             _stateController.Init(log, () => _gameOverlayController.OnContinue?.Invoke());
             _stateController.SetViewActive(true);
             _gameOverlayController.EnableReturnButton(false);

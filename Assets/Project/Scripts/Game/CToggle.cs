@@ -27,7 +27,19 @@ namespace Chang.UI
             _onValueChanged = onValueChanged;
             _toggle.group = toggleGroup;
         }
+        
+        public void Set(string word, string phonetic, Action<bool> onValueChanged)
+        {
+            _word.text = word;
+            _phonetic.text = phonetic;
+            _onValueChanged = onValueChanged;
+        }
 
+        public void SetGroup(ToggleGroup toggleGroup)
+        {
+            _toggle.group = toggleGroup;
+        }
+        
         public void EnablePhonetic(bool enable)
         {
             _phonetic.gameObject.SetActive(enable);

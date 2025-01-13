@@ -12,7 +12,7 @@ namespace Chang
     public abstract class QuestBase
     {
         public QuestionType QuestionType { get; protected set; }
-        
+
         public string EditorInfo()
         {
             return $"{GetEditorInfo()}";
@@ -48,28 +48,29 @@ namespace Chang
         }
     }
 
-    public class QuestMatchWord : QuestBase
+    public class QuestMatchWords : QuestBase
     {
-        public QuestMatchWord()
+        public QuestMatchWords()
         {
             QuestionType = QuestionType.MatchWords;
         }
 
-        public string Question = "Select words";
-        public bool C;
+        private string Question = "Match Words"; // todo roman remove this
 
+        public List<PhraseConfig> WordsToMatch;
+        
         public override QuestDataBase GetQuestData()
         {
-            return new QuestMatchData
+            return new QuestMatchWordsData
             {
                 Question = Question,
-                C = C
             };
         }
 
         protected override string GetEditorInfo()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return string.Empty;
         }
     }
 }
