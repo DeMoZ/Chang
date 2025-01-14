@@ -65,18 +65,25 @@ namespace Chang.Utilities
                             throw new NotImplementedException();
                         
                         case QuestionType.SelectWord:
-                            var qData = question.Question as QuestSelectWord;
-                            var data = new QuestSelectWordData
+                            var selectWord = question.Question as QuestSelectWord;
+                            QuestSelectWordData selectWordData = new QuestSelectWordData
                             {
                                 FileName = question.name,
-                                CorrectWordFileName = $"{WordPath}{qData.CorrectWord.Key}",
-                                MixWordsFileNames = qData.MixWords.Select(c => $"{WordPath}{c.Key}").ToList()
+                                CorrectWordFileName = $"{WordPath}{selectWord.CorrectWord.Key}",
+                                MixWordsFileNames = selectWord.MixWords.Select(c => $"{WordPath}{c.Key}").ToList()
                             };
-                            questionData.Add(data);
+                            questionData.Add(selectWordData);
                             break;
                         
                         case QuestionType.MatchWords:
-                            throw new NotImplementedException();
+                            var matchWords = question.Question as QuestMatchWords;
+                            QuestMatchWordsData matchWordsData = new QuestMatchWordsData
+                            {
+                                FileName = question.name,
+                                MatchWords = matchWords.MatchWords.Select(c => $"{WordPath}{c.Key}").ToList()
+                            };
+                            questionData.Add(matchWordsData);
+                            break;
                         
                         case QuestionType.DemonstrationDialogue:
                             throw new NotImplementedException();
@@ -119,6 +126,14 @@ namespace Chang.Utilities
             
             public string CorrectWordFileName;
             public List<string> MixWordsFileNames;
+        }
+        
+        public class QuestMatchWordsData : IQuestionData
+        {
+            public QuestionType QuestionType => QuestionType.MatchWords;
+            public string FileName { get; set; }
+            
+            public List<string> MatchWords;
         }
 
         #endregion

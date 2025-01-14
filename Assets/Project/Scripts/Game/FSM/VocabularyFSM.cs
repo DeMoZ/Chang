@@ -38,25 +38,19 @@ namespace Chang.FSM
             var playResultState = new PlayResultState(_vocabularyBus, OnStateResult);
             var demonstrationWordState = new DemonstrationState(_vocabularyBus, OnStateResult);
             var selectWordState = new SelectWordState(_vocabularyBus, OnStateResult);
-            
+            var matchWordsState = new MatchWordsState( _vocabularyBus, OnStateResult) ;
+
             _diContainer.Inject(playResultState);
             _diContainer.Inject(demonstrationWordState);
             _diContainer.Inject(selectWordState);
+            _diContainer.Inject(matchWordsState);
             
-            // todo roman implement other states
-            //var matchWordsState = new MatchWordsState( _vocabularyBus, OnStateResult) ;
-            //var demonstrationDialogueState = new DemonstrationDialogueState( _vocabularyBus, OnStateResult) ;
-
-            //_diContainer.Inject(matchWordsState);
-            //_diContainer.Inject(demonstrationDialogueState);
-
             _states = new Dictionary<QuestionType, IResultState<QuestionType>>
             {
                 { QuestionType.Result, playResultState },
                 { QuestionType.DemonstrationWord, demonstrationWordState },
                 { QuestionType.SelectWord, selectWordState },
-                // { QuestionType.MatchWords, matchWordsState },
-                // { QuestionType.DemonstrationDialogue, demonstrationDialogueState },
+                { QuestionType.MatchWords, matchWordsState },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));

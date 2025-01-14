@@ -34,8 +34,12 @@ namespace Chang
 
     public class QuestMatchWordsData : QuestDataBase
     {
-        public string Question;
-        public bool C;
+        public List<PhraseData> MatchWords;
         public override QuestionType QuestionType => QuestionType.MatchWords;
+        
+        public QuestMatchWordsData(List<PhraseData> words)
+        {
+            MatchWords = words;
+        }
     }
 }

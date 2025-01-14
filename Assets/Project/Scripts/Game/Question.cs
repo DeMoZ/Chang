@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
@@ -57,19 +56,16 @@ namespace Chang
 
         private string Question = "Match Words"; // todo roman remove this
 
-        public List<PhraseConfig> WordsToMatch;
-        
+        public List<PhraseConfig> MatchWords;
+
         public override QuestDataBase GetQuestData()
         {
-            return new QuestMatchWordsData
-            {
-                Question = Question,
-            };
+            return new QuestMatchWordsData(MatchWords?.Select(m => m.PhraseData).ToList());
         }
 
         protected override string GetEditorInfo()
         {
-            //throw new NotImplementedException();
+            // todo roman add some info
             return string.Empty;
         }
     }
