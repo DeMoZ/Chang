@@ -67,8 +67,7 @@ namespace Chang.FSM
             var right = new List<WordData>();
             
             // todo roman populate left and right lists and shafle them
-            var questionData = (QuestMatchWordsData)Bus.CurrentLesson.CurrentQuestion;
-            
+            var questionData = (QuestMatchWordsData)Bus.CurrentLesson.CurrentQuestionData;
             
             bool isLeft = UnityEngine.Random.Range(0, 2) == 0;
             _stateController.Init(isLeft, left, right, OnToggleValueChanged, OnContinueClicked);

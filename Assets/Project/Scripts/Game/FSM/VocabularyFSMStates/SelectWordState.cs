@@ -50,10 +50,10 @@ namespace Chang.FSM
         private void StateBody()
         {
             // 1 instantiate screen and initialise with data.
-            if (Bus.CurrentLesson.CurrentQuestion.QuestionType != Type)
+            if (Bus.CurrentLesson.CurrentQuestionData.QuestionType != Type)
                 throw new ArgumentException("Question type doesnt match with state type");
 
-            var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestion;
+            var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestionData;
             _correctWord = questionData.CorrectWord;
             _mixWords ??= new List<PhraseData>();
             _mixWords.Clear();

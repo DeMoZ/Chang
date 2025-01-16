@@ -13,10 +13,11 @@ namespace Chang
         /// </summary>
         public string FileName { get; private set; }
 
-        public SimpleQuestionBase CurrentSimpleQuestion { get; private set; }
-        public List<SimpleQuestionBase> SimpleQuestions { get; private set; }
-        public Queue<SimpleQuestionBase> SimpleQuestionQueue { get; private set; }
-        public QuestDataBase CurrentQuestion { get; private set; }
+        public ISimpleQuestion CurrentSimpleQuestion { get; private set; }
+        public IQuestData CurrentQuestionData { get; private set; }
+        public List<ISimpleQuestion> SimpleQuestions { get; private set; }
+        public Queue<ISimpleQuestion> SimpleQuestionQueue { get; private set; }
+        //public QuestDataBase CurrentQuestion { get; private set; }
 
         /// <summary>
         /// todo roman if this lesson is not preconfigured, the content should be loaded in the other way ?
@@ -40,7 +41,7 @@ namespace Chang
             CurrentSimpleQuestion = SimpleQuestionQueue.Dequeue();
         }
 
-        public SimpleQuestionBase PeekNextQuestion()
+        public ISimpleQuestion PeekNextQuestion()
         {
             return SimpleQuestionQueue.Peek();
         }
@@ -48,22 +49,27 @@ namespace Chang
         /// <summary>
         /// Add quest to the beginning of the queue (example: add demonstration screen)
         /// </summary> 
-        public void InsertNextQuest(SimpleQuestionBase quest)
+        public void InsertNextQuest(ISimpleQuestion quest)
         {
-            var tempList = new List<SimpleQuestionBase>(SimpleQuestionQueue);
+            var tempList = new List<ISimpleQuestion>(SimpleQuestionQueue);
             tempList.Insert(0, quest);
-            SimpleQuestionQueue = new Queue<SimpleQuestionBase>(tempList);
+            SimpleQuestionQueue = new Queue<ISimpleQuestion>(tempList);
         }
 
-        public void SetSimpleQuestions(List<SimpleQuestionBase> questions)
+        public void SetSimpleQuestions(List<ISimpleQuestion> questions)
         {
             SimpleQuestions = questions;
-            SimpleQuestionQueue = new Queue<SimpleQuestionBase>(questions);
+            SimpleQuestionQueue = new Queue<ISimpleQuestion>(questions);
         }
 
-        public void SetCurrentQuestionConfig(QuestDataBase quest)
+        // public void SetCurrentQuestionConfig(QuestDataBase quest)
+        // {
+        //     CurrentQuestion = quest;
+        // }
+        
+        public void SetCurrentQuestionData(IQuestData data)
         {
-            CurrentQuestion = quest;
+            CurrentQuestionData = data;
         }
 
         public void EnqueueCurrentQuestion()

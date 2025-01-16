@@ -47,10 +47,10 @@ namespace Chang.FSM
         private void StateBody()
         {
             // 1 instantiate screen and initialise with data.
-            if (Bus.CurrentLesson.CurrentQuestion.QuestionType != Type)
+            if (Bus.CurrentLesson.CurrentSimpleQuestion.QuestionType != Type)
                 throw new ArgumentException("Question type doesnt match with state type");
 
-            var questionData = (QuestDemonstrateWordData)Bus.CurrentLesson.CurrentQuestion;
+            var questionData = (QuestDemonstrateWordData)Bus.CurrentLesson.CurrentQuestionData;
             _correctWord = questionData.CorrectWord;
 
             var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
@@ -63,7 +63,7 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
             object[] info = { _correctWord.Word.Phonetic };
-            var result = new DemonstrationWordResult(_correctWord.Word.Word ,info);
+            var result = new DemonstrationWordResult(_correctWord.Word.Word, info);
             Bus.QuestionResult = result;
         }
     }

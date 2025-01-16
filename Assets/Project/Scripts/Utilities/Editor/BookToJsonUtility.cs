@@ -80,7 +80,7 @@ namespace Chang.Utilities
                             QuestMatchWordsData matchWordsData = new QuestMatchWordsData
                             {
                                 FileName = question.name,
-                                MatchWords = matchWords.MatchWords.Select(c => $"{WordPath}{c.Key}").ToList()
+                                MatchWordsFileNames = matchWords.MatchWords.Select(c => $"{WordPath}{c.Key}").ToList()
                             };
                             questionData.Add(matchWordsData);
                             break;
@@ -133,7 +133,7 @@ namespace Chang.Utilities
             public QuestionType QuestionType => QuestionType.MatchWords;
             public string FileName { get; set; }
             
-            public List<string> MatchWords;
+            public List<string> MatchWordsFileNames;
         }
 
         #endregion

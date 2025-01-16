@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chang.Resources;
 using Chang.Services;
@@ -75,14 +76,20 @@ namespace Chang.FSM
             Debug.Log("LoadGameBookConfigAsync start");
             var key = "BookJson";
             var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
-            Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text);
+
+            var settings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new BookConverter() }
+            };
+            
+            Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text, settings);
             Bus.SimpleLessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
 
             Bus.SimpleQuestions = Bus.SimpleBookData.Lessons
                 .SelectMany(lesson => lesson.Questions)
                 .GroupBy(question => question.FileName)
                 .Select(group => group.First())
-                .ToDictionary(question => question.FileName);
+                .ToDictionary(question => question.FileName, question => (Chang.ISimpleQuestion)question);
             Debug.Log("LoadGameBookConfigAsync end");
         }
 

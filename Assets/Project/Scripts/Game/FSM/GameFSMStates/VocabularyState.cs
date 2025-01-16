@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
+using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -102,7 +104,7 @@ namespace Chang.FSM
             info.InfoText = (string)_vocabularyBus.QuestionResult.Info[0];
 
             _vocabularyBus.LessonLog.Add(_vocabularyBus.QuestionResult);
-                
+
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
             await _profileService.SaveAsync(); // todo roman in case of bug move before _gameOverlayController.EnableContinueButton(true); 
@@ -110,12 +112,12 @@ namespace Chang.FSM
 
         private async void OnContinue()
         {
-            if(_vocabularyFSM.CurrentStateType == QuestionType.Result)
+            if (_vocabularyFSM.CurrentStateType == QuestionType.Result)
             {
                 ExitToLobby();
                 return;
             }
-            
+
             var lesson = _vocabularyBus.CurrentLesson;
 
             if (lesson.SimpleQuestionQueue.Count == 0)
@@ -126,9 +128,12 @@ namespace Chang.FSM
             }
             else
             {
-                var nextQuestion = lesson.PeekNextQuestion();
-                var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(nextQuestion.FileName);
-                var questionData = questionConfig.GetQuestData();
+                // SimpleQuestionBase nextQuestion = lesson.PeekNextQuestion();
+                // QuestionConfig questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(nextQuestion.FileName);
+                // QuestDataBase questionData = questionConfig.GetQuestData();
+                
+                ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
+                IQuestData questionData = await CreateQuestData(nextQuestion);
 
                 if (nextQuestion.QuestionType == QuestionType.SelectWord && IsNeedDemonstration(nextQuestion))
                 {
@@ -143,13 +148,78 @@ namespace Chang.FSM
                 }
 
                 lesson.DequeueAndSetSipmQiestion();
-                lesson.SetCurrentQuestionConfig(questionData);
+                lesson.SetCurrentQuestionData(questionData);
                 _vocabularyFSM.SwitchState(questionData.QuestionType);
             }
         }
 
+        private async UniTask<QuestDataBase> CreateQuestData(ISimpleQuestion nextQuestion)
+        {
+            switch (nextQuestion.QuestionType)
+            {
+                case QuestionType.SelectWord:
+                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
+                    var selectWordData = new QuestSelectWordData
+                    {
+                        CorrectWord = await LoadPhraseConfigData(selectWord.CorrectWordFileName),
+                        MixWords = new List<PhraseData>()
+                    };
+
+                    foreach (var fileName in selectWord.MixWordsFileNames)
+                    {
+                        var data = await LoadPhraseConfigData(fileName);
+                        selectWordData.MixWords.Add(data);
+                    }
+
+                    return selectWordData;
+
+                case QuestionType.MatchWords:
+                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
+                    var matchWordsData = new QuestMatchWordsData(new List<PhraseData>());
+                    foreach (var fileName in matchWords.MatchWordsFileNames)
+                    {
+                        var data = await LoadPhraseConfigData(fileName);
+                        matchWordsData.MatchWords.Add(data);
+                    }
+
+                    return matchWordsData;
+
+                default:
+                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.FileName}, {nextQuestion.QuestionType}");
+            }
+        }
+
+        private async UniTask<PhraseData> LoadPhraseConfigData(string fileName)
+        {
+            var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(fileName);
+            return config.PhraseData;
+        }
+
+        private List<string> GetAssetsNames(ISimpleQuestion nextQuestion)
+        {
+            List<string> result = new();
+            switch (nextQuestion.QuestionType)
+            {
+                case QuestionType.SelectWord:
+                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
+                    result.Add(selectWord.CorrectWordFileName);
+                    result.AddRange(selectWord.MixWordsFileNames);
+                    break;
+
+                case QuestionType.MatchWords:
+                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
+                    result.AddRange(matchWords.MatchWordsFileNames);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.FileName}, {nextQuestion.QuestionType}");
+            }
+
+            return result;
+        }
+
         // if no records stored about this question or the question mark is 1 (or 0)
-        private bool IsNeedDemonstration(SimpleQuestionBase question)
+        private bool IsNeedDemonstration(ISimpleQuestion question)
         {
             bool logExists = _profileService.TryGetLog(question.FileName, out var questLog);
 
@@ -176,4 +246,3 @@ public struct ContinueButtonInfo
     public bool IsCorrect;
     public string InfoText;
 }
-

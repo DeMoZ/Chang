@@ -7,6 +7,7 @@ namespace Chang
 {
     public interface IQuestData
     {
+        public QuestionType QuestionType { get; }
     }
     
     public abstract class QuestDataBase : IQuestData
