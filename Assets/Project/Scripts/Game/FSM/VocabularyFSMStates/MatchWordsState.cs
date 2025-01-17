@@ -1,6 +1,7 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
+using System.Linq;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -62,12 +63,15 @@ namespace Chang.FSM
             // var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
             // _stateController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
             // _stateController.SetViewActive(true);
-
-            var left = new List<WordData>();
-            var right = new List<WordData>();
             
             // todo roman populate left and right lists and shafle them
-            var questionData = (QuestMatchWordsData)Bus.CurrentLesson.CurrentQuestionData;
+            QuestMatchWordsData questionData = (QuestMatchWordsData)Bus.CurrentLesson.CurrentQuestionData;
+            var words = questionData.MatchWords.Select(p => p.Word);
+            var left = new List<WordData>(words);
+            var right = new List<WordData>(words);
+            
+            left.Shuffle();
+            right.Shuffle();
             
             bool isLeft = UnityEngine.Random.Range(0, 2) == 0;
             _stateController.Init(isLeft, left, right, OnToggleValueChanged, OnContinueClicked);
@@ -87,18 +91,6 @@ namespace Chang.FSM
         private void OnContinueClicked()
         {
             
-        }
-
-        private void Shuffle<T>(List<T> list)
-        {
-            var rng = new Random();
-            var n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                (list[k], list[n]) = (list[n], list[k]);
-            }
         }
     }
 }

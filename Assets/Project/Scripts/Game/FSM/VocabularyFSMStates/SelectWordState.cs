@@ -59,7 +59,7 @@ namespace Chang.FSM
             _mixWords.Clear();
             _mixWords.Add(_correctWord);
             _mixWords.AddRange(questionData.MixWords);
-            Shuffle(_mixWords);
+            _mixWords.Shuffle();
 
             var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
             _stateController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
@@ -74,18 +74,6 @@ namespace Chang.FSM
             object[] info = { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
             var result = new SelectWordResult(_correctWord.Word.Word, isCorrect, info);
             Bus.QuestionResult = result;
-        }
-
-        private void Shuffle<T>(List<T> list)
-        {
-            var rng = new Random();
-            var n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                (list[k], list[n]) = (list[n], list[k]);
-            }
         }
     }
 }
