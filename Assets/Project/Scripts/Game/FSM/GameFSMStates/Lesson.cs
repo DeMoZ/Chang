@@ -76,5 +76,10 @@ namespace Chang
         {
             SimpleQuestionQueue.Enqueue(CurrentSimpleQuestion);
         }
+        
+        public void EnqueueQuestion(ISimpleQuestion question)
+        {
+            SimpleQuestionQueue.Enqueue(question);
+        }
     }
 }

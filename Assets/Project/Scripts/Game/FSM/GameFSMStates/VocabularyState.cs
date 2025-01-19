@@ -86,6 +86,12 @@ namespace Chang.FSM
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
 
+            if (_vocabularyFSM.CurrentStateType == QuestionType.MatchWords)
+            {
+                OnCheckMatchWords();
+                return;
+            }
+
             // if the answer is correct
             var isCorrect = _vocabularyBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
@@ -110,6 +116,25 @@ namespace Chang.FSM
             await _profileService.SaveAsync(); // todo roman in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
 
+        private async void OnCheckMatchWords()
+        {
+            Debug.Log($"{nameof(OnCheckMatchWords)}");
+
+            var matchWordsStateResult = _vocabularyBus.QuestionResult as MatchWordsStateResult;
+            if (matchWordsStateResult == null)
+                throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
+
+            var time = DateTime.UtcNow;
+            foreach (SelectWordResult result in matchWordsStateResult.Results)
+            {
+                _profileService.AddLog(result.Key, new LogUnit(time, result.IsCorrect));
+                _vocabularyBus.LessonLog.Add(result);
+            }
+
+            await _profileService.SaveAsync();
+            OnContinue();
+        }
+
         private async void OnContinue()
         {
             if (_vocabularyFSM.CurrentStateType == QuestionType.Result)
@@ -128,14 +153,10 @@ namespace Chang.FSM
             }
             else
             {
-                // SimpleQuestionBase nextQuestion = lesson.PeekNextQuestion();
-                // QuestionConfig questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(nextQuestion.FileName);
-                // QuestDataBase questionData = questionConfig.GetQuestData();
-                
                 ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
                 IQuestData questionData = await CreateQuestData(nextQuestion);
 
-                if (nextQuestion.QuestionType == QuestionType.SelectWord && IsNeedDemonstration(nextQuestion))
+                if (nextQuestion.QuestionType == QuestionType.SelectWord && IsNeedDemonstration(nextQuestion.FileName))
                 {
                     var demonstration = new SimpleQuestDemonstrationWord
                     {
@@ -145,6 +166,24 @@ namespace Chang.FSM
                     lesson.InsertNextQuest(demonstration);
                     var questionSelectWordData = (QuestSelectWordData)questionData;
                     questionData = new QuestDemonstrateWordData(questionSelectWordData.CorrectWord);
+                }
+                else if (nextQuestion.QuestionType == QuestionType.MatchWords)
+                {
+                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
+                    foreach (var fileName in matchWords.MatchWordsFileNames)
+                    {
+                        if (IsNeedDemonstration(fileName))
+                        {
+                            // todo reman implement demonstration for new match words. Then issue with after demonstration.
+                            // var demonstration = new SimpleQuestDemonstrationWord
+                            // {
+                            //     FileName = fileName
+                            // };
+                            // lesson.InsertNextQuest(demonstration);
+                            // var phraseData = await LoadPhraseConfigData(fileName);
+                            // questionData = new QuestDemonstrateWordData(phraseData);
+                        }
+                    }
                 }
 
                 lesson.DequeueAndSetSipmQiestion();
@@ -219,13 +258,13 @@ namespace Chang.FSM
         }
 
         // if no records stored about this question or the question mark is 1 (or 0)
-        private bool IsNeedDemonstration(ISimpleQuestion question)
+        private bool IsNeedDemonstration(string fileName)
         {
-            bool logExists = _profileService.TryGetLog(question.FileName, out var questLog);
+            bool logExists = _profileService.TryGetLog(fileName, out var questLog);
 
             if (!logExists)
             {
-                Debug.Log($"Demonstration required. No log for: {question.FileName}");
+                Debug.Log($"Demonstration required. No log for: {fileName}");
                 return true;
             }
 
@@ -233,7 +272,7 @@ namespace Chang.FSM
 
             if (isSmallMark)
             {
-                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {question.FileName}");
+                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {fileName}");
             }
 
             return isSmallMark;

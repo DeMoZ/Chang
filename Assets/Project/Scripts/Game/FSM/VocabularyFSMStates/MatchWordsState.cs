@@ -9,18 +9,12 @@ namespace Chang.FSM
 {
     public class MatchWordsStateResult : IQuestionResult
     {
+        public List<SelectWordResult> Results = new();
         public string Key { get; }
         public QuestionType Type => QuestionType.MatchWords;
-        public bool IsCorrect { get; }
+        public bool IsCorrect => true;
 
         public object[] Info { get; }
-        //
-        // public MatchWordsStateResult(string word, bool isCorrect, params object[] info)
-        // {
-        //     Word = word;
-        //     IsCorrect = isCorrect;
-        //     Info = info;
-        // }
     }
 
     public class MatchWordsState : ResultStateBase<QuestionType, VocabularyBus>
@@ -28,7 +22,13 @@ namespace Chang.FSM
         [Inject] private readonly MatchWordsController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
 
+        private List<WordData> _leftWords;
+        private List<WordData> _rightWords;
+
         public override QuestionType Type => QuestionType.MatchWords;
+
+        private int _correctCount;
+        private MatchWordsStateResult _result;
 
         public MatchWordsState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
@@ -43,54 +43,65 @@ namespace Chang.FSM
         public override void Exit()
         {
             base.Exit();
+
             _stateController.SetViewActive(false);
+
+            _leftWords.Clear();
+            _rightWords.Clear();
         }
 
         private void StateBody()
         {
-            // // 1 instantiate screen and initialise with data.
-            // if (Bus.CurrentLesson.CurrentQuestion.QuestionType != Type)
-            //     throw new ArgumentException("Question type doesnt match with state type");
-            //
-            // var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestion;
-            // _correctWord = questionData.CorrectWord;
-            // _mixWords ??= new List<PhraseData>();
-            // _mixWords.Clear();
-            // _mixWords.Add(_correctWord);
-            // _mixWords.AddRange(questionData.MixWords);
-            // Shuffle(_mixWords);
-            //
-            // var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
-            // _stateController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
-            // _stateController.SetViewActive(true);
-            
+            _correctCount = 0;
+            _result = new MatchWordsStateResult();
+
+            _stateController.EnableContinueButton(false);
+
             var questionData = (QuestMatchWordsData)Bus.CurrentLesson.CurrentQuestionData;
             var words = questionData.MatchWords.Select(p => p.Word);
-            var left = new List<WordData>(words);
-            var right = new List<WordData>(words);
-            
-            left.Shuffle();
-            right.Shuffle();
-            
-            var isLeft = RandomUtils.GetRandomBool();
-            Debug.LogError($"isLeft: {isLeft}");
-            _stateController.Init(isLeft, left, right, OnToggleValueChanged, OnContinueClicked);
+            _leftWords = new List<WordData>(words);
+            _rightWords = new List<WordData>(words);
+
+            _leftWords.Shuffle();
+            _rightWords.Shuffle();
+
+            var isLeftLanguage = RandomUtils.GetRandomBool();
+            Debug.Log($"isLeft: {isLeftLanguage}");
+            _stateController.Init(isLeftLanguage, _leftWords, _rightWords, OnToggleValueChanged, OnContinueClicked);
             _stateController.SetViewActive(true);
         }
 
-        private void OnToggleValueChanged(bool isLeft, int index, bool isOn)
+        private void OnToggleValueChanged(int leftIndex, int rightIndex)
         {
-            // _gameOverlayController.EnableCheckButton(isOn);
-            // Debug.Log($"toggle: {index}; isOn: {isOn}");
-            // var isCorrect = _mixWords[index] == _correctWord;
-            // object[] info = { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
-            // var result = new SelectWordResult( _correctWord.Word.Word, isCorrect, info);
-            // Bus.QuestionResult = result;
+            var isCorrect = _leftWords[leftIndex] == _rightWords[rightIndex];
+            Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
+
+            _stateController.ShowCorrect(leftIndex, rightIndex, isCorrect);
+
+            var leftResult = new SelectWordResult(_leftWords[leftIndex].Word, isCorrect);
+            _result.Results.Add(leftResult);
+
+            if (!isCorrect)
+            {
+                var rightResult = new SelectWordResult(_rightWords[rightIndex].Word, false);
+                _result.Results.Add(rightResult);
+            }
+
+            if (!isCorrect)
+                return;
+
+            _correctCount++;
+
+            if (_correctCount == _leftWords.Count)
+                _stateController.EnableContinueButton(true);
         }
 
         private void OnContinueClicked()
         {
-            
+            Debug.Log($"Continue clicked");
+
+            Bus.QuestionResult = _result;
+            _gameOverlayController.OnCheck?.Invoke();
         }
     }
 }
