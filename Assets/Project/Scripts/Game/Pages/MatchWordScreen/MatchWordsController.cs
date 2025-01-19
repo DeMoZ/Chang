@@ -24,7 +24,7 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        public void Init(bool langColumn, 
+        public void Init(bool isLeftLanguage,
             List<WordData> left, List<WordData> right,
             Action<bool, int, bool> onToggleValueChanged, Action onContinueClicked)
         {
@@ -33,10 +33,10 @@ namespace Chang
             for (var i = 0; i < left.Count; i++)
             {
                 var index = i;
-                var toggle = _view.AddItem(langColumn);
-                
-                if (langColumn)
-                    toggle.Set( left[i].Word, left[i].Phonetic, isOn => onToggleValueChanged(true, index, isOn));
+                var toggle = _view.AddItem(true);
+
+                if (isLeftLanguage)
+                    toggle.Set(left[i].Word, left[i].Phonetic, isOn => onToggleValueChanged(true, index, isOn));
                 else
                     toggle.Set(left[i].GetTranslation(), string.Empty, isOn => onToggleValueChanged(true, index, isOn));
             }
@@ -44,12 +44,12 @@ namespace Chang
             for (var i = 0; i < right.Count; i++)
             {
                 var index = i;
-                var toggle = _view.AddItem(!langColumn);
-                
-                if (!langColumn)
-                    toggle.Set( right[i].Word, right[i].Phonetic, isOn => onToggleValueChanged(true, index, isOn));
-                else
+                var toggle = _view.AddItem(false);
+
+                if (isLeftLanguage)
                     toggle.Set(right[i].GetTranslation(), string.Empty, isOn => onToggleValueChanged(true, index, isOn));
+                else
+                    toggle.Set(right[i].Word, right[i].Phonetic, isOn => onToggleValueChanged(true, index, isOn));
             }
         }
     }
