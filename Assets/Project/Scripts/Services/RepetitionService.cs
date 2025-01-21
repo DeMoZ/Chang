@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chang.Profile;
-using Cysharp.Threading.Tasks;
 using Zenject;
 
 namespace Chang.Services

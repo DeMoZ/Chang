@@ -53,20 +53,13 @@ namespace Chang.FSM
                     await _profileService.LoadStoredData();
                     OnStateResult.Invoke(StateType.Lobby);
                     break;
-                // case PreloadType.Lobby:
-                //     // _gameModel.Lessons are already in the model, so no need to call PlreloaderType.Lobby
-                //     break;
-                case PreloadType.LessonConfig:
-                    await LoadLessonContentAsync();
-                    OnStateResult.Invoke(StateType.PlayVocabulary);
-                    break;
-                case PreloadType.QuestConfigs:
-                    await LoadQuestionsContentAsync();
+                case PreloadType.LessonData:
+                    Debug.LogWarning("Should not be here because it loads in VocabularyState without loading ui");
                     OnStateResult.Invoke(StateType.PlayVocabulary);
                     break;
 
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException($"PreloadType not implemented {Bus.PreloadFor}");
             }
         }
 
@@ -81,37 +74,11 @@ namespace Chang.FSM
             {
                 Converters = new List<JsonConverter> { new BookConverter() }
             };
-            
+
             Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text, settings);
             Bus.SimpleLessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
-
-            Bus.SimpleQuestions = Bus.SimpleBookData.Lessons
-                .SelectMany(lesson => lesson.Questions)
-                .GroupBy(question => question.FileName)
-                .Select(group => group.First())
-                .ToDictionary(question => question.FileName, question => (Chang.ISimpleQuestion)question);
+            
             Debug.Log("LoadGameBookConfigAsync end");
-        }
-
-        /// <summary>
-        /// Loads lesson config but not to be used as it as,
-        /// but to also load contained question configs that will be called by the fileNames.
-        /// </summary>
-        private async UniTask LoadLessonContentAsync()
-        {
-            var lesson = Bus.SimpleLessons[Bus.CurrentLesson.FileName];
-            await _resourcesManager.LoadAssetAsync<LessonConfig>(lesson.FileName);
-        }
-
-        /// <summary>
-        /// Loads qeustion configs to cash it and load faster during game
-        /// </summary>
-        private async UniTask LoadQuestionsContentAsync()
-        {
-            foreach (var question in Bus.CurrentLesson.SimpleQuestions)
-            {
-                await _resourcesManager.LoadAssetAsync<QuestionConfig>(question.FileName);
-            }
         }
     }
 }

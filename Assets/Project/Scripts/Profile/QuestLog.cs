@@ -15,12 +15,13 @@ namespace Chang.Profile
         private readonly (int min, int max) SuccesSequeseRange = (0, 10);
         
         public string FileName { get; set; }
+        public QuestionType QuestionType { get; set; }
         public Queue<LogUnit> Log { get; set; }
         
         /// <summary>
         /// Mark for quest [0-10]
         /// 0 - show demonstration again
-        /// 9 - perfect, dont show the word for a long time again
+        /// 9 - perfect, don't show the word for a long time again
         /// </summary>
         public int Mark { get; set; }
        
@@ -34,30 +35,24 @@ namespace Chang.Profile
         /// </summary>
         public DateTime UtcTime { get; set; }
         
-        public QuestLog(string fileName)
+        public QuestLog(string fileName, QuestionType type)
         {
             FileName = fileName;
+            QuestionType = type;
             Mark = DefaultMark;
             SuccessSequence = DefaultSuccess;
             Log = new Queue<LogUnit>();
         }
         
         [JsonConstructor]
-        public QuestLog(string fileName, int mark, int successSequence, Queue<LogUnit> log)
+        public QuestLog(string fileName, QuestionType type, int mark, int successSequence, Queue<LogUnit> log)
         {
             FileName = fileName;
+            QuestionType = type;
             Mark = mark;
             SuccessSequence = successSequence;
             Log = log ?? new Queue<LogUnit>();
         }
-
-        // public void SetDefaultData(string key)
-        // {
-        //     FileName = key;
-        //     Mark = DefaultMark;
-        //     SuccessSequence = DefaultSuccess;
-        //     Log = new Queue<LogUnit>();
-        // }
         
         public void SetTime(DateTime utcTime)
         {

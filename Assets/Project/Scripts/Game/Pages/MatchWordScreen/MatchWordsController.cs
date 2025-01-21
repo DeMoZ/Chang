@@ -60,7 +60,7 @@ namespace Chang
                 _leftToggles.Add(toggle);
 
                 if (isLeftLanguage)
-                    toggle.Set(left[i].Word, left[i].Phonetic, isOn => OnToggleValueChanged(true, index, isOn));
+                    toggle.Set(left[i].LearnWord, left[i].Phonetic, isOn => OnToggleValueChanged(true, index, isOn));
                 else
                     toggle.Set(left[i].GetTranslation(), string.Empty, isOn => OnToggleValueChanged(true, index, isOn));
             }
@@ -74,7 +74,7 @@ namespace Chang
                 if (isLeftLanguage)
                     toggle.Set(right[i].GetTranslation(), string.Empty, isOn => OnToggleValueChanged(false, index, isOn));
                 else
-                    toggle.Set(right[i].Word, right[i].Phonetic, isOn => OnToggleValueChanged(false, index, isOn));
+                    toggle.Set(right[i].LearnWord, right[i].Phonetic, isOn => OnToggleValueChanged(false, index, isOn));
             }
         }
 

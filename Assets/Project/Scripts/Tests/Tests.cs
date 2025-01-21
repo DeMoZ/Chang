@@ -21,8 +21,8 @@ namespace Chang
         public async UniTask Run()
         {
             await Test_LoadingAssets<TextAsset>("BookJson"); // WebBuild LZ4 compressed json
-            await Test_LoadingAssets<LessonConfig>("AdjectiveAdverb 0"); // WebBuild Uncompressed
-            await Test_LoadingAssets<QuestionConfig>("Hot"); // WebBuild Uncompressed
+            // OBSOLETE // await Test_LoadingAssets<LessonConfig>("AdjectiveAdverb 0"); // WebBuild Uncompressed
+            // OBSOLETE // await Test_LoadingAssets<QuestionConfig>("Hot"); // WebBuild Uncompressed
             await Test_LoadingAssets<PhraseConfig>("go"); // WebBuild Uncompressed
             
             // todo roman create groups with following assets and test different archiving methods

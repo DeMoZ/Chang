@@ -1,3 +1,4 @@
+using System;
 using Chang.Services;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -51,6 +52,12 @@ namespace Chang
             Debug.Log($"Clicked on item {index}");
 
             //_mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
+        }
+
+        public int GetLogCount()
+        {
+            // return _repetitionService.GetProgress().Questions;
+            throw new NotImplementedException("Not implemented count log");
         }
     }
 }

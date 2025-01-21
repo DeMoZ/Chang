@@ -62,9 +62,9 @@ namespace Chang.FSM
         {
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
-            object[] info = { _correctWord.Word.Phonetic };
-            var result = new DemonstrationWordResult(_correctWord.Word.Word, info);
+            object[] info = { _correctWord.Word.LearnWord };
+            var result = new DemonstrationWordResult(_correctWord.Word.Key, info);
             Bus.QuestionResult = result;
         }
     }
-}
+}   

@@ -23,9 +23,7 @@ namespace Chang
     {
         None,
         Boot,       // Run game, preload all that need for the game on bootstrap
-        // Lobby,      // Enter the lobby, load book
-        LessonConfig,     // Start lesson, load LessonConfig file // todo roman refactor to use preloader in a different way. May be set the model with content names to donwload
-        QuestConfigs,     // Start lesson, load Question Configs files separately
+        LessonData,
     }
 
     public enum Languages

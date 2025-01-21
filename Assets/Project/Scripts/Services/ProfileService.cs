@@ -38,12 +38,12 @@ namespace Chang.Services
 
             //var prefsProfileData = await _prefsDataProvider.LoadProfileDataAsync(_cts.Token);
             //var prefsProgressData = await _prefsDataProvider.LoadProgressDataAsync(_cts.Token);
-            
+
             var unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(_cts.Token);
             var unityProgressData = await _unityCloudDataProvider.LoadProgressDataAsync(_cts.Token);
 
             // todo roman merge data with prefs. But for now will use only cloud data
-            
+
             _playerProfile.ProfileData = unityProfileData;
             _playerProfile.ProgressData = unityProgressData;
         }
@@ -57,25 +57,27 @@ namespace Chang.Services
             await SaveIntoScriptableObject();
         }
 
-        public void AddLog(string key, LogUnit logUnit)
+        public void AddLog(string key, QuestionType type, bool isCorrect)
         {
-            if (!_playerProfile.ProgressData.Questions.TryGetValue(key, out var unit))
+            Debug.LogWarning($"AddLog key: {key}, isCorrect {isCorrect}");
+
+            if (!_playerProfile.ProgressData.Questions.TryGetValue(key, out var questLog))
             {
-                unit = new QuestLog(key);
-                // unit.SetDefaultData(key);
-                _playerProfile.ProgressData.Questions[key] = unit;
+                questLog = new QuestLog(key, type);
+                _playerProfile.ProgressData.Questions[key] = questLog;
             }
 
+            var logUnit = new LogUnit(DateTime.UtcNow, isCorrect);
             _playerProfile.ProgressData.SetTime(logUnit.UtcTime);
-            unit.SetTime(logUnit.UtcTime);
-            unit.AddLog(logUnit);
+            questLog.SetTime(logUnit.UtcTime);
+            questLog.AddLog(logUnit);
         }
 
         public ProgressData GetProgress()
         {
             return _playerProfile.ProgressData;
         }
-        
+
         public bool TryGetLog(string key, out QuestLog questLog)
         {
             return _playerProfile.ProgressData.Questions.TryGetValue(key, out questLog);

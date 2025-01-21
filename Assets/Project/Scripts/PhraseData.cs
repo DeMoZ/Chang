@@ -24,15 +24,15 @@ namespace Chang
 
     public class WordData
     {
-        public string EngWord { get; private set; }
-        public string Word { get; private set; }
+        public string Key { get; private set; }
+        public string LearnWord { get; private set; }
         public string Phonetic { get; private set; }
         public List<Translation> Meanings { get; private set; }
 
-        public WordData(string engWord, string word, string phonetic, List<Translation> meanings)
+        public WordData(string key, string learnWord, string phonetic, List<Translation> meanings)
         {
-            EngWord = engWord;
-            Word = word;
+            Key = key;
+            LearnWord = learnWord;
             Phonetic = phonetic;
             Meanings = meanings;
         }

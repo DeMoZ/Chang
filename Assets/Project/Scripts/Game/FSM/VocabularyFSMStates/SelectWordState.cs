@@ -71,8 +71,10 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index] == _correctWord;
-            object[] info = { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
-            var result = new SelectWordResult(_correctWord.Word.Word, isCorrect, info);
+            var correctWord = _correctWord.Word.LearnWord;
+            var selectedWord = _mixWords[index].Word.LearnWord;
+            object[] info = { correctWord, selectedWord };
+            var result = new SelectWordResult(_correctWord.Word.Key, isCorrect, info);
             Bus.QuestionResult = result;
         }
     }

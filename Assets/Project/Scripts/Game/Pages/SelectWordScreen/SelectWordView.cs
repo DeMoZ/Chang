@@ -27,7 +27,7 @@ namespace Chang.UI
             }
 
             // init thai word
-            var quesWord = !questInStudiedLanguage ? correctWord.Word.GetTranslation() : correctWord.Word.Word;
+            var quesWord = !questInStudiedLanguage ? correctWord.Word.GetTranslation() : correctWord.Word.LearnWord;
             _questionWord.Set(quesWord, correctWord.Word.Phonetic);
             _questionWord.EnablePhonetic(questInStudiedLanguage);
 
@@ -37,7 +37,7 @@ namespace Chang.UI
                 var mix = Instantiate(_mixWordPrefab, _mixWordContent);
                 var index = i;
 
-                var word = questInStudiedLanguage ? mixWords[i].Word.GetTranslation() : mixWords[i].Word.Word;
+                var word = questInStudiedLanguage ? mixWords[i].Word.GetTranslation() : mixWords[i].Word.LearnWord;
                 mix.Set(word, mixWords[i].Word.Phonetic, _toggleGroup, isOn => onToggleValueChanged(index, isOn));
                 mix.EnablePhonetic(!questInStudiedLanguage);
             }

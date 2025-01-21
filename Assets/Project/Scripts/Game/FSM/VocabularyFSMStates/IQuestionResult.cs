@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Chang.FSM
 {
     public interface IQuestionResult

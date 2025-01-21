@@ -97,8 +97,7 @@ namespace Chang.FSM
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
             var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
-
-            _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpleQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
+            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, QuestionType.SelectWord, isCorrect);
 
             if (!isCorrect)
             {
@@ -124,10 +123,9 @@ namespace Chang.FSM
             if (matchWordsStateResult == null)
                 throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
 
-            var time = DateTime.UtcNow;
             foreach (SelectWordResult result in matchWordsStateResult.Results)
             {
-                _profileService.AddLog(result.Key, new LogUnit(time, result.IsCorrect));
+                _profileService.AddLog(result.Key, QuestionType.SelectWord, result.IsCorrect);
                 _vocabularyBus.LessonLog.Add(result);
             }
 
@@ -156,16 +154,20 @@ namespace Chang.FSM
                 ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
                 IQuestData questionData = await CreateQuestData(nextQuestion);
 
-                if (nextQuestion.QuestionType == QuestionType.SelectWord && IsNeedDemonstration(nextQuestion.FileName))
+                if (nextQuestion.QuestionType == QuestionType.SelectWord)
                 {
-                    var demonstration = new SimpleQuestDemonstrationWord
+                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
+                    if (IsNeedDemonstration(selectWord.CorrectWordFileName))
                     {
-                        FileName = nextQuestion.FileName
-                    };
+                        var demonstration = new SimpleQuestDemonstrationWord
+                        {
+                            CorrectWordFileName = selectWord.CorrectWordFileName
+                        };
 
-                    lesson.InsertNextQuest(demonstration);
-                    var questionSelectWordData = (QuestSelectWordData)questionData;
-                    questionData = new QuestDemonstrateWordData(questionSelectWordData.CorrectWord);
+                        lesson.InsertNextQuest(demonstration);
+                        var questionSelectWordData = (QuestSelectWordData)questionData;
+                        questionData = new QuestDemonstrateWordData(questionSelectWordData.CorrectWord);
+                    }
                 }
                 else if (nextQuestion.QuestionType == QuestionType.MatchWords)
                 {
@@ -174,14 +176,15 @@ namespace Chang.FSM
                     {
                         if (IsNeedDemonstration(fileName))
                         {
-                            // todo reman implement demonstration for new match words. Then issue with after demonstration.
-                            // var demonstration = new SimpleQuestDemonstrationWord
-                            // {
-                            //     FileName = fileName
-                            // };
-                            // lesson.InsertNextQuest(demonstration);
-                            // var phraseData = await LoadPhraseConfigData(fileName);
-                            // questionData = new QuestDemonstrateWordData(phraseData);
+                            var demonstration = new SimpleQuestDemonstrationWord
+                            {
+                                CorrectWordFileName = fileName
+                            };
+                            lesson.InsertNextQuest(demonstration);
+                            
+                            var phraseData = await LoadPhraseConfigData(fileName);
+                            questionData = new QuestDemonstrateWordData(phraseData);
+                            break; // no need to create and load all demonstration screens at once
                         }
                     }
                 }
@@ -192,6 +195,7 @@ namespace Chang.FSM
             }
         }
 
+        // todo roman implement loading screen
         private async UniTask<QuestDataBase> CreateQuestData(ISimpleQuestion nextQuestion)
         {
             switch (nextQuestion.QuestionType)
@@ -222,9 +226,14 @@ namespace Chang.FSM
                     }
 
                     return matchWordsData;
+                
+                // case QuestionType.DemonstrationWord:
+                //     var demonstration = (SimpleQuestDemonstrationWord)nextQuestion;
+                //     var demonstrationWordData = await LoadPhraseConfigData(demonstration.CorrectWordFileName);
+                //     return new QuestDemonstrateWordData(demonstrationWordData);
 
                 default:
-                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.FileName}, {nextQuestion.QuestionType}");
+                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.QuestionType}");
             }
         }
 
@@ -251,7 +260,7 @@ namespace Chang.FSM
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.FileName}, {nextQuestion.QuestionType}");
+                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.QuestionType}");
             }
 
             return result;
