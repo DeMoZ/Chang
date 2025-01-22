@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-
 namespace Chang.FSM
 {
     public interface IQuestionResult
     {
-        public string Word { get; }
+        public string Key { get; }
+        public string Presentation { get; }
         public bool IsCorrect { get; }
         public QuestionType Type { get; }
         object[] Info { get; }

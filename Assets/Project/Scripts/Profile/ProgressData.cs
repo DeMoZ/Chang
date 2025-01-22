@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Profile
 {
@@ -20,7 +21,8 @@ namespace Chang.Profile
         public ProgressData(DateTime utcTime, Dictionary<string, QuestLog> questions)
         {
             UtcTime = utcTime;
-            Questions = questions ?? new Dictionary<string, QuestLog>();
+            Questions = ValidateQuestions(questions);
+            // Questions = questions;
         }
 
         public ProgressData()
@@ -32,6 +34,24 @@ namespace Chang.Profile
         public void SetTime(DateTime utcTime)
         {
             UtcTime = utcTime;
+        }
+        
+        public Dictionary<string, QuestLog>  ValidateQuestions(Dictionary<string, QuestLog> questions)
+        {
+            Dictionary<string, QuestLog> result = new();
+            
+            foreach (var pair in questions)
+            {
+                if (pair.Value.QuestionType == QuestionType.None)
+                {
+                    Debug.LogWarning($"ValidateQuestion: QuestionType is None for {pair.Key}");
+                    continue;
+                }
+                
+                result.Add(pair.Key, pair.Value);
+            }
+
+            return result;
         }
     }
 }

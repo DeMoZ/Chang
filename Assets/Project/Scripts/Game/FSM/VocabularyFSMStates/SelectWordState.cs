@@ -1,21 +1,23 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
-using Debug = DMZ.DebugSystem.DMZLogger;
 using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
     public class SelectWordResult : IQuestionResult
     {
-        public string Word { get; }
+        public string Key { get; }
+        public string Presentation { get; }
         public QuestionType Type => QuestionType.SelectWord;
         public bool IsCorrect { get; }
         public object[] Info { get; }
 
-        public SelectWordResult(string word, bool isCorrect, params object[] info)
+        public SelectWordResult(string key, string presentation, bool isCorrect, params object[] info)
         {
-            Word = word;
+            Key = key;
+            Presentation = presentation;
             IsCorrect = isCorrect;
             Info = info;
         }
@@ -50,16 +52,16 @@ namespace Chang.FSM
         private void StateBody()
         {
             // 1 instantiate screen and initialise with data.
-            if (Bus.CurrentLesson.CurrentQuestion.QuestionType != Type)
+            if (Bus.CurrentLesson.CurrentQuestionData.QuestionType != Type)
                 throw new ArgumentException("Question type doesnt match with state type");
 
-            var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestion;
+            var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestionData;
             _correctWord = questionData.CorrectWord;
             _mixWords ??= new List<PhraseData>();
             _mixWords.Clear();
             _mixWords.Add(_correctWord);
             _mixWords.AddRange(questionData.MixWords);
-            Shuffle(_mixWords);
+            _mixWords.Shuffle();
 
             var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
             _stateController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
@@ -71,21 +73,11 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index] == _correctWord;
-            object[] info = { _correctWord.Word.Phonetic, _mixWords[index].Word.Phonetic };
-            var result = new SelectWordResult( _correctWord.Word.Word, isCorrect, info);
+            var correctWord = _correctWord.Word.LearnWord;
+            var selectedWord = _mixWords[index].Word.LearnWord;
+            object[] info = { correctWord, selectedWord };
+            var result = new SelectWordResult(_correctWord.Word.Key, _correctWord.Word.LearnWord, isCorrect, info);
             Bus.QuestionResult = result;
-        }
-
-        private void Shuffle<T>(List<T> list)
-        {
-            var rng = new Random();
-            var n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                (list[k], list[n]) = (list[n], list[k]);
-            }
         }
     }
 }

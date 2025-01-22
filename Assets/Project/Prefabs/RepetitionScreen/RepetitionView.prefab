@@ -198,15 +198,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -850,6 +852,10 @@ PrefabInstance:
       propertyPath: m_text
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3666787018453247266, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 3752854648024024900, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -885,6 +891,10 @@ PrefabInstance:
     - target: {fileID: 5752635045831282837, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
       propertyPath: m_text
       value: 'Questions:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5752635045831282837, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1003,6 +1013,10 @@ PrefabInstance:
       propertyPath: m_text
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3666787018453247266, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 3752854648024024900, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1038,6 +1052,10 @@ PrefabInstance:
     - target: {fileID: 5752635045831282837, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
       propertyPath: m_text
       value: 'Sentences:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5752635045831282837, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1156,6 +1174,10 @@ PrefabInstance:
       propertyPath: m_text
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3666787018453247266, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 3752854648024024900, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1191,6 +1213,10 @@ PrefabInstance:
     - target: {fileID: 5752635045831282837, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
       propertyPath: m_text
       value: 'Words:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5752635045831282837, guid: a256be1875c2343c2b3a06f66f1bfb3f, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

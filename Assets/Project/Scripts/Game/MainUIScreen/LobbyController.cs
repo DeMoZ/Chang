@@ -116,9 +116,9 @@ namespace Chang
             _isLoading = true;
             await UniTask.DelayFrame(1);
             _gameBus.CurrentLesson.SetFileName(name);
-            _gameBus.CurrentLesson.SetSimpleQuestions(_gameBus.SimpleLessons[name].Questions);
+            _gameBus.CurrentLesson.SetSimpleQuestions(_gameBus.SimpleLessons[name].Questions.ToList());
+            _gameBus.PreloadFor = PreloadType.LessonData;
 
-            _gameBus.PreloadFor = PreloadType.LessonConfig;
             _isLoading = false;
 
             _onExitState?.Invoke();
@@ -129,18 +129,45 @@ namespace Chang
             if (_isLoading)
                 return;
 
+            var repetitions = _repetitionService.GetGeneralRepetition(GeneralRepetitionAmount);
+            if (repetitions.Count < 4)
+            {
+                Debug.LogWarning("Not enough logs for general repetition");
+                return;
+            }
+            
             _isLoading = true;
-
             await UniTask.DelayFrame(1);
-
             _gameBus.CurrentLesson = new Lesson();
 
-            var repetitions = _repetitionService.GetGeneralRepetition(GeneralRepetitionAmount);
-            List<SimpleQuestionBase> questions = repetitions.Select(q => _gameBus.SimpleQuestions[q.FileName]).ToList();
-            // _gameBus.CurrentLesson.SetFileName(string.Empty); // todo roman need to not to mark lesson as finished on end repetition
+            var questions = new List<ISimpleQuestion>();
+            foreach (var questLog in repetitions)
+            {
+                switch (questLog.QuestionType)
+                {
+                    case QuestionType.SelectWord:
+                    // todo roman new SimpleQuestion using word from log and also need to populate it with the other words.
+                    // Probably from log but not sure. Can be other words from database. Do i have it?
+                    SimpleQuestSelectWord simpleQuest = new SimpleQuestSelectWord();
+                    simpleQuest.CorrectWordFileName = questLog.FileName;
+                    var words = repetitions
+                        .Where(r => r.QuestionType == QuestionType.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
+                        .ToList();
+                    
+                    words.Shuffle();
+                    simpleQuest.MixWordsFileNames = words.Take(3).Select(w=>w.FileName).ToList();
+                    questions.Add(simpleQuest);
+                    break;
+                    
+                    default:
+                        throw new NotImplementedException($"Not implemented simple quest generation for type: {questLog.QuestionType}");
+                }
+            }
+            
+            _gameBus.CurrentLesson.SetFileName(string.Empty); // todo roman need to not to mark lesson as finished on end repetition
             _gameBus.CurrentLesson.SetSimpleQuestions(questions);
 
-            _gameBus.PreloadFor = PreloadType.QuestConfigs;
+            _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 
             _onExitState?.Invoke();

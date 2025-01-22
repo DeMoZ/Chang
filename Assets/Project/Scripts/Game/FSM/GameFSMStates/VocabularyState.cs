@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
+using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -84,13 +86,18 @@ namespace Chang.FSM
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
 
+            if (_vocabularyFSM.CurrentStateType == QuestionType.MatchWords)
+            {
+                OnCheckMatchWords();
+                return;
+            }
+
             // if the answer is correct
             var isCorrect = _vocabularyBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
             var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
-
-            _profileService.AddLog(_vocabularyBus.CurrentLesson.CurrentSimpleQuestion.FileName, new LogUnit(DateTime.UtcNow, isCorrect));
+            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, _vocabularyBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect);
 
             if (!isCorrect)
             {
@@ -102,20 +109,38 @@ namespace Chang.FSM
             info.InfoText = (string)_vocabularyBus.QuestionResult.Info[0];
 
             _vocabularyBus.LessonLog.Add(_vocabularyBus.QuestionResult);
-                
+
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
             await _profileService.SaveAsync(); // todo roman in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
 
+        private async void OnCheckMatchWords()
+        {
+            Debug.Log($"{nameof(OnCheckMatchWords)}");
+
+            var matchWordsStateResult = _vocabularyBus.QuestionResult as MatchWordsStateResult;
+            if (matchWordsStateResult == null)
+                throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
+
+            foreach (SelectWordResult result in matchWordsStateResult.Results)
+            {
+                _profileService.AddLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect);
+                _vocabularyBus.LessonLog.Add(result);
+            }
+
+            await _profileService.SaveAsync();
+            OnContinue();
+        }
+
         private async void OnContinue()
         {
-            if(_vocabularyFSM.CurrentStateType == QuestionType.Result)
+            if (_vocabularyFSM.CurrentStateType == QuestionType.Result)
             {
                 ExitToLobby();
                 return;
             }
-            
+
             var lesson = _vocabularyBus.CurrentLesson;
 
             if (lesson.SimpleQuestionQueue.Count == 0)
@@ -126,36 +151,129 @@ namespace Chang.FSM
             }
             else
             {
-                var nextQuestion = lesson.PeekNextQuestion();
-                var questionConfig = await _resourcesManager.LoadAssetAsync<QuestionConfig>(nextQuestion.FileName);
-                var questionData = questionConfig.GetQuestData();
+                ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
+                IQuestData questionData = await CreateQuestData(nextQuestion);
 
-                if (nextQuestion.QuestionType == QuestionType.SelectWord && IsNeedDemonstration(nextQuestion))
+                if (nextQuestion.QuestionType == QuestionType.SelectWord)
                 {
-                    var demonstration = new SimpleQuestDemonstrationWord
+                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
+                    if (IsNeedDemonstration(selectWord.CorrectWordFileName))
                     {
-                        FileName = nextQuestion.FileName
-                    };
+                        var demonstration = new SimpleQuestDemonstrationWord
+                        {
+                            CorrectWordFileName = selectWord.CorrectWordFileName
+                        };
 
-                    lesson.InsertNextQuest(demonstration);
-                    var questionSelectWordData = (QuestSelectWordData)questionData;
-                    questionData = new QuestDemonstrateWordData(questionSelectWordData.CorrectWord);
+                        lesson.InsertNextQuest(demonstration);
+                        var questionSelectWordData = (QuestSelectWordData)questionData;
+                        questionData = new QuestDemonstrateWordData(questionSelectWordData.CorrectWord);
+                    }
+                }
+                else if (nextQuestion.QuestionType == QuestionType.MatchWords)
+                {
+                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
+                    foreach (var fileName in matchWords.MatchWordsFileNames)
+                    {
+                        if (IsNeedDemonstration(fileName))
+                        {
+                            var demonstration = new SimpleQuestDemonstrationWord
+                            {
+                                CorrectWordFileName = fileName
+                            };
+                            lesson.InsertNextQuest(demonstration);
+
+                            var phraseData = await LoadPhraseConfigData(fileName);
+                            questionData = new QuestDemonstrateWordData(phraseData);
+                            break; // no need to create and load all demonstration screens at once
+                        }
+                    }
                 }
 
                 lesson.DequeueAndSetSipmQiestion();
-                lesson.SetCurrentQuestionConfig(questionData);
+                lesson.SetCurrentQuestionData(questionData);
                 _vocabularyFSM.SwitchState(questionData.QuestionType);
             }
         }
 
-        // if no records stored about this question or the question mark is 1 (or 0)
-        private bool IsNeedDemonstration(SimpleQuestionBase question)
+        // todo roman implement loading screen
+        private async UniTask<QuestDataBase> CreateQuestData(ISimpleQuestion nextQuestion)
         {
-            bool logExists = _profileService.TryGetLog(question.FileName, out var questLog);
+            switch (nextQuestion.QuestionType)
+            {
+                case QuestionType.SelectWord:
+                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
+                    var selectWordData = new QuestSelectWordData
+                    {
+                        CorrectWord = await LoadPhraseConfigData(selectWord.CorrectWordFileName),
+                        MixWords = new List<PhraseData>()
+                    };
+
+                    foreach (var fileName in selectWord.MixWordsFileNames)
+                    {
+                        var data = await LoadPhraseConfigData(fileName);
+                        selectWordData.MixWords.Add(data);
+                    }
+
+                    return selectWordData;
+
+                case QuestionType.MatchWords:
+                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
+                    var matchWordsData = new QuestMatchWordsData(new List<PhraseData>());
+                    foreach (var fileName in matchWords.MatchWordsFileNames)
+                    {
+                        var data = await LoadPhraseConfigData(fileName);
+                        matchWordsData.MatchWords.Add(data);
+                    }
+
+                    return matchWordsData;
+
+                // case QuestionType.DemonstrationWord:
+                //     var demonstration = (SimpleQuestDemonstrationWord)nextQuestion;
+                //     var demonstrationWordData = await LoadPhraseConfigData(demonstration.CorrectWordFileName);
+                //     return new QuestDemonstrateWordData(demonstrationWordData);
+
+                default:
+                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.QuestionType}");
+            }
+        }
+
+        private async UniTask<PhraseData> LoadPhraseConfigData(string fileName)
+        {
+            var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(fileName);
+            return config.PhraseData;
+        }
+
+        private List<string> GetAssetsNames(ISimpleQuestion nextQuestion)
+        {
+            List<string> result = new();
+            switch (nextQuestion.QuestionType)
+            {
+                case QuestionType.SelectWord:
+                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
+                    result.Add(selectWord.CorrectWordFileName);
+                    result.AddRange(selectWord.MixWordsFileNames);
+                    break;
+
+                case QuestionType.MatchWords:
+                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
+                    result.AddRange(matchWords.MatchWordsFileNames);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.QuestionType}");
+            }
+
+            return result;
+        }
+
+        // if no records stored about this question or the question mark is 1 (or 0)
+        private bool IsNeedDemonstration(string fileName)
+        {
+            bool logExists = _profileService.TryGetLog(fileName, out var questLog);
 
             if (!logExists)
             {
-                Debug.Log($"Demonstration required. No log for: {question.FileName}");
+                Debug.Log($"Demonstration required. No log for: {fileName}");
                 return true;
             }
 
@@ -163,7 +281,7 @@ namespace Chang.FSM
 
             if (isSmallMark)
             {
-                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {question.FileName}");
+                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {fileName}");
             }
 
             return isSmallMark;
@@ -176,4 +294,3 @@ public struct ContinueButtonInfo
     public bool IsCorrect;
     public string InfoText;
 }
-

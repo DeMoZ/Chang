@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
@@ -12,7 +11,7 @@ namespace Chang
     public abstract class QuestBase
     {
         public QuestionType QuestionType { get; protected set; }
-        
+
         public string EditorInfo()
         {
             return $"{GetEditorInfo()}";
@@ -48,28 +47,26 @@ namespace Chang
         }
     }
 
-    public class QuestMatchWord : QuestBase
+    public class QuestMatchWords : QuestBase
     {
-        public QuestMatchWord()
+        public QuestMatchWords()
         {
             QuestionType = QuestionType.MatchWords;
         }
 
-        public string Question = "Select words";
-        public bool C;
+        private string Question = "Match Words"; // todo roman remove this
+
+        public List<PhraseConfig> MatchWords;
 
         public override QuestDataBase GetQuestData()
         {
-            return new QuestMatchData
-            {
-                Question = Question,
-                C = C
-            };
+            return new QuestMatchWordsData(MatchWords?.Select(m => m.PhraseData).ToList());
         }
 
         protected override string GetEditorInfo()
         {
-            throw new NotImplementedException();
+            // todo roman add some info
+            return string.Empty;
         }
     }
 }

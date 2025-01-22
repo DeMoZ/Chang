@@ -14,8 +14,8 @@ namespace Chang
         /// <summary>
         /// Runtime collection to get Question data by name.
         /// </summary>
-        public Dictionary<string, SimpleQuestionBase> SimpleQuestions { get; set; }
-
+        public Dictionary<string, ISimpleQuestion> SimpleQuestions { get; set; }
+        
         public Lesson CurrentLesson { get; set; } = new();
         public PreloadType PreloadFor { get; set; }
     }
