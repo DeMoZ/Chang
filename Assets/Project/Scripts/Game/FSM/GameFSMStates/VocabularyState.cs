@@ -97,7 +97,7 @@ namespace Chang.FSM
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
             var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
-            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, QuestionType.SelectWord, isCorrect);
+            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, _vocabularyBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect);
 
             if (!isCorrect)
             {
@@ -125,7 +125,7 @@ namespace Chang.FSM
 
             foreach (SelectWordResult result in matchWordsStateResult.Results)
             {
-                _profileService.AddLog(result.Key, QuestionType.SelectWord, result.IsCorrect);
+                _profileService.AddLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect);
                 _vocabularyBus.LessonLog.Add(result);
             }
 
@@ -181,7 +181,7 @@ namespace Chang.FSM
                                 CorrectWordFileName = fileName
                             };
                             lesson.InsertNextQuest(demonstration);
-                            
+
                             var phraseData = await LoadPhraseConfigData(fileName);
                             questionData = new QuestDemonstrateWordData(phraseData);
                             break; // no need to create and load all demonstration screens at once
@@ -226,7 +226,7 @@ namespace Chang.FSM
                     }
 
                     return matchWordsData;
-                
+
                 // case QuestionType.DemonstrationWord:
                 //     var demonstration = (SimpleQuestDemonstrationWord)nextQuestion;
                 //     var demonstrationWordData = await LoadPhraseConfigData(demonstration.CorrectWordFileName);

@@ -11,6 +11,7 @@ namespace Chang.FSM
     {
         public readonly List<SelectWordResult> Results = new();
         public string Key { get; }
+        public string Presentation { get; }
         public QuestionType Type => QuestionType.MatchWords;
         public bool IsCorrect => true;
 
@@ -77,14 +78,16 @@ namespace Chang.FSM
             Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
 
             _stateController.ShowCorrect(leftIndex, rightIndex, isCorrect);
-            var leftResult = new SelectWordResult(_leftWords[leftIndex].Key, isCorrect, _leftWords[leftIndex].LearnWord,
-                _leftWords[leftIndex].Phonetic);
+            var leftResult = new SelectWordResult(_leftWords[leftIndex].Key, _leftWords[leftIndex].LearnWord, isCorrect,
+                _leftWords[leftIndex].LearnWord, _leftWords[leftIndex].Phonetic);
+
             _result.Results.Add(leftResult);
 
             if (!isCorrect)
             {
-                var rightResult = new SelectWordResult(_rightWords[rightIndex].Key, false, _rightWords[rightIndex].LearnWord,
-                    _rightWords[rightIndex].Phonetic);
+                var rightResult = new SelectWordResult(_rightWords[rightIndex].Key, _rightWords[rightIndex].LearnWord, false,
+                    _rightWords[rightIndex].LearnWord, _rightWords[rightIndex].Phonetic);
+
                 _result.Results.Add(rightResult);
             }
 

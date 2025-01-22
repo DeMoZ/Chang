@@ -22,7 +22,11 @@ namespace Chang
             foreach (var questLog in sortedList)
             {
                 var overviewLogItem = Instantiate(overviewLogItemPrefab, logContainer);
-                overviewLogItem.Set(questLog.FileName, questLog.Mark.ToString(), questLog.Log.Count.ToString(), questLog.UtcTime.ToString(),
+                overviewLogItem.Set(
+                    questLog.Presentation,
+                    questLog.Mark.ToString(),
+                    questLog.Log.Count.ToString(),
+                    questLog.UtcTime.ToString(),
                     questLog.SuccessSequence.ToString());
             }
         }

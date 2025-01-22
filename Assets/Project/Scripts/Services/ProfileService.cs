@@ -57,13 +57,13 @@ namespace Chang.Services
             await SaveIntoScriptableObject();
         }
 
-        public void AddLog(string key, QuestionType type, bool isCorrect)
+        public void AddLog(string key, string presentation, QuestionType type, bool isCorrect)
         {
             Debug.LogWarning($"AddLog key: {key}, isCorrect {isCorrect}");
 
             if (!_playerProfile.ProgressData.Questions.TryGetValue(key, out var questLog))
             {
-                questLog = new QuestLog(key, type);
+                questLog = new QuestLog(key, presentation, type);
                 _playerProfile.ProgressData.Questions[key] = questLog;
             }
 

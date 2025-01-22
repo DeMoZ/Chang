@@ -1,7 +1,6 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
-using System.Linq;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -9,12 +8,12 @@ namespace Chang.FSM
 {
     public class ResultItem
     {
-        public string Key { get; }
+        public string Presentation { get; }
         public bool IsCorrect { get; }
 
-        public ResultItem(string key, bool isCorrect)
+        public ResultItem(string presentation, bool isCorrect)
         {
-            Key = key;
+            Presentation = presentation;
             IsCorrect = isCorrect;
         }
     }
@@ -51,7 +50,7 @@ namespace Chang.FSM
             
             foreach (var result in Bus.LessonLog)
             {
-                log.Add(new ResultItem(result.Key, result.IsCorrect));
+                log.Add(new ResultItem(result.Presentation, result.IsCorrect));
             }
             
             _stateController.Init(log, () => _gameOverlayController.OnContinue?.Invoke());

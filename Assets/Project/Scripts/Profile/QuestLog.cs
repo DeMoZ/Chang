@@ -15,6 +15,7 @@ namespace Chang.Profile
         private readonly (int min, int max) SuccesSequeseRange = (0, 10);
         
         public string FileName { get; set; }
+        public string Presentation { get; set; }
         public QuestionType QuestionType { get; set; }
         public Queue<LogUnit> Log { get; set; }
         
@@ -35,9 +36,10 @@ namespace Chang.Profile
         /// </summary>
         public DateTime UtcTime { get; set; }
         
-        public QuestLog(string fileName, QuestionType type)
+        public QuestLog(string fileName, string presentation, QuestionType type)
         {
             FileName = fileName;
+            Presentation = presentation;
             QuestionType = type;
             Mark = DefaultMark;
             SuccessSequence = DefaultSuccess;
@@ -45,9 +47,10 @@ namespace Chang.Profile
         }
         
         [JsonConstructor]
-        public QuestLog(string fileName, QuestionType type, int mark, int successSequence, Queue<LogUnit> log)
+        public QuestLog(string fileName, string presentation, QuestionType type, int mark, int successSequence, Queue<LogUnit> log)
         {
             FileName = fileName;
+            Presentation = presentation;
             QuestionType = type;
             Mark = mark;
             SuccessSequence = successSequence;

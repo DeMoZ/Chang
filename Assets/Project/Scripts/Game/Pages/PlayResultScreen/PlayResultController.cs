@@ -30,7 +30,7 @@ namespace Chang
             
             foreach (var item in lessonLog)
             {
-                _view.AddItem(item.Key, isUp: item.IsCorrect);
+                _view.AddItem(item.Presentation, isUp: item.IsCorrect);
             }
         }
     }

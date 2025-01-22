@@ -9,13 +9,15 @@ namespace Chang.FSM
     public class SelectWordResult : IQuestionResult
     {
         public string Key { get; }
+        public string Presentation { get; }
         public QuestionType Type => QuestionType.SelectWord;
         public bool IsCorrect { get; }
         public object[] Info { get; }
 
-        public SelectWordResult(string key, bool isCorrect, params object[] info)
+        public SelectWordResult(string key, string presentation, bool isCorrect, params object[] info)
         {
             Key = key;
+            Presentation = presentation;
             IsCorrect = isCorrect;
             Info = info;
         }
@@ -74,7 +76,7 @@ namespace Chang.FSM
             var correctWord = _correctWord.Word.LearnWord;
             var selectedWord = _mixWords[index].Word.LearnWord;
             object[] info = { correctWord, selectedWord };
-            var result = new SelectWordResult(_correctWord.Word.Key, isCorrect, info);
+            var result = new SelectWordResult(_correctWord.Word.Key, _correctWord.Word.LearnWord, isCorrect, info);
             Bus.QuestionResult = result;
         }
     }

@@ -8,13 +8,15 @@ namespace Chang.FSM
     public class DemonstrationWordResult : IQuestionResult
     {
         public string Key { get; }
+        public string Presentation { get; }
         public QuestionType Type => QuestionType.DemonstrationWord;
         public bool IsCorrect => true;
         public object[] Info { get; }
 
-        public DemonstrationWordResult(string key, params object[] info)
+        public DemonstrationWordResult(string key, string presentation, params object[] info)
         {
             Key = key;
+            Presentation = presentation;
             Info = info;
         }
     }
@@ -63,8 +65,8 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
             object[] info = { _correctWord.Word.LearnWord };
-            var result = new DemonstrationWordResult(_correctWord.Word.Key, info);
+            var result = new DemonstrationWordResult(_correctWord.Word.Key, _correctWord.Word.LearnWord, info);
             Bus.QuestionResult = result;
         }
     }
-}   
+}
