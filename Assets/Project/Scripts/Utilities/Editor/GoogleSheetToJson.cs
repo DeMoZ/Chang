@@ -51,8 +51,7 @@ namespace Chang.Utilities
             }
 
             var firstSheetName = firstSheet.Properties.Title;
-            Debug.Log(
-                $"{nameof(firstSheetName)}: {firstSheetName}\nnow we use only first sheet");
+            Debug.Log($"{nameof(firstSheetName)}: {firstSheetName}\nnow we use only first sheet");
             //var range = $"{firstSheetName}!A1:D10"; // Cells range on the page
             var range = $"{firstSheetName}"; // all the data from the page
             SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, range);
@@ -65,8 +64,8 @@ namespace Chang.Utilities
 
         protected async Task<UserCredential> AuthorizeAsync()
         {
-
-            string secretFullPath = Path.Combine(Application.dataPath, VocabularyUtilitiesConstants.RelativePath, VocabularyUtilitiesConstants.SecretFileName);
+            string secretFullPath = Path.Combine(Application.dataPath, VocabularyUtilitiesConstants.RelativePath,
+                VocabularyUtilitiesConstants.SecretFileName);
             string tokenFullPath = Path.Combine(Application.dataPath, VocabularyUtilitiesConstants.RelativePath, TokenFileName);
 
             // Load credentials from file
