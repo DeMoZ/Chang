@@ -239,7 +239,10 @@ namespace Chang.FSM
 
         private async UniTask<PhraseData> LoadPhraseConfigData(string fileName)
         {
-            var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(fileName);
+            // todo roman create provider for words and implement call _resourcesManager form it
+            var phraseConfigPath = $"Assets/Project/Resources_Bundled/Thai/Words/";
+            var path = $"{phraseConfigPath}{fileName}.asset";
+            var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(path);
             return config.PhraseData;
         }
 
