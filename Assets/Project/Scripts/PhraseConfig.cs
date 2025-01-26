@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Chang
@@ -16,6 +17,15 @@ namespace Chang
         [field: SerializeField] public WordConfig Word { get; set; }
 
         public PhraseData PhraseData => new(Key, AudioClip, Sprite, Word.WordData);
+        
+        /// <summary>
+        /// DEPRICATED. Very temp solution. Take Key From Phrase config and put into Word.Key
+        /// </summary>
+        // [Button]
+        public void FixWordDataKey()
+        {
+           Word.Key = Key;
+        }
     }
 
     [Serializable]
@@ -27,13 +37,13 @@ namespace Chang
         /// </summary>
         [Tooltip("Only to show in the inspector")]
         [field: SerializeField]
-        public string EngWord { get; set; } = string.Empty;
+        public string Key { get; set; } = string.Empty;
 
         [field: SerializeField] public string Word { get; set; } = string.Empty;
         [field: SerializeField] public string Phonetic { get; set; } = string.Empty;
         [field: SerializeField] public List<Translation> Meanings { get; set; }
 
-        public WordData WordData => new(EngWord, Word, Phonetic, Meanings);
+        public WordData WordData => new(Key, Word, Phonetic, Meanings);
     }
 
     [Serializable]

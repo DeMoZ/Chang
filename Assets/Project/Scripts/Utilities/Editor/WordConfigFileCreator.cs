@@ -96,7 +96,7 @@ namespace Chang.Utilities
 
             var word = new WordConfig
             {
-                EngWord = name,
+                Key = name,
                 Word = phraseData.Word,
                 Phonetic = phraseData.Phonetic,
                 Meanings = meanings
@@ -111,8 +111,7 @@ namespace Chang.Utilities
             dataAsset.AudioClip = phraseData.AudioClip;
             dataAsset.Word = word;
 
-            var relativePath = Path.Combine(RelativePath, language.ToString(), $"{language.ToString()}{WordsFolder}", NewFolder,
-                $"{language.ToString()}{name}.asset");
+            var relativePath = Path.Combine(RelativePath, language.ToString(), $"{language.ToString()}{WordsFolder}", NewFolder, $"{name}.asset");
             var assetRelativePath = Path.Combine(AssetsFolder, relativePath);
 
             var path = Path.Combine(Application.dataPath, relativePath);

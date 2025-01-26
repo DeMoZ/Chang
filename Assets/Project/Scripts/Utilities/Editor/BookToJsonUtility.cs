@@ -53,7 +53,7 @@ namespace Chang.Utilities
             AssetDatabase.Refresh();
             Debug.LogWarning("End");
         }
-
+        
         private BookData CreateBookData(GameBookConfig config)
         {
             var bookData = new BookData
