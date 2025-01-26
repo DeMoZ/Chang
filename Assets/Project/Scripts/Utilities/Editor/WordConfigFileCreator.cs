@@ -10,11 +10,10 @@ namespace Chang.Utilities
 {
     public static class WordConfigFileCreator
     {
-        private static string RelativePath = "Project/Languages";
         private static string AssetsFolder = "Assets";
+        private static string RelativePath = "Project/Configs";
         private static string WordsFolder = "Words";
         private static string NewFolder = "New";
-
         private static string JsonFileName = "Words.json";
 
         private static JsonSerializerSettings JsonSettings = new()
@@ -29,7 +28,7 @@ namespace Chang.Utilities
             File.WriteAllText(path, jsonData);
         }
 
-        public async static void ReadJsongAndCreateConfigs(Languages language)
+        public static async void ReadJsonAndCreateConfigs(Languages language)
         {
             var path = GetWordsJsonFilePath(language);
             if (!File.Exists(path))
@@ -61,7 +60,7 @@ namespace Chang.Utilities
             }
         }
 
-        public async static Task<List<(string filename, string word)>> GetDatasetForAudio(Languages language)
+        public static async Task<List<(string filename, string word)>> GetDatasetForAudio(Languages language)
         {
             var path = GetWordsJsonFilePath(language);
             List<(string filename, string word)> dataset = new();
@@ -84,7 +83,7 @@ namespace Chang.Utilities
             return dataset;
         }
 
-        public static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
+        private static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
         {
             var meanings = new List<Translation>
             {
@@ -112,7 +111,8 @@ namespace Chang.Utilities
             dataAsset.AudioClip = phraseData.AudioClip;
             dataAsset.Word = word;
 
-            var relativePath = Path.Combine(RelativePath, language.ToString(), WordsFolder, NewFolder, $"{name}.asset");
+            var relativePath = Path.Combine(RelativePath, language.ToString(), $"{language.ToString()}{WordsFolder}", NewFolder,
+                $"{language.ToString()}{name}.asset");
             var assetRelativePath = Path.Combine(AssetsFolder, relativePath);
 
             var path = Path.Combine(Application.dataPath, relativePath);
@@ -129,7 +129,7 @@ namespace Chang.Utilities
 
         private static string GetWordsJsonFilePath(Languages language)
         {
-            var relativePath = Path.Combine(RelativePath, language.ToString(), JsonFileName);
+            var relativePath = Path.Combine(RelativePath, language.ToString(), $"{language.ToString()}{JsonFileName}");
             var path = Path.Combine(Application.dataPath, relativePath);
             return path;
         }

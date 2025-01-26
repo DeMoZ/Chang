@@ -45,7 +45,7 @@ namespace Chang.Utilities
         public static void CreateWordConfigs()
         {
             Debug.LogWarning($"[{nameof(CreateWordConfigs)}] --- Start ---");
-            WordConfigFileCreator.ReadJsongAndCreateConfigs(Languages.Thai);
+            WordConfigFileCreator.ReadJsonAndCreateConfigs(Languages.Thai);
             Debug.LogWarning($"[{nameof(CreateWordConfigs)}] --- Done ---");
         }
 
@@ -58,7 +58,7 @@ namespace Chang.Utilities
             // 2. from dataset to audio with saving each audio        
             //-------------------------------------
             var data = dataset[0];
-            var filePath = Path.Combine(Application.dataPath, "Project", "Languages", "Thai", "WordsAudio", "New", data.filename + ".mp3");
+            var filePath = Path.Combine(Application.dataPath, "Project", "Configs", "Thai", "WordsAudio", "New", data.filename + ".mp3");
             var result = await textToVoice.TryGetAudioAsync(data.word, "th-TH", filePath);
             if (!result)
             {
