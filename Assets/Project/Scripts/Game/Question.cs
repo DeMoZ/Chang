@@ -54,8 +54,6 @@ namespace Chang
             QuestionType = QuestionType.MatchWords;
         }
 
-        private string Question = "Match Words"; // todo roman remove this
-
         public List<PhraseConfig> MatchWords;
 
         public override QuestDataBase GetQuestData()

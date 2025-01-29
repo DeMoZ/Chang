@@ -7,7 +7,7 @@ namespace Chang
     [CreateAssetMenu(fileName = "LessonConfig", menuName = "Chang/GameBook/Lesson Config", order = 1)]
     public class LessonConfig : SerializedScriptableObject
     {
-        [field: SerializeField] public bool GenerateMatchQuest { get; set; } = true;
+        [field: SerializeField] public bool GenerateQuestMatchWordsData { get; set; } = true;
 
         [SerializeReference] [InlineEditor(Expanded = true)] [ListDrawerSettings(ShowIndexLabels = true)]
         public List<QuestionConfig> Questions;

@@ -70,9 +70,10 @@ namespace Chang.Utilities
                 if (lesson != null)
                 {
                     lessonData.FileName = lesson.name;
+                    lessonData.GenerateQuestMatchWordsData = lesson.GenerateQuestMatchWordsData;
                     lessonData.Questions = GetQuestions(lesson.Questions);
 
-                    if (lesson.GenerateMatchQuest && GenerateMatchWordsData(lessonData, out var matchWordsQuest))
+                    if (lesson.GenerateQuestMatchWordsData && TryGenerateQuestMatchWordsData(lessonData, out var matchWordsQuest))
                     {
                         lessonData.Questions.Add(matchWordsQuest);
                     }
@@ -84,7 +85,7 @@ namespace Chang.Utilities
             return bookData;
         }
 
-        private static bool GenerateMatchWordsData(LessonData lessonData, out QuestMatchWordsData matchWordsQuest)
+        private static bool TryGenerateQuestMatchWordsData(LessonData lessonData, out QuestMatchWordsData matchWordsQuest)
         {
             matchWordsQuest = new QuestMatchWordsData();
             HashSet<string> matchWords = new();
@@ -166,6 +167,7 @@ namespace Chang.Utilities
         public struct LessonData
         {
             public string FileName;
+            public bool GenerateQuestMatchWordsData;
             public List<IQuestionData> Questions;
         }
 
