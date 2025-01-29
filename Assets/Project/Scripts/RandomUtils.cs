@@ -22,6 +22,17 @@ public static class RandomUtils
         }
     }
 
+    public static void Shuffle<T>(this HashSet<T> hashSet)
+    {
+        var list = new List<T>(hashSet);
+        list.Shuffle();
+        hashSet.Clear();
+        foreach (var item in list)
+        {
+            hashSet.Add(item);
+        }
+    }
+    
     public static T GetRandom<T>(this List<T> list)
     {
         lock (SyncLock)

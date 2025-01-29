@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -17,7 +18,7 @@ namespace Chang.Utilities
 
         [SerializeField] private TextAsset gameBookJson;
         [SerializeField] private GameBookConfig[] gameBookConfigs;
-        
+
         JsonSerializerSettings _jSettings = new()
         {
             Formatting = Formatting.Indented,
@@ -29,7 +30,7 @@ namespace Chang.Utilities
             Debug.LogWarning("Start");
             List<BookData> booksData = new();
             List<string> jsons = new();
-            
+
             foreach (var config in gameBookConfigs)
             {
                 Debug.Log($"BookData for {config.name}");
@@ -37,23 +38,23 @@ namespace Chang.Utilities
                 booksData.Add(bookData);
             }
 
-            var lessons = booksData.SelectMany(b=>b.Lessons).ToList();
+            var lessons = booksData.SelectMany(b => b.Lessons).ToList();
             var allBooksData = new BookData()
             {
                 FileName = "AllBooks",
                 Lessons = lessons
             };
-            
+
             Debug.Log($"json for {allBooksData.FileName}");
             var json = JsonConvert.SerializeObject(allBooksData, _jSettings);
-            
+
             Debug.Log("Save GameBookJson");
             File.WriteAllText(AssetDatabase.GetAssetPath(gameBookJson), json);
 
             AssetDatabase.Refresh();
             Debug.LogWarning("End");
         }
-        
+
         private BookData CreateBookData(GameBookConfig config)
         {
             var bookData = new BookData
@@ -70,9 +71,37 @@ namespace Chang.Utilities
                 {
                     lessonData.FileName = lesson.name;
                     lessonData.Questions = GetQuestions(lesson.Questions);
-                }
 
-                bookData.Lessons.Add(lessonData);
+                    if (lesson.GenerateMatchQuest)
+                    {
+                        HashSet<string> matchWords = new();
+
+                        foreach (var quest in lessonData.Questions.ToList())
+                        {
+                            if (quest is QuestSelectWordData selectWordData)
+                            {
+                                matchWords.Add(selectWordData.CorrectWordFileName);
+                                matchWords.AddRange(selectWordData.MixWordsFileNames);
+                            }
+                        }
+    
+                        if (matchWords.Count < 2)
+                        {
+                            Debug.LogWarning($"matchWords not generated for lesson: {lessonData.FileName}, count select words {matchWords.Count}");
+                            continue;
+                        }
+
+                        matchWords.Shuffle();
+                        var matchWordsQuest = new QuestMatchWordsData
+                        {
+                            MatchWordsFileNames = matchWords.Take(7).ToList(),
+                        };
+
+                        lessonData.Questions.Add(matchWordsQuest);
+                    }
+
+                    bookData.Lessons.Add(lessonData);
+                }
             }
 
             return bookData;
