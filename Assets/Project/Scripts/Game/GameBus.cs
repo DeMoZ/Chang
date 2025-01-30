@@ -16,7 +16,7 @@ namespace Chang
         /// </summary>
         public Dictionary<string, ISimpleQuestion> SimpleQuestions { get; set; }
         
-        public Lesson CurrentLesson { get; set; } = new();
+        public Lesson CurrentLesson { get; set; }
         public PreloadType PreloadFor { get; set; }
     }
 }

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
+using Sirenix.Utilities;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -141,7 +143,17 @@ namespace Chang.FSM
                 return;
             }
 
-            var lesson = _vocabularyBus.CurrentLesson;
+            Lesson lesson = _vocabularyBus.CurrentLesson;
+
+            // Add generated match words quest at the end of the lesson
+            if (lesson.SimpleQuestionQueue.Count == 0)
+            {
+                if (TryGenerateQuestMatchWordsData(lesson, out var matchWordsQuest))
+                {
+                    lesson.AddSimpleQuestion(matchWordsQuest);
+                    lesson.IsGeneratedMathWordsQuestPlayed = true;
+                }
+            }
 
             if (lesson.SimpleQuestionQueue.Count == 0)
             {
@@ -189,11 +201,43 @@ namespace Chang.FSM
                     }
                 }
 
-                lesson.DequeueAndSetSipmQiestion();
+                lesson.DequeueAndSetSipmlQuestion();
                 lesson.SetCurrentQuestionData(questionData);
                 _vocabularyFSM.SwitchState(questionData.QuestionType);
             }
         }
+
+        private bool TryGenerateQuestMatchWordsData(Lesson lesson, out SimpleQuestMatchWords matchWordsQuest)
+        {
+            matchWordsQuest = new SimpleQuestMatchWords();
+            HashSet<string> matchWords = new();
+
+            if (!lesson.GenerateQuestMatchWordsData || lesson.IsGeneratedMathWordsQuestPlayed)
+            {
+                return false;
+            }
+            
+            foreach (var quest in lesson.SimpleQuestions)
+            {
+                if (quest is SimpleQuestSelectWord simpleQuestSelectWord)
+                {
+                    matchWords.Add(simpleQuestSelectWord.CorrectWordFileName);
+                    matchWords.AddRange(simpleQuestSelectWord.MixWordsFileNames);
+                }
+            }
+
+            if (matchWords.Count < 2)
+            {
+                Debug.LogWarning($"matchWords not generated for lesson FileName: {lesson.FileName}, count select words {matchWords.Count}");
+                return false;
+            }
+
+            matchWords.Shuffle();
+            matchWordsQuest.MatchWordsFileNames = matchWords.Take(ProjectConstants.MAX_WORDS_IN_MATCHT_WORDS_PAGE).ToList();
+
+            return true;
+        }
+
 
         // todo roman implement loading screen
         private async UniTask<QuestDataBase> CreateQuestData(ISimpleQuestion nextQuestion)

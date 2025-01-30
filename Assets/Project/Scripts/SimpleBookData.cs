@@ -14,6 +14,7 @@ namespace Chang
     public class SimpleLessonData
     {
         public string FileName;
+        public bool GenerateQuestMatchWordsData;
         public List<ISimpleQuestion> Questions;
     }
 

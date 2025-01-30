@@ -45,11 +45,9 @@ namespace Chang.Services
             .Take(amount)
             .ToList();
             
-            // todo roman add match words quest
-
             return sortedList;
         }
-
+        
         public void Dispose()
         {
         }

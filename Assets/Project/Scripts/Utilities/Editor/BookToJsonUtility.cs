@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -72,43 +71,11 @@ namespace Chang.Utilities
                     lessonData.FileName = lesson.name;
                     lessonData.GenerateQuestMatchWordsData = lesson.GenerateQuestMatchWordsData;
                     lessonData.Questions = GetQuestions(lesson.Questions);
-
-                    if (lesson.GenerateQuestMatchWordsData && TryGenerateQuestMatchWordsData(lessonData, out var matchWordsQuest))
-                    {
-                        lessonData.Questions.Add(matchWordsQuest);
-                    }
-
                     bookData.Lessons.Add(lessonData);
                 }
             }
 
             return bookData;
-        }
-
-        private static bool TryGenerateQuestMatchWordsData(LessonData lessonData, out QuestMatchWordsData matchWordsQuest)
-        {
-            matchWordsQuest = new QuestMatchWordsData();
-            HashSet<string> matchWords = new();
-
-            foreach (var quest in lessonData.Questions.ToList())
-            {
-                if (quest is QuestSelectWordData selectWordData)
-                {
-                    matchWords.Add(selectWordData.CorrectWordFileName);
-                    matchWords.AddRange(selectWordData.MixWordsFileNames);
-                }
-            }
-
-            if (matchWords.Count < 2)
-            {
-                Debug.LogWarning($"matchWords not generated for lesson: {lessonData.FileName}, count select words {matchWords.Count}");
-                return false;
-            }
-
-            matchWords.Shuffle();
-            matchWordsQuest.MatchWordsFileNames = matchWords.Take(ProjectConstants.MAX_WORDS_IN_MATCHT_WORDS_PAGE).ToList();
-
-            return true;
         }
 
         private List<IQuestionData> GetQuestions(List<QuestionConfig> questions)

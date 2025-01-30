@@ -90,11 +90,11 @@ namespace Chang
                 case MainTabType.Lessons:
                     _gameBookController.Set();
                     break;
-                
+
                 case MainTabType.Repetition:
                     _repetitionController.Set();
                     break;
-                
+
                 case MainTabType.Profile:
                     _profileController.Set();
                     break;
@@ -108,6 +108,7 @@ namespace Chang
             _currentTabType = tabType;
         }
 
+        // todo roman fix async
         private async void OnGameBookLessonClickedAsync(string name)
         {
             if (_isLoading)
@@ -115,15 +116,21 @@ namespace Chang
 
             _isLoading = true;
             await UniTask.DelayFrame(1);
-            _gameBus.CurrentLesson.SetFileName(name);
-            _gameBus.CurrentLesson.SetSimpleQuestions(_gameBus.SimpleLessons[name].Questions.ToList());
-            _gameBus.PreloadFor = PreloadType.LessonData;
 
+            var simpleLesson = _gameBus.SimpleLessons[name];
+            var lesson = new Lesson();
+            lesson.FileName = simpleLesson.FileName;
+            lesson.GenerateQuestMatchWordsData = simpleLesson.GenerateQuestMatchWordsData;
+            lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
+
+            _gameBus.CurrentLesson = lesson;
+            _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 
             _onExitState?.Invoke();
         }
 
+        // todo roman fix async
         private async void OnGeneralRepeatClickedAsync()
         {
             if (_isLoading)
@@ -135,38 +142,39 @@ namespace Chang
                 Debug.LogWarning("Not enough logs for general repetition");
                 return;
             }
-            
+
             _isLoading = true;
             await UniTask.DelayFrame(1);
-            _gameBus.CurrentLesson = new Lesson();
 
             var questions = new List<ISimpleQuestion>();
+
             foreach (var questLog in repetitions)
             {
                 switch (questLog.QuestionType)
                 {
+                    // todo roman new SimpleQuestion using word from log and also need to populate it with the other words quests.
                     case QuestionType.SelectWord:
-                    // todo roman new SimpleQuestion using word from log and also need to populate it with the other words.
-                    // Probably from log but not sure. Can be other words from database. Do i have it?
-                    SimpleQuestSelectWord simpleQuest = new SimpleQuestSelectWord();
-                    simpleQuest.CorrectWordFileName = questLog.FileName;
-                    var words = repetitions
-                        .Where(r => r.QuestionType == QuestionType.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
-                        .ToList();
-                    
-                    words.Shuffle();
-                    simpleQuest.MixWordsFileNames = words.Take(3).Select(w=>w.FileName).ToList();
-                    questions.Add(simpleQuest);
-                    break;
-                    
+                        var simpleQuest = new SimpleQuestSelectWord();
+                        simpleQuest.CorrectWordFileName = questLog.FileName;
+                        var words = repetitions
+                            .Where(r => r.QuestionType == QuestionType.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
+                            .ToList();
+
+                        words.Shuffle();
+                        simpleQuest.MixWordsFileNames = words.Take(3).Select(w => w.FileName).ToList();
+                        questions.Add(simpleQuest);
+                        break;
+
                     default:
                         throw new NotImplementedException($"Not implemented simple quest generation for type: {questLog.QuestionType}");
                 }
             }
-            
-            _gameBus.CurrentLesson.SetFileName(string.Empty); // todo roman need to not to mark lesson as finished on end repetition
-            _gameBus.CurrentLesson.SetSimpleQuestions(questions);
 
+            var lesson = new Lesson();
+            lesson.GenerateQuestMatchWordsData = true;
+            lesson.SetSimpleQuestions(questions);
+            
+            _gameBus.CurrentLesson = lesson;
             _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 

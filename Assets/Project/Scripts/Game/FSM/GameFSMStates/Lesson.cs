@@ -11,19 +11,17 @@ namespace Chang
         /// <summary>
         /// selected name. Used to find config with the same name
         /// </summary>
-        public string FileName { get; private set; }
-
+        public string FileName = string.Empty;
+        public bool GenerateQuestMatchWordsData;
+        public bool IsGeneratedMathWordsQuestPlayed;
+        
         public ISimpleQuestion CurrentSimpleQuestion { get; private set; }
         public IQuestData CurrentQuestionData { get; private set; }
         public List<ISimpleQuestion> SimpleQuestions { get; private set; }
         public Queue<ISimpleQuestion> SimpleQuestionQueue { get; private set; }
+        
         //public QuestDataBase CurrentQuestion { get; private set; }
-
-        /// <summary>
-        /// todo roman if this lesson is not preconfigured, the content should be loaded in the other way ?
-        /// </summary>
-        public bool IsConfig => string.IsNullOrEmpty(FileName);
-
+        
         public void Dispose()
         {
             FileName = null;
@@ -31,12 +29,7 @@ namespace Chang
             SimpleQuestionQueue.Clear();
         }
 
-        public void SetFileName(string fileName)
-        {
-            FileName = fileName;
-        }
-
-        public void DequeueAndSetSipmQiestion()
+        public void DequeueAndSetSipmlQuestion()
         {
             CurrentSimpleQuestion = SimpleQuestionQueue.Dequeue();
         }
@@ -60,6 +53,12 @@ namespace Chang
         {
             SimpleQuestions = questions;
             SimpleQuestionQueue = new Queue<ISimpleQuestion>(questions);
+        }
+        
+        public void AddSimpleQuestion(ISimpleQuestion question)
+        {
+            SimpleQuestions.Add(question);
+            SimpleQuestionQueue.Enqueue(question);
         }
 
         // public void SetCurrentQuestionConfig(QuestDataBase quest)
