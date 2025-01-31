@@ -238,7 +238,6 @@ namespace Chang.FSM
             return true;
         }
 
-
         // todo roman implement loading screen
         private async UniTask<QuestDataBase> CreateQuestData(ISimpleQuestion nextQuestion)
         {
