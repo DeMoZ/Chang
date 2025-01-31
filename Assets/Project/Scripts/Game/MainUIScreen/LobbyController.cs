@@ -161,7 +161,11 @@ namespace Chang
                             .ToList();
 
                         words.Shuffle();
-                        simpleQuest.MixWordsFileNames = words.Take(3).Select(w => w.FileName).ToList();
+                        
+                        simpleQuest.MixWordsFileNames = words.Take(ProjectConstants.MIX_WORDS_AMOUNT_IN_SELECT_WORD_PAGE)
+                            .Select(w => w.FileName)
+                            .ToList();
+                        
                         questions.Add(simpleQuest);
                         break;
 
@@ -173,7 +177,7 @@ namespace Chang
             var lesson = new Lesson();
             lesson.GenerateQuestMatchWordsData = true;
             lesson.SetSimpleQuestions(questions);
-            
+
             _gameBus.CurrentLesson = lesson;
             _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
