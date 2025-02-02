@@ -127,7 +127,7 @@ namespace Chang.FSM
 
             foreach (SelectWordResult result in matchWordsStateResult.Results)
             {
-                _profileService.AddLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect);
+                _profileService.AddLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect, false);
                 _vocabularyBus.LessonLog.Add(result);
             }
 

@@ -1,6 +1,7 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
+using Chang.Services;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -27,6 +28,7 @@ namespace Chang.FSM
     {
         [Inject] private readonly SelectWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
+        [Inject] private readonly ProfileService _profileService;
 
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
@@ -63,8 +65,17 @@ namespace Chang.FSM
             _mixWords.AddRange(questionData.MixWords);
             _mixWords.Shuffle();
 
-            var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
-            _stateController.Init(questInStudiedLanguage, _correctWord, _mixWords, OnToggleValueChanged);
+            var mark = _profileService.GetMark(_correctWord.Word.Key);
+            var isQuestInTranslation = GetQuestInTranslation(mark);
+            _correctWord.SetPhonetics(GetShowPhonetic(mark));
+
+            foreach (var mixWord in _mixWords)
+            {
+                mark = _profileService.GetMark(mixWord.Word.Key);
+                mixWord.SetPhonetics(GetShowPhonetic(mark));
+            }
+
+            _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged);
             _stateController.SetViewActive(true);
         }
 
@@ -72,12 +83,27 @@ namespace Chang.FSM
         {
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
-            var isCorrect = _mixWords[index] == _correctWord;
+            var isCorrect = _mixWords[index].Key == _correctWord.Key;
             var correctWord = _correctWord.Word.LearnWord;
             var selectedWord = _mixWords[index].Word.LearnWord;
             object[] info = { correctWord, selectedWord };
             var result = new SelectWordResult(_correctWord.Word.Key, _correctWord.Word.LearnWord, isCorrect, info);
             Bus.QuestionResult = result;
+        }
+
+        private static bool GetQuestInTranslation(int mark)
+        {
+            return mark switch
+            {
+                < 3 => false,
+                < 5 => true,
+                _ => RandomUtils.GetRandomBool()
+            };
+        }
+
+        private static bool GetShowPhonetic(int mark)
+        {
+            return mark < 7;
         }
     }
 }

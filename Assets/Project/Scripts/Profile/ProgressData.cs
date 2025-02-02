@@ -35,11 +35,11 @@ namespace Chang.Profile
         {
             UtcTime = utcTime;
         }
-        
-        public Dictionary<string, QuestLog>  ValidateQuestions(Dictionary<string, QuestLog> questions)
+
+        public Dictionary<string, QuestLog> ValidateQuestions(Dictionary<string, QuestLog> questions)
         {
             Dictionary<string, QuestLog> result = new();
-            
+
             foreach (var pair in questions)
             {
                 if (pair.Value.QuestionType == QuestionType.None)
@@ -47,7 +47,7 @@ namespace Chang.Profile
                     Debug.LogWarning($"ValidateQuestion: QuestionType is None for {pair.Key}");
                     continue;
                 }
-                
+
                 result.Add(pair.Key, pair.Value);
             }
 

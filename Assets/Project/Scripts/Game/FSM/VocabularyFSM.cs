@@ -11,7 +11,7 @@ namespace Chang.FSM
         private readonly DiContainer _diContainer;
 
         public QuestionType CurrentStateType => _currentState?.Value?.Type ?? QuestionType.None;
-        
+
         protected override QuestionType _defaultStateType => QuestionType.None;
 
         public VocabularyFSM(DiContainer diContainer, VocabularyBus vocabularyBus, Action<StateType> stateChangedCallback = null)
@@ -38,13 +38,13 @@ namespace Chang.FSM
             var playResultState = new PlayResultState(_vocabularyBus, OnStateResult);
             var demonstrationWordState = new DemonstrationState(_vocabularyBus, OnStateResult);
             var selectWordState = new SelectWordState(_vocabularyBus, OnStateResult);
-            var matchWordsState = new MatchWordsState( _vocabularyBus, OnStateResult) ;
+            var matchWordsState = new MatchWordsState(_vocabularyBus, OnStateResult);
 
             _diContainer.Inject(playResultState);
             _diContainer.Inject(demonstrationWordState);
             _diContainer.Inject(selectWordState);
             _diContainer.Inject(matchWordsState);
-            
+
             _states = new Dictionary<QuestionType, IResultState<QuestionType>>
             {
                 { QuestionType.Result, playResultState },

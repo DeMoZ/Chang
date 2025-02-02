@@ -57,7 +57,7 @@ namespace Chang.Services
             await SaveIntoScriptableObject();
         }
 
-        public void AddLog(string key, string presentation, QuestionType type, bool isCorrect)
+        public void AddLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
         {
             Debug.LogWarning($"AddLog key: {key}, isCorrect {isCorrect}");
 
@@ -67,7 +67,7 @@ namespace Chang.Services
                 _playerProfile.ProgressData.Questions[key] = questLog;
             }
 
-            var logUnit = new LogUnit(DateTime.UtcNow, isCorrect);
+            var logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
             _playerProfile.ProgressData.SetTime(logUnit.UtcTime);
             questLog.SetTime(logUnit.UtcTime);
             questLog.AddLog(logUnit);
@@ -76,6 +76,16 @@ namespace Chang.Services
         public ProgressData GetProgress()
         {
             return _playerProfile.ProgressData;
+        }
+        
+        public int GetMark(string key)
+        {
+            if (_playerProfile.ProgressData.Questions.TryGetValue(key, out var questLog))
+            {
+                return questLog.Mark;
+            }
+
+            return 0;
         }
 
         public bool TryGetLog(string key, out QuestLog questLog)

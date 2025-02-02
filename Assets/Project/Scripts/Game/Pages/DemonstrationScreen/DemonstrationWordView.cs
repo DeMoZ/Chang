@@ -16,7 +16,7 @@ namespace Chang.UI
 
         [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.DemonstrationWord;
 
-        public void Init(bool questInStudiedLanguage, PhraseData correctWord, Action<bool> onToggleValueChanged)
+        public void Init(PhraseData correctWord, Action<bool> onToggleValueChanged)
         {
             Debug.Log("Init SelectWordView");
 
@@ -26,15 +26,15 @@ namespace Chang.UI
             }
 
             // init thai word
-            var quesWord = !questInStudiedLanguage ? correctWord.Word.GetTranslation() : correctWord.Word.LearnWord;
+            var quesWord = correctWord.Word.LearnWord;
             _questionWord.Set(quesWord, correctWord.Word.Phonetic);
-            _questionWord.EnablePhonetic(questInStudiedLanguage);
+            _questionWord.EnablePhonetic(true);
 
             // init mix words
             var mix = Instantiate(_mixWordPrefab, _mixWordContent);
-            var word = questInStudiedLanguage ? correctWord.Word.GetTranslation() : correctWord.Word.LearnWord;
+            var word = correctWord.Word.GetTranslation();
             mix.Set(word, correctWord.Word.Phonetic, _toggleGroup, onToggleValueChanged);
-            mix.EnablePhonetic(!questInStudiedLanguage);
+            mix.EnablePhonetic(false);
         }
     }
 }

@@ -55,8 +55,7 @@ namespace Chang.FSM
             var questionData = (QuestDemonstrateWordData)Bus.CurrentLesson.CurrentQuestionData;
             _correctWord = questionData.CorrectWord;
 
-            var questInStudiedLanguage = false; // todo roman implement switch from thai to eng or from eng to thai
-            _stateController.Init(questInStudiedLanguage, _correctWord, OnToggleValueChanged);
+            _stateController.Init(_correctWord, OnToggleValueChanged);
             _stateController.SetViewActive(true);
         }
 
