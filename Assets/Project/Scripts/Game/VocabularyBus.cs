@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Chang.FSM;
+using DMZ.Events;
 
 namespace Chang
 {
@@ -9,6 +10,7 @@ namespace Chang
         public Lesson CurrentLesson { get; set; }
         public IQuestionResult QuestionResult { get; set; }
         public List<IQuestionResult> LessonLog { get; } = new();
+        public DMZState<bool> OnHintUsed { get; set; } = new();
 
         public void Dispose()
         {

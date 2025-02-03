@@ -700,11 +700,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _toggle: {fileID: 1724591129793623742}
-  _inactive: {fileID: 5534583303969720214}
-  _correct: {fileID: 5535582327167019331}
   _incorrect: {fileID: 4658668910381911375}
+  _correct: {fileID: 5535582327167019331}
+  _inactive: {fileID: 5534583303969720214}
   _word: {fileID: 6026677252932812158}
-  _phonetic: {fileID: 3957588901077183162}
+  _phonetics: {fileID: 3957588901077183162}
 --- !u!114 &4951704721617835385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -853,7 +853,7 @@ GameObject:
   - component: {fileID: 3101884159974746612}
   - component: {fileID: 3957588901077183162}
   m_Layer: 5
-  m_Name: Phonetic
+  m_Name: Phonetics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

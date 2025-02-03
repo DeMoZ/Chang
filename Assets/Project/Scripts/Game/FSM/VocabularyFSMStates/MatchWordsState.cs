@@ -2,6 +2,8 @@ using System;
 using DMZ.FSM;
 using System.Collections.Generic;
 using System.Linq;
+using Chang.Services;
+using Cysharp.Threading.Tasks;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -22,6 +24,7 @@ namespace Chang.FSM
     {
         [Inject] private readonly MatchWordsController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
+        [Inject] private readonly ProfileService _profileService;
 
         private List<WordData> _leftWords;
         private List<WordData> _rightWords;
@@ -38,15 +41,17 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
+            Bus.OnHintUsed.Subscribe(OnHint);
             StateBody();
         }
 
         public override void Exit()
         {
             base.Exit();
-
+            Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
-
+            _stateController.Clear();
+            
             _leftWords.Clear();
             _rightWords.Clear();
         }
@@ -60,15 +65,21 @@ namespace Chang.FSM
 
             var questionData = (QuestMatchWordsData)Bus.CurrentLesson.CurrentQuestionData;
             var words = questionData.MatchWords.Select(p => p.Word);
+
+            foreach (var word in words)
+            {
+                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetMark(word.Key)));
+            }
+
             _leftWords = new List<WordData>(words);
             _rightWords = new List<WordData>(words);
 
             _leftWords.Shuffle();
             _rightWords.Shuffle();
 
-            var isLeftLanguage = RandomUtils.GetRandomBool();
-            Debug.Log($"isLeft: {isLeftLanguage}");
-            _stateController.Init(isLeftLanguage, _leftWords, _rightWords, OnToggleValueChanged, OnContinueClicked);
+            var isLeftLearnLanguage = RandomUtils.GetRandomBool();
+            Debug.Log($"isLeft: {isLeftLearnLanguage}");
+            _stateController.Init(isLeftLearnLanguage, _leftWords, _rightWords, OnToggleValueChanged, OnContinueClicked);
             _stateController.SetViewActive(true);
         }
 
@@ -77,7 +88,7 @@ namespace Chang.FSM
             var isCorrect = _leftWords[leftIndex] == _rightWords[rightIndex];
             Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
 
-            _stateController.ShowCorrect(leftIndex, rightIndex, isCorrect);
+            _stateController.ShowCorrect(leftIndex, rightIndex, isCorrect).Forget();
             var leftResult = new SelectWordResult(_leftWords[leftIndex].Key, _leftWords[leftIndex].LearnWord, isCorrect,
                 _leftWords[leftIndex].LearnWord, _leftWords[leftIndex].Phonetic);
 
@@ -106,6 +117,11 @@ namespace Chang.FSM
 
             Bus.QuestionResult = _result;
             _gameOverlayController.OnCheck?.Invoke();
+        }
+
+        private void OnHint(bool isHintUsed)
+        {
+            _stateController.ShowHint();
         }
     }
 }

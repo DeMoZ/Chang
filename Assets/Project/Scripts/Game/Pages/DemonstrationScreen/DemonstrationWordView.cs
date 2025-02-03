@@ -15,7 +15,7 @@ namespace Chang.UI
         [SerializeField] private ToggleGroup _toggleGroup;
 
         [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.DemonstrationWord;
-
+        
         public void Init(PhraseData correctWord, Action<bool> onToggleValueChanged)
         {
             Debug.Log("Init SelectWordView");
@@ -25,16 +25,16 @@ namespace Chang.UI
                 Destroy(child.gameObject);
             }
 
-            // init thai word
+            // init learning language word
             var quesWord = correctWord.Word.LearnWord;
             _questionWord.Set(quesWord, correctWord.Word.Phonetic);
             _questionWord.EnablePhonetic(true);
 
-            // init mix words
+            // init translation words
             var mix = Instantiate(_mixWordPrefab, _mixWordContent);
             var word = correctWord.Word.GetTranslation();
             mix.Set(word, correctWord.Word.Phonetic, _toggleGroup, onToggleValueChanged);
-            mix.EnablePhonetic(false);
+            mix.EnablePhonetics(false);
         }
     }
 }

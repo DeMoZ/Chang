@@ -46,8 +46,10 @@ namespace Chang.FSM
             _gameOverlayController.OnCheck += OnCheck;
             _gameOverlayController.OnContinue += OnContinue;
             _gameOverlayController.OnReturnFromGame += ExitToLobby;
-
+            _gameOverlayController.OnHint += OnHint;
+            
             _gameOverlayController.EnableReturnButton(true);
+            _gameOverlayController.EnableHintButton(true);
 
             _vocabularyBus = new VocabularyBus
             {
@@ -69,6 +71,9 @@ namespace Chang.FSM
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
             _gameOverlayController.OnReturnFromGame -= ExitToLobby;
+            
+            _gameOverlayController.OnHint -= OnHint;
+            _gameOverlayController.EnableHintButton(false);
 
             _gameOverlayController.OnExitToLobby();
         }
@@ -79,6 +84,12 @@ namespace Chang.FSM
             OnStateResult.Invoke(StateType.Lobby);
         }
 
+        private void OnHint()
+        {
+            Debug.Log($"{nameof(OnHint)}");
+            _vocabularyBus.OnHintUsed.Value = true;
+        }
+        
         private void OnCheck()
         {
             OnCheckAsync().Forget();
@@ -173,7 +184,7 @@ namespace Chang.FSM
             {
                 // the lesson has finished
                 // todo roman UML needs to be updated
-                _vocabularyFSM.SwitchState(QuestionType.Result);
+                SwitchState(QuestionType.Result);
             }
             else
             {
@@ -217,10 +228,16 @@ namespace Chang.FSM
 
                 lesson.DequeueAndSetSipmlQuestion();
                 lesson.SetCurrentQuestionData(questionData);
-                _vocabularyFSM.SwitchState(questionData.QuestionType);
+                SwitchState(questionData.QuestionType);
             }
         }
 
+        private void SwitchState(QuestionType questionType)
+        {
+            _vocabularyFSM.SwitchState(questionType);
+            _vocabularyBus.OnHintUsed.Value = false;
+        }
+        
         private bool TryGenerateQuestMatchWordsData(Lesson lesson, out SimpleQuestMatchWords matchWordsQuest)
         {
             matchWordsQuest = new SimpleQuestMatchWords();

@@ -11,15 +11,16 @@ namespace Chang
 {
     public class MatchWordsController : IViewController
     {
-        private const int TimeToSetNormal = 500; 
-        
+        private const int TimeToSetNormal = 500;
+
         private readonly MatchWordsView _view;
 
         private Action<int, int> _onToggleValueChanged;
-        private List<CToggle> _leftToggles;
-        private List<CToggle> _rightToggles;
+        private List<CToggle> _leftToggles = new();
+        private List<CToggle> _rightToggles = new();
 
         private CancellationTokenSource _cts;
+        private bool _isLeftLearnLanguage;
 
         [Inject]
         public MatchWordsController(MatchWordsView view)
@@ -32,24 +33,28 @@ namespace Chang
             _cts?.Cancel();
             _cts?.Dispose();
             
-            _leftToggles?.Clear();
-            _rightToggles?.Clear();
+            Clear();
         }
 
+        public void Clear()
+        {
+            _leftToggles.Clear();
+            _rightToggles.Clear();
+        }
+        
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
         }
 
-        public void Init(bool isLeftLanguage, List<WordData> left, List<WordData> right,
+        public void Init(bool isLeftLearnLanguage, List<WordData> left, List<WordData> right,
             Action<int, int> onToggleValueChanged, Action onContinueClicked)
         {
-            _leftToggles = new List<CToggle>();
-            _rightToggles = new List<CToggle>();
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = new CancellationTokenSource();
-            
+
+            _isLeftLearnLanguage = isLeftLearnLanguage;
             _onToggleValueChanged = onToggleValueChanged;
             _view.Init(onContinueClicked);
 
@@ -59,10 +64,9 @@ namespace Chang
                 var toggle = _view.AddItem(true);
                 _leftToggles.Add(toggle);
 
-                if (isLeftLanguage)
-                    toggle.Set(left[i].LearnWord, left[i].Phonetic, isOn => OnToggleValueChanged(true, index, isOn));
-                else
-                    toggle.Set(left[i].GetTranslation(), string.Empty, isOn => OnToggleValueChanged(true, index, isOn));
+                var word = _isLeftLearnLanguage ? left[i].LearnWord : left[i].GetTranslation();
+                toggle.Set(word, left[i].Phonetic, isOn => OnToggleValueChanged(true, index, isOn));
+                toggle.EnablePhonetics(_isLeftLearnLanguage && right[i].ShowPhonetics);
             }
 
             for (var i = 0; i < right.Count; i++)
@@ -71,26 +75,25 @@ namespace Chang
                 var toggle = _view.AddItem(false);
                 _rightToggles.Add(toggle);
 
-                if (isLeftLanguage)
-                    toggle.Set(right[i].GetTranslation(), string.Empty, isOn => OnToggleValueChanged(false, index, isOn));
-                else
-                    toggle.Set(right[i].LearnWord, right[i].Phonetic, isOn => OnToggleValueChanged(false, index, isOn));
+                var word = _isLeftLearnLanguage ? right[i].GetTranslation() : right[i].LearnWord;
+                toggle.Set(word, right[i].Phonetic, isOn => OnToggleValueChanged(false, index, isOn));
+                toggle.EnablePhonetics(!_isLeftLearnLanguage && right[i].ShowPhonetics);
             }
         }
 
-        public async void ShowCorrect(int leftIndex, int rightIndex, bool isCorrect)
+        public async UniTask ShowCorrect(int leftIndex, int rightIndex, bool isCorrect)
         {
             _leftToggles[leftIndex].IsOn = false;
             _rightToggles[rightIndex].IsOn = false;
-            
+
             _leftToggles[leftIndex].SetInteractable(false);
             _rightToggles[rightIndex].SetInteractable(false);
-            
+
             _leftToggles[leftIndex].SetCorrect(isCorrect);
             _rightToggles[rightIndex].SetCorrect(isCorrect);
 
             await UniTask.Delay(TimeToSetNormal, cancellationToken: _cts.Token);
-            
+
             _leftToggles[leftIndex].SetNormal();
             _rightToggles[rightIndex].SetNormal();
 
@@ -110,11 +113,13 @@ namespace Chang
         {
             _view.EnableContinueButton(active);
         }
-        
+
         private void OnToggleValueChanged(bool isLeft, int index, bool isOn)
         {
             if (!isOn)
+            {
                 return;
+            }
 
             var column = isLeft ? "left" : "right";
             Debug.Log($"Clicked column: {column}; toggle: {index}; isOn: {isOn}");
@@ -122,13 +127,27 @@ namespace Chang
             var left = _leftToggles.FirstOrDefault(t => t.IsOn);
             var right = _rightToggles.FirstOrDefault(t => t.IsOn);
 
-            if (left == default || right == default)
+            if (left == null || right == null)
+            {
                 return;
+            }
 
             var leftIndex = _leftToggles.IndexOf(left);
             var rightIndex = _rightToggles.IndexOf(right);
 
             _onToggleValueChanged?.Invoke(leftIndex, rightIndex);
+        }
+
+        public void ShowHint()
+        {
+            if (_isLeftLearnLanguage)
+            {
+                _leftToggles.ForEach(toggle => toggle.EnablePhonetics(true));
+            }
+            else
+            {
+                _rightToggles.ForEach(toggle => toggle.EnablePhonetics(true));
+            }
         }
     }
 }

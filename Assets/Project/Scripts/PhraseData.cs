@@ -39,6 +39,8 @@ namespace Chang
         public string LearnWord { get; private set; }
         public string Phonetic { get; private set; }
         public List<Translation> Meanings { get; private set; }
+        
+        public bool ShowPhonetics { get; private set; }
 
         public WordData(string key, string learnWord, string phonetic, List<Translation> meanings)
         {
@@ -47,10 +49,24 @@ namespace Chang
             Phonetic = phonetic;
             Meanings = meanings;
         }
+        
+        public WordData(string key, string learnWord, string phonetic, List<Translation> meanings, bool showPhonetics)
+        {
+            Key = key;
+            LearnWord = learnWord;
+            Phonetic = phonetic;
+            Meanings = meanings;
+            ShowPhonetics = showPhonetics;
+        }
 
         public string GetTranslation()
         {
             return Meanings.FirstOrDefault(t => t.Language == Languages.English)?.Meaning;
+        }
+        
+        public void SetShowPhonetics(bool showPhonetics)
+        {
+            ShowPhonetics = showPhonetics;
         }
     }
 }

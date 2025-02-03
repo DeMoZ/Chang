@@ -13,13 +13,13 @@ namespace Chang
             _word.text = word;
             _phonetic.text = phonetic;
 
-            if (sprite != null) { }
-            if (audioClip != null) { }
-        }
+            if (sprite != null)
+            {
+            }
 
-        public void SetPhoneticActive(bool active)
-        {
-            _phonetic.gameObject.SetActive(active);
+            if (audioClip != null)
+            {
+            }
         }
 
         public void EnablePhonetic(bool enable)

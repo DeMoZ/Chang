@@ -32,8 +32,7 @@ namespace Chang.FSM
 
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
-        private bool _isHintUsed;
-        
+
         public override QuestionType Type => QuestionType.SelectWord;
 
         public SelectWordState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
@@ -43,8 +42,7 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
-            _isHintUsed = false;
-            _gameOverlayController.OnHint += OnHint;
+            Bus.OnHintUsed.Subscribe(OnHint);
             _gameOverlayController.EnableHintButton(true);
             StateBody();
         }
@@ -52,8 +50,7 @@ namespace Chang.FSM
         public override void Exit()
         {
             base.Exit();
-            _gameOverlayController.EnableHintButton(false);
-            _gameOverlayController.OnHint -= OnHint;
+            Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
         }
 
@@ -72,28 +69,22 @@ namespace Chang.FSM
             _mixWords.Shuffle();
 
             var mark = _profileService.GetMark(_correctWord.Word.Key);
-            var isQuestInTranslation = GetQuestInTranslation(mark);
-            _correctWord.SetPhonetics(GetShowPhonetic(mark));
+            var isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
+            _correctWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
 
             foreach (var mixWord in _mixWords)
             {
                 mark = _profileService.GetMark(mixWord.Word.Key);
-                mixWord.SetPhonetics(GetShowPhonetic(mark));
+                mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
             }
 
             _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged);
             _stateController.SetViewActive(true);
         }
 
-        private void OnHint()
+        private void OnHint(bool isHintUsed)
         {
-            if (_isHintUsed)
-            {
-                return;
-            }
-            
             _stateController.ShowHint();
-            _isHintUsed = true;
         }
 
         private void OnToggleValueChanged(int index, bool isOn)
@@ -101,24 +92,9 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index].Key == _correctWord.Key;
-            object[] info = { _correctWord.Word.LearnWord, _isHintUsed };
+            object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
             var result = new SelectWordResult(_correctWord.Word.Key, _correctWord.Word.LearnWord, isCorrect, info);
             Bus.QuestionResult = result;
-        }
-
-        private static bool GetQuestInTranslation(int mark)
-        {
-            return mark switch
-            {
-                < 3 => false,
-                < 5 => true,
-                _ => RandomUtils.GetRandomBool()
-            };
-        }
-
-        private static bool GetShowPhonetic(int mark)
-        {
-            return mark < 7;
         }
     }
 }

@@ -37,6 +37,7 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
+            _gameOverlayController.EnableHintButton(false);
             StateBody();
         }
 

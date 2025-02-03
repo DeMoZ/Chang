@@ -12,7 +12,7 @@ namespace Chang.UI
         [SerializeField] private Image _correct;
         [SerializeField] private Image _inactive;
         [SerializeField] private TMP_Text _word;
-        [SerializeField] private TMP_Text _phonetic;
+        [SerializeField] private TMP_Text _phonetics;
 
         private Action<bool> _onValueChanged;
         
@@ -33,7 +33,7 @@ namespace Chang.UI
         public void Set(string word, string phonetic, ToggleGroup toggleGroup, Action<bool> onValueChanged)
         {
             _word.text = word;
-            _phonetic.text = phonetic;
+            _phonetics.text = phonetic;
             _onValueChanged = onValueChanged;
             _toggle.group = toggleGroup;
         }
@@ -41,7 +41,7 @@ namespace Chang.UI
         public void Set(string word, string phonetic, Action<bool> onValueChanged)
         {
             _word.text = word;
-            _phonetic.text = phonetic;
+            _phonetics.text = phonetic;
             _onValueChanged = onValueChanged;
         }
 
@@ -50,9 +50,9 @@ namespace Chang.UI
             _toggle.group = toggleGroup;
         }
         
-        public void EnablePhonetic(bool enable)
+        public void EnablePhonetics(bool enable)
         {
-            _phonetic.gameObject.SetActive(enable);
+            _phonetics.gameObject.SetActive(enable);
         }
 
         public void SetInteractable(bool interactable)

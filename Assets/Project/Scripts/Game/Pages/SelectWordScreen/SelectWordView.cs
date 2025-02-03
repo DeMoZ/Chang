@@ -44,7 +44,7 @@ namespace Chang.UI
 
                 var word = !_isQuestInTranslation ? mixWords[i].Word.GetTranslation() : mixWords[i].Word.LearnWord;
                 mix.Set(word, mixWords[i].Word.Phonetic, _toggleGroup, isOn => onToggleValueChanged(index, isOn));
-                mix.EnablePhonetic(_isQuestInTranslation && mixWords[i].ShowPhonetics);
+                mix.EnablePhonetics(_isQuestInTranslation && mixWords[i].ShowPhonetics);
 
                 _mixWordToggles.Add(mix);
             }
@@ -66,7 +66,7 @@ namespace Chang.UI
 
             foreach (var toggle in _mixWordToggles)
             {
-                toggle.EnablePhonetic(_isQuestInTranslation);
+                toggle.EnablePhonetics(_isQuestInTranslation);
             }
         }
     }
