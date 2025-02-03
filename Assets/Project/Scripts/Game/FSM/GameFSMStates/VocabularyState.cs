@@ -235,7 +235,7 @@ namespace Chang.FSM
         private void SwitchState(QuestionType questionType)
         {
             _vocabularyFSM.SwitchState(questionType);
-            _vocabularyBus.OnHintUsed.Value = false;
+            _vocabularyBus.OnHintUsed.SetSilent(false);
         }
         
         private bool TryGenerateQuestMatchWordsData(Lesson lesson, out SimpleQuestMatchWords matchWordsQuest)

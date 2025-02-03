@@ -53,6 +53,19 @@ namespace DMZ.Events
         }
 
         /// <summary>
+        /// set value and do not notify even if state not changed
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetSilent(T value)
+        {
+            lock (_lock)
+            {
+                _previousData = _data;
+                _data = value;
+            }
+        }
+        
+        /// <summary>
         /// set value and force notify even if state has not changed
         /// </summary>
         /// <param name="value"></param>
