@@ -17,18 +17,24 @@ namespace Chang.UI
 
         [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.SelectWord;
 
+        private readonly List<CToggle> _mixWordToggles = new();
+        
+        private bool _isQuestInTranslation;
+
         public void Init(bool isQuestInTranslation, PhraseData correctWord, List<PhraseData> mixWords, Action<int, bool> onToggleValueChanged)
         {
             Debug.Log("Init SelectWordView");
+
+            _isQuestInTranslation = isQuestInTranslation;
 
             foreach (Transform child in _mixWordContent)
             {
                 Destroy(child.gameObject);
             }
 
-            var quesWord = isQuestInTranslation ? correctWord.Word.GetTranslation() : correctWord.Word.LearnWord;
+            var quesWord = _isQuestInTranslation ? correctWord.Word.GetTranslation() : correctWord.Word.LearnWord;
             _questionWord.Set(quesWord, correctWord.Word.Phonetic);
-            _questionWord.EnablePhonetic(!isQuestInTranslation && correctWord.ShowPhonetics);
+            _questionWord.EnablePhonetic(!_isQuestInTranslation && correctWord.ShowPhonetics);
 
             // init mix words
             for (var i = 0; i < mixWords.Count; i++)
@@ -36,9 +42,31 @@ namespace Chang.UI
                 var mix = Instantiate(_mixWordPrefab, _mixWordContent);
                 var index = i;
 
-                var word = !isQuestInTranslation ? mixWords[i].Word.GetTranslation() : mixWords[i].Word.LearnWord;
+                var word = !_isQuestInTranslation ? mixWords[i].Word.GetTranslation() : mixWords[i].Word.LearnWord;
                 mix.Set(word, mixWords[i].Word.Phonetic, _toggleGroup, isOn => onToggleValueChanged(index, isOn));
-                mix.EnablePhonetic(isQuestInTranslation && mixWords[i].ShowPhonetics);
+                mix.EnablePhonetic(_isQuestInTranslation && mixWords[i].ShowPhonetics);
+
+                _mixWordToggles.Add(mix);
+            }
+        }
+
+        private void OnDisable()
+        {
+            foreach(var toggle in _mixWordToggles)
+            {
+                Destroy(toggle.gameObject);
+            }
+            
+            _mixWordToggles.Clear();
+        }
+
+        public void ShowHint()
+        {
+            _questionWord.EnablePhonetic(!_isQuestInTranslation);
+
+            foreach (var toggle in _mixWordToggles)
+            {
+                toggle.EnablePhonetic(_isQuestInTranslation);
             }
         }
     }

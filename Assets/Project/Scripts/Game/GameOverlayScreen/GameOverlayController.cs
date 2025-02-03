@@ -14,14 +14,14 @@ namespace Chang
         public Action OnCheck;
         public Action OnContinue;
         public Action OnReturnFromGame;
-        public Action<bool> OnPhonetic;
+        public Action OnHint;
 
         [Inject]
         public GameOverlayController(GameOverlayView view, GameBus gameBus, SystemUiController systemUiController)
         {
             _view = view;
             _systemUiController = systemUiController;
-            _view.Init(OnCheckBtn, OnContinueBtn, OnReturnBtn, OnPhoneticTgl);
+            _view.Init(OnCheckBtn, OnContinueBtn, OnReturnBtn, OnHintBtn);
         }
 
         public void SetViewActive(bool active)
@@ -34,6 +34,7 @@ namespace Chang
             EnableReturnButton(false);
             EnableCheckButton(false);
             EnableContinueButton(false);
+            EnableHintButton(false);
         }
         
         public void EnableReturnButton(bool enable)
@@ -44,6 +45,11 @@ namespace Chang
         public void EnableCheckButton(bool enable)
         {
             _view.EnableCheckButton(enable);
+        }
+        
+        public void EnableHintButton(bool enable)
+        {
+            _view.EnableHintButton(enable);
         }
 
         public void SetContinueButtonInfo(ContinueButtonInfo info)
@@ -90,9 +96,10 @@ namespace Chang
             }
         }
 
-        private void OnPhoneticTgl(bool obj)
+        private void OnHintBtn()
         {
-            throw new NotImplementedException();
+            Debug.Log($"OnHintButton");
+            OnHint?.Invoke();
         }
 
         public void Dispose()

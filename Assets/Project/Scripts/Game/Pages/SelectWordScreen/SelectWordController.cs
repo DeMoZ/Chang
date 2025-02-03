@@ -23,10 +23,15 @@ namespace Chang
         {
             _view.Init(isQuestInTranslation, correctWord, mixWords, onToggleValueChanged);
         }
-
+        
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
+        }
+
+        public void ShowHint()
+        {
+            _view.ShowHint();
         }
     }
 }

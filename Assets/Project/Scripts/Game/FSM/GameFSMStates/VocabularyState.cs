@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -50,9 +49,6 @@ namespace Chang.FSM
 
             _gameOverlayController.EnableReturnButton(true);
 
-            // todo roman implement phonetic toggle
-            //gameOverlayController.OnPhonetic += OnPhonetic;
-
             _vocabularyBus = new VocabularyBus
             {
                 CurrentLesson = Bus.CurrentLesson,
@@ -83,23 +79,40 @@ namespace Chang.FSM
             OnStateResult.Invoke(StateType.Lobby);
         }
 
-        private async void OnCheck()
+        private void OnCheck()
+        {
+            OnCheckAsync().Forget();
+        }
+        
+        private async UniTask OnCheckAsync()
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
-
-            if (_vocabularyFSM.CurrentStateType == QuestionType.MatchWords)
+            
+            switch (_vocabularyFSM.CurrentStateType)
             {
-                OnCheckMatchWords();
-                return;
+                case QuestionType.DemonstrationWord:
+                case QuestionType.SelectWord:
+                    await OnCheckSelectWordAsync();
+                    break;
+                case QuestionType.MatchWords:
+                    await OnCheckMatchWordsAsync();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException($"simple question not handled {_vocabularyFSM.CurrentStateType}");
             }
+        }
 
-            // if the answer is correct
+        private async UniTask OnCheckSelectWordAsync()
+        {
+            Debug.Log($"{nameof(OnCheckSelectWordAsync)}");
+            
             var isCorrect = _vocabularyBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
             var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
-            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, _vocabularyBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect);
+            var needIncrement = !(bool)_vocabularyBus.QuestionResult.Info[1];
+            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, _vocabularyBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect, needIncrement);
 
             if (!isCorrect)
             {
@@ -116,10 +129,10 @@ namespace Chang.FSM
             _gameOverlayController.EnableContinueButton(true);
             await _profileService.SaveAsync(); // todo roman in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
-
-        private async void OnCheckMatchWords()
+        
+        private async UniTask OnCheckMatchWordsAsync()
         {
-            Debug.Log($"{nameof(OnCheckMatchWords)}");
+            Debug.Log($"{nameof(OnCheckMatchWordsAsync)}");
 
             var matchWordsStateResult = _vocabularyBus.QuestionResult as MatchWordsStateResult;
             if (matchWordsStateResult == null)
@@ -135,6 +148,7 @@ namespace Chang.FSM
             OnContinue();
         }
 
+        // todo roman async
         private async void OnContinue()
         {
             if (_vocabularyFSM.CurrentStateType == QuestionType.Result)

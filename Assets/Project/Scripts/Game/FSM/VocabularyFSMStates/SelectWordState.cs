@@ -32,7 +32,8 @@ namespace Chang.FSM
 
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
-
+        private bool _isHintUsed;
+        
         public override QuestionType Type => QuestionType.SelectWord;
 
         public SelectWordState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
@@ -42,12 +43,17 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
+            _isHintUsed = false;
+            _gameOverlayController.OnHint += OnHint;
+            _gameOverlayController.EnableHintButton(true);
             StateBody();
         }
 
         public override void Exit()
         {
             base.Exit();
+            _gameOverlayController.EnableHintButton(false);
+            _gameOverlayController.OnHint -= OnHint;
             _stateController.SetViewActive(false);
         }
 
@@ -79,14 +85,23 @@ namespace Chang.FSM
             _stateController.SetViewActive(true);
         }
 
+        private void OnHint()
+        {
+            if (_isHintUsed)
+            {
+                return;
+            }
+            
+            _stateController.ShowHint();
+            _isHintUsed = true;
+        }
+
         private void OnToggleValueChanged(int index, bool isOn)
         {
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index].Key == _correctWord.Key;
-            var correctWord = _correctWord.Word.LearnWord;
-            var selectedWord = _mixWords[index].Word.LearnWord;
-            object[] info = { correctWord, selectedWord };
+            object[] info = { _correctWord.Word.LearnWord, _isHintUsed };
             var result = new SelectWordResult(_correctWord.Word.Key, _correctWord.Word.LearnWord, isCorrect, info);
             Bus.QuestionResult = result;
         }
