@@ -14,42 +14,55 @@ namespace Chang.Utilities
     {
         private static int countLetters = 0;
 
-        [MenuItem("Chang/Utilities/Create Words Json From Google Sheet")]
-        public static async void ReadGoogleSheetAsync()
+        /// <summary>
+        /// Reads Google book from Google Sheet and creates Json files for each sheet.
+        ///</summary>
+        [MenuItem("Chang/Utilities/Create Create Sheets Jsons", false, 0)]
+        public static async void ReadGoogleBookAsync()
         {
             var gSheetsToJson = new GoogleSheetToJson();
-            var result = gSheetsToJson.TryGetWords();
-            await result;
+            var book = await gSheetsToJson.TryGetBook();
 
-            if (!result.Result.Any())
+            foreach (var sheet in book.Sheets)
             {
-                Debug.LogError($"[{nameof(ReadGoogleSheetAsync)}] --- Failed ---");
+                if (sheet.Properties.Skip || sheet.Rows.Count == 0)
+                {
+                    continue;
+                }
+
+                Debug.Log($"Sheet: {sheet.Title}");
+
+                // Validation - remove rows with empty value in any cell
+                sheet.Rows = sheet.Rows
+                    .Where(row =>
+                    {
+                        if (string.IsNullOrEmpty(row.LearnWord) || string.IsNullOrEmpty(row.Phonetics) || string.IsNullOrEmpty(row.Meaning))
+                        {
+                            Debug.LogWarning($"Sheet: {sheet.Title}, Empty value for {row.LearnWord} {row.Phonetics} {row.Meaning}");
+                            return false;
+                        }
+
+                        return true;
+                    })
+                    .ToList();
+
+                WordConfigFileCreator.CreateSheetJson(sheet);
             }
 
-            countLetters = 0;
-            var rows = result.Result;
-            if (rows is { Count: > 0 })
-            {
-                var data = FilterData(rows);
-                WordConfigFileCreator.CreateJson(Languages.Thai, data);
-            }
-            else
-            {
-                Debug.Log("No data found.");
-            }
-
-            Debug.LogWarning($"[{nameof(ReadGoogleSheetAsync)}] --- Done --- count letters: {countLetters}");
+            Debug.LogWarning($"[{nameof(ReadGoogleBookAsync)}] --- Done --- count letters: {countLetters}");
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
-        [MenuItem("Chang/Utilities/Create Word Configs from Json")]
-        public static void CreateWordConfigs()
-        {
-            Debug.LogWarning($"[{nameof(CreateWordConfigs)}] --- Start ---");
-            WordConfigFileCreator.ReadJsonAndCreateConfigs(Languages.Thai);
-            Debug.LogWarning($"[{nameof(CreateWordConfigs)}] --- Done ---");
-        }
+        // [MenuItem("Chang/Utilities/Create Word Configs from Json", false, 1)]
+        // public static void CreateWordConfigs()
+        // {
+        //     Debug.LogWarning($"[{nameof(CreateWordConfigs)}] --- Start ---");
+        //     WordConfigFileCreator.ReadJsonAndCreateConfigs(Languages.Thai);
+        //     Debug.LogWarning($"[{nameof(CreateWordConfigs)}] --- Done ---");
+        // }
 
-        [MenuItem("Chang/Utilities/Create Audio from Json")]
+        [MenuItem("Chang/Utilities/Create Audio from Json, false", false, 2)]
         public static async void CreateAudioFilesAsync()
         {
             Debug.LogWarning($"[{nameof(CreateAudioFilesAsync)}] --- Start ---");
@@ -68,7 +81,6 @@ namespace Chang.Utilities
 
             Debug.LogWarning($"[{nameof(CreateAudioFilesAsync)}] --- Done ---");
         }
-
 
 
         public async Task GenerateAudioAsync(string thaiText)
@@ -175,7 +187,7 @@ namespace Chang.Utilities
                 Meaning = columns[3].ToString(),
             };
         }
-        
+
         private static int GetHash(string str)
         {
             unchecked
