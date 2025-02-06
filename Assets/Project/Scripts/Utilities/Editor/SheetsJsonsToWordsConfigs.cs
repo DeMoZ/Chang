@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Chang.Utilities;
+using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -12,13 +13,16 @@ public class SheetsJsonsToWordsConfigs : ScriptableObject
     public List<TextAsset> SheetsJsons;
 
     [Button]
-    private void MakeWordsFromJsons()
+    private async void MakeWordsFromJsons()
     {
         foreach (var textAsset in SheetsJsons)
         {
-            // Sheet sheet = 
-            //
-            // WordConfigFileCreator.CreateWordsConfigs(sheet);
+            var json = textAsset.text;
+            var sheet = JsonConvert.DeserializeObject<Sheet>(json);
+
+            await WordConfigFileCreator.CreateWordConfigsFromSheet(sheet);
         }
+        
+        Debug.LogWarning("--Word Configs Created--");
     }
 }

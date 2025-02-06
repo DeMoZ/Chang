@@ -16,7 +16,6 @@ namespace Chang.Utilities
     {
         private const string ApplicationName = "Google Sheets API Unity";
         private const string TokenFileName = "gcloud_client_token.json";
-        //private const string IdFileName = "ids_Level 1-2 Vocabulary by Joyful Thai.json";
         private const string IdFileName = "ids_ThaiVocabularyFood.json";
 
         private SheetsService _service;
