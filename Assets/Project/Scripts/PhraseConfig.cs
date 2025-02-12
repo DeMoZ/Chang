@@ -8,15 +8,14 @@ namespace Chang
     public class PhraseConfig : ScriptableObject
     {
         [field: SerializeField] public string Key { get; set; } = string.Empty;
-
-        /*[field: SerializeField]*/
-        public Languages Language { get; set; } = Languages.Thai;
+        [field: SerializeField] public Languages Language { get; set; } = Languages.English;
+        [field: SerializeField] public string Section { get; set; } = string.Empty;
         [field: SerializeField] public AudioClip AudioClip { get; set; }
         [field: SerializeField] public Sprite Sprite { get; set; }
         [field: SerializeField] public WordConfig Word { get; set; }
 
         public PhraseData PhraseData => new(Key, AudioClip, Sprite, Word.WordData);
-        
+
         /// <summary>
         /// DEPRICATED. Very temp solution. Take Key From Phrase config and put into Word.Key
         /// </summary>
