@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace Chang.Utilities
             File.WriteAllText(path, jsonData);
         }
 
-        public static async Task CreateWordConfigsFromSheet(Sheet data)
+        public static async UniTask CreateWordConfigsFromSheet(Sheet data)
         {
             try
             {
@@ -99,6 +100,25 @@ namespace Chang.Utilities
             }
         }
 
+        public static void CreateQuestSelectWordConfig(string name, QuestionConfig dataAsset)
+        {
+            var languagePrefix = dataAsset.Language.ToString();
+            var fileName =
+                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}{name}";
+
+            var pathOnly = Path.Combine(
+                ChangUtilitiesConstants.AssetsFolder,
+                ChangUtilitiesConstants.RelativePath,
+                languagePrefix,
+                $"{languagePrefix}{ChangUtilitiesConstants.Question}",
+                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}",
+                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}{ChangUtilitiesConstants.NewFolder}",
+                dataAsset.Section);
+
+            CreateFolders(pathOnly);
+            AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
+        }
+
         private static string GetSheetJsonSystemFilePath(Languages language, string name)
         {
             var languagePrefix = language.ToString();
@@ -111,6 +131,59 @@ namespace Chang.Utilities
                 $"{name}.json");
 
             return path;
+        }
+
+        private static void CreateFolders(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            string[] folders = path.Split('/');
+
+            if (folders.Length == 0)
+            {
+                return;
+            }
+
+            if (!string.Equals(folders[0], "Assets"))
+            {
+                Debug.LogError($"Path should start with 'Assets'. Path:\n{path}");
+                return;
+            }
+
+            string currentPath = folders[0];
+
+            foreach (string folder in folders.Skip(1))
+            {
+                string folderPath = Path.Combine(currentPath, folder);
+                if (!AssetDatabase.IsValidFolder(folderPath))
+                {
+                    AssetDatabase.CreateFolder(currentPath, folder);
+
+                    RestartEditAssetDatabase();
+                }
+
+                currentPath = folderPath;
+            }
+
+            Debug.Log($"Folders created at:\n{path}");
+        }
+        
+        private static void RestartEditAssetDatabase()
+        {
+            AssetDatabase.StopAssetEditing();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            AssetDatabase.StartAssetEditing();
+        }
+
+        private static void StopEditAssetDatabase()
+        {
+            AssetDatabase.StopAssetEditing();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         private static string GetNewWordFolderSystemPath(Languages language, string section)

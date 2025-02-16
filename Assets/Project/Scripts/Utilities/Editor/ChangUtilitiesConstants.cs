@@ -7,5 +7,9 @@ namespace Chang.Utilities
         public static string WordsFolder = "Words";
         public static string NewFolder = "New";
         public static string JsonFolder = "Jsons";
+        
+        public static string Question = "Quest";
+        public static string Select = "Select";
+        public static string Plural = "s";
     }
 }
