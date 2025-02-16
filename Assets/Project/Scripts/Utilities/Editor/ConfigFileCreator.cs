@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Chang.Utilities
 {
-    public static class WordConfigFileCreator
+    public static class ConfigFileCreator
     {
         private static JsonSerializerSettings JsonSettings = new()
         {
@@ -58,6 +58,42 @@ namespace Chang.Utilities
             }
         }
 
+        public static void CreateQuestSelectWordConfig(string name, QuestionConfig dataAsset)
+        {
+            var languagePrefix = dataAsset.Language.ToString();
+            var fileName =
+                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}{name}";
+
+            var pathOnly = Path.Combine(
+                ChangUtilitiesConstants.AssetsFolder,
+                ChangUtilitiesConstants.RelativePath,
+                languagePrefix,
+                $"{languagePrefix}{ChangUtilitiesConstants.Question}",
+                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}",
+                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}{ChangUtilitiesConstants.NewFolder}",
+                dataAsset.Section);
+
+            CreateFolders(pathOnly);
+            AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
+        }
+        
+        public static void CreateLessonConfig(string section, LessonConfig dataAsset)
+        {
+            var languagePrefix = dataAsset.Language.ToString();
+            var fileName = $"{languagePrefix}{ChangUtilitiesConstants.Lesson}{dataAsset.Name}";
+
+            var pathOnly = Path.Combine(
+                ChangUtilitiesConstants.AssetsFolder,
+                ChangUtilitiesConstants.RelativePath,
+                languagePrefix,
+                $"{languagePrefix}{ChangUtilitiesConstants.Lesson}",
+                $"{languagePrefix}{ChangUtilitiesConstants.Lesson}{ChangUtilitiesConstants.NewFolder}",
+                section);
+
+            CreateFolders(pathOnly);
+            AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
+        }
+        
         private static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
         {
             var meanings = new List<Translation>
@@ -98,25 +134,6 @@ namespace Chang.Utilities
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
-        }
-
-        public static void CreateQuestSelectWordConfig(string name, QuestionConfig dataAsset)
-        {
-            var languagePrefix = dataAsset.Language.ToString();
-            var fileName =
-                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}{name}";
-
-            var pathOnly = Path.Combine(
-                ChangUtilitiesConstants.AssetsFolder,
-                ChangUtilitiesConstants.RelativePath,
-                languagePrefix,
-                $"{languagePrefix}{ChangUtilitiesConstants.Question}",
-                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}",
-                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}{ChangUtilitiesConstants.NewFolder}",
-                dataAsset.Section);
-
-            CreateFolders(pathOnly);
-            AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
         }
 
         private static string GetSheetJsonSystemFilePath(Languages language, string name)

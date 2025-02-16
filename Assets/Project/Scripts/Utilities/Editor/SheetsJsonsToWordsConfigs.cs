@@ -20,7 +20,7 @@ public class SheetsJsonsToWordsConfigs : ScriptableObject
             var json = textAsset.text;
             var sheet = JsonConvert.DeserializeObject<Sheet>(json);
 
-            await WordConfigFileCreator.CreateWordConfigsFromSheet(sheet);
+            await ConfigFileCreator.CreateWordConfigsFromSheet(sheet);
         }
         
         Debug.LogWarning("--Word Configs Created--");

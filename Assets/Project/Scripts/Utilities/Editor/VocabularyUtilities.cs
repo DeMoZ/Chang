@@ -41,7 +41,7 @@ namespace Chang.Utilities
                     })
                     .ToList();
 
-                WordConfigFileCreator.CreateSheetJson(sheet);
+                ConfigFileCreator.CreateSheetJson(sheet);
             }
 
             Debug.LogWarning($"[{nameof(ReadGoogleBookAsync)}] --- Done --- count letters: {countLetters}");

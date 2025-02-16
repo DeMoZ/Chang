@@ -7,6 +7,8 @@ namespace Chang
     [CreateAssetMenu(fileName = "LessonConfig", menuName = "Chang/GameBook/Lesson Config", order = 1)]
     public class LessonConfig : SerializedScriptableObject
     {
+        [field: SerializeField] public string Name { get; set; } = string.Empty;
+        [field: SerializeField] public Languages Language { get; set; } = Languages.English;
         [field: SerializeField] public bool GenerateQuestMatchWordsData { get; set; } = true;
 
         [SerializeReference] [InlineEditor(Expanded = true)] [ListDrawerSettings(ShowIndexLabels = true)]

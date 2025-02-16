@@ -10,6 +10,7 @@ namespace Chang.Utilities
         
         public static string Question = "Quest";
         public static string Select = "Select";
-        public static string Plural = "s";
+
+        public static string Lesson = "Lesson";
     }
 }
