@@ -94,6 +94,22 @@ namespace Chang.Utilities
             AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
         }
         
+        public static void CreateBookConfig(GameBookConfig dataAsset)
+        {
+            var languagePrefix = dataAsset.Language.ToString();
+            var fileName = $"{languagePrefix}{ChangUtilitiesConstants.Book}{dataAsset.Name}";
+
+            var pathOnly = Path.Combine(
+                ChangUtilitiesConstants.AssetsFolder,
+                ChangUtilitiesConstants.RelativePath,
+                languagePrefix,
+                $"{languagePrefix}{ChangUtilitiesConstants.Book}",
+                $"{languagePrefix}{ChangUtilitiesConstants.Book}{ChangUtilitiesConstants.NewFolder}");
+
+            CreateFolders(pathOnly);
+            AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
+        }
+        
         private static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
         {
             var meanings = new List<Translation>
@@ -178,14 +194,12 @@ namespace Chang.Utilities
                 if (!AssetDatabase.IsValidFolder(folderPath))
                 {
                     AssetDatabase.CreateFolder(currentPath, folder);
-
+                    Debug.Log($"Folders created at:\n{path}");
                     RestartEditAssetDatabase();
                 }
 
                 currentPath = folderPath;
             }
-
-            Debug.Log($"Folders created at:\n{path}");
         }
         
         private static void RestartEditAssetDatabase()

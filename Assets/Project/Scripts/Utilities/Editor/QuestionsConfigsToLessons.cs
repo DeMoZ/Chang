@@ -63,7 +63,7 @@ public class QuestionsConfigsToLessons : ScriptableObject
             AssetDatabase.Refresh();
         }
 
-        Debug.LogWarning("--Quest Configs Created--");
+        Debug.LogWarning("--Lesson Configs Created--");
     }
 
     private void GetHashes(List<QuestionConfig> configs, out List<int> hashes, out Dictionary<int, QuestionConfig> configsDict)

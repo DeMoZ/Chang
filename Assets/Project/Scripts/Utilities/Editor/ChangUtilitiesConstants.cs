@@ -12,5 +12,7 @@ namespace Chang.Utilities
         public static string Select = "Select";
 
         public static string Lesson = "Lesson";
+        
+        public static string Book = "Book";
     }
 }
