@@ -9,6 +9,7 @@ namespace Chang
     {
         [field: SerializeField] public string Name { get; set; } = string.Empty;
         [field: SerializeField] public Languages Language { get; set; } = Languages.English;
+        [field: SerializeField] public string Section { get; set; } = string.Empty;
         [field: SerializeField] public bool GenerateQuestMatchWordsData { get; set; } = true;
 
         [SerializeReference] [InlineEditor(Expanded = true)] [ListDrawerSettings(ShowIndexLabels = true)]

@@ -42,6 +42,7 @@ public class QuestionsConfigsToLessons : ScriptableObject
                     lessonConfig.GenerateQuestMatchWordsData = true;
                     lessonConfig.Language = configsDict[firstHash].Language;
                     lessonConfig.Name = $"{configsDict[firstHash].Section}_{countSectionLessons}";
+                    lessonConfig.Section = section;
                     lessonConfig.Questions = new List<QuestionConfig>();
 
                     foreach (var hash in groupedHash)
