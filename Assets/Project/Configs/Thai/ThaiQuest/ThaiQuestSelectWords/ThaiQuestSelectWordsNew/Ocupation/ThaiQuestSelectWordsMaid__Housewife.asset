@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsMaid__Housewife
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Ocupation
+  Question:
+    rid: 1662933650522243882
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243882
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: aebd4e4cda2834d0da2af59085204ffa, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: 9cf050877fda54828b46cd05ca3cb4d7, type: 2}
+        - {fileID: 11400000, guid: 54128ab4de5a84317b57ce21777dfe29, type: 2}
+        - {fileID: 11400000, guid: 97a0fbcf04b014200be04059ed1920fc, type: 2}

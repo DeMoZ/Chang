@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsTry__Try_on
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Shopping
+  Question:
+    rid: 1662933650522243986
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243986
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: d7e50ab65a90c4d17be910a5e451a3a6, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: 26c9906b9514b4f709d923e3c0fd8a65, type: 2}
+        - {fileID: 11400000, guid: 51df561e65b8d4cc6934d5a3b2c0ee7b, type: 2}
+        - {fileID: 11400000, guid: 041401a75b8ee47b2968a2e4220e5e6d, type: 2}

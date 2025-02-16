@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsWhere
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Introduce
+  Question:
+    rid: 1662933650522243828
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243828
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: 09fabeafb62f04a139ea93b05e31dcad, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: f4981b9fe068542f5ae748795c5d7c7d, type: 2}
+        - {fileID: 11400000, guid: 603fd65b299f84733b58bcb216ae8c1b, type: 2}
+        - {fileID: 11400000, guid: 38f876796a6644b6294ccee31d7f6c35, type: 2}

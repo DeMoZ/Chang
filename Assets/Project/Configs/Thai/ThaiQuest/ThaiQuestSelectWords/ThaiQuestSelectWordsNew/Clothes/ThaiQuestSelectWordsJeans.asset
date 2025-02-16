@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsJeans
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Clothes
+  Question:
+    rid: 1662933650522243676
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243676
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: 0e804a41b4edc4d50965656d276b3a4b, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: 0734b1831c41c4db8a25975e2b54a4fc, type: 2}
+        - {fileID: 11400000, guid: 68c11563b864f4dfc985e9f7bb49ec1e, type: 2}
+        - {fileID: 11400000, guid: 0741b5f2a5ea943a48e45ce12516ebca, type: 2}

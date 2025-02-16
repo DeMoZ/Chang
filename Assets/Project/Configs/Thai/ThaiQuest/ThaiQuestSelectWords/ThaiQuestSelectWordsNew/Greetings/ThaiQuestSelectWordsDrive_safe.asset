@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsDrive_safe
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Greetings
+  Question:
+    rid: 1662933650522243801
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243801
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: 897afd9cf89b2405491dcc69427f3bc8, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: 9274e91c3669b4828baf4bdf213113d3, type: 2}
+        - {fileID: 11400000, guid: 5d2954f8da61240c8b0012a7dfeccbac, type: 2}
+        - {fileID: 11400000, guid: abb2b0fc7b13247278e2396c98f66ac3, type: 2}

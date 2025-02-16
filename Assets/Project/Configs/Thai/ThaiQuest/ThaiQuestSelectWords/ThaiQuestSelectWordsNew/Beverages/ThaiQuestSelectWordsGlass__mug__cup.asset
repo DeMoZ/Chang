@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsGlass__mug__cup
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Beverages
+  Question:
+    rid: 1662933650522243654
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243654
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: bbd517f5c8cee49859056ae70cac9245, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: d831f14f747ec4e8cb7bb256d3d0b5cc, type: 2}
+        - {fileID: 11400000, guid: f736cb839acf54368a6689e21b739a93, type: 2}
+        - {fileID: 11400000, guid: 240acca5c527b4606903d3d923611eb1, type: 2}

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsClassifiers_for_1989193633
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Beverages
+  Question:
+    rid: 1662933650522243662
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243662
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: 7d109bd8e0cdb46fda2f00e242a5900f, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: cd93577f245374f0f9da59ed949751ac, type: 2}
+        - {fileID: 11400000, guid: 6745d0ec7e2b54c0d974788b7531a724, type: 2}
+        - {fileID: 11400000, guid: 7e1ded399adb545989946c0bd1e5b9b2, type: 2}

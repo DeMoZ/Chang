@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsNail_salon
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Places
+  Question:
+    rid: 1662933650522243910
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243910
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: 31e5ece7537e640d4a9bf1e03138eca8, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: d3264bf32d67346ed8f14894e666a457, type: 2}
+        - {fileID: 11400000, guid: db4b48df0ee2a43c9b9622e5e5cfc978, type: 2}
+        - {fileID: 11400000, guid: ed84c60f66ade4a8a9494ab268b0fc34, type: 2}

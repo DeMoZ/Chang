@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8441ef4a6c422bbd7c999dd22a31a8, type: 3}
+  m_Name: ThaiQuestSelectWordsSeasoning
+  m_EditorClassIdentifier: 
+  <QuestionType>k__BackingField: 2
+  <Info>k__BackingField: 
+  <Language>k__BackingField: 6
+  <Section>k__BackingField: Food
+  Question:
+    rid: 1662933650522243773
+  references:
+    version: 2
+    RefIds:
+    - rid: 1662933650522243773
+      type: {class: QuestSelectWord, ns: Chang, asm: Assembly-CSharp}
+      data:
+        CorrectWord: {fileID: 11400000, guid: b40000b014d524c1e8b820c741631277, type: 2}
+        MixWords:
+        - {fileID: 11400000, guid: 9fe6ccd80f49b44899b5a2e9b8c5a139, type: 2}
+        - {fileID: 11400000, guid: eac60b4aeb26c4e54bcff70a616dfda5, type: 2}
+        - {fileID: 11400000, guid: 9c8c8ee533519484ba5d1ff61db07021, type: 2}
