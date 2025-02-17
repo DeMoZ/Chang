@@ -1,7 +1,9 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using Zenject;
@@ -51,7 +53,7 @@ namespace Chang.FSM
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
             _stateController.Clear();
-            
+
             _leftWords.Clear();
             _rightWords.Clear();
         }
@@ -89,14 +91,26 @@ namespace Chang.FSM
             Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
 
             _stateController.ShowCorrect(leftIndex, rightIndex, isCorrect).Forget();
-            var leftResult = new SelectWordResult(_leftWords[leftIndex].Key, _leftWords[leftIndex].LearnWord, isCorrect,
+            var leftResult = new SelectWordResult(
+                Path.Combine(
+                    Bus.CurrentLanguage.ToString(),
+                    AssetPaths.Addressables.WORDS,
+                    _leftWords[leftIndex].Section,
+                    _leftWords[leftIndex].Key),
+                _leftWords[leftIndex].LearnWord, isCorrect,
                 _leftWords[leftIndex].LearnWord, _leftWords[leftIndex].Phonetic);
 
             _result.Results.Add(leftResult);
 
             if (!isCorrect)
             {
-                var rightResult = new SelectWordResult(_rightWords[rightIndex].Key, _rightWords[rightIndex].LearnWord, false,
+                var rightResult = new SelectWordResult(
+                    Path.Combine(
+                        Bus.CurrentLanguage.ToString(),
+                        AssetPaths.Addressables.WORDS,
+                        _rightWords[rightIndex].Section,
+                        _rightWords[rightIndex].Key),
+                    _rightWords[rightIndex].LearnWord, false,
                     _rightWords[rightIndex].LearnWord, _rightWords[rightIndex].Phonetic);
 
                 _result.Results.Add(rightResult);

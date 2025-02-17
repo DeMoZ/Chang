@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Chang.Resources;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEditor;
@@ -62,15 +63,15 @@ namespace Chang.Utilities
         {
             var languagePrefix = dataAsset.Language.ToString();
             var fileName =
-                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}{name}";
+                $"{languagePrefix}{AssetPaths.Utilities.Question}{AssetPaths.Utilities.Select}{AssetPaths.Utilities.WordsFolder}{name}";
 
             var pathOnly = Path.Combine(
-                ChangUtilitiesConstants.AssetsFolder,
-                ChangUtilitiesConstants.RelativePath,
+                AssetPaths.Utilities.AssetsFolder,
+                AssetPaths.Utilities.RelativePath,
                 languagePrefix,
-                $"{languagePrefix}{ChangUtilitiesConstants.Question}",
-                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}",
-                $"{languagePrefix}{ChangUtilitiesConstants.Question}{ChangUtilitiesConstants.Select}{ChangUtilitiesConstants.WordsFolder}{ChangUtilitiesConstants.NewFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.Question}",
+                $"{languagePrefix}{AssetPaths.Utilities.Question}{AssetPaths.Utilities.Select}{AssetPaths.Utilities.WordsFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.Question}{AssetPaths.Utilities.Select}{AssetPaths.Utilities.WordsFolder}{AssetPaths.Utilities.NewFolder}",
                 dataAsset.Section);
 
             CreateFolders(pathOnly);
@@ -80,14 +81,14 @@ namespace Chang.Utilities
         public static void CreateLessonConfig(string section, LessonConfig dataAsset)
         {
             var languagePrefix = dataAsset.Language.ToString();
-            var fileName = $"{languagePrefix}{ChangUtilitiesConstants.Lesson}{dataAsset.Name}";
+            var fileName = $"{languagePrefix}{AssetPaths.Utilities.Lesson}{dataAsset.Name}";
 
             var pathOnly = Path.Combine(
-                ChangUtilitiesConstants.AssetsFolder,
-                ChangUtilitiesConstants.RelativePath,
+                AssetPaths.Utilities.AssetsFolder,
+                AssetPaths.Utilities.RelativePath,
                 languagePrefix,
-                $"{languagePrefix}{ChangUtilitiesConstants.Lesson}",
-                $"{languagePrefix}{ChangUtilitiesConstants.Lesson}{ChangUtilitiesConstants.NewFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.Lesson}",
+                $"{languagePrefix}{AssetPaths.Utilities.Lesson}{AssetPaths.Utilities.NewFolder}",
                 section);
 
             CreateFolders(pathOnly);
@@ -97,14 +98,14 @@ namespace Chang.Utilities
         public static void CreateBookConfig(GameBookConfig dataAsset)
         {
             var languagePrefix = dataAsset.Language.ToString();
-            var fileName = $"{languagePrefix}{ChangUtilitiesConstants.Book}{dataAsset.Name}";
+            var fileName = $"{languagePrefix}{AssetPaths.Utilities.Book}{dataAsset.Name}";
 
             var pathOnly = Path.Combine(
-                ChangUtilitiesConstants.AssetsFolder,
-                ChangUtilitiesConstants.RelativePath,
+                AssetPaths.Utilities.AssetsFolder,
+                AssetPaths.Utilities.RelativePath,
                 languagePrefix,
-                $"{languagePrefix}{ChangUtilitiesConstants.Book}",
-                $"{languagePrefix}{ChangUtilitiesConstants.Book}{ChangUtilitiesConstants.NewFolder}");
+                $"{languagePrefix}{AssetPaths.Utilities.Book}",
+                $"{languagePrefix}{AssetPaths.Utilities.Book}{AssetPaths.Utilities.NewFolder}");
 
             CreateFolders(pathOnly);
             AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
@@ -123,6 +124,7 @@ namespace Chang.Utilities
 
             var word = new WordConfig
             {
+                Section = phraseData.Section,
                 Key = name,
                 Word = phraseData.Word,
                 Phonetic = phraseData.Phonetics,
@@ -157,10 +159,10 @@ namespace Chang.Utilities
             var languagePrefix = language.ToString();
             var path = Path.Combine(
                 Application.dataPath,
-                ChangUtilitiesConstants.RelativePath,
+                AssetPaths.Utilities.RelativePath,
                 languagePrefix,
-                $"{languagePrefix}{ChangUtilitiesConstants.JsonFolder}",
-                $"{languagePrefix}{ChangUtilitiesConstants.JsonFolder}{ChangUtilitiesConstants.NewFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.JsonFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.JsonFolder}{AssetPaths.Utilities.NewFolder}",
                 $"{name}.json");
 
             return path;
@@ -222,10 +224,10 @@ namespace Chang.Utilities
             var languagePrefix = language.ToString();
             var pathOnly = Path.Combine(
                 Application.dataPath,
-                ChangUtilitiesConstants.RelativePath,
+                AssetPaths.Utilities.RelativePath,
                 languagePrefix,
-                $"{languagePrefix}{ChangUtilitiesConstants.WordsFolder}",
-                $"{languagePrefix}{ChangUtilitiesConstants.WordsFolder}{ChangUtilitiesConstants.NewFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.WordsFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.WordsFolder}{AssetPaths.Utilities.NewFolder}",
                 section);
 
             return pathOnly;
@@ -235,11 +237,11 @@ namespace Chang.Utilities
         {
             var languagePrefix = language.ToString();
             var pathOnly = Path.Combine(
-                ChangUtilitiesConstants.AssetsFolder,
-                ChangUtilitiesConstants.RelativePath,
+                AssetPaths.Utilities.AssetsFolder,
+                AssetPaths.Utilities.RelativePath,
                 languagePrefix,
-                $"{languagePrefix}{ChangUtilitiesConstants.WordsFolder}",
-                $"{languagePrefix}{ChangUtilitiesConstants.WordsFolder}{ChangUtilitiesConstants.NewFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.WordsFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.WordsFolder}{AssetPaths.Utilities.NewFolder}",
                 section,
                 $"{name}.asset");
 

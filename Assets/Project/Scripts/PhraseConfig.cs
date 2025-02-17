@@ -29,7 +29,8 @@ namespace Chang
     [Serializable]
     public class WordConfig
     {
-        //[field: SerializeField] public string Name = string.Empty;
+        [field: SerializeField] public string Section { get; set; } = string.Empty;
+        
         /// <summary>
         /// Do not use this field
         /// </summary>
@@ -41,7 +42,7 @@ namespace Chang
         [field: SerializeField] public string Phonetic { get; set; } = string.Empty;
         [field: SerializeField] public List<Translation> Meanings { get; set; }
 
-        public WordData WordData => new(Key, Word, Phonetic, Meanings);
+        public WordData WordData => new(Section, Key, Word, Phonetic, Meanings);
     }
 
     [Serializable]

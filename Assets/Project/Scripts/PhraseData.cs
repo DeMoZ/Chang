@@ -35,6 +35,7 @@ namespace Chang
 
     public class WordData
     {
+        public string Section { get; private set; }
         public string Key { get; private set; }
         public string LearnWord { get; private set; }
         public string Phonetic { get; private set; }
@@ -42,16 +43,18 @@ namespace Chang
         
         public bool ShowPhonetics { get; private set; }
 
-        public WordData(string key, string learnWord, string phonetic, List<Translation> meanings)
+        public WordData(string section, string key, string learnWord, string phonetic, List<Translation> meanings)
         {
+            Section = section;
             Key = key;
             LearnWord = learnWord;
             Phonetic = phonetic;
             Meanings = meanings;
         }
         
-        public WordData(string key, string learnWord, string phonetic, List<Translation> meanings, bool showPhonetics)
+        public WordData(string section, string key, string learnWord, string phonetic, List<Translation> meanings, bool showPhonetics)
         {
+            Section = section;
             Key = key;
             LearnWord = learnWord;
             Phonetic = phonetic;

@@ -47,7 +47,7 @@ namespace Chang.FSM
             _gameOverlayController.OnContinue += OnContinue;
             _gameOverlayController.OnReturnFromGame += ExitToLobby;
             _gameOverlayController.OnHint += OnHint;
-            
+
             _gameOverlayController.EnableReturnButton(true);
             _gameOverlayController.EnableHintButton(true);
 
@@ -71,7 +71,7 @@ namespace Chang.FSM
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
             _gameOverlayController.OnReturnFromGame -= ExitToLobby;
-            
+
             _gameOverlayController.OnHint -= OnHint;
             _gameOverlayController.EnableHintButton(false);
 
@@ -89,17 +89,17 @@ namespace Chang.FSM
             Debug.Log($"{nameof(OnHint)}");
             _vocabularyBus.OnHintUsed.Value = true;
         }
-        
+
         private void OnCheck()
         {
             OnCheckAsync().Forget();
         }
-        
+
         private async UniTask OnCheckAsync()
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
-            
+
             switch (_vocabularyFSM.CurrentStateType)
             {
                 case QuestionType.DemonstrationWord:
@@ -117,13 +117,14 @@ namespace Chang.FSM
         private async UniTask OnCheckSelectWordAsync()
         {
             Debug.Log($"{nameof(OnCheckSelectWordAsync)}");
-            
+
             var isCorrect = _vocabularyBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
             var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
             var needIncrement = !(bool)_vocabularyBus.QuestionResult.Info[1];
-            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, _vocabularyBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect, needIncrement);
+            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, _vocabularyBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect,
+                needIncrement);
 
             if (!isCorrect)
             {
@@ -140,7 +141,7 @@ namespace Chang.FSM
             _gameOverlayController.EnableContinueButton(true);
             await _profileService.SaveAsync(); // todo chang in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
-        
+
         private async UniTask OnCheckMatchWordsAsync()
         {
             Debug.Log($"{nameof(OnCheckMatchWordsAsync)}");
@@ -237,7 +238,7 @@ namespace Chang.FSM
             _vocabularyFSM.SwitchState(questionType);
             _vocabularyBus.OnHintUsed.SetSilent(false);
         }
-        
+
         private bool TryGenerateQuestMatchWordsData(Lesson lesson, out SimpleQuestMatchWords matchWordsQuest)
         {
             matchWordsQuest = new SimpleQuestMatchWords();
@@ -247,7 +248,7 @@ namespace Chang.FSM
             {
                 return false;
             }
-            
+
             foreach (var quest in lesson.SimpleQuestions)
             {
                 if (quest is SimpleQuestSelectWord simpleQuestSelectWord)
@@ -314,34 +315,34 @@ namespace Chang.FSM
         private async UniTask<PhraseData> LoadPhraseConfigData(string fileName)
         {
             // todo chang create provider for words and implement call _resourcesManager form it
-            var phraseConfigPath = $"Assets/Project/Resources_Bundled/Thai/Words/";
+            var phraseConfigPath = AssetPaths.Addressables.ROOT;
             var path = $"{phraseConfigPath}{fileName}.asset";
             var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(path);
             return config.PhraseData;
         }
 
-        private List<string> GetAssetsNames(ISimpleQuestion nextQuestion)
-        {
-            List<string> result = new();
-            switch (nextQuestion.QuestionType)
-            {
-                case QuestionType.SelectWord:
-                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
-                    result.Add(selectWord.CorrectWordFileName);
-                    result.AddRange(selectWord.MixWordsFileNames);
-                    break;
-
-                case QuestionType.MatchWords:
-                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
-                    result.AddRange(matchWords.MatchWordsFileNames);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.QuestionType}");
-            }
-
-            return result;
-        }
+        // private List<FileNameData> GetAssetsNames(ISimpleQuestion nextQuestion)
+        // {
+        //     List<FileNameData> result = new();
+        //     switch (nextQuestion.QuestionType)
+        //     {
+        //         case QuestionType.SelectWord:
+        //             var selectWord = (SimpleQuestSelectWord)nextQuestion;
+        //             result.Add(selectWord.CorrectWordFileName);
+        //             result.AddRange(selectWord.MixWordsFileNames);
+        //             break;
+        //
+        //         case QuestionType.MatchWords:
+        //             var matchWords = (SimpleQuestMatchWords)nextQuestion;
+        //             result.AddRange(matchWords.MatchWordsFileNames);
+        //             break;
+        //
+        //         default:
+        //             throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.QuestionType}");
+        //     }
+        //
+        //     return result;
+        // }
 
         // if no records stored about this question or the question mark is 1 (or 0)
         private bool IsNeedDemonstration(string fileName)

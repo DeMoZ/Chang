@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using Chang.Resources;
 using DMZ.FSM;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -65,7 +67,14 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
             object[] info = { _correctWord.Word.LearnWord, false };
-            var result = new DemonstrationWordResult(_correctWord.Word.Key, _correctWord.Word.LearnWord, info);
+            var result = new DemonstrationWordResult(
+                Path.Combine(
+                    Bus.CurrentLanguage.ToString(),
+                    AssetPaths.Addressables.WORDS,
+                    _correctWord.Word.Section,
+                    _correctWord.Word.Key),
+                _correctWord.Word.LearnWord,
+                info);
             Bus.QuestionResult = result;
         }
     }

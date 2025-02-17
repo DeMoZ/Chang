@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Chang.Resources;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -13,7 +14,7 @@ namespace Chang.Utilities
     [CreateAssetMenu(fileName = "BookToJsonUtility", menuName = "Chang/GameBook/BookToJsonUtility", order = 0)]
     public class BookToJsonUtility : ScriptableObject
     {
-        private const string WordPath = ""; // "Word/";
+        private const string WORDS = AssetPaths.Utilities.WordsFolder;
 
         [SerializeField] private TextAsset gameBookJson;
         [SerializeField] private GameBookConfig[] gameBookConfigs;
@@ -96,8 +97,18 @@ namespace Chang.Utilities
                         QuestSelectWordData selectWordData = new QuestSelectWordData
                         {
                             FileName = question.name,
-                            CorrectWordFileName = $"{WordPath}{selectWord.CorrectWord.Key}",
-                            MixWordsFileNames = selectWord.MixWords.Select(c => $"{WordPath}{c.Key}").ToList()
+                            CorrectWordFileName = Path.Combine(
+                                selectWord.CorrectWord.Language.ToString(),
+                                WORDS,
+                                selectWord.CorrectWord.Section,
+                                selectWord.CorrectWord.Key),
+                            MixWordsFileNames = selectWord.MixWords
+                                .Select(c => Path.Combine(
+                                    c.Language.ToString(),
+                                    WORDS,
+                                    c.Section,
+                                    c.Key))
+                                .ToList()
                         };
                         questionData.Add(selectWordData);
                         break;
@@ -107,7 +118,12 @@ namespace Chang.Utilities
                         QuestMatchWordsData matchWordsData = new QuestMatchWordsData
                         {
                             FileName = question.name,
-                            MatchWordsFileNames = matchWords.MatchWords.Select(c => $"{WordPath}{c.Key}").ToList()
+                            MatchWordsFileNames = matchWords.MatchWords.Select(c => Path.Combine(
+                                    c.Language.ToString(),
+                                    WORDS,
+                                    c.Section,
+                                    c.Key))
+                                .ToList()
                         };
                         questionData.Add(matchWordsData);
                         break;

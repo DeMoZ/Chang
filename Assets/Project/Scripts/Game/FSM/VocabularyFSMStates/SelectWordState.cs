@@ -1,6 +1,8 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
+using System.IO;
+using Chang.Resources;
 using Chang.Services;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -93,7 +95,13 @@ namespace Chang.FSM
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index].Key == _correctWord.Key;
             object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
-            var result = new SelectWordResult(_correctWord.Word.Key, _correctWord.Word.LearnWord, isCorrect, info);
+            var result = new SelectWordResult(
+                Path.Combine(
+                    Bus.CurrentLanguage.ToString(),
+                    AssetPaths.Addressables.WORDS,
+                    _correctWord.Word.Section,
+                    _correctWord.Word.Key),
+                _correctWord.Word.LearnWord, isCorrect, info);
             Bus.QuestionResult = result;
         }
     }
