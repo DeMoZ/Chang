@@ -19,7 +19,7 @@ namespace Chang.Services
 
         /// <summary>
         /// First iteration of the repetition filter
-        /// todo roman add more logic to the filter
+        /// todo chang add more logic to the filter
         /// </summary>
         /// <param name="amount"></param>
         /// <returns></returns>
@@ -34,12 +34,12 @@ namespace Chang.Services
             //     .Take(10)
             //     .ToList();
 
-            // todo roman what to count?
+            // todo chang what to count?
             // 1. Iteration
             // 2. Date
             // 3. Mark
 
-            // todo roman should be sorted by the sequence and time  too
+            // todo chang should be sorted by the sequence and time  too
             var sortedList = progressList.OrderBy(w => w.Mark)
             //.ThenBy(w => w.UtcTime)
             .Take(amount)

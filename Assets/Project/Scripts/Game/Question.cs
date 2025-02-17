@@ -63,7 +63,7 @@ namespace Chang
 
         protected override string GetEditorInfo()
         {
-            // todo roman add some info
+            // todo chang add some info
             return string.Empty;
         }
     }

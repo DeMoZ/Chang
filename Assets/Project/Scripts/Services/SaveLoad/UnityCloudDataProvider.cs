@@ -42,7 +42,7 @@ namespace Chang.Services.DataProvider
         {
             var isOk = CheckSession();
             if (!isOk)
-                return null; // todo roman should be exception or callback to start authorization
+                return null; // todo chang should be exception or callback to start authorization
 
             var result = await LoadDataAsync<ProgressData>(DataProviderConstants.ProgressDataKey).AttachExternalCancellation(ct);
             result ??= new ProgressData();
@@ -109,11 +109,11 @@ namespace Chang.Services.DataProvider
         
         private void HandleError(Exception e)
         {
-            // todo roman solve exceptions
+            // todo chang solve exceptions
             // <exception cref="CloudSaveException">Thrown if request is unsuccessful.</exception>
             // <exception cref="CloudSaveValidationException">Thrown if the service returned validation error.</exception>
             // <exception cref="CloudSaveRateLimitedException">Thrown if the service returned rate limited error.</exception>
-            // todo roman add error handling, probably internet issue
+            // todo chang add error handling, probably internet issue
 
             throw new NotImplementedException(e.ToString());
         }

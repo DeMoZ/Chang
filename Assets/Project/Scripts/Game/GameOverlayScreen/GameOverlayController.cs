@@ -5,7 +5,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
-    // todo roman need to be FSM for overlay elements
+    // todo chang need to be FSM for overlay elements
     public class GameOverlayController : IViewController
     {
         private readonly GameOverlayView _view;
@@ -77,7 +77,7 @@ namespace Chang
 
         private void OnReturnBtn()
         {
-            // todo roman localization
+            // todo chang localization
             _systemUiController.ShowConfirmPopup(
                 OnConfirmReturn,
                 headerText: string.Empty,

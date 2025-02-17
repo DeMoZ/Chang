@@ -138,7 +138,7 @@ namespace Chang.FSM
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
-            await _profileService.SaveAsync(); // todo roman in case of bug move before _gameOverlayController.EnableContinueButton(true); 
+            await _profileService.SaveAsync(); // todo chang in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
         
         private async UniTask OnCheckMatchWordsAsync()
@@ -159,7 +159,7 @@ namespace Chang.FSM
             OnContinue();
         }
 
-        // todo roman async
+        // todo chang async
         private async void OnContinue()
         {
             if (_vocabularyFSM.CurrentStateType == QuestionType.Result)
@@ -183,7 +183,7 @@ namespace Chang.FSM
             if (lesson.SimpleQuestionQueue.Count == 0)
             {
                 // the lesson has finished
-                // todo roman UML needs to be updated
+                // todo chang UML needs to be updated
                 SwitchState(QuestionType.Result);
             }
             else
@@ -269,7 +269,7 @@ namespace Chang.FSM
             return true;
         }
 
-        // todo roman implement loading screen
+        // todo chang implement loading screen
         private async UniTask<QuestDataBase> CreateQuestData(ISimpleQuestion nextQuestion)
         {
             switch (nextQuestion.QuestionType)
@@ -313,7 +313,7 @@ namespace Chang.FSM
 
         private async UniTask<PhraseData> LoadPhraseConfigData(string fileName)
         {
-            // todo roman create provider for words and implement call _resourcesManager form it
+            // todo chang create provider for words and implement call _resourcesManager form it
             var phraseConfigPath = $"Assets/Project/Resources_Bundled/Thai/Words/";
             var path = $"{phraseConfigPath}{fileName}.asset";
             var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(path);

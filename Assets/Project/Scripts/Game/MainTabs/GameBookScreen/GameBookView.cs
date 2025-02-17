@@ -29,7 +29,7 @@ namespace Chang
             for (var i = 0; i < fileNames.Count; i++)
             {
                 var item = Instantiate(itemPrefab, content);
-                var state = 0; // todo roman calculate item state from 0 to 2
+                var state = 0; // todo chang calculate item state from 0 to 2
                 item.Init(i, fileNames[i], state, _onItemClick);
                 item.gameObject.SetActive(true);
                 _items.Add(item);

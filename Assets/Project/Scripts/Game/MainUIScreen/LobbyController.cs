@@ -108,7 +108,7 @@ namespace Chang
             _currentTabType = tabType;
         }
 
-        // todo roman fix async
+        // todo chang fix async
         private async void OnGameBookLessonClickedAsync(string name)
         {
             if (_isLoading)
@@ -130,7 +130,7 @@ namespace Chang
             _onExitState?.Invoke();
         }
 
-        // todo roman fix async
+        // todo chang fix async
         private async void OnGeneralRepeatClickedAsync()
         {
             if (_isLoading)
@@ -152,7 +152,7 @@ namespace Chang
             {
                 switch (questLog.QuestionType)
                 {
-                    // todo roman new SimpleQuestion using word from log and also need to populate it with the other words quests.
+                    // todo chang new SimpleQuestion using word from log and also need to populate it with the other words quests.
                     case QuestionType.SelectWord:
                         var simpleQuest = new SimpleQuestSelectWord();
                         simpleQuest.CorrectWordFileName = questLog.FileName;

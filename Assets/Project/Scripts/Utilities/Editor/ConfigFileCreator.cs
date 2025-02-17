@@ -301,7 +301,7 @@ namespace Chang.Utilities
             var dataString = await new StreamReader(stream).ReadToEndAsync();
             var data = JsonConvert.DeserializeObject<List<PhraseData>>(dataString);
 
-            // todo roman create dataset for audio
+            // todo chang create dataset for audio
             foreach (PhraseData phraseData in data)
             {
                 dataset.Add((phraseData.Key, phraseData.Word));

@@ -14,7 +14,7 @@ namespace Chang
         [Tooltip("Last time the word was shown")]
         [SerializeField] private TMP_Text date;
 
-        // todo roman implement this logic
+        // todo chang implement this logic
         [Tooltip("Repetition iteration number. The bigger the number, the less show priority. Will reset to 0 after each wront answer")]
         [SerializeField] private TMP_Text timeStep;
 

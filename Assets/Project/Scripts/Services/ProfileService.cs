@@ -42,7 +42,7 @@ namespace Chang.Services
             var unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(_cts.Token);
             var unityProgressData = await _unityCloudDataProvider.LoadProgressDataAsync(_cts.Token);
 
-            // todo roman merge data with prefs. But for now will use only cloud data
+            // todo chang merge data with prefs. But for now will use only cloud data
 
             _playerProfile.ProfileData = unityProfileData;
             _playerProfile.ProgressData = unityProgressData;

@@ -41,6 +41,7 @@ namespace Chang.Utilities
             var allBooksData = new BookData()
             {
                 FileName = "AllBooks",
+                Language = booksData[0].Language, // todo chang may be some changes in future if contains different languages
                 Lessons = lessons
             };
 
@@ -59,7 +60,8 @@ namespace Chang.Utilities
             var bookData = new BookData
             {
                 FileName = config.name,
-                Lessons = new List<LessonData>()
+                Lessons = new List<LessonData>(),
+                Language = config.Language,
             };
 
             foreach (var lesson in config.Lessons)
@@ -128,6 +130,7 @@ namespace Chang.Utilities
         {
             public string FileName;
             public List<LessonData> Lessons;
+            public Languages Language;
         }
 
         [Serializable]

@@ -18,7 +18,7 @@ namespace Chang
         Result = 100,
     }
 
-    // todo roman use system languages
+    // todo chang use system languages
     public enum PreloadType
     {
         None,

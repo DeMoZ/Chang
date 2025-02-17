@@ -39,15 +39,15 @@ namespace Chang.FSM
 
         private async UniTaskVoid StateBodyAsync()
         {
-            // todo roman Show loading UI and some info on that UI
-            // todo roman implement loading error catching
+            // todo chang Show loading UI and some info on that UI
+            // todo chang implement loading error catching
 
             _preloaderController.SetViewActive(true);
 
             switch (Bus.PreloadFor)
             {
                 case PreloadType.Boot:
-                    // todo roman this logic supposed to be in main game logic, not in the FSM
+                    // todo chang this logic supposed to be in main game logic, not in the FSM
                     await LoadGameBookConfigAsync();
                     await _authorizationService.AuthenticateAsync();
                     await _profileService.LoadStoredData();
@@ -63,7 +63,7 @@ namespace Chang.FSM
             }
         }
 
-        // todo roman think about to move this logic to the resource manager as the other services to the job inside
+        // todo chang think about to move this logic to the resource manager as the other services to the job inside
         private async UniTask LoadGameBookConfigAsync()
         {
             Debug.Log("LoadGameBookConfigAsync start");
