@@ -13,6 +13,8 @@ namespace Chang
         public DMZState<bool> OnHintUsed { get; set; } = new();
         public Languages CurrentLanguage { get; set; } = Languages.Thai; // todo chang need to select language in game
 
+        public GameType GameType { get; set; }
+
         public void Dispose()
         {
             LessonLog.Clear();

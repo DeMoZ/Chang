@@ -127,6 +127,7 @@ namespace Chang
             _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 
+            _gameBus.GameType = GameType.Learn;
             _onExitState?.Invoke();
         }
 
@@ -162,7 +163,7 @@ namespace Chang
 
                         words.Shuffle();
                         
-                        simpleQuest.MixWordsFileNames = words.Take(ProjectConstants.MIX_WORDS_AMOUNT_IN_SELECT_WORD_PAGE)
+                        simpleQuest.MixWordsFileNames = words.Take(ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE)
                             .Select(w => w.FileName)
                             .ToList();
                         
@@ -182,6 +183,7 @@ namespace Chang
             _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 
+            _gameBus.GameType = GameType.Repetition;
             _onExitState?.Invoke();
         }
     }

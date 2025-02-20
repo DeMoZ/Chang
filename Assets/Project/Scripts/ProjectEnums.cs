@@ -44,4 +44,13 @@ namespace Chang
         Repetition,
         Profile,
     }
+
+    /// <summary>
+    /// What is this game. Is it learning or repetition?
+    /// </summary>
+    public enum GameType
+    {
+        Learn,
+        Repetition,
+    } 
 }

@@ -40,7 +40,6 @@ namespace Chang
         private void OnItemClick(int index)
         {
             Debug.Log($"Clicked on item {index}");
-
             _mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
         }
 

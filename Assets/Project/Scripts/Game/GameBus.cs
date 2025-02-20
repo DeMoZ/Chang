@@ -18,5 +18,6 @@ namespace Chang
         
         public Lesson CurrentLesson { get; set; }
         public PreloadType PreloadFor { get; set; }
+        public GameType GameType { get; set; }
     }
 }

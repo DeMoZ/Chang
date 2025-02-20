@@ -54,6 +54,7 @@ namespace Chang.FSM
             _vocabularyBus = new VocabularyBus
             {
                 CurrentLesson = Bus.CurrentLesson,
+                GameType = Bus.GameType,
             };
 
             _vocabularyFSM = new VocabularyFSM(_diContainer, _vocabularyBus);
@@ -248,25 +249,25 @@ namespace Chang.FSM
             {
                 return false;
             }
-
-            foreach (var quest in lesson.SimpleQuestions)
-            {
-                if (quest is SimpleQuestSelectWord simpleQuestSelectWord)
-                {
-                    matchWords.Add(simpleQuestSelectWord.CorrectWordFileName);
-                    matchWords.AddRange(simpleQuestSelectWord.MixWordsFileNames);
-                }
-            }
-
+            // todo chang need to get if this is repetition or learning
+            var selectWordQuests = lesson.SimpleQuestions.OfType<SimpleQuestSelectWord>().ToList();
+            matchWords.AddRange(selectWordQuests.Select(q => q.CorrectWordFileName));
+            matchWords.AddRange(selectWordQuests.SelectMany(q => q.MixWordsFileNames));
+            
             if (matchWords.Count < 2)
             {
                 Debug.LogWarning($"matchWords not generated for lesson FileName: {lesson.FileName}, count select words {matchWords.Count}");
                 return false;
             }
 
-            matchWords.Shuffle();
-            matchWordsQuest.MatchWordsFileNames = matchWords.Take(ProjectConstants.MAX_WORDS_IN_MATCHT_WORDS_PAGE).ToList();
+            
+            matchWords = _vocabularyBus.GameType == GameType.Learn ? 
+                matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE).ToHashSet() : 
+                matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE).ToHashSet();
 
+            matchWords.Shuffle();
+            matchWordsQuest.MatchWordsFileNames = matchWords.ToList();
+            
             return true;
         }
 
@@ -283,7 +284,13 @@ namespace Chang.FSM
                         MixWords = new List<PhraseData>()
                     };
 
-                    foreach (var fileName in selectWord.MixWordsFileNames)
+                    var mixWordsAmount = _vocabularyBus.GameType == GameType.Learn
+                        ? ProjectConstants.MIX_WORDS_AMOUNT_IN_LEARN_SELECT_WORD_PAGE
+                        : ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE;
+                    
+                    var mixWords = selectWord.MixWordsFileNames.Take(mixWordsAmount);
+                    
+                    foreach (var fileName in mixWords)
                     {
                         var data = await LoadPhraseConfigData(fileName);
                         selectWordData.MixWords.Add(data);
