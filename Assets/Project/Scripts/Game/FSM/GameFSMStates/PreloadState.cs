@@ -76,7 +76,9 @@ namespace Chang.FSM
             };
 
             Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text, settings);
-            Bus.SimpleLessons = Bus.SimpleBookData.Lessons.ToDictionary(lesson => lesson.FileName);
+            Bus.SimpleLessons = Bus.SimpleBookData.Sections
+                .SelectMany(section => section.Lessons)
+                .ToDictionary(lesson => lesson.FileName);
             
             Debug.Log("LoadGameBookConfigAsync end");
         }

@@ -32,7 +32,7 @@ namespace Chang
 
         public void Set()
         {
-            _lessons = _gameBus.SimpleBookData.Lessons;
+            _lessons = _gameBus.SimpleBookData.Sections.SelectMany(s => s.Lessons).ToList();
             var fileNames = _lessons.Select(n => n.Name).ToList();
             _view.Set(fileNames);
         }

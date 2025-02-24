@@ -28,7 +28,7 @@ namespace Chang.Utilities
         private void MakeJsonDepth()
         {
             Debug.LogWarning("Start");
-            List<BookData> booksData = new();
+            List<SimpleBookData> booksData = new();
             List<string> jsons = new();
 
             foreach (var config in gameBookConfigs)
@@ -38,12 +38,12 @@ namespace Chang.Utilities
                 booksData.Add(bookData);
             }
 
-            var lessons = booksData.SelectMany(b => b.Lessons).ToList();
-            var allBooksData = new BookData()
+            var sections = booksData.SelectMany(b => b.Sections).ToList();
+            var allBooksData = new SimpleBookData()
             {
                 FileName = "AllBooks",
                 Language = booksData[0].Language, // todo chang may be some changes in future if contains different languages
-                Lessons = lessons
+                Sections = sections
             };
 
             Debug.Log($"json for {allBooksData.FileName}");
@@ -56,36 +56,50 @@ namespace Chang.Utilities
             Debug.LogWarning("End");
         }
 
-        private BookData CreateBookData(GameBookConfig config)
+        private SimpleBookData CreateBookData(GameBookConfig config)
         {
-            var bookData = new BookData
+            var bookData = new SimpleBookData
             {
                 FileName = config.name,
-                Lessons = new List<LessonData>(),
+                Sections = new List<SimpleSection>(),
                 Language = config.Language,
             };
 
             int cnt = 0;
+            SimpleSection section = new SimpleSection();
             foreach (var lesson in config.Lessons)
             {
-                var lessonData = new LessonData();
+                var lessonData = new SimpleLessonData();
 
                 if (lesson != null)
                 {
                     lessonData.FileName = lesson.name;
-                    lessonData.Name = $"{lesson.Section} {++cnt}"; // todo chang temp. probably i2l key, also include the number?
+                    lessonData.Section = lesson.Section; // todo chang temp. probably i2l key, also include the number?
+                    lessonData.Name = $"{lesson.Section} {++cnt}"; // todo chang temp, change to cnt
                     lessonData.GenerateQuestMatchWordsData = lesson.GenerateQuestMatchWordsData;
                     lessonData.Questions = GetQuestions(lesson.Questions);
-                    bookData.Lessons.Add(lessonData);
+
+                    if (string.IsNullOrEmpty(section.Section) || !section.Section.Equals(lessonData.Section))
+                    {
+                        section = new SimpleSection
+                        {
+                            Section = lessonData.Section,
+                            Lessons = new List<SimpleLessonData>()
+                        };
+
+                        bookData.Sections.Add(section);
+                    }
+
+                    section.Lessons.Add(lessonData);
                 }
             }
 
             return bookData;
         }
 
-        private List<IQuestionData> GetQuestions(List<QuestionConfig> questions)
+        private List<ISimpleQuestion> GetQuestions(List<QuestionConfig> questions)
         {
-            List<IQuestionData> questionData = new();
+            List<ISimpleQuestion> questionData = new();
 
             foreach (var question in questions)
             {
@@ -96,7 +110,7 @@ namespace Chang.Utilities
 
                     case QuestionType.SelectWord:
                         var selectWord = question.Question as QuestSelectWord;
-                        QuestSelectWordData selectWordData = new QuestSelectWordData
+                        SimpleQuestSelectWord selectWordData = new SimpleQuestSelectWord
                         {
                             FileName = question.name,
                             CorrectWordFileName = Path.Combine(
@@ -117,7 +131,7 @@ namespace Chang.Utilities
 
                     case QuestionType.MatchWords:
                         var matchWords = question.Question as QuestMatchWords;
-                        QuestMatchWordsData matchWordsData = new QuestMatchWordsData
+                        SimpleQuestMatchWords matchWordsData = new SimpleQuestMatchWords
                         {
                             FileName = question.name,
                             MatchWordsFileNames = matchWords.MatchWords.Select(c => Path.Combine(
@@ -140,49 +154,5 @@ namespace Chang.Utilities
 
             return questionData;
         }
-
-        #region Book Classes
-
-        [Serializable]
-        public struct BookData
-        {
-            public string FileName;
-            public List<LessonData> Lessons;
-            public Languages Language;
-        }
-
-        [Serializable]
-        public struct LessonData
-        {
-            public string FileName;
-            public string Name; // user friendly name
-            public bool GenerateQuestMatchWordsData;
-            public List<IQuestionData> Questions;
-        }
-
-        public interface IQuestionData
-        {
-            QuestionType QuestionType { get; }
-            string FileName { get; set; }
-        }
-
-        public class QuestSelectWordData : IQuestionData
-        {
-            public QuestionType QuestionType => QuestionType.SelectWord;
-            public string FileName { get; set; }
-
-            public string CorrectWordFileName;
-            public List<string> MixWordsFileNames;
-        }
-
-        public class QuestMatchWordsData : IQuestionData
-        {
-            public QuestionType QuestionType => QuestionType.MatchWords;
-            public string FileName { get; set; }
-
-            public List<string> MatchWordsFileNames;
-        }
-
-        #endregion
     }
 }
