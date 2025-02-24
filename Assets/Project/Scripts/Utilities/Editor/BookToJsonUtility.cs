@@ -65,6 +65,7 @@ namespace Chang.Utilities
                 Language = config.Language,
             };
 
+            int cnt = 0;
             foreach (var lesson in config.Lessons)
             {
                 var lessonData = new LessonData();
@@ -72,6 +73,7 @@ namespace Chang.Utilities
                 if (lesson != null)
                 {
                     lessonData.FileName = lesson.name;
+                    lessonData.Name = $"{lesson.Section} {++cnt}"; // todo chang temp. probably i2l key, also include the number?
                     lessonData.GenerateQuestMatchWordsData = lesson.GenerateQuestMatchWordsData;
                     lessonData.Questions = GetQuestions(lesson.Questions);
                     bookData.Lessons.Add(lessonData);
@@ -153,6 +155,7 @@ namespace Chang.Utilities
         public struct LessonData
         {
             public string FileName;
+            public string Name; // user friendly name
             public bool GenerateQuestMatchWordsData;
             public List<IQuestionData> Questions;
         }
