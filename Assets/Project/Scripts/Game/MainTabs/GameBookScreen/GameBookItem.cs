@@ -3,22 +3,25 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameBookItem : MonoBehaviour
+namespace Chang.GameBook
 {
-    [SerializeField] private TMP_Text lable;
-    [SerializeField] private GameObject doneState;
-    [SerializeField] private GameObject nextState;
-    [SerializeField] private GameObject wiatState;
-    [SerializeField] private Button button;
-
-    public void Init(int index, string lableText, int state, Action<int> onItemClick)
+    public class GameBookItem : MonoBehaviour
     {
-        lable.text = lableText;
+        [SerializeField] private TMP_Text lable;
+        [SerializeField] private GameObject doneState;
+        [SerializeField] private GameObject nextState;
+        [SerializeField] private GameObject wiatState;
+        [SerializeField] private Button button;
 
-        doneState.SetActive(state == 0);
-        nextState.SetActive(state == 1);
-        wiatState.SetActive(state == 2);
+        public void Init(string key, string lableText, int state, Action<string> onItemClick)
+        {
+            lable.text = lableText;
 
-        button.onClick.AddListener(() => onItemClick.Invoke(index));
+            doneState.SetActive(state == 0);
+            nextState.SetActive(state == 1);
+            wiatState.SetActive(state == 2);
+
+            button.onClick.AddListener(() => onItemClick.Invoke(key));
+        }
     }
 }

@@ -4,7 +4,9 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Zenject;
 using Chang.Services;
+using Chang.GameBook;
 using Debug = DMZ.DebugSystem.DMZLogger;
+
 
 namespace Chang
 {

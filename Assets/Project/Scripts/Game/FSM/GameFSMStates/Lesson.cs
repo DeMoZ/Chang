@@ -20,8 +20,6 @@ namespace Chang
         public List<ISimpleQuestion> SimpleQuestions { get; private set; }
         public Queue<ISimpleQuestion> SimpleQuestionQueue { get; private set; }
         
-        //public QuestDataBase CurrentQuestion { get; private set; }
-        
         public void Dispose()
         {
             FileName = null;
@@ -60,11 +58,6 @@ namespace Chang
             SimpleQuestions.Add(question);
             SimpleQuestionQueue.Enqueue(question);
         }
-
-        // public void SetCurrentQuestionConfig(QuestDataBase quest)
-        // {
-        //     CurrentQuestion = quest;
-        // }
         
         public void SetCurrentQuestionData(IQuestData data)
         {
@@ -74,11 +67,6 @@ namespace Chang
         public void EnqueueCurrentQuestion()
         {
             SimpleQuestionQueue.Enqueue(CurrentSimpleQuestion);
-        }
-        
-        public void EnqueueQuestion(ISimpleQuestion question)
-        {
-            SimpleQuestionQueue.Enqueue(question);
         }
     }
 }

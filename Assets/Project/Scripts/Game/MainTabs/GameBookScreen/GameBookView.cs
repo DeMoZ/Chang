@@ -1,38 +1,34 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Chang
+namespace Chang.GameBook
 {
     public class GameBookView : MonoBehaviour
     {
-        [SerializeField] private GameBookItem itemPrefab;
+        [SerializeField] private GameBookSection sectionPrefab;
+        [SerializeField] private GameBookItem lessonPrefab;
         [SerializeField] private Transform content;
 
-        private List<GameBookItem> _items = new();
-        private Action<int> _onItemClick;
-
-        public void Init(Action<int> onItemClick)
+        public GameBookSection InstantiateSection()
         {
-            _onItemClick = onItemClick;
+            var section = Instantiate(sectionPrefab, content);
+            section.gameObject.SetActive(true);
+            
+            return section;
         }
 
-        public void Set(List<string> fileNames)
+        public GameBookItem InstantiateLesson()
+        {
+            var lesson = Instantiate(lessonPrefab, content);
+            lesson.gameObject.SetActive(true);
+
+            return lesson;
+        }
+        
+        public void Clear()
         {
             foreach (Transform item in content)
             {
                 Destroy(item.gameObject);
-            }
-
-            _items.Clear();
-
-            for (var i = 0; i < fileNames.Count; i++)
-            {
-                var item = Instantiate(itemPrefab, content);
-                var state = 0; // todo chang calculate item state from 0 to 2
-                item.Init(i, fileNames[i], state, _onItemClick);
-                item.gameObject.SetActive(true);
-                _items.Add(item);
             }
         }
     }

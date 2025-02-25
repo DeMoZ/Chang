@@ -1,6 +1,7 @@
 using UnityEngine;
 using Zenject;
 using Chang.UI;
+using Chang.GameBook;
 using DMZ.Legacy.LoginScreen;
 
 namespace Chang
