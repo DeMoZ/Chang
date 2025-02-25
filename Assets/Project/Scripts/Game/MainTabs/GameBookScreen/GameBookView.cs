@@ -6,7 +6,10 @@ namespace Chang.GameBook
     {
         [SerializeField] private GameBookSection sectionPrefab;
         [SerializeField] private GameBookItem lessonPrefab;
+        [SerializeField] private GameBookSection topSection;
         [SerializeField] private Transform content;
+        
+        public GameBookSection TopSection => topSection;
 
         public GameBookSection InstantiateSection()
         {

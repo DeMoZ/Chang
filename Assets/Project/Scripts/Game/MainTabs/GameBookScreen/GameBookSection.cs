@@ -9,6 +9,8 @@ namespace Chang.GameBook
         [SerializeField] private TMP_Text label;
         [SerializeField] private Button repeatSectionButton;
         
+        public string LabelText => label.text;
+        
         public void Init(string labelText)
         {
             label.text = labelText;

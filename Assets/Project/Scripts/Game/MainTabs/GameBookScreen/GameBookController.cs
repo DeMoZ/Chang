@@ -1,4 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -10,6 +13,9 @@ namespace Chang.GameBook
         private readonly MainScreenBus _mainScreenBus;
         private readonly GameBookView _view;
         private Dictionary<string, SimpleLessonData> _lessons = new();
+        private List<GameBookSection> _sectionItems = new();
+        private GameBookSection _topSection;
+        private CancellationTokenSource _cancellationTokenSource;
 
         [Inject]
         public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view)
@@ -29,14 +35,18 @@ namespace Chang.GameBook
 
         public void Set()
         {
+            _sectionItems.Clear();
             _lessons.Clear();
             _view.Clear();
+
+            _topSection = _view.TopSection;
 
             foreach (var section in _gameBus.SimpleBookData.Sections)
             {
                 var sectionItem = _view.InstantiateSection();
-                sectionItem.Init(section.Section); // todo cahng button?
-                sectionItem.name = section.Section;
+                sectionItem.Init(section.Section); // todo chang button?
+                sectionItem.name = $"Section {section.Section}";
+                _sectionItems.Add(sectionItem);
 
                 for (int i = 0; i < section.Lessons.Count; i++)
                 {
@@ -45,6 +55,7 @@ namespace Chang.GameBook
 
                     var lessonItem = _view.InstantiateLesson();
                     lessonItem.Init(key, (i + 1).ToString(), 0, OnItemClick);
+                    lessonItem.name = $"Item {key}";
                 }
             }
 
@@ -60,6 +71,51 @@ namespace Chang.GameBook
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
+
+            if (active)
+            {
+                _view.TopSection.StartCoroutine(CalculateTopSectionRoutine());
+            }
+            else
+            {
+                // todo chang need to unsubscribe from top section
+            }
+        }
+
+        private IEnumerator CalculateTopSectionRoutine()
+        {
+            while (true)
+            {
+                yield return new WaitForEndOfFrame();
+
+                int left = 0;
+                int right = _sectionItems.Count - 1;
+
+                if (_sectionItems.Count == 0)
+                {
+                    continue;
+                }
+
+                GameBookSection lastSection = _sectionItems[0];
+                float point = _topSection.transform.position.y - _topSection.GetComponent<RectTransform>().rect.height;
+
+                while (left <= right)
+                {
+                    int mid = (left + right) / 2;
+                    if (_sectionItems[mid].transform.position.y >= point)
+                    {
+                        lastSection = _sectionItems[mid];
+                        left = mid + 1;
+                    }
+                    else
+                    {
+                        right = mid - 1;
+                    }
+                }
+
+                _topSection.Init(lastSection.LabelText);
+                // todo chang need to copy button subscribtion too
+            }
         }
     }
 }
