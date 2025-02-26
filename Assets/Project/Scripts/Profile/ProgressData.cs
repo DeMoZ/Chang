@@ -48,6 +48,12 @@ namespace Chang.Profile
                     continue;
                 }
 
+                if (string.IsNullOrEmpty(pair.Value.Section))
+                {
+                    Debug.LogWarning($"ValidateQuestion: Section is null for {pair.Key}");
+                    continue;
+                }
+
                 result.Add(pair.Key, pair.Value);
             }
 

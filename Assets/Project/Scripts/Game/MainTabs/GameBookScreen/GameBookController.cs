@@ -65,6 +65,7 @@ namespace Chang.GameBook
         private void OnSectionRepetitionClick(string key)
         {
             Debug.Log($"OnSectionRepetitionClick key: {key}");
+            _mainScreenBus.OnGameBookSectionRepeatClicked?.Invoke(key);
         }
 
         private void OnLessonClick(string key)

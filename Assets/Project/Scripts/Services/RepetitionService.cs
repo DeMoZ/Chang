@@ -8,7 +8,6 @@ namespace Chang.Services
 {
     public class RepetitionService : IDisposable
     {
-
         private readonly ProfileService _profileService;
 
         [Inject]
@@ -17,14 +16,26 @@ namespace Chang.Services
             _profileService = profileService;
         }
 
+        public List<QuestLog> GetSectionRepetition(Languages language, int amount, string key)
+        {
+            Dictionary<string, QuestLog> progressQuestions = _profileService.GetProgress().Questions;
+            var progressList = progressQuestions
+                .Select(q => q.Value)
+                .Where(q => q.Language == language && string.Equals(q.Section, key)).ToList();
+
+            progressList.Shuffle();
+            return progressList.Take(amount).ToList();
+        }
+
         /// <summary>
         /// First iteration of the repetition filter
         /// todo chang add more logic to the filter
         /// </summary>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public List<QuestLog> GetGeneralRepetition(int amount)
+        public List<QuestLog> GetGeneralRepetition(Languages language, int amount)
         {
+            // todo chang filter by language
             var progressQuestions = _profileService.GetProgress().Questions;
             var progressList = progressQuestions.Select(q => q.Value).Where(q => q.SuccessSequence < 10);
 
@@ -41,13 +52,13 @@ namespace Chang.Services
 
             // todo chang should be sorted by the sequence and time  too
             var sortedList = progressList.OrderBy(w => w.Mark)
-            //.ThenBy(w => w.UtcTime)
-            .Take(amount)
-            .ToList();
-            
+                //.ThenBy(w => w.UtcTime)
+                .Take(amount)
+                .ToList();
+
             return sortedList;
         }
-        
+
         public void Dispose()
         {
         }

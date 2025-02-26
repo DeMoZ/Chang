@@ -38,7 +38,7 @@ namespace Chang
 
         public void Set()
         {
-            var sortedList = _repetitionService.GetGeneralRepetition(ShowLogLimitAmount);
+            var sortedList = _repetitionService.GetGeneralRepetition(_gameBus.CurrentLanguage, ShowLogLimitAmount);
             _view.Set(sortedList);
         }
 
@@ -47,17 +47,17 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        private void OnItemClick(int index)
-        {
-            Debug.Log($"Clicked on item {index}");
-
-            //_mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
-        }
-
-        public int GetLogCount()
-        {
-            // return _repetitionService.GetProgress().Questions;
-            throw new NotImplementedException("Not implemented count log");
-        }
+        // private void OnItemClick(int index)
+        // {
+        //     Debug.Log($"Clicked on item {index}");
+        //
+        //     //_mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
+        // }
+        //
+        // public int GetLogCount()
+        // {
+        //     // return _repetitionService.GetProgress().Questions;
+        //     throw new NotImplementedException("Not implemented count log");
+        // }
     }
 }

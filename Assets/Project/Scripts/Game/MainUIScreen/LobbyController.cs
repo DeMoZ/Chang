@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Zenject;
 using Chang.Services;
 using Chang.GameBook;
+using Chang.Profile;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 
@@ -50,12 +51,14 @@ namespace Chang
             _repetitionService = repetitionService;
 
             _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClickedAsync;
+            _mainScreenBus.OnGameBookSectionRepeatClicked += OnGameBookLessonRepeatClickedAsync;
             _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClickedAsync;
         }
 
         public void Dispose()
         {
             _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClickedAsync;
+            _mainScreenBus.OnGameBookSectionRepeatClicked -= OnGameBookLessonRepeatClickedAsync;
             _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClickedAsync;
         }
 
@@ -133,13 +136,27 @@ namespace Chang
             _onExitState?.Invoke();
         }
 
+        private async void OnGameBookLessonRepeatClickedAsync(string section)
+        {
+            if (_isLoading)
+                return;
+
+            var repetitions = _repetitionService.GetSectionRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount, section);
+            await MakeRepetition(repetitions);
+        }
+
         // todo chang fix async
         private async void OnGeneralRepeatClickedAsync()
         {
             if (_isLoading)
                 return;
 
-            var repetitions = _repetitionService.GetGeneralRepetition(GeneralRepetitionAmount);
+            var repetitions = _repetitionService.GetGeneralRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount);
+            await MakeRepetition(repetitions);
+        }
+
+        private async UniTask MakeRepetition(List<QuestLog> repetitions)
+        {
             if (repetitions.Count < 4)
             {
                 Debug.LogWarning("Not enough logs for general repetition");
@@ -164,11 +181,11 @@ namespace Chang
                             .ToList();
 
                         words.Shuffle();
-                        
+
                         simpleQuest.MixWordsFileNames = words.Take(ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE)
                             .Select(w => w.FileName)
                             .ToList();
-                        
+
                         questions.Add(simpleQuest);
                         break;
 
