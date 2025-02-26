@@ -21,7 +21,13 @@ namespace Chang.GameBook
             nextState.SetActive(state == 1);
             wiatState.SetActive(state == 2);
 
+            button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => onItemClick.Invoke(key));
+        }
+
+        private void OnDestroy()
+        {
+            button.onClick.RemoveAllListeners();
         }
     }
 }

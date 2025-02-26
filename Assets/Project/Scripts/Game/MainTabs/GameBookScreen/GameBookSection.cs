@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,9 +12,17 @@ namespace Chang.GameBook
         
         public string LabelText => label.text;
         
-        public void Init(string labelText)
+        public void Init(string key, Action<string> onSectionRepetitionClick)
         {
-            label.text = labelText;
+            label.text = key;
+            
+            repeatSectionButton.onClick.RemoveAllListeners();
+            repeatSectionButton.onClick.AddListener(() => onSectionRepetitionClick.Invoke(key));
+        }
+
+        private void OnDestroy()
+        {
+            repeatSectionButton.onClick.RemoveAllListeners();
         }
     }
 }

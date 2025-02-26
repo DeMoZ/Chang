@@ -12,10 +12,12 @@ namespace Chang.GameBook
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
         private readonly GameBookView _view;
+
         private Dictionary<string, SimpleLessonData> _lessons = new();
         private List<GameBookSection> _sectionItems = new();
         private GameBookSection _topSection;
         private CancellationTokenSource _cancellationTokenSource;
+        private Coroutine _topSectionRoutine;
 
         [Inject]
         public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view)
@@ -44,7 +46,7 @@ namespace Chang.GameBook
             foreach (var section in _gameBus.SimpleBookData.Sections)
             {
                 var sectionItem = _view.InstantiateSection();
-                sectionItem.Init(section.Section); // todo chang button?
+                sectionItem.Init(section.Section, OnSectionRepetitionClick);
                 sectionItem.name = $"Section {section.Section}";
                 _sectionItems.Add(sectionItem);
 
@@ -54,15 +56,18 @@ namespace Chang.GameBook
                     _lessons[key] = section.Lessons[i];
 
                     var lessonItem = _view.InstantiateLesson();
-                    lessonItem.Init(key, (i + 1).ToString(), 0, OnItemClick);
+                    lessonItem.Init(key, (i + 1).ToString(), 0, OnLessonClick);
                     lessonItem.name = $"Item {key}";
                 }
             }
-
-            // todo chang top section need to resubscribe on items pass it 
         }
 
-        private void OnItemClick(string key)
+        private void OnSectionRepetitionClick(string key)
+        {
+            Debug.Log($"OnSectionRepetitionClick key: {key}");
+        }
+
+        private void OnLessonClick(string key)
         {
             Debug.Log($"Clicked on item {key}");
             _mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[key].FileName);
@@ -74,15 +79,24 @@ namespace Chang.GameBook
 
             if (active)
             {
-                _view.TopSection.StartCoroutine(CalculateTopSectionRoutine());
+                if (_topSectionRoutine != null)
+                {
+                    _view.TopSection.StopCoroutine(_topSectionRoutine);
+                }
+
+                _topSectionRoutine = _view.TopSection.StartCoroutine(TopSectionRoutine());
             }
             else
             {
-                // todo chang need to unsubscribe from top section
+                if (_topSectionRoutine != null)
+                {
+                    _view.TopSection.StopCoroutine(_topSectionRoutine);
+                    _topSectionRoutine = null;
+                }
             }
         }
 
-        private IEnumerator CalculateTopSectionRoutine()
+        private IEnumerator TopSectionRoutine()
         {
             while (true)
             {
@@ -113,8 +127,7 @@ namespace Chang.GameBook
                     }
                 }
 
-                _topSection.Init(lastSection.LabelText);
-                // todo chang need to copy button subscribtion too
+                _topSection.Init(lastSection.LabelText, OnSectionRepetitionClick);
             }
         }
     }
