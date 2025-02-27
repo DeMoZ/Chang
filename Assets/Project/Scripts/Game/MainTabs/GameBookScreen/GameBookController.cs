@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -45,17 +46,28 @@ namespace Chang.GameBook
 
             foreach (var section in _gameBus.SimpleBookData.Sections)
             {
-                var sectionItem = _view.InstantiateSection();
+                var sectionBlock = _view.InstantiateSectionBlock(out var sectionItem);
                 sectionItem.Init(section.Section, OnSectionRepetitionClick);
                 sectionItem.name = $"Section {section.Section}";
                 _sectionItems.Add(sectionItem);
 
+                RectTransform row = null;
+                int count = -1;
                 for (int i = 0; i < section.Lessons.Count; i++)
                 {
+                    if (i / 6 > count)
+                    {
+                        count++;
+                        row = _view.InstantiateRow(sectionBlock);
+                    }
+
                     var key = $"{section.Section}_{i + 1}";
                     _lessons[key] = section.Lessons[i];
 
-                    var lessonItem = _view.InstantiateLesson();
+                    var lessonItem = i % 2 == 0
+                        ? _view.InstantiateUpLesson(row)
+                        : _view.InstantiateDownLesson(row);
+
                     lessonItem.Init(key, (i + 1).ToString(), 0, OnLessonClick);
                     lessonItem.name = $"Item {key}";
                 }
