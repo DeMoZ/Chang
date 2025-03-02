@@ -4,31 +4,30 @@ namespace Chang.GameBook
 {
     public class GameBookView : MonoBehaviour
     {
-        [SerializeField] private RectTransform sectionBlockPrefab;
+        [SerializeField] private SectionBlock sectionBlockPrefab;
         [SerializeField] private RectTransform rowPrefab;
+        [SerializeField] private GameBookSection sectionPrefab;
         [SerializeField] private GameBookItem upLessonPrefab;
         [SerializeField] private GameBookItem downLessonPrefab;
-
-        [SerializeField] private GameBookSection sectionPrefab;
-        [SerializeField] private GameBookSection topSection;
         [SerializeField] private Transform content;
+        [SerializeField] private Color[] colors;
 
-        public GameBookSection TopSection => topSection;
+        public Color GetNextColor(int index) => colors[index % colors.Length];
 
-        public RectTransform InstantiateSectionBlock(out GameBookSection section)
+        public SectionBlock InstantiateSectionBlock(out GameBookSection section)
         {
             var got = Instantiate(sectionBlockPrefab, content);
             got.gameObject.SetActive(true);
 
-            section = InstantiateSection(got);
+            section = InstantiateSection(got.Container);
             return got;
         }
-        
+
         public RectTransform InstantiateRow(RectTransform sectionBlock)
         {
             var got = Instantiate(rowPrefab, sectionBlock);
             got.gameObject.SetActive(true);
-            
+
             return got;
         }
 
@@ -36,24 +35,24 @@ namespace Chang.GameBook
         {
             var got = Instantiate(upLessonPrefab, row);
             got.gameObject.SetActive(true);
-            
+
             return got;
         }
-        
+
         public GameBookItem InstantiateDownLesson(RectTransform row)
         {
-            var got = Instantiate(downLessonPrefab, row);
-            got.gameObject.SetActive(true);
-            
-            return got;
+            var go = Instantiate(downLessonPrefab, row);
+            go.gameObject.SetActive(true);
+
+            return go;
         }
-        
+
         private GameBookSection InstantiateSection(Transform sectionBlock)
         {
-            var section = Instantiate(sectionPrefab, sectionBlock);
-            section.gameObject.SetActive(true);
+            var go = Instantiate(sectionPrefab, sectionBlock);
+            go.gameObject.SetActive(true);
 
-            return section;
+            return go;
         }
 
         public void Clear()

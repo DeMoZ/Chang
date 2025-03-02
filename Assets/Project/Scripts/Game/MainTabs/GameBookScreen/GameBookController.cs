@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -16,9 +14,7 @@ namespace Chang.GameBook
 
         private Dictionary<string, SimpleLessonData> _lessons = new();
         private List<GameBookSection> _sectionItems = new();
-        private GameBookSection _topSection;
         private CancellationTokenSource _cancellationTokenSource;
-        private Coroutine _topSectionRoutine;
 
         [Inject]
         public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view)
@@ -36,39 +32,49 @@ namespace Chang.GameBook
         {
         }
 
+        public void SetViewActive(bool active)
+        {
+            _view.gameObject.SetActive(active);
+        }
+        
         public void Set()
         {
             _sectionItems.Clear();
             _lessons.Clear();
             _view.Clear();
 
-            _topSection = _view.TopSection;
-
-            foreach (var section in _gameBus.SimpleBookData.Sections)
+            for (var i = 0; i < _gameBus.SimpleBookData.Sections.Count; i++)
             {
+                var baseColor = _view.GetNextColor(i);
+                var section = _gameBus.SimpleBookData.Sections[i];
+                
                 var sectionBlock = _view.InstantiateSectionBlock(out var sectionItem);
+                sectionBlock.SetBaseColor(baseColor);
+                sectionItem.name = $"SectionBlock_{section.Section}";
+                
                 sectionItem.Init(section.Section, OnSectionRepetitionClick);
-                sectionItem.name = $"Section {section.Section}";
+                sectionItem.name = $"Section_{section.Section}";
+                sectionItem.SetBaseColor(baseColor);
                 _sectionItems.Add(sectionItem);
 
                 RectTransform row = null;
                 int count = -1;
-                for (int i = 0; i < section.Lessons.Count; i++)
+                for (int m = 0; m < section.Lessons.Count; m++)
                 {
-                    if (i / 6 > count)
+                    if (m / 6 > count)
                     {
                         count++;
-                        row = _view.InstantiateRow(sectionBlock);
+                        row = _view.InstantiateRow(sectionBlock.Container);
                     }
 
-                    var key = $"{section.Section}_{i + 1}";
-                    _lessons[key] = section.Lessons[i];
+                    var key = $"{section.Section}_{m + 1}";
+                    _lessons[key] = section.Lessons[m];
 
-                    var lessonItem = i % 2 == 0
+                    var lessonItem = m % 2 == 0
                         ? _view.InstantiateUpLesson(row)
                         : _view.InstantiateDownLesson(row);
 
-                    lessonItem.Init(key, (i + 1).ToString(), 0, OnLessonClick);
+                    lessonItem.Init(key, (m + 1).ToString(), 0, OnLessonClick);
                     lessonItem.name = $"Item {key}";
                 }
             }
@@ -84,64 +90,6 @@ namespace Chang.GameBook
         {
             Debug.Log($"Clicked on item {key}");
             _mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[key].FileName);
-        }
-
-        public void SetViewActive(bool active)
-        {
-            _view.gameObject.SetActive(active);
-
-            if (active)
-            {
-                if (_topSectionRoutine != null)
-                {
-                    _view.TopSection.StopCoroutine(_topSectionRoutine);
-                }
-
-                _topSectionRoutine = _view.TopSection.StartCoroutine(TopSectionRoutine());
-            }
-            else
-            {
-                if (_topSectionRoutine != null)
-                {
-                    _view.TopSection.StopCoroutine(_topSectionRoutine);
-                    _topSectionRoutine = null;
-                }
-            }
-        }
-
-        private IEnumerator TopSectionRoutine()
-        {
-            while (true)
-            {
-                yield return new WaitForEndOfFrame();
-
-                int left = 0;
-                int right = _sectionItems.Count - 1;
-
-                if (_sectionItems.Count == 0)
-                {
-                    continue;
-                }
-
-                GameBookSection lastSection = _sectionItems[0];
-                float point = _topSection.transform.position.y - _topSection.GetComponent<RectTransform>().rect.height;
-
-                while (left <= right)
-                {
-                    int mid = (left + right) / 2;
-                    if (_sectionItems[mid].transform.position.y >= point)
-                    {
-                        lastSection = _sectionItems[mid];
-                        left = mid + 1;
-                    }
-                    else
-                    {
-                        right = mid - 1;
-                    }
-                }
-
-                _topSection.Init(lastSection.LabelText, OnSectionRepetitionClick);
-            }
         }
     }
 }

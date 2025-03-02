@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Chang.GameBook
 {
-    public class GameBookSection : MonoBehaviour
+    public class GameBookSection : Colorizable
     {
         [SerializeField] private TMP_Text label;
         [SerializeField] private Button repeatSectionButton;
