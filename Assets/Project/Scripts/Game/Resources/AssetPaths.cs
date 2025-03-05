@@ -16,6 +16,7 @@ namespace Chang.Resources
             public const string Lesson = "Lesson";
         
             public const string Book = "Book";
+            public static string Sound = "Sound";
         }
         
         public static class Addressables

@@ -111,6 +111,35 @@ namespace Chang.Utilities
             AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
         }
         
+        /*
+          private static string GetNewWordFolderSystemPath(Languages language, string section)
+                  {
+                      var languagePrefix = language.ToString();
+                      var pathOnly = Path.Combine(
+                          Application.dataPath,
+                          AssetPaths.Utilities.RelativePath,
+                          languagePrefix,
+                          $"{languagePrefix}{AssetPaths.Utilities.WordsFolder}",
+                          $"{languagePrefix}{AssetPaths.Utilities.WordsFolder}{AssetPaths.Utilities.NewFolder}",
+                          section);
+
+                      return pathOnly;
+                  }
+         */
+        public static string GetSoundWordsSystemFilePath(Languages language,string section)
+        {
+            var languagePrefix = language.ToString();
+            var path = Path.Combine(
+                Application.dataPath,
+                AssetPaths.Utilities.RelativePath,
+                languagePrefix,
+                $"{languagePrefix}{AssetPaths.Utilities.Sound}{AssetPaths.Utilities.WordsFolder}",
+                $"{languagePrefix}{AssetPaths.Utilities.Sound}{AssetPaths.Utilities.WordsFolder}{AssetPaths.Utilities.NewFolder}",
+                section);
+
+            return path;
+        }
+        
         private static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
         {
             var meanings = new List<Translation>
