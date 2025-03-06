@@ -27,7 +27,7 @@ public class ConfigToSpeech : ScriptableObject
     }
 
     [Button]
-    public async UniTask AudioTextFolders()
+    public async void AudioTextFolders()
     {
         AssetDatabase.StartAssetEditing();
 
@@ -55,6 +55,8 @@ public class ConfigToSpeech : ScriptableObject
                     byte[] audioBytes = System.Convert.FromBase64String(audio.audioContent);
                     File.WriteAllBytes(pathName, audioBytes);
                     Debug.Log($"Sound for config: {config.Word.Key} created");
+
+                    await UniTask.WaitForSeconds(2);
                 }
             }
         }
@@ -79,20 +81,9 @@ public class ConfigToSpeech : ScriptableObject
 
     private async UniTaskVoid AudioTextAsync(PhraseConfig config)
     {
-        // var audio = await _textToSpeechService.GetAudioAsync(text);
-        // if(audio == null)
-        // {
-        //     return;
-        // }
-        //
-        // string path = ConfigFileCreator.GetSheetJsonSystemFilePath(data.Properties.Language, data.Properties.Name);
-        // byte[] audioBytes = System.Convert.FromBase64String(audioContent.audioContent);
-        //
-        // File.WriteAllText(path, jsonData);
+       // todo chang implement for single config
     }
-
-    // Assets/Project/Configs/Thai/ThaiWordsSounds/Section/ThaiWordsSounds
-
+    
     private List<PhraseConfig> FindConfigsInFolder(string folder)
     {
         string[] assetsGuids = AssetDatabase.FindAssets("t: ScriptableObject", new[] { folder });
