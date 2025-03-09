@@ -31,6 +31,7 @@ namespace Chang.FSM
         [Inject] private readonly SelectWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
+        [Inject] private readonly PagesSoundController _pagesSoundController;
 
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
@@ -82,6 +83,8 @@ namespace Chang.FSM
 
             _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged);
             _stateController.SetViewActive(true);
+            
+            _pagesSoundController.PlaySound(_correctWord.AudioClip);
         }
 
         private void OnHint(bool isHintUsed)
@@ -98,7 +101,7 @@ namespace Chang.FSM
             var result = new SelectWordResult(
                 Path.Combine(
                     Bus.CurrentLanguage.ToString(),
-                    AssetPaths.Addressables.WORDS,
+                    AssetPaths.Addressables.Words,
                     _correctWord.Word.Section,
                     _correctWord.Word.Key),
                 _correctWord.Word.LearnWord, isCorrect, info);

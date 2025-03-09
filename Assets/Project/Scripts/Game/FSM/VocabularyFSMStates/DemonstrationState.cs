@@ -70,7 +70,7 @@ namespace Chang.FSM
             var result = new DemonstrationWordResult(
                 Path.Combine(
                     Bus.CurrentLanguage.ToString(),
-                    AssetPaths.Addressables.WORDS,
+                    AssetPaths.Addressables.Words,
                     _correctWord.Word.Section,
                     _correctWord.Word.Key),
                 _correctWord.Word.LearnWord,

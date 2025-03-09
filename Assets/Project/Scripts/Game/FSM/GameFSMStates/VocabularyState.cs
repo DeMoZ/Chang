@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Sirenix.Utilities;
+using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -249,25 +251,26 @@ namespace Chang.FSM
             {
                 return false;
             }
+
             // todo chang need to get if this is repetition or learning
             var selectWordQuests = lesson.SimpleQuestions.OfType<SimpleQuestSelectWord>().ToList();
             matchWords.AddRange(selectWordQuests.Select(q => q.CorrectWordFileName));
             matchWords.AddRange(selectWordQuests.SelectMany(q => q.MixWordsFileNames));
-            
+
             if (matchWords.Count < 2)
             {
                 Debug.LogWarning($"matchWords not generated for lesson FileName: {lesson.FileName}, count select words {matchWords.Count}");
                 return false;
             }
 
-            
-            matchWords = _vocabularyBus.GameType == GameType.Learn ? 
-                matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE).ToHashSet() : 
-                matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE).ToHashSet();
+
+            matchWords = _vocabularyBus.GameType == GameType.Learn
+                ? matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE).ToHashSet()
+                : matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE).ToHashSet();
 
             matchWords.Shuffle();
             matchWordsQuest.MatchWordsFileNames = matchWords.ToList();
-            
+
             return true;
         }
 
@@ -287,9 +290,9 @@ namespace Chang.FSM
                     var mixWordsAmount = _vocabularyBus.GameType == GameType.Learn
                         ? ProjectConstants.MIX_WORDS_AMOUNT_IN_LEARN_SELECT_WORD_PAGE
                         : ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE;
-                    
+
                     var mixWords = selectWord.MixWordsFileNames.Take(mixWordsAmount);
-                    
+
                     foreach (var fileName in mixWords)
                     {
                         var data = await LoadPhraseConfigData(fileName);
@@ -322,9 +325,22 @@ namespace Chang.FSM
         private async UniTask<PhraseData> LoadPhraseConfigData(string fileName)
         {
             // todo chang create provider for words and implement call _resourcesManager form it
-            var phraseConfigPath = AssetPaths.Addressables.ROOT;
-            var path = $"{phraseConfigPath}{fileName}.asset";
-            var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(path);
+            // Assets/Project/Resources_Bundled/Thai/Words/WeekDays/Yesterday.asset
+            var configPath = Path.Combine(
+                AssetPaths.Addressables.Root,
+                $"{fileName}.asset");
+            
+            var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(configPath);
+
+            // Assets/Project/Resources_Bundled/Thai/SoundWords/Fruits/Watermelon.mp3
+            var audioClipPath = Path.Combine(
+                AssetPaths.Addressables.Root,
+                config.Language.ToString(),
+                AssetPaths.Addressables.SoundWords,
+                config.Section,
+                $"{config.Word.Key}.mp3");
+
+            config.AudioClip = await _resourcesManager.LoadAssetAsync<AudioClip>(audioClipPath);
             return config.PhraseData;
         }
 

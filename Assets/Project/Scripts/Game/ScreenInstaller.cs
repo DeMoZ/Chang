@@ -29,6 +29,9 @@ namespace Chang
         [Space] 
         [SerializeField] private LogInView logInScreen;
 
+        [Space]
+        [SerializeField] private AudioSource pagesAudioSource;
+        
         private LogInController _loginController;
 
 
@@ -69,9 +72,13 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<PreloaderController>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SystemUiController>().AsSingle();
+            
+            Container.BindInterfacesAndSelfTo<PagesSoundController>().AsSingle();
             #endregion
 
             Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
+
+            Container.BindInstance(pagesAudioSource).AsSingle();
 
             BindLogin();
         }

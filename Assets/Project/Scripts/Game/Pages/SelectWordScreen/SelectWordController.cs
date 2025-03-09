@@ -7,12 +7,13 @@ namespace Chang
 {
     public class SelectWordController : IViewController
     {
-        private SelectWordView _view;
+        private readonly SelectWordView _view;
 
         [Inject]
-        public SelectWordController(SelectWordView view)
+        public SelectWordController(SelectWordView view, PagesSoundController pagesSoundController)
         {
             _view = view;
+            _view.SetPagesSoundController(pagesSoundController);
         }
 
         public void Dispose()
@@ -23,7 +24,7 @@ namespace Chang
         {
             _view.Init(isQuestInTranslation, correctWord, mixWords, onToggleValueChanged);
         }
-        
+
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);

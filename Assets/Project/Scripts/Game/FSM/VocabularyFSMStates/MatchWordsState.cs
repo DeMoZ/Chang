@@ -94,7 +94,7 @@ namespace Chang.FSM
             var leftResult = new SelectWordResult(
                 Path.Combine(
                     Bus.CurrentLanguage.ToString(),
-                    AssetPaths.Addressables.WORDS,
+                    AssetPaths.Addressables.Words,
                     _leftWords[leftIndex].Section,
                     _leftWords[leftIndex].Key),
                 _leftWords[leftIndex].LearnWord, isCorrect,
@@ -107,7 +107,7 @@ namespace Chang.FSM
                 var rightResult = new SelectWordResult(
                     Path.Combine(
                         Bus.CurrentLanguage.ToString(),
-                        AssetPaths.Addressables.WORDS,
+                        AssetPaths.Addressables.Words,
                         _rightWords[rightIndex].Section,
                         _rightWords[rightIndex].Key),
                     _rightWords[rightIndex].LearnWord, false,

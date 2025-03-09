@@ -14,6 +14,7 @@ namespace Chang.UI
         [SerializeField] private CToggle _mixWordPrefab;
         [SerializeField] private Transform _mixWordContent;
         [SerializeField] private ToggleGroup _toggleGroup;
+        [SerializeField] private PlayStopButton _playStopBtn;
 
         [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.SelectWord;
 
@@ -48,6 +49,13 @@ namespace Chang.UI
 
                 _mixWordToggles.Add(mix);
             }
+            
+            PagesSoundController.RegisterListener(correctWord.AudioClip.name, OnSoundPlay);
+        }
+
+        private void OnSoundPlay(bool play)
+        {
+            _playStopBtn.SetPlay(play);
         }
 
         private void OnDisable()
@@ -58,6 +66,7 @@ namespace Chang.UI
             }
             
             _mixWordToggles.Clear();
+            PagesSoundController.UnregisterListeners();
         }
 
         public void ShowHint()
