@@ -81,9 +81,14 @@ namespace Chang.FSM
                 mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
             }
 
-            _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged);
+            _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged, OnClickPlaySound);
             _stateController.SetViewActive(true);
-            
+
+            OnClickPlaySound();
+        }
+
+        private void OnClickPlaySound()
+        {
             _pagesSoundController.PlaySound(_correctWord.AudioClip);
         }
 

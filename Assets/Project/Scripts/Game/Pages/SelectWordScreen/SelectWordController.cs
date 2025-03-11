@@ -20,9 +20,13 @@ namespace Chang
         {
         }
 
-        public void Init(bool isQuestInTranslation, PhraseData correctWord, List<PhraseData> mixWords, Action<int, bool> onToggleValueChanged)
+        public void Init(bool isQuestInTranslation,
+            PhraseData correctWord,
+            List<PhraseData> mixWords,
+            Action<int, bool> onToggleValueChanged,
+            Action onClickPlaySound)
         {
-            _view.Init(isQuestInTranslation, correctWord, mixWords, onToggleValueChanged);
+            _view.Init(isQuestInTranslation, correctWord, mixWords, onToggleValueChanged, onClickPlaySound);
         }
 
         public void SetViewActive(bool active)

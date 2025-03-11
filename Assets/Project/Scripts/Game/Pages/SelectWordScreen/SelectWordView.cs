@@ -21,12 +21,18 @@ namespace Chang.UI
         private readonly List<CToggle> _mixWordToggles = new();
         
         private bool _isQuestInTranslation;
+        private Action _onClickPlaySound;
 
-        public void Init(bool isQuestInTranslation, PhraseData correctWord, List<PhraseData> mixWords, Action<int, bool> onToggleValueChanged)
+        public void Init(bool isQuestInTranslation, 
+            PhraseData correctWord, 
+            List<PhraseData> mixWords,
+            Action<int, bool> onToggleValueChanged,
+            Action onClickPlaySound)
         {
             Debug.Log("Init SelectWordView");
 
             _isQuestInTranslation = isQuestInTranslation;
+            _onClickPlaySound = onClickPlaySound;
 
             foreach (Transform child in _mixWordContent)
             {
@@ -51,15 +57,23 @@ namespace Chang.UI
             }
             
             PagesSoundController.RegisterListener(correctWord.AudioClip.name, OnSoundPlay);
+            _playStopBtn.OnClick += OnClickPlaySound;
         }
 
         private void OnSoundPlay(bool play)
         {
-            _playStopBtn.SetPlay(play);
+            _playStopBtn.SetPlay(!play);
         }
 
+        private void OnClickPlaySound()
+        {
+            _onClickPlaySound?.Invoke();
+        }
+        
         private void OnDisable()
         {
+            _playStopBtn.OnClick -= OnClickPlaySound;
+            
             foreach(var toggle in _mixWordToggles)
             {
                 Destroy(toggle.gameObject);

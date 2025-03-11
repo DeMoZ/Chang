@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using DMZ.Events;
 using UnityEngine;
 
@@ -7,8 +9,10 @@ namespace Chang
 {
     public class PagesSoundController : IDisposable
     {
-        private AudioSource _audioSource;
-        private Dictionary<string, DMZState<bool>> _listeners = new();
+        private readonly AudioSource _audioSource;
+        private readonly Dictionary<string, DMZState<bool>> _listeners = new();
+        
+        private CancellationTokenSource _cancellationTokenSource;
         
         public PagesSoundController(AudioSource audioSource)
         {
@@ -52,20 +56,41 @@ namespace Chang
         public void PlaySound(AudioClip audioClip)
         {
             Debug.Log("PlaySound: " + audioClip.name);
-            _audioSource.PlayOneShot(audioClip);
-            _audioSource.UnPause();
+           
+            if (_audioSource.isPlaying)
+            {
+                if (_audioSource.clip == audioClip)
+                {
+                    StopSound();
+                    return;
+                }
+                
+                StopSound();
+            }
+            
+            _audioSource.clip = audioClip;
+            _audioSource.Play();
             
             _listeners[audioClip.name].Value = true;
+            
+            _cancellationTokenSource = new CancellationTokenSource();
+            MonitorAudioCompletion(audioClip, _cancellationTokenSource.Token).Forget();
         }
 
-        public void StopSound(AudioClip audioClip)
+        private void StopSound()
         {
-            _audioSource?.Stop();
-            _listeners[audioClip.name].Value = false;
+            _cancellationTokenSource?.Cancel();
+            _audioSource.Stop();
+            
+            if (_audioSource.clip != null)
+            {
+                _listeners[_audioSource.clip.name].Value = false;
+            }
         }
 
         public void UnregisterListeners()
         {
+            _cancellationTokenSource?.Cancel();
             Clear();
         }
 
@@ -77,6 +102,25 @@ namespace Chang
             }
 
             _listeners.Clear();
+        }
+        
+        private async UniTask MonitorAudioCompletion(AudioClip clip, CancellationToken token)
+        {
+            try
+            {
+                while (_audioSource.isPlaying && !token.IsCancellationRequested)
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
+
+                if (_audioSource.clip == clip && _listeners.TryGetValue(clip.name, out var state))
+                {
+                    state.Value = false;
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
         }
     }
 }
