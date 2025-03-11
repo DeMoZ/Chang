@@ -23,7 +23,7 @@ namespace Chang.FSM
         }
     }
 
-    public class DemonstrationState : ResultStateBase<QuestionType, VocabularyBus>
+    public class DemonstrationState : ResultStateBase<QuestionType, PagesBus>
     {
         [Inject] private readonly DemonstrationWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
@@ -32,7 +32,7 @@ namespace Chang.FSM
 
         public override QuestionType Type => QuestionType.DemonstrationWord;
 
-        public DemonstrationState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public DemonstrationState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
         }
 

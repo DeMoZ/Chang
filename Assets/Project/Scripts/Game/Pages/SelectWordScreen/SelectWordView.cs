@@ -66,7 +66,6 @@ namespace Chang.UI
             }
             
             _mixWordToggles.Clear();
-            PagesSoundController.UnregisterListeners();
         }
 
         public void ShowHint()

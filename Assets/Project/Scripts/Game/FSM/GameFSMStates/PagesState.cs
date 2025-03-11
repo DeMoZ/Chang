@@ -13,7 +13,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class VocabularyState : ResultStateBase<StateType, GameBus>, IDisposable
+    public class PagesState : ResultStateBase<StateType, GameBus>, IDisposable
     {
         public override StateType Type => StateType.PlayVocabulary;
 
@@ -24,10 +24,10 @@ namespace Chang.FSM
 
         private readonly DiContainer _diContainer;
 
-        private VocabularyBus _vocabularyBus;
-        private VocabularyFSM _vocabularyFSM;
+        private PagesBus _pagesBus;
+        private PagesFSM _pagesFsm;
 
-        public VocabularyState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult)
+        public PagesState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult)
             : base(gameBus, onStateResult)
         {
             _diContainer = diContainer;
@@ -35,8 +35,8 @@ namespace Chang.FSM
 
         public void Dispose()
         {
-            _vocabularyFSM.Dispose();
-            _vocabularyBus.Dispose();
+            _pagesFsm.Dispose();
+            _pagesBus.Dispose();
         }
 
         public override void Enter()
@@ -53,14 +53,14 @@ namespace Chang.FSM
             _gameOverlayController.EnableReturnButton(true);
             _gameOverlayController.EnableHintButton(true);
 
-            _vocabularyBus = new VocabularyBus
+            _pagesBus = new PagesBus
             {
                 CurrentLesson = Bus.CurrentLesson,
                 GameType = Bus.GameType,
             };
 
-            _vocabularyFSM = new VocabularyFSM(_diContainer, _vocabularyBus);
-            _vocabularyFSM.Initialize();
+            _pagesFsm = new PagesFSM(_diContainer, _pagesBus);
+            _pagesFsm.Initialize();
             OnContinue();
         }
 
@@ -68,8 +68,8 @@ namespace Chang.FSM
         {
             base.Exit();
 
-            _vocabularyBus = null;
-            _vocabularyFSM.Dispose();
+            _pagesBus = null;
+            _pagesFsm.Dispose();
             _screenManager.SetActivePagesContainer(false);
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
@@ -90,7 +90,7 @@ namespace Chang.FSM
         private void OnHint()
         {
             Debug.Log($"{nameof(OnHint)}");
-            _vocabularyBus.OnHintUsed.Value = true;
+            _pagesBus.OnHintUsed.Value = true;
         }
 
         private void OnCheck()
@@ -103,7 +103,7 @@ namespace Chang.FSM
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
 
-            switch (_vocabularyFSM.CurrentStateType)
+            switch (_pagesFsm.CurrentStateType)
             {
                 case QuestionType.DemonstrationWord:
                 case QuestionType.SelectWord:
@@ -113,7 +113,7 @@ namespace Chang.FSM
                     await OnCheckMatchWordsAsync();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException($"simple question not handled {_vocabularyFSM.CurrentStateType}");
+                    throw new ArgumentOutOfRangeException($"simple question not handled {_pagesFsm.CurrentStateType}");
             }
         }
 
@@ -121,24 +121,24 @@ namespace Chang.FSM
         {
             Debug.Log($"{nameof(OnCheckSelectWordAsync)}");
 
-            var isCorrect = _vocabularyBus.QuestionResult.IsCorrect;
+            var isCorrect = _pagesBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
-            var answer = string.Join(" / ", _vocabularyBus.QuestionResult.Info);
+            var answer = string.Join(" / ", _pagesBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
-            var needIncrement = !(bool)_vocabularyBus.QuestionResult.Info[1];
-            _profileService.AddLog(_vocabularyBus.QuestionResult.Key, _vocabularyBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect,
+            var needIncrement = !(bool)_pagesBus.QuestionResult.Info[1];
+            _profileService.AddLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect,
                 needIncrement);
 
             if (!isCorrect)
             {
-                _vocabularyBus.CurrentLesson.EnqueueCurrentQuestion();
+                _pagesBus.CurrentLesson.EnqueueCurrentQuestion();
             }
 
             var info = new ContinueButtonInfo();
             info.IsCorrect = isCorrect;
-            info.InfoText = (string)_vocabularyBus.QuestionResult.Info[0];
+            info.InfoText = (string)_pagesBus.QuestionResult.Info[0];
 
-            _vocabularyBus.LessonLog.Add(_vocabularyBus.QuestionResult);
+            _pagesBus.LessonLog.Add(_pagesBus.QuestionResult);
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
@@ -149,14 +149,14 @@ namespace Chang.FSM
         {
             Debug.Log($"{nameof(OnCheckMatchWordsAsync)}");
 
-            var matchWordsStateResult = _vocabularyBus.QuestionResult as MatchWordsStateResult;
+            var matchWordsStateResult = _pagesBus.QuestionResult as MatchWordsStateResult;
             if (matchWordsStateResult == null)
                 throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
 
             foreach (SelectWordResult result in matchWordsStateResult.Results)
             {
                 _profileService.AddLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect, false);
-                _vocabularyBus.LessonLog.Add(result);
+                _pagesBus.LessonLog.Add(result);
             }
 
             await _profileService.SaveAsync();
@@ -166,13 +166,13 @@ namespace Chang.FSM
         // todo chang async
         private async void OnContinue()
         {
-            if (_vocabularyFSM.CurrentStateType == QuestionType.Result)
+            if (_pagesFsm.CurrentStateType == QuestionType.Result)
             {
                 ExitToLobby();
                 return;
             }
 
-            Lesson lesson = _vocabularyBus.CurrentLesson;
+            Lesson lesson = _pagesBus.CurrentLesson;
 
             // Add generated match words quest at the end of the lesson
             if (lesson.SimpleQuestionQueue.Count == 0)
@@ -238,8 +238,8 @@ namespace Chang.FSM
 
         private void SwitchState(QuestionType questionType)
         {
-            _vocabularyFSM.SwitchState(questionType);
-            _vocabularyBus.OnHintUsed.SetSilent(false);
+            _pagesFsm.SwitchState(questionType);
+            _pagesBus.OnHintUsed.SetSilent(false);
         }
 
         private bool TryGenerateQuestMatchWordsData(Lesson lesson, out SimpleQuestMatchWords matchWordsQuest)
@@ -264,7 +264,7 @@ namespace Chang.FSM
             }
 
 
-            matchWords = _vocabularyBus.GameType == GameType.Learn
+            matchWords = _pagesBus.GameType == GameType.Learn
                 ? matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE).ToHashSet()
                 : matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE).ToHashSet();
 
@@ -287,7 +287,7 @@ namespace Chang.FSM
                         MixWords = new List<PhraseData>()
                     };
 
-                    var mixWordsAmount = _vocabularyBus.GameType == GameType.Learn
+                    var mixWordsAmount = _pagesBus.GameType == GameType.Learn
                         ? ProjectConstants.MIX_WORDS_AMOUNT_IN_LEARN_SELECT_WORD_PAGE
                         : ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE;
 

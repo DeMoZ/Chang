@@ -22,7 +22,7 @@ namespace Chang.FSM
         public object[] Info { get; }
     }
 
-    public class MatchWordsState : ResultStateBase<QuestionType, VocabularyBus>
+    public class MatchWordsState : ResultStateBase<QuestionType, PagesBus>
     {
         [Inject] private readonly MatchWordsController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
@@ -36,7 +36,7 @@ namespace Chang.FSM
         private int _correctCount;
         private MatchWordsStateResult _result;
 
-        public MatchWordsState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public MatchWordsState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
         }
 

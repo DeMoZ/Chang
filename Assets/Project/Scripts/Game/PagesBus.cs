@@ -5,7 +5,7 @@ using DMZ.Events;
 
 namespace Chang
 {
-    public class VocabularyBus : IDisposable
+    public class PagesBus : IDisposable
     {
         public Lesson CurrentLesson { get; set; }
         public IQuestionResult QuestionResult { get; set; }

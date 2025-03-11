@@ -26,7 +26,7 @@ namespace Chang.FSM
         }
     }
 
-    public class SelectWordState : ResultStateBase<QuestionType, VocabularyBus>
+    public class SelectWordState : ResultStateBase<QuestionType, PagesBus>
     {
         [Inject] private readonly SelectWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
@@ -38,7 +38,7 @@ namespace Chang.FSM
 
         public override QuestionType Type => QuestionType.SelectWord;
 
-        public SelectWordState(VocabularyBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public SelectWordState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
         }
 
