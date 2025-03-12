@@ -100,7 +100,7 @@ namespace Chang
             {
                 listener.Value.Dispose();
             }
-
+            
             _listeners.Clear();
         }
         
@@ -117,6 +117,8 @@ namespace Chang
                 {
                     state.Value = false;
                 }
+                
+                _audioSource.clip = null;
             }
             catch (OperationCanceledException)
             {
