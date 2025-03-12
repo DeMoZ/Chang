@@ -9,9 +9,10 @@ namespace Chang
         private DemonstrationWordView _view;
 
         [Inject]
-        public DemonstrationWordController(DemonstrationWordView view)
+        public DemonstrationWordController(DemonstrationWordView view, PagesSoundController pagesSoundController)
         {
             _view = view;
+            _view.SetPagesSoundController(pagesSoundController);
         }
 
         public void Dispose()
@@ -23,9 +24,11 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        public void Init(PhraseData correctWord, Action<bool> onToggleValueChanged)
+        public void Init(PhraseData correctWord,
+            Action<bool> onToggleValueChanged,
+            Action onClickPlaySound)
         {
-            _view.Init(correctWord, onToggleValueChanged);
+            _view.Init(correctWord, onToggleValueChanged, onClickPlaySound);
         }
     }
 }

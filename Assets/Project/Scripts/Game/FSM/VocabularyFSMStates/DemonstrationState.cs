@@ -27,7 +27,8 @@ namespace Chang.FSM
     {
         [Inject] private readonly DemonstrationWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
-
+        [Inject] private readonly PagesSoundController _pagesSoundController;
+        
         private PhraseData _correctWord;
 
         public override QuestionType Type => QuestionType.DemonstrationWord;
@@ -58,8 +59,15 @@ namespace Chang.FSM
             var questionData = (QuestDemonstrateWordData)Bus.CurrentLesson.CurrentQuestionData;
             _correctWord = questionData.CorrectWord;
 
-            _stateController.Init(_correctWord, OnToggleValueChanged);
+            _stateController.Init(_correctWord, OnToggleValueChanged, OnClickPlaySound);
             _stateController.SetViewActive(true);
+        
+            OnClickPlaySound();
+        }
+
+        private void OnClickPlaySound()
+        {
+            _pagesSoundController.PlaySound(_correctWord.AudioClip);
         }
 
         private void OnToggleValueChanged(bool isOn)

@@ -13,12 +13,19 @@ namespace Chang.UI
         [SerializeField] private CToggle _mixWordPrefab;
         [SerializeField] private Transform _mixWordContent;
         [SerializeField] private ToggleGroup _toggleGroup;
+        [SerializeField] private PlayStopButton _playStopBtn;
 
         [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.DemonstrationWord;
         
-        public void Init(PhraseData correctWord, Action<bool> onToggleValueChanged)
+        private Action _onClickPlaySound;
+        
+        public void Init(PhraseData correctWord,
+            Action<bool> onToggleValueChanged,
+            Action onClickPlaySound)
         {
             Debug.Log("Init SelectWordView");
+            
+            _onClickPlaySound = onClickPlaySound;
 
             foreach (Transform child in _mixWordContent)
             {
@@ -35,6 +42,23 @@ namespace Chang.UI
             var word = correctWord.Word.GetTranslation();
             mix.Set(word, correctWord.Word.Phonetic, _toggleGroup, onToggleValueChanged);
             mix.EnablePhonetics(false);
+            PagesSoundController.RegisterListener(correctWord.AudioClip.name, OnSoundPlay);
+            _playStopBtn.OnClick += OnClickPlaySound;
+        }
+
+        private void OnSoundPlay(bool play)
+        {
+            _playStopBtn.SetPlay(!play);
+        }
+
+        private void OnClickPlaySound()
+        {
+            _onClickPlaySound?.Invoke();
+        }
+
+        private void OnDisable()
+        {
+            _playStopBtn.OnClick -= OnClickPlaySound;
         }
     }
 }
