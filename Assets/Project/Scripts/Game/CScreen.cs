@@ -7,7 +7,7 @@ namespace Chang.UI
     {
         [ShowInInspector, ReadOnly] public virtual QuestionType ScreenType { get; }
 
-        public PagesSoundController PagesSoundController { get; private set; }
+        protected PagesSoundController PagesSoundController { get; private set; }
 
         public void SetPagesSoundController(PagesSoundController pagesSoundController)
         {
