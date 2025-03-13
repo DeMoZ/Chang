@@ -28,11 +28,11 @@ namespace Chang.FSM
         {
             _gameBus.PreloadFor = PreloadType.Boot;
 
-            var vocabularyState = new PagesState(_diContainer, _gameBus, OnStateResult);
+            var pagesState = new PagesState(_diContainer, _gameBus, OnStateResult);
             var preloaderState = new PreloadState(_gameBus, OnStateResult);
             var lobbyState = new LobbyState(_gameBus, OnStateResult);
 
-            _diContainer.Inject(vocabularyState);
+            _diContainer.Inject(pagesState);
             _diContainer.Inject(preloaderState);
             _diContainer.Inject(lobbyState);
 
@@ -42,7 +42,7 @@ namespace Chang.FSM
             {
                 { StateType.Preload, preloaderState },
                 { StateType.Lobby, lobbyState },
-                { StateType.PlayVocabulary, vocabularyState },
+                { StateType.PlayPages, pagesState },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));

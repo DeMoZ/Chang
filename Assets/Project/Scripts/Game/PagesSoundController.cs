@@ -70,8 +70,11 @@ namespace Chang
             
             _audioSource.clip = audioClip;
             _audioSource.Play();
-            
-            _listeners[audioClip.name].Value = true;
+
+            if (_listeners.TryGetValue(_audioSource.clip.name, out var state))
+            {
+                state.Value = true;
+            }
             
             _cancellationTokenSource = new CancellationTokenSource();
             MonitorAudioCompletion(audioClip, _cancellationTokenSource.Token).Forget();
@@ -82,9 +85,9 @@ namespace Chang
             _cancellationTokenSource?.Cancel();
             _audioSource.Stop();
             
-            if (_audioSource.clip != null)
+            if (_audioSource.clip != null && _listeners.TryGetValue(_audioSource.clip.name, out var state))
             {
-                _listeners[_audioSource.clip.name].Value = false;
+                state.Value = false;
             }
         }
 

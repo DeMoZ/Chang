@@ -20,6 +20,8 @@ namespace Chang
             AudioClip = audioClip;
             Sprite = sprite;
             Word = word;
+            
+            Word.AudioClip = audioClip;
         }
 
         public void SetPhonetics(bool showPhonetics)
@@ -40,8 +42,8 @@ namespace Chang
         public string LearnWord { get; private set; }
         public string Phonetic { get; private set; }
         public List<Translation> Meanings { get; private set; }
-        
         public bool ShowPhonetics { get; private set; }
+        public AudioClip AudioClip { get; set; } 
 
         public WordData(string section, string key, string learnWord, string phonetic, List<Translation> meanings)
         {

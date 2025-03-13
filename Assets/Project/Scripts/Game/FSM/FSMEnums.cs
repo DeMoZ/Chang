@@ -5,7 +5,7 @@ namespace Chang.FSM
     {
         Preload,
         Lobby,
-        PlayVocabulary,
+        PlayPages,
     }
 
     /// <summary>

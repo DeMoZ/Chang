@@ -14,6 +14,7 @@ namespace Chang
         private const int TimeToSetNormal = 500;
 
         private readonly MatchWordsView _view;
+        private readonly PagesSoundController _pagesSoundController;
 
         private Action<int, int> _onToggleValueChanged;
         private List<CToggle> _leftToggles = new();
@@ -23,9 +24,10 @@ namespace Chang
         private bool _isLeftLearnLanguage;
 
         [Inject]
-        public MatchWordsController(MatchWordsView view)
+        public MatchWordsController(MatchWordsView view, PagesSoundController pagesSoundController)
         {
             _view = view;
+            _pagesSoundController = pagesSoundController;
         }
 
         public void Dispose()
@@ -65,7 +67,14 @@ namespace Chang
                 _leftToggles.Add(toggle);
 
                 var word = _isLeftLearnLanguage ? left[i].LearnWord : left[i].GetTranslation();
-                toggle.Set(word, left[i].Phonetic, isOn => OnToggleValueChanged(true, index, isOn));
+                toggle.Set(word, left[i].Phonetic, isOn =>
+                {
+                    OnToggleValueChanged(true, index, isOn);
+                    if (isOn && _isLeftLearnLanguage)
+                    {
+                        _pagesSoundController.PlaySound(left[index].AudioClip);    
+                    }
+                });
                 toggle.EnablePhonetics(_isLeftLearnLanguage && right[i].ShowPhonetics);
             }
 
@@ -76,7 +85,14 @@ namespace Chang
                 _rightToggles.Add(toggle);
 
                 var word = _isLeftLearnLanguage ? right[i].GetTranslation() : right[i].LearnWord;
-                toggle.Set(word, right[i].Phonetic, isOn => OnToggleValueChanged(false, index, isOn));
+                toggle.Set(word, right[i].Phonetic, isOn =>
+                {
+                    OnToggleValueChanged(false, index, isOn);
+                    if (isOn && !_isLeftLearnLanguage)
+                    {
+                        _pagesSoundController.PlaySound(right[index].AudioClip);    
+                    }
+                });
                 toggle.EnablePhonetics(!_isLeftLearnLanguage && right[i].ShowPhonetics);
             }
         }

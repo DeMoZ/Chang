@@ -15,7 +15,7 @@ namespace Chang.FSM
 {
     public class PagesState : ResultStateBase<StateType, GameBus>, IDisposable
     {
-        public override StateType Type => StateType.PlayVocabulary;
+        public override StateType Type => StateType.PlayPages;
 
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;

@@ -55,7 +55,7 @@ namespace Chang.FSM
                     break;
                 case PreloadType.LessonData:
                     Debug.LogWarning("Should not be here because it loads in VocabularyState without loading ui");
-                    OnStateResult.Invoke(StateType.PlayVocabulary);
+                    OnStateResult.Invoke(StateType.PlayPages);
                     break;
 
                 default:
