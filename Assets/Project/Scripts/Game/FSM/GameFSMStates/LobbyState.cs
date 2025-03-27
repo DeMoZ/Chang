@@ -35,7 +35,7 @@ namespace Chang.FSM
 
         private void OnExitState()
         {
-            OnStateResult.Invoke(StateType.Preload);
+            // OnStateResult.Invoke(StateType.Preload); todo Chang so i need to figure out how to switch to a new state on exit from _mainUiController.Init(OnExitState);
         }
     }
 }

@@ -1,27 +1,16 @@
-
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Cysharp.Threading.Tasks;
-using Chang.Resources;
 
-
-namespace Chang
+public class Bootstrap : MonoBehaviour
 {
-    public class Bootstrap : MonoBehaviour
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
-        async void Start()
-        {
-            await BootstrapProcesses();
+        
+    }
 
-            SceneManager.LoadScene("Game", LoadSceneMode.Single);
-            
-            // var handle = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Single);
-            // await UniTask.WaitUntil(() => handle.isDone, PlayerLoopTiming.Update);
-        }
-
-        private async UniTask BootstrapProcesses()
-        {
-            await UniTask.Delay(1);
-        }
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

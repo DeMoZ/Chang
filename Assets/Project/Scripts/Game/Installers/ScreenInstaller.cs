@@ -26,14 +26,14 @@ namespace Chang
         
         [SerializeField] private PreloaderView preloaderScreen;
 
-        [Space] 
-        [SerializeField] private LogInView logInScreen;
+        
+        
+        [Space]
+        [SerializeField] private LoadingView loadingScreenPrefab;
+        [SerializeField] private Transform loadingScreenContainer;
 
         [Space]
         [SerializeField] private AudioSource pagesAudioSource;
-        
-        private LogInController _loginController;
-
 
         public override void InstallBindings()
         {
@@ -53,7 +53,7 @@ namespace Chang
             Container.BindInstance(matchWordScreen).AsSingle();
             Container.BindInstance(selectWordScreen).AsSingle();
             Container.BindInstance(preloaderScreen).AsSingle();
-            Container.BindInstance(logInScreen).AsSingle();
+            
             Container.BindInstance(profileScreen).AsSingle();
             Container.BindInstance(systemUiScreen).AsSingle();
 
@@ -80,21 +80,7 @@ namespace Chang
 
             Container.BindInstance(pagesAudioSource).AsSingle();
 
-            BindLogin();
-        }
-
-        private void BindLogin()
-        {
-            var loginModel = new LogInModel();
-            _loginController = new LogInController(loginModel);
-            Container.BindInstance(loginModel).AsSingle();
-            logInScreen.Init(loginModel);
-            Container.BindInstance(_loginController).AsSingle();
-        }
-
-        public void OnDestroy()
-        {
-            _loginController?.Dispose();
+           
         }
     }
 }

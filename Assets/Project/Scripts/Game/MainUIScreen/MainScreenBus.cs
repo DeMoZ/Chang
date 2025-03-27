@@ -8,7 +8,7 @@ namespace Chang
         public Action<string> OnGameBookLessonClicked;
         public Action<string> OnGameBookSectionRepeatClicked;
         public Action OnRepeatClicked;
-        public Action OnLogOutClicked;
+        // public Action OnLogOutClicked;
 
         [Inject]
         public MainScreenBus()

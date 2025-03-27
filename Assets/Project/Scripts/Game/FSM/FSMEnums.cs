@@ -3,7 +3,7 @@ namespace Chang.FSM
 
     public enum StateType
     {
-        Preload,
+        // Preload,
         Lobby,
         PlayPages,
     }

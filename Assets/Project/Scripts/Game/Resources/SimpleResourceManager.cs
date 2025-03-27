@@ -14,7 +14,7 @@ namespace Chang.Resources
     {
         private bool _isInitialized = false;
 
-        public async UniTask InitAsync()
+        public async UniTask InitializeAsync()
         {
             await Addressables.InitializeAsync();
             _isInitialized = true;

@@ -15,15 +15,6 @@ namespace Chang
 
         public AudioClip AudioClip { get; set; }
         public PhraseData PhraseData => new(Key, AudioClip, Sprite, Word.WordData);
-
-        /// <summary>
-        /// DEPRICATED. Very temp solution. Take Key From Phrase config and put into Word.Key
-        /// </summary>
-        // [Button]
-        public void FixWordDataKey()
-        {
-           Word.Key = Key;
-        }
     }
 
     [Serializable]

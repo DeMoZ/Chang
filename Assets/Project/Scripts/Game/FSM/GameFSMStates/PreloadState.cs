@@ -19,7 +19,7 @@ namespace Chang.FSM
         [Inject] private readonly AuthorizationService _authorizationService;
         [Inject] private readonly IResourcesManager _resourcesManager;
 
-        public override StateType Type => StateType.Preload;
+        public override StateType Type { get; } // => StateType.Preload;
 
         public PreloadState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
