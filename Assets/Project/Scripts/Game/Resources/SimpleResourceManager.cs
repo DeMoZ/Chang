@@ -142,6 +142,11 @@ namespace Chang.Resources
             //Addressables.ReleaseInstance(this); 
         }
 
+        public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken token) where T : Object
+        {
+            throw new NotImplementedException();
+        }
+       /*
         public async UniTask<T> LoadAssetAsync<T>(string key, CancellationToken token) where T : Object
         {
             while (!_isInitialized)
@@ -210,5 +215,6 @@ namespace Chang.Resources
 
             return result;
         }
+        */
     }
 }

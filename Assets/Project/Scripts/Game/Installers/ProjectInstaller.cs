@@ -21,7 +21,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
             Container.BindInterfacesAndSelfTo<Game>().AsSingle();
-            Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();// todo chang move to GameSceneInstaller
 
 
             // todo Chang add required bindings

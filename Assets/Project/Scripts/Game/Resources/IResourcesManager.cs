@@ -12,6 +12,7 @@ namespace Chang.Resources
         T LoadAssetSync<T>(AssetReference key) where T : UnityEngine.Object;
         T LoadAssetSync<T>(string key) where T : UnityEngine.Object;
 
-        UniTask<T> LoadAssetAsync<T>(string key, CancellationToken cancellationToken = default) where T : UnityEngine.Object;
+        // UniTask<T> LoadAssetAsync<T>(string key, CancellationToken ct = default) where T : UnityEngine.Object;
+        UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct = default) where T : UnityEngine.Object;
     }
 }

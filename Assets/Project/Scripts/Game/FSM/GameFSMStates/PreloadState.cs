@@ -47,10 +47,11 @@ namespace Chang.FSM
             switch (Bus.PreloadFor)
             {
                 case PreloadType.Boot:
-                    // todo chang this logic supposed to be in main game logic, not in the FSM
-                    await LoadGameBookConfigAsync();
-                    await _authorizationService.AuthenticateAsync();
-                    await _profileService.LoadStoredData();
+                    // Moved into bootstrap
+                    // // todo chang this logic supposed to be in main game logic, not in the FSM
+                    // await LoadGameBookConfigAsync();
+                    // await _authorizationService.AuthenticateAsync();
+                    // await _profileService.LoadStoredData();
                     OnStateResult.Invoke(StateType.Lobby);
                     break;
                 case PreloadType.LessonData:
@@ -63,24 +64,25 @@ namespace Chang.FSM
             }
         }
 
-        // todo chang think about to move this logic to the resource manager as the other services to the job inside
-        private async UniTask LoadGameBookConfigAsync()
-        {
-            Debug.Log("LoadGameBookConfigAsync start");
-            var key = "BookJson";
-            var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
-
-            var settings = new JsonSerializerSettings
-            {
-                Converters = new List<JsonConverter> { new BookConverter() }
-            };
-
-            Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text, settings);
-            Bus.SimpleLessons = Bus.SimpleBookData.Sections
-                .SelectMany(section => section.Lessons)
-                .ToDictionary(lesson => lesson.FileName);
-            
-            Debug.Log("LoadGameBookConfigAsync end");
-        }
+        // moved into bootstrap
+        // // todo chang think about to move this logic to the resource manager as the other services to the job inside
+        // private async UniTask LoadGameBookConfigAsync()
+        // {
+        //     Debug.Log("LoadGameBookConfigAsync start");
+        //     var key = "BookJson";
+        //     var text = await _resourcesManager.LoadAssetAsync<TextAsset>(key);
+        //
+        //     var settings = new JsonSerializerSettings
+        //     {
+        //         Converters = new List<JsonConverter> { new BookConverter() }
+        //     };
+        //
+        //     Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(text.text, settings);
+        //     Bus.SimpleLessons = Bus.SimpleBookData.Sections
+        //         .SelectMany(section => section.Lessons)
+        //         .ToDictionary(lesson => lesson.FileName);
+        //     
+        //     Debug.Log("LoadGameBookConfigAsync end");
+        // }
     }
 }

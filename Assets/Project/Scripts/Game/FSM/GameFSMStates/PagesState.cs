@@ -330,7 +330,8 @@ namespace Chang.FSM
                 AssetPaths.Addressables.Root,
                 $"{fileName}.asset");
             
-            var config = await _resourcesManager.LoadAssetAsync<PhraseConfig>(configPath);
+            DisposableAsset<PhraseConfig> configAsset = await _resourcesManager.LoadAssetAsync<PhraseConfig>(configPath);
+            var config = configAsset.Item;
 
             // Assets/Project/Resources_Bundled/Thai/SoundWords/Fruits/Watermelon.mp3
             var audioClipPath = Path.Combine(
@@ -340,7 +341,8 @@ namespace Chang.FSM
                 config.Section,
                 $"{config.Word.Key}.mp3");
 
-            config.AudioClip = await _resourcesManager.LoadAssetAsync<AudioClip>(audioClipPath);
+            var clipAsset = await _resourcesManager.LoadAssetAsync<AudioClip>(audioClipPath);
+            config.AudioClip = clipAsset.Item;
             return config.PhraseData;
         }
 

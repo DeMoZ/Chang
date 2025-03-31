@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using Object = UnityEngine.Object;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -74,9 +75,67 @@ namespace Chang.Resources
             throw new NotImplementedException();
         }
 
-        public UniTask<T> LoadAssetAsync<T>(string key, CancellationToken cancellationToken = default) where T : Object
+        // public UniTask<T> LoadAssetAsync<T>(string key, CancellationToken cancellationToken = default) where T : Object
+        // {
+        //     // todo chang disposable asset? or handle and then dissposable asset is not required?
+        //     throw new NotImplementedException();
+        // }
+
+        // todo chang implement with progress? or cant it be moved into downloader class?
+        //public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, IProgress<float> progress, CancellationToken ct) where T : Object
+        public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct) where T : Object
         {
-            throw new NotImplementedException();
+            // InitializationGuard();
+            bool isKeyNotFound = false;
+            AsyncOperationHandle<T> handle = default;
+            T result = null;
+
+            try
+            {
+                handle = Addressables.LoadAssetAsync<T>(key);
+                result = await handle.WithCancellation(ct);
+            }
+            catch (OperationCanceledException)
+            {
+                handle.SafeRelease();
+                return DisposableAsset<T>.Empty();
+            }
+            catch (InvalidKeyException ex)
+            {
+                Debug.Log($"<color=Yellow>Warning</color> not found asset with key '{key}': {ex.Message}");
+                isKeyNotFound = true;
+                handle.SafeRelease();
+            }
+
+            if (isKeyNotFound)
+            {
+                try
+                {
+                    Debug.Log($"Repeat load asset from cached path '{key}':");
+                    handle = Addressables.LoadAssetAsync<T>(key);
+                    result = await handle.WithCancellation(ct);
+                }
+                catch (OperationCanceledException)
+                {
+                    handle.SafeRelease();
+                    return DisposableAsset<T>.Empty();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error loading asset with cached path '{key}': {ex.Message}");
+                    handle.SafeRelease();
+                    return DisposableAsset<T>.Empty();
+                }
+            }
+
+            if (handle.Result == null)
+            {
+                Debug.LogError($"missing asset with key '{key}'");
+                handle.SafeRelease();
+                return DisposableAsset<T>.Empty();
+            }
+
+            return new DisposableAsset<T>(result, handle);
         }
 
         public Sprite LoadMissingSprite()
