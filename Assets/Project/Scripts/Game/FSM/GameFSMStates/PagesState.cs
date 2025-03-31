@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -20,12 +21,14 @@ namespace Chang.FSM
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
-        [Inject] private readonly IResourcesManager _resourcesManager;
+        [Inject] private readonly AddressablesDownloader _assetDownloader;
+        [Inject] private readonly IResourcesManager _assetManager;
 
         private readonly DiContainer _diContainer;
 
         private PagesBus _pagesBus;
         private PagesFSM _pagesFsm;
+        private CancellationTokenSource _cts;
 
         public PagesState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult)
             : base(gameBus, onStateResult)
@@ -35,6 +38,9 @@ namespace Chang.FSM
 
         public void Dispose()
         {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            
             _pagesFsm.Dispose();
             _pagesBus.Dispose();
         }
@@ -43,6 +49,17 @@ namespace Chang.FSM
         {
             base.Enter();
 
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
+            
+            EnterAsync().Forget();
+        }
+        
+        private async UniTask EnterAsync()
+        {
+            await PreloadContent();
+            
             _screenManager.SetActivePagesContainer(true);
 
             _gameOverlayController.OnCheck += OnCheck;
@@ -81,6 +98,21 @@ namespace Chang.FSM
             _gameOverlayController.OnExitToLobby();
         }
 
+        private async UniTask PreloadContent()
+        {
+            
+            HashSet<string> keys = new HashSet<string>();
+            foreach (ISimpleQuestion quest in Bus.CurrentLesson.SimpleQuestions)
+            {
+                keys.AddRange(quest.GetKeys);
+            }
+            
+            // refactor keys. Add .asset also add .mp3 . Add prefix Assets/Project/Resources_Bundled/Thai/ for sound and for configs
+            // todo chang create provider for kays naming
+            
+            await _assetDownloader.PreloadAssetAsync(keys, _cts.Token);
+        }
+        
         private void ExitToLobby()
         {
             // todo remove Temporary solution with exit to lobby, and add game result popup
@@ -330,7 +362,8 @@ namespace Chang.FSM
                 AssetPaths.Addressables.Root,
                 $"{fileName}.asset");
             
-            DisposableAsset<PhraseConfig> configAsset = await _resourcesManager.LoadAssetAsync<PhraseConfig>(configPath);
+            // todo chang DISPOSE handler!!!
+            DisposableAsset<PhraseConfig> configAsset = await _assetManager.LoadAssetAsync<PhraseConfig>(configPath);
             var config = configAsset.Item;
 
             // Assets/Project/Resources_Bundled/Thai/SoundWords/Fruits/Watermelon.mp3
@@ -341,7 +374,8 @@ namespace Chang.FSM
                 config.Section,
                 $"{config.Word.Key}.mp3");
 
-            var clipAsset = await _resourcesManager.LoadAssetAsync<AudioClip>(audioClipPath);
+            // todo chang DISPOSE handler!!!
+            var clipAsset = await _assetManager.LoadAssetAsync<AudioClip>(audioClipPath);
             config.AudioClip = clipAsset.Item;
             return config.PhraseData;
         }

@@ -42,26 +42,26 @@ namespace Chang.FSM
             // todo chang Show loading UI and some info on that UI
             // todo chang implement loading error catching
 
-            _preloaderController.SetViewActive(true);
+            // _preloaderController.SetViewActive(true);
 
-            switch (Bus.PreloadFor)
-            {
-                case PreloadType.Boot:
-                    // Moved into bootstrap
-                    // // todo chang this logic supposed to be in main game logic, not in the FSM
-                    // await LoadGameBookConfigAsync();
-                    // await _authorizationService.AuthenticateAsync();
-                    // await _profileService.LoadStoredData();
-                    OnStateResult.Invoke(StateType.Lobby);
-                    break;
-                case PreloadType.LessonData:
-                    Debug.LogWarning("Should not be here because it loads in VocabularyState without loading ui");
-                    OnStateResult.Invoke(StateType.PlayPages);
-                    break;
-
-                default:
-                    throw new NotImplementedException($"PreloadType not implemented {Bus.PreloadFor}");
-            }
+            // switch (Bus.PreloadFor)
+            // {
+            //     case PreloadType.Boot:
+            //         // Moved into bootstrap
+            //         // // todo chang this logic supposed to be in main game logic, not in the FSM
+            //         // await LoadGameBookConfigAsync();
+            //         // await _authorizationService.AuthenticateAsync();
+            //         // await _profileService.LoadStoredData();
+            //         OnStateResult.Invoke(StateType.Lobby);
+            //         break;
+            //     case PreloadType.LessonData:
+            //         Debug.LogWarning("Should not be here because it loads in VocabularyState without loading ui");
+            //         OnStateResult.Invoke(StateType.PlayPages);
+            //         break;
+            //
+            //     default:
+            //         throw new NotImplementedException($"PreloadType not implemented {Bus.PreloadFor}");
+            // }
         }
 
         // moved into bootstrap

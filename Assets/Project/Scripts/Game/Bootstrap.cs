@@ -12,7 +12,7 @@ namespace Chang
 {
     public class Bootstrap : IInitializable, IDisposable
     {
-        private readonly AddressablesDownloader _addressablesDownloader;
+        private readonly AddressablesDownloader _assetDownloader;
         private readonly AuthorizationService _authorizationService;
         
         private CancellationTokenSource _cts;
@@ -20,7 +20,7 @@ namespace Chang
         [Inject]
         public Bootstrap(AddressablesDownloader addresablesDownloader, AuthorizationService authorizationService)
         {
-            _addressablesDownloader = addresablesDownloader;
+            _assetDownloader = addresablesDownloader;
             _authorizationService = authorizationService;
 
             _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
@@ -49,7 +49,7 @@ namespace Chang
                 //0 *skip for now download game settings from unity cloud ? Without authorization?
 
                 //1 download addressables Base
-                await _addressablesDownloader.PreloadGameStartAddressables(_cts.Token);
+                await _assetDownloader.PreloadGameStartAddressables(_cts.Token);
                 
                 //2 authorization   
                 await _authorizationService.AuthenticateAsync();

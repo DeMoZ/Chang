@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.Utilities;
 
 namespace Chang
 {
@@ -27,6 +28,7 @@ namespace Chang
     public interface ISimpleQuestion
     {
         QuestionType QuestionType { get; }
+        HashSet<string> GetKeys { get; }
     }
 
     public class SimpleQuestSelectWord : ISimpleQuestion
@@ -35,6 +37,16 @@ namespace Chang
         public string CorrectWordFileName;
         public List<string> MixWordsFileNames;
         public string FileName; // json field
+        
+        public HashSet<string> GetKeys
+        {
+            get
+            {
+                var keys = new HashSet<string> { CorrectWordFileName };
+                keys.AddRange(MixWordsFileNames);
+                return keys;
+            }
+        }
     }
 
     public class SimpleQuestMatchWords : ISimpleQuestion
@@ -43,11 +55,15 @@ namespace Chang
 
         public List<string> MatchWordsFileNames;
         public string FileName; // json field
+        
+        public HashSet<string> GetKeys => new(MatchWordsFileNames);
     }
 
     public class SimpleQuestDemonstrationWord : ISimpleQuestion
     {
         public string CorrectWordFileName;
         public QuestionType QuestionType => QuestionType.DemonstrationWord;
+        
+        public HashSet<string> GetKeys => new() { CorrectWordFileName };
     }
 }

@@ -26,7 +26,7 @@ namespace Chang.FSM
 
         protected override void Init()
         {
-            _gameBus.PreloadFor = PreloadType.Boot;
+            // _gameBus.PreloadFor = PreloadType.Boot;
 
             // var preloaderState = new PreloadState(_gameBus, OnStateResult);
             var lobbyState = new LobbyState(_gameBus, OnStateResult);

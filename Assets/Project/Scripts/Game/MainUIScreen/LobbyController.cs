@@ -8,7 +8,6 @@ using Chang.GameBook;
 using Chang.Profile;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
-
 namespace Chang
 {
     public class LobbyController : IViewController
@@ -129,7 +128,7 @@ namespace Chang
             lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
 
             _gameBus.CurrentLesson = lesson;
-            _gameBus.PreloadFor = PreloadType.LessonData;
+            // _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 
             _gameBus.GameType = GameType.Learn;
@@ -199,7 +198,7 @@ namespace Chang
             lesson.SetSimpleQuestions(questions);
 
             _gameBus.CurrentLesson = lesson;
-            _gameBus.PreloadFor = PreloadType.LessonData;
+            // _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 
             _gameBus.GameType = GameType.Repetition;

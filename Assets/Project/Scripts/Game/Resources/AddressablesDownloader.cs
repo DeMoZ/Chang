@@ -93,7 +93,6 @@ namespace Chang.Resources
             downloadHandle.Release();
         }
 
-
         private async UniTask InitializationGuard()
         {
             if (!_isInitialized)
