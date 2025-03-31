@@ -1,4 +1,3 @@
-using Chang.FSM;
 using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
@@ -19,16 +18,11 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<PlayerProfile>().AsSingle();
             Container.BindInterfacesAndSelfTo<AuthorizationService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
-            Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
-            Container.BindInterfacesAndSelfTo<Game>().AsSingle();
-            Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();// todo chang move to GameSceneInstaller
 
-
-            // todo Chang add required bindings
-            // Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle(); probably move to SceneInstaller which is better to name after scene name - GameInstaller
-            
-            Container.BindInterfacesAndSelfTo<LogInModel>().AsSingle();
-            Container.BindInterfacesAndSelfTo<LogInController>().AsSingle();
+            var loginModel = new LogInModel();
+            var loginController = new LogInController(loginModel);
+            Container.BindInstances(loginModel);
+            Container.BindInstance(loginController);
         }
 
         private void OnApplicationPause(bool pauseStatus)

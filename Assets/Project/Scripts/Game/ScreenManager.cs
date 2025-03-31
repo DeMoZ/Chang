@@ -7,7 +7,7 @@ namespace Chang
     public class ScreenManager
     {
         private LobbyController _mainUiController;
-        private PreloaderController _preloaderController;
+        //private PreloaderController _preloaderController;
 
         private GameObject _pagesContainer;
 
@@ -15,16 +15,16 @@ namespace Chang
 
         [Inject]
         public ScreenManager(LobbyController mainUiController,
-            PreloaderController preloaderController,
+            //PreloaderController preloaderController,
             [Inject(Id = "PagesContainer")] GameObject pagesContainer,
             DemonstrationWordController demonstrationController,
             MatchWordsController matchTranslationController,
             SelectWordController selectTranslationController)
         {
             _mainUiController = mainUiController;
-            _preloaderController = preloaderController;
+            //_preloaderController = preloaderController;
             _mainUiController.SetViewActive(false);
-            _preloaderController.SetViewActive(false);
+            //_preloaderController.SetViewActive(false);
 
             _pagesContainer = pagesContainer;
             SetActivePagesContainer(false);

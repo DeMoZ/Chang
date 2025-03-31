@@ -5,7 +5,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
-    public class BootstrapSceneInstaller : MonoInstaller<BootstrapSceneInstaller>
+    public class BootstrapInstaller : MonoInstaller<BootstrapInstaller>
     {
         [SerializeField] private LoadingView loadingScreen;
         [SerializeField] private LogInView logInScreen;
@@ -24,6 +24,7 @@ namespace Chang
             
             #region Controllers
 
+            Container.BindInterfacesAndSelfTo<Bootstrap>().AsSingle();
             Container.BindInterfacesTo<LoadingController>().AsSingle();
 
             #endregion

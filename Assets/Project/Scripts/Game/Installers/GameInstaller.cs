@@ -1,12 +1,13 @@
+using Chang.FSM;
 using UnityEngine;
 using Zenject;
 using Chang.UI;
 using Chang.GameBook;
-using DMZ.Legacy.LoginScreen;
+using Chang.Services;
 
 namespace Chang
 {
-    public class ScreenInstaller : MonoInstaller
+    public class GameInstaller : MonoInstaller
     {
         [SerializeField] private MainUiView mainUiScreen;
         [SerializeField] private RepetitionView repetitionScreen;
@@ -37,10 +38,15 @@ namespace Chang
 
         public override void InstallBindings()
         {
-            Debug.Log($"{nameof(ScreenInstaller)} InstallBindings");
+            Debug.Log($"{nameof(GameInstaller)} InstallBindings");
 
             Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
 
+            Container.BindInterfacesAndSelfTo<Game>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
+            
             #region Views
 
             Container.BindInstance(mainUiScreen).AsSingle();
@@ -69,7 +75,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<PreloaderController>().AsSingle();
+            //Container.BindInterfacesAndSelfTo<PreloaderController>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SystemUiController>().AsSingle();
             
