@@ -7,10 +7,10 @@ namespace Chang
     public class LoadingController : IDisposable
     {
         private readonly LoadingView _view;
-        private readonly AddressablesDownloadModel _downloadModel;
+        private readonly DownloadModel _downloadModel;
 
         [Inject]
-        public LoadingController(LoadingView view, AddressablesDownloadModel downloadModel)
+        public LoadingController(LoadingView view, DownloadModel downloadModel)
         {
             _view = view;
             _downloadModel = downloadModel;

@@ -17,9 +17,10 @@ namespace Chang.FSM
     {
         public override StateType Type => StateType.Lobby;
 
-        [Inject] private readonly LobbyController _mainUiController;
+        [Inject] private readonly LobbyController _lobbyController;
         [Inject] private readonly AddressablesAssetManager _assetManager;
         [Inject] private readonly ProfileService _profileService;
+        [Inject] private readonly DownloadModel _downloadModel;
 
         private CancellationTokenSource _cts;
 
@@ -29,7 +30,7 @@ namespace Chang.FSM
 
         public void Init()
         {
-            _mainUiController.Init(OnExitState);
+            _lobbyController.Init(OnExitState);
         }
 
         public override void Enter()
@@ -42,12 +43,12 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
-            //3 download player profile
-            await _profileService.LoadStoredData();
+            _downloadModel.SimulateProgress(2f, ct : _cts.Token);
+            _downloadModel.ShowUi.Value = true;
+            
+            await _profileService.LoadStoredData(_cts.Token);
                 
-            //4 *skip for now download additional addressables related to profile?
-                
-            // todo chang HideLoadingUi();
+            // todo chang download additional addressables related to profile?
             
             Debug.Log("LoadGameBookConfigAsync start");
             var key = "BookJson";
@@ -72,12 +73,18 @@ namespace Chang.FSM
             asset.Dispose();
             
             Debug.Log("LoadGameBookConfigAsync end");
-            _mainUiController.Enter();
+            
+            _downloadModel.Progress.Value = 1f;
+            _downloadModel.ShowUi.Value = false;
+            
+            _lobbyController.Enter();
         }
 
         public override void Exit()
         {
-            _mainUiController.SetViewActive(false);
+            _lobbyController.SetViewActive(false);
+            _cts?.Cancel();
+            _cts?.Dispose();
         }
 
         private void OnExitState()

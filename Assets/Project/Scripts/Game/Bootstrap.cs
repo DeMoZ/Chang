@@ -29,10 +29,10 @@ namespace Chang
         public void Initialize()
         {
             DMZLogger.Log($"{nameof(Initialize)}");
-            LoadingSequenceAsync();
+            LoadingSequenceAsync().Forget();
         }
         
-        private async void LoadingSequenceAsync()
+        private async UniTask LoadingSequenceAsync()
         {
             DMZLogger.Log($"{nameof(LoadingSequenceAsync)}: Start");
             RunRestartTrigger();

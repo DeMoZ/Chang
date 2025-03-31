@@ -23,11 +23,11 @@ namespace Chang.Resources
     /// </summary>
     public class AddressablesDownloader
     {
-        private readonly AddressablesDownloadModel _downloadModel;
+        private readonly DownloadModel _downloadModel;
 
         private bool _isInitialized;
 
-        public AddressablesDownloader(AddressablesDownloadModel downloadModel)
+        public AddressablesDownloader(DownloadModel downloadModel)
         {
             _downloadModel = downloadModel;
         }

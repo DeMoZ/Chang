@@ -12,7 +12,7 @@ namespace Chang
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(InstallBindings)}");
-            Container.BindInterfacesAndSelfTo<AddressablesDownloadModel>().AsSingle();
+            Container.BindInterfacesAndSelfTo<DownloadModel>().AsSingle();
             Container.BindInterfacesAndSelfTo<AddressablesAssetManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<AddressablesDownloader>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerProfile>().AsSingle();
