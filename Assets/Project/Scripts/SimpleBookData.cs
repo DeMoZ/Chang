@@ -15,7 +15,7 @@ namespace Chang
         public string Section;
         public List<SimpleLessonData> Lessons;
     }
-    
+
     public class SimpleLessonData
     {
         public string FileName; // json field
@@ -28,7 +28,8 @@ namespace Chang
     public interface ISimpleQuestion
     {
         QuestionType QuestionType { get; }
-        HashSet<string> GetKeys { get; }
+        HashSet<string> GetConfigKeys();
+        HashSet<string> GetSoundKeys();
     }
 
     public class SimpleQuestSelectWord : ISimpleQuestion
@@ -37,15 +38,17 @@ namespace Chang
         public string CorrectWordFileName;
         public List<string> MixWordsFileNames;
         public string FileName; // json field
-        
-        public HashSet<string> GetKeys
+
+        public HashSet<string> GetConfigKeys()
         {
-            get
-            {
-                var keys = new HashSet<string> { CorrectWordFileName };
-                keys.AddRange(MixWordsFileNames);
-                return keys;
-            }
+            var keys = new HashSet<string> { CorrectWordFileName };
+            keys.AddRange(MixWordsFileNames);
+            return keys;
+        }
+
+        public HashSet<string> GetSoundKeys()
+        {
+            return new HashSet<string>(MixWordsFileNames);
         }
     }
 
@@ -55,15 +58,17 @@ namespace Chang
 
         public List<string> MatchWordsFileNames;
         public string FileName; // json field
-        
-        public HashSet<string> GetKeys => new(MatchWordsFileNames);
+
+        public HashSet<string> GetConfigKeys() => new(MatchWordsFileNames);
+        public HashSet<string> GetSoundKeys() => new(MatchWordsFileNames);
     }
 
     public class SimpleQuestDemonstrationWord : ISimpleQuestion
     {
         public string CorrectWordFileName;
         public QuestionType QuestionType => QuestionType.DemonstrationWord;
-        
-        public HashSet<string> GetKeys => new() { CorrectWordFileName };
+
+        public HashSet<string> GetConfigKeys() => new() { CorrectWordFileName };
+        public HashSet<string> GetSoundKeys() => new() { CorrectWordFileName };
     }
 }

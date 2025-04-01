@@ -106,7 +106,7 @@ namespace Chang.Resources
             AsyncOperationHandle<IResourceLocator> handle = Addressables.InitializeAsync();
             await handle.Task;
 
-            // Проверяем, действителен ли handle перед обращением к нему
+            // todo chang Check handle validity
             if (!handle.IsValid())
             {
                 Debug.LogWarning("Handle is invalid, skipping further operations.");
@@ -118,7 +118,6 @@ namespace Chang.Resources
                 string errorMessage = handle.OperationException?.Message;
                 Debug.LogError($"Initialization failed: {errorMessage}");
 
-                // Освобождаем handle только если он ещё валиден
                 if (handle.IsValid())
                 {
                     handle.Release();

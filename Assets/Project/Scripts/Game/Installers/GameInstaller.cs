@@ -3,6 +3,7 @@ using UnityEngine;
 using Zenject;
 using Chang.UI;
 using Chang.GameBook;
+using Chang.Resources;
 using Chang.Services;
 
 namespace Chang
@@ -46,6 +47,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
             Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<WordPathHelper>().AsSingle();
             
             #region Views
 

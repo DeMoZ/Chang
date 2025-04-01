@@ -23,6 +23,7 @@ namespace Chang.FSM
         [Inject] private readonly ScreenManager _screenManager;
         [Inject] private readonly AddressablesDownloader _assetDownloader;
         [Inject] private readonly IResourcesManager _assetManager;
+        [Inject] private readonly WordPathHelper _wordPathHelper;
 
         private readonly DiContainer _diContainer;
 
@@ -40,7 +41,7 @@ namespace Chang.FSM
         {
             _cts?.Cancel();
             _cts?.Dispose();
-            
+
             _pagesFsm.Dispose();
             _pagesBus.Dispose();
         }
@@ -52,14 +53,14 @@ namespace Chang.FSM
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = new CancellationTokenSource();
-            
+
             EnterAsync().Forget();
         }
-        
+
         private async UniTask EnterAsync()
         {
             await PreloadContent();
-            
+
             _screenManager.SetActivePagesContainer(true);
 
             _gameOverlayController.OnCheck += OnCheck;
@@ -100,19 +101,16 @@ namespace Chang.FSM
 
         private async UniTask PreloadContent()
         {
-            
-            HashSet<string> keys = new HashSet<string>();
+            HashSet<string> keys = new();
             foreach (ISimpleQuestion quest in Bus.CurrentLesson.SimpleQuestions)
             {
-                keys.AddRange(quest.GetKeys);
+                keys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
+                keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
             }
-            
-            // refactor keys. Add .asset also add .mp3 . Add prefix Assets/Project/Resources_Bundled/Thai/ for sound and for configs
-            // todo chang create provider for kays naming
             
             await _assetDownloader.PreloadAssetAsync(keys, _cts.Token);
         }
-        
+
         private void ExitToLobby()
         {
             // todo remove Temporary solution with exit to lobby, and add game result popup
@@ -356,23 +354,13 @@ namespace Chang.FSM
 
         private async UniTask<PhraseData> LoadPhraseConfigData(string fileName)
         {
-            // todo chang create provider for words and implement call _resourcesManager form it
-            // Assets/Project/Resources_Bundled/Thai/Words/WeekDays/Yesterday.asset
-            var configPath = Path.Combine(
-                AssetPaths.Addressables.Root,
-                $"{fileName}.asset");
-            
+            var configPath = _wordPathHelper.GetConfigPath(fileName);
+
             // todo chang DISPOSE handler!!!
             DisposableAsset<PhraseConfig> configAsset = await _assetManager.LoadAssetAsync<PhraseConfig>(configPath);
             var config = configAsset.Item;
 
-            // Assets/Project/Resources_Bundled/Thai/SoundWords/Fruits/Watermelon.mp3
-            var audioClipPath = Path.Combine(
-                AssetPaths.Addressables.Root,
-                config.Language.ToString(),
-                AssetPaths.Addressables.SoundWords,
-                config.Section,
-                $"{config.Word.Key}.mp3");
+            var audioClipPath = _wordPathHelper.GetSoundPath(fileName);
 
             // todo chang DISPOSE handler!!!
             var clipAsset = await _assetManager.LoadAssetAsync<AudioClip>(audioClipPath);
