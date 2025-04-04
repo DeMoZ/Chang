@@ -30,7 +30,7 @@ namespace Chang
             #endregion
         }
 
-        public void Start()
+        public override void Start()
         {
             Debug.Log($"{nameof(Start)}");
             var loginModel = Container.Resolve<LogInModel>();

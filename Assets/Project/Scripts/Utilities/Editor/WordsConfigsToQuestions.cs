@@ -15,7 +15,7 @@ public class WordsConfigsToQuestions : ScriptableObject
     [SerializeField, FolderPath] private List<string> _folders;
 
     [Button]
-    private async void MakeQuestsWithWordsInFolders()
+    private void MakeQuestsWithWordsInFolders()
     {
         AssetDatabase.StartAssetEditing();
         try

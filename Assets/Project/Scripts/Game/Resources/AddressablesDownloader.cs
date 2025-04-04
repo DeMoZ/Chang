@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -89,6 +90,51 @@ namespace Chang.Resources
                 Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
             }
 
+            _downloadModel.ShowUi.Value = false;
+            downloadHandle.Release();
+        }
+
+        // todo chang why do i use this method? need to figure out the difference with PreloadAssetAsync
+        public async UniTask PreloadAssetAsyncTest(IEnumerable<string> keys, CancellationToken ct)
+        {
+            // await InitializationGuard();
+
+            AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
+            await getDownloadSizeHandle.Task;
+
+            if (getDownloadSizeHandle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError($"{nameof(PreloadAssetAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                getDownloadSizeHandle.Release();
+                return;
+            }
+
+            long totalDownloadSize = getDownloadSizeHandle.Result;
+            Debug.Log($"Total download size: {totalDownloadSize} bytes");
+            getDownloadSizeHandle.Release();
+
+            if (totalDownloadSize == 0)
+            {
+                Debug.Log("No assets need to be downloaded.");
+                return;
+            }
+
+            _downloadModel.ShowUi.Value = true;
+            _downloadModel.Progress.Value = 0;
+
+            AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
+            while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
+            {
+                Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
+                _downloadModel.Progress.Value = downloadHandle.PercentComplete;
+                await UniTask.Yield(ct);
+            }
+            
+            if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
+            }
+            
             _downloadModel.ShowUi.Value = false;
             downloadHandle.Release();
         }

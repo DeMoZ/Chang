@@ -61,7 +61,7 @@ namespace Chang
             }
             catch (Exception e)
             {
-                throw; // TODO handle exception
+              Debug.LogError(e);
             }
         }
         

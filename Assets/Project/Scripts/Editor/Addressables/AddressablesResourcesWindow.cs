@@ -133,18 +133,6 @@ namespace Chang.Editor.Addressables
             AssetDatabase.Refresh();
         }
 
-        private void MoveWeaponWrapMaterialsAssets(string fromPath, string toPath)
-        {
-        }
-
-        private void MoveGadgetsAssets(string fromPath, string toPath)
-        {
-        }
-
-        private void MoveShopGadgetsAssets(string fromPath, string toPath)
-        {
-        }
-
         private static (int, int, int) MoveAsset<T>(
             string[] assetGuids,
             string fromPath,
@@ -246,7 +234,6 @@ namespace Chang.Editor.Addressables
         
         private string GetCachePath()
         {
-            string path;
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
             return Path.Combine(Environment.GetFolderPath(
                     Environment.SpecialFolder.UserProfile), 
@@ -258,12 +245,10 @@ namespace Chang.Editor.Addressables
 #else
                 return Application.persistentDataPath;
 #endif
-            return path;
         }
         
         private string GetCaTalogPath()
         {
-            string path;
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
             return Path.Combine(Environment.GetFolderPath(
                     Environment.SpecialFolder.UserProfile), 
@@ -275,7 +260,6 @@ namespace Chang.Editor.Addressables
 #else
                 return Application.persistentDataPath;
 #endif
-            return path;
         }
     }
 }

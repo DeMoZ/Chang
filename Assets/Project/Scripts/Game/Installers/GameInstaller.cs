@@ -17,25 +17,17 @@ namespace Chang
         [SerializeField] private GameOverlayView gameOverlayScreen;
         [SerializeField] private SystemUiScreen systemUiScreen;
 
-        [Space] 
-        [SerializeField] private GameObject pagesContainer;
+        [Space] [SerializeField] private GameObject pagesContainer;
 
-        [Space] 
-        [SerializeField] private PlayResultView playResultScreen;
+        [Space] [SerializeField] private PlayResultView playResultScreen;
         [SerializeField] private DemonstrationWordView demonstrationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;
-        
-        [SerializeField] private PreloaderView preloaderScreen;
 
-        
-        
-        [Space]
-        [SerializeField] private LoadingView loadingScreenPrefab;
+        [Space] [SerializeField] private LoadingView loadingScreenPrefab;
         [SerializeField] private Transform loadingScreenContainer;
 
-        [Space]
-        [SerializeField] private AudioSource pagesAudioSource;
+        [Space] [SerializeField] private AudioSource pagesAudioSource;
 
         public override void InstallBindings()
         {
@@ -48,7 +40,10 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
             Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
             Container.BindInterfacesAndSelfTo<WordPathHelper>().AsSingle();
-            
+            Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
+
+            Container.BindInstance(pagesAudioSource).AsSingle();
+
             #region Views
 
             Container.BindInstance(mainUiScreen).AsSingle();
@@ -60,8 +55,6 @@ namespace Chang
             Container.BindInstance(demonstrationScreen).AsSingle();
             Container.BindInstance(matchWordScreen).AsSingle();
             Container.BindInstance(selectWordScreen).AsSingle();
-            Container.BindInstance(preloaderScreen).AsSingle();
-            
             Container.BindInstance(profileScreen).AsSingle();
             Container.BindInstance(systemUiScreen).AsSingle();
 
@@ -77,18 +70,11 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
-            //Container.BindInterfacesAndSelfTo<PreloaderController>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SystemUiController>().AsSingle();
-            
             Container.BindInterfacesAndSelfTo<PagesSoundController>().AsSingle();
+
             #endregion
-
-            Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
-
-            Container.BindInstance(pagesAudioSource).AsSingle();
-
-           
         }
     }
 }

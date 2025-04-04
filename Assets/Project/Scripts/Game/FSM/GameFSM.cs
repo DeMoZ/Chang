@@ -7,7 +7,7 @@ namespace Chang.FSM
 {
     public class GameFSM : FSMResultBase<StateType>
     {
-        protected override StateType _defaultStateType => StateType.Lobby; // todo Chang lobby state only after I authorize, load base bundles, load profile data 
+        protected override StateType _defaultStateType => StateType.Lobby; 
 
         private readonly DiContainer _diContainer;
         private readonly GameBus _gameBus;

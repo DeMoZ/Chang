@@ -84,7 +84,6 @@ namespace Chang.FSM
         {
             _lobbyController.SetViewActive(false);
             _cts?.Cancel();
-            _cts?.Dispose();
         }
 
         private void OnExitState()

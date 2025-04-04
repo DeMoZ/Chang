@@ -30,7 +30,7 @@ namespace Chang.Utilities
             File.WriteAllText(path, jsonData);
         }
 
-        public static async UniTask CreateWordConfigsFromSheet(Sheet data)
+        public static void CreateWordConfigsFromSheet(Sheet data)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace Chang.Utilities
             CreateFolders(pathOnly);
             AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
         }
-        
+
         public static void CreateLessonConfig(string section, LessonConfig dataAsset)
         {
             var languagePrefix = dataAsset.Language.ToString();
@@ -94,7 +94,7 @@ namespace Chang.Utilities
             CreateFolders(pathOnly);
             AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
         }
-        
+
         public static void CreateBookConfig(GameBookConfig dataAsset)
         {
             var languagePrefix = dataAsset.Language.ToString();
@@ -110,7 +110,7 @@ namespace Chang.Utilities
             CreateFolders(pathOnly);
             AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
         }
-        
+
         /*
           private static string GetNewWordFolderSystemPath(Languages language, string section)
                   {
@@ -126,7 +126,7 @@ namespace Chang.Utilities
                       return pathOnly;
                   }
          */
-        public static string GetSoundWordsSystemFilePath(Languages language,string section)
+        public static string GetSoundWordsSystemFilePath(Languages language, string section)
         {
             var languagePrefix = language.ToString();
             var path = Path.Combine(
@@ -139,7 +139,7 @@ namespace Chang.Utilities
 
             return path;
         }
-        
+
         private static void CreateConfig(Languages language, string name, PhraseData phraseData, bool withDirtyAndSafe = false)
         {
             var meanings = new List<Translation>
@@ -232,7 +232,7 @@ namespace Chang.Utilities
                 currentPath = folderPath;
             }
         }
-        
+
         private static void RestartEditAssetDatabase()
         {
             AssetDatabase.StopAssetEditing();

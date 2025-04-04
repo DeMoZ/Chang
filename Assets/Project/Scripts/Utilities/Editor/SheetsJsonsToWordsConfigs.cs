@@ -13,14 +13,14 @@ public class SheetsJsonsToWordsConfigs : ScriptableObject
     public List<TextAsset> SheetsJsons;
 
     [Button]
-    private async void MakeWordsFromJsons()
+    private void MakeWordsFromJsons()
     {
         foreach (var textAsset in SheetsJsons)
         {
             var json = textAsset.text;
             var sheet = JsonConvert.DeserializeObject<Sheet>(json);
 
-            await ConfigFileCreator.CreateWordConfigsFromSheet(sheet);
+            ConfigFileCreator.CreateWordConfigsFromSheet(sheet);
         }
         
         Debug.LogWarning("--Word Configs Created--");

@@ -15,7 +15,7 @@ public class LessonsToBooks : ScriptableObject
     [SerializeField, FolderPath] private List<string> _folders;
 
     [Button]
-    private async void MakeLessonsToBooksInFolders()
+    private void MakeLessonsToBooksInFolders()
     {
         AssetDatabase.StartAssetEditing();
         try

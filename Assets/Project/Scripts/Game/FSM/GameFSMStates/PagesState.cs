@@ -108,7 +108,7 @@ namespace Chang.FSM
                 keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
             }
             
-            await _assetDownloader.PreloadAssetAsync(keys, _cts.Token);
+            await _assetDownloader.PreloadAssetAsyncTest(keys, _cts.Token);
         }
 
         private void ExitToLobby()
@@ -193,8 +193,13 @@ namespace Chang.FSM
             OnContinue();
         }
 
-        // todo chang async
-        private async void OnContinue()
+
+        private void OnContinue()
+        {
+            OnContinueAsync().Forget();
+        }
+
+        private async UniTask OnContinueAsync()
         {
             if (_pagesFsm.CurrentStateType == QuestionType.Result)
             {
@@ -368,7 +373,7 @@ namespace Chang.FSM
             return config.PhraseData;
         }
 
-        // private List<FileNameData> GetAssetsNames(ISimpleQuestion nextQuestion)
+        // private List<FileNameData>  GetAssetsNames(ISimpleQuestion nextQuestion)
         // {
         //     List<FileNameData> result = new();
         //     switch (nextQuestion.QuestionType)

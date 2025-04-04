@@ -12,12 +12,10 @@ namespace Chang.Resources
 {
     public class SimpleResourceManager : IResourcesManager
     {
-        private bool _isInitialized = false;
 
         public async UniTask InitializeAsync()
         {
             await Addressables.InitializeAsync();
-            _isInitialized = true;
         }
 
         public bool IsAssetExists(AssetReference key)
@@ -144,6 +142,7 @@ namespace Chang.Resources
 
         public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken token) where T : Object
         {
+            await UniTask.Yield(token);
             throw new NotImplementedException();
         }
        /*

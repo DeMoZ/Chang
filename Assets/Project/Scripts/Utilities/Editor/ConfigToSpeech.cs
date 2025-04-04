@@ -74,14 +74,9 @@ public class ConfigToSpeech : ScriptableObject
         Debug.LogWarning("--Sounds Created--");
     }
 
-    private async UniTaskVoid AudioTextAsync(string text)
+    private async UniTaskVoid AudioTextAsync(string value)
     {
-        await TextToSpeechService.GetAudioAsync(text);
-    }
-
-    private async UniTaskVoid AudioTextAsync(PhraseConfig config)
-    {
-       // todo chang implement for single config
+        await TextToSpeechService.GetAudioAsync(value);
     }
     
     private List<PhraseConfig> FindConfigsInFolder(string folder)
