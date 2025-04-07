@@ -43,13 +43,13 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
-            _downloadModel.SimulateProgress(2f, ct : _cts.Token);
+            _downloadModel.SimulateProgress(2f, ct: _cts.Token).Forget();
             _downloadModel.ShowUi.Value = true;
-            
+
             await _profileService.LoadStoredData(_cts.Token);
-                
+
             // todo chang download additional addressables related to profile?
-            
+
             Debug.Log("LoadGameBookConfigAsync start");
             var key = "BookJson";
             DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(key, _cts.Token);
@@ -71,12 +71,12 @@ namespace Chang.FSM
                 .ToDictionary(lesson => lesson.FileName);
 
             asset.Dispose();
-            
+
             Debug.Log("LoadGameBookConfigAsync end");
-            
-            _downloadModel.Progress.Value = 1f;
+
+            _downloadModel.SetProgress(1f);
             _downloadModel.ShowUi.Value = false;
-            
+
             _lobbyController.Enter();
         }
 

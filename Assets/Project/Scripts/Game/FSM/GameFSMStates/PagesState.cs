@@ -22,6 +22,7 @@ namespace Chang.FSM
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
         [Inject] private readonly AddressablesDownloader _assetDownloader;
+        [Inject] private readonly DownloadModel _downloadModel;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly WordPathHelper _wordPathHelper;
 
@@ -59,6 +60,9 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
+            _downloadModel.ShowUi.Value = true;
+            _downloadModel.SetProgress(0);
+            
             await PreloadContent();
 
             _screenManager.SetActivePagesContainer(true);
@@ -79,7 +83,11 @@ namespace Chang.FSM
 
             _pagesFsm = new PagesFSM(_diContainer, _pagesBus);
             _pagesFsm.Initialize();
+            
             OnContinue();
+            
+            _downloadModel.SetProgress(100);
+            _downloadModel.ShowUi.Value = false;
         }
 
         public override void Exit()
@@ -108,7 +116,7 @@ namespace Chang.FSM
                 keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
             }
             
-            await _assetDownloader.PreloadAssetAsyncTest(keys, _cts.Token);
+            await _assetDownloader.PreloadAsync(keys, _cts.Token);
         }
 
         private void ExitToLobby()

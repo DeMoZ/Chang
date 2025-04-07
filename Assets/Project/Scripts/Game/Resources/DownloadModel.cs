@@ -11,8 +11,13 @@ namespace Chang.Resources
         public DMZState<bool> ShowUi = new(false);
         public DMZState<float> Progress = new(0);
 
-        public async void SimulateProgress(float duration, float from = 0, float to = 1, CancellationToken ct = default)
+        private CancellationTokenSource _cts;
+
+        public async UniTask SimulateProgress(float duration, float from = 0, float to = 1, CancellationToken ct = default)
         {
+            _cts?.Cancel();
+            _cts = new CancellationTokenSource();
+
             if (from < 0)
             {
                 from = Progress.Value;
@@ -23,7 +28,7 @@ namespace Chang.Resources
             float elapsed = 0f;
             while (elapsed < duration)
             {
-                if (ct.IsCancellationRequested)
+                if (ct.IsCancellationRequested || _cts.Token.IsCancellationRequested)
                 {
                     return;
                 }
@@ -35,9 +40,17 @@ namespace Chang.Resources
 
             Progress.Value = to;
         }
-            
+
+        public void SetProgress(float progress)
+        {
+            _cts?.Cancel();
+            Progress.Value = progress;
+        }
+
         public void Dispose()
         {
+            _cts?.Cancel();
+            _cts?.Dispose();
             
             ShowUi.Dispose();
             Progress.Dispose();

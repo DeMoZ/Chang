@@ -7,13 +7,11 @@ namespace Chang
     public class LoadingController : IDisposable
     {
         private readonly LoadingView _view;
-        private readonly DownloadModel _downloadModel;
 
         [Inject]
         public LoadingController(LoadingView view, DownloadModel downloadModel)
         {
             _view = view;
-            _downloadModel = downloadModel;
             
             downloadModel.ShowUi.Subscribe(OnShowUi);
             downloadModel.Progress.Subscribe(OnProgress);

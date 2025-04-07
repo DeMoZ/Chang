@@ -75,13 +75,13 @@ namespace Chang.Resources
             }
 
             _downloadModel.ShowUi.Value = true;
-            _downloadModel.Progress.Value = 0;
+            _downloadModel.SetProgress(0);
 
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Intersection);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
                 Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                _downloadModel.Progress.Value = downloadHandle.PercentComplete;
+                _downloadModel.SetProgress(downloadHandle.PercentComplete);
                 await UniTask.Yield(ct);
             }
 
@@ -94,11 +94,11 @@ namespace Chang.Resources
             downloadHandle.Release();
         }
 
-        // todo chang why do i use this method? need to figure out the difference with PreloadAssetAsync
-        public async UniTask PreloadAssetAsyncTest(IEnumerable<string> keys, CancellationToken ct)
+        /// <summary>
+        /// Without download screen 
+        /// </summary>
+        public async UniTask PreloadAsync(IEnumerable<string> keys, CancellationToken ct)
         {
-            // await InitializationGuard();
-
             AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
             await getDownloadSizeHandle.Task;
 
@@ -119,14 +119,11 @@ namespace Chang.Resources
                 return;
             }
 
-            _downloadModel.ShowUi.Value = true;
-            _downloadModel.Progress.Value = 0;
-
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
                 Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                _downloadModel.Progress.Value = downloadHandle.PercentComplete;
+                _downloadModel.SetProgress(downloadHandle.PercentComplete);
                 await UniTask.Yield(ct);
             }
             
