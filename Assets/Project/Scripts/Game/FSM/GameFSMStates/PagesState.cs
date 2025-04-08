@@ -115,13 +115,12 @@ namespace Chang.FSM
                 keys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
                 keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
             }
-            
+
             await _assetDownloader.PreloadAsync(keys, _cts.Token);
         }
 
         private void ExitToLobby()
         {
-            // todo remove Temporary solution with exit to lobby, and add game result popup
             OnStateResult.Invoke(StateType.Lobby);
         }
 
@@ -198,7 +197,7 @@ namespace Chang.FSM
             }
 
             await _profileService.SaveAsync();
-            OnContinue();
+            await OnContinueAsync();
         }
 
 
@@ -295,7 +294,6 @@ namespace Chang.FSM
                 return false;
             }
 
-            // todo chang need to get if this is repetition or learning
             var selectWordQuests = lesson.SimpleQuestions.OfType<SimpleQuestSelectWord>().ToList();
             matchWords.AddRange(selectWordQuests.Select(q => q.CorrectWordFileName));
             matchWords.AddRange(selectWordQuests.SelectMany(q => q.MixWordsFileNames));
@@ -305,7 +303,6 @@ namespace Chang.FSM
                 Debug.LogWarning($"matchWords not generated for lesson FileName: {lesson.FileName}, count select words {matchWords.Count}");
                 return false;
             }
-
 
             matchWords = _pagesBus.GameType == GameType.Learn
                 ? matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE).ToHashSet()
@@ -317,7 +314,6 @@ namespace Chang.FSM
             return true;
         }
 
-        // todo chang implement loading screen
         private async UniTask<QuestDataBase> CreateQuestData(ISimpleQuestion nextQuestion)
         {
             switch (nextQuestion.QuestionType)
@@ -376,33 +372,10 @@ namespace Chang.FSM
             var audioClipPath = _wordPathHelper.GetSoundPath(fileName);
 
             // todo chang DISPOSE handler!!!
-            var clipAsset = await _assetManager.LoadAssetAsync<AudioClip>(audioClipPath);
+            DisposableAsset<AudioClip> clipAsset = await _assetManager.LoadAssetAsync<AudioClip>(audioClipPath);
             config.AudioClip = clipAsset.Item;
             return config.PhraseData;
         }
-
-        // private List<FileNameData>  GetAssetsNames(ISimpleQuestion nextQuestion)
-        // {
-        //     List<FileNameData> result = new();
-        //     switch (nextQuestion.QuestionType)
-        //     {
-        //         case QuestionType.SelectWord:
-        //             var selectWord = (SimpleQuestSelectWord)nextQuestion;
-        //             result.Add(selectWord.CorrectWordFileName);
-        //             result.AddRange(selectWord.MixWordsFileNames);
-        //             break;
-        //
-        //         case QuestionType.MatchWords:
-        //             var matchWords = (SimpleQuestMatchWords)nextQuestion;
-        //             result.AddRange(matchWords.MatchWordsFileNames);
-        //             break;
-        //
-        //         default:
-        //             throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.QuestionType}");
-        //     }
-        //
-        //     return result;
-        // }
 
         // if no records stored about this question or the question mark is 1 (or 0)
         private bool IsNeedDemonstration(string fileName)

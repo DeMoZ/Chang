@@ -16,10 +16,10 @@ namespace Chang
         private readonly MatchWordsView _view;
         private readonly PagesSoundController _pagesSoundController;
 
+        private readonly List<CToggle> _leftToggles = new();
+        private readonly List<CToggle> _rightToggles = new();
+        
         private Action<int, int> _onToggleValueChanged;
-        private List<CToggle> _leftToggles = new();
-        private List<CToggle> _rightToggles = new();
-
         private CancellationTokenSource _cts;
         private bool _isLeftLearnLanguage;
 

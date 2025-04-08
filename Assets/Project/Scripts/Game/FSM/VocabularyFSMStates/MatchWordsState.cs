@@ -14,12 +14,12 @@ namespace Chang.FSM
     public class MatchWordsStateResult : IQuestionResult
     {
         public readonly List<SelectWordResult> Results = new();
-        public string Key { get; }
-        public string Presentation { get; }
+        public string Key { get; } = string.Empty;
+        public string Presentation { get; } = string.Empty;
         public QuestionType Type => QuestionType.MatchWords;
         public bool IsCorrect => true;
 
-        public object[] Info { get; }
+        public object[] Info { get; } = null;
     }
 
     public class MatchWordsState : ResultStateBase<QuestionType, PagesBus>
@@ -131,6 +131,7 @@ namespace Chang.FSM
 
             Bus.QuestionResult = _result;
             _gameOverlayController.OnCheck?.Invoke();
+            _stateController.EnableContinueButton(false);
         }
 
         private void OnHint(bool isHintUsed)
