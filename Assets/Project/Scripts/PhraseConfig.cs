@@ -10,18 +10,16 @@ namespace Chang
         [field: SerializeField] public string Key { get; set; } = string.Empty;
         [field: SerializeField] public Languages Language { get; set; } = Languages.English;
         [field: SerializeField] public string Section { get; set; } = string.Empty;
-        [field: SerializeField] public Sprite Sprite { get; set; }
         [field: SerializeField] public WordConfig Word { get; set; }
 
-        public AudioClip AudioClip { get; set; }
-        public PhraseData PhraseData => new(Key, AudioClip, Sprite, Word.WordData);
+        public PhraseData PhraseData => new(Key, Word.WordData);
     }
 
     [Serializable]
     public class WordConfig
     {
         [field: SerializeField] public string Section { get; set; } = string.Empty;
-        
+
         /// <summary>
         /// Do not use this field
         /// </summary>

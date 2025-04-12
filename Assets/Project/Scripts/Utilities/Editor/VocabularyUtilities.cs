@@ -99,7 +99,6 @@ namespace Chang.Utilities
         public string Word { get; set; }
         public string Phonetics { get; set; }
         public string Meaning { get; set; }
-        public AudioClip AudioClip { get; set; }
     }
 
     public class IdsData

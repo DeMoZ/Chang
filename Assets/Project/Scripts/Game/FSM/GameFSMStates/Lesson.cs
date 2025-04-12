@@ -16,7 +16,7 @@ namespace Chang
         public bool IsGeneratedMathWordsQuestPlayed;
         
         public ISimpleQuestion CurrentSimpleQuestion { get; private set; }
-        public IQuestData CurrentQuestionData { get; private set; }
+        public IQuestData CurrentQuestionData { get; private set; } // todo chang remove after refactoring pages on self loading content
         public List<ISimpleQuestion> SimpleQuestions { get; private set; }
         public Queue<ISimpleQuestion> SimpleQuestionQueue { get; private set; }
         

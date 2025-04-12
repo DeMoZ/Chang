@@ -167,7 +167,6 @@ namespace Chang.Utilities
             dataAsset.Key = phraseData.Key;
             dataAsset.Language = phraseData.Language;
             dataAsset.Section = phraseData.Section;
-            dataAsset.AudioClip = phraseData.AudioClip;
             dataAsset.Word = word;
 
             var folderSystemPath = GetNewWordFolderSystemPath(language, phraseData.Section);

@@ -14,27 +14,24 @@ namespace Chang
         private const int TimeToSetNormal = 500;
 
         private readonly MatchWordsView _view;
-        private readonly PagesSoundController _pagesSoundController;
-
         private readonly List<CToggle> _leftToggles = new();
         private readonly List<CToggle> _rightToggles = new();
-        
+
         private Action<int, int> _onToggleValueChanged;
         private CancellationTokenSource _cts;
         private bool _isLeftLearnLanguage;
 
         [Inject]
-        public MatchWordsController(MatchWordsView view, PagesSoundController pagesSoundController)
+        public MatchWordsController(MatchWordsView view)
         {
             _view = view;
-            _pagesSoundController = pagesSoundController;
         }
 
         public void Dispose()
         {
             _cts?.Cancel();
             _cts?.Dispose();
-            
+
             Clear();
         }
 
@@ -43,14 +40,14 @@ namespace Chang
             _leftToggles.Clear();
             _rightToggles.Clear();
         }
-        
+
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
         }
 
         public void Init(bool isLeftLearnLanguage, List<WordData> left, List<WordData> right,
-            Action<int, int> onToggleValueChanged, Action onContinueClicked)
+            Action<int, int> onToggleValueChanged, Action onContinueClicked, Action<string> onPlaySound)
         {
             _cts?.Cancel();
             _cts?.Dispose();
@@ -72,7 +69,7 @@ namespace Chang
                     OnToggleValueChanged(true, index, isOn);
                     if (isOn && _isLeftLearnLanguage)
                     {
-                        _pagesSoundController.PlaySound(left[index].AudioClip);    
+                        onPlaySound?.Invoke(left[index].Key);
                     }
                 });
                 toggle.EnablePhonetics(_isLeftLearnLanguage && right[i].ShowPhonetics);
@@ -90,7 +87,7 @@ namespace Chang
                     OnToggleValueChanged(false, index, isOn);
                     if (isOn && !_isLeftLearnLanguage)
                     {
-                        _pagesSoundController.PlaySound(right[index].AudioClip);    
+                        onPlaySound?.Invoke(right[index].Key);
                     }
                 });
                 toggle.EnablePhonetics(!_isLeftLearnLanguage && right[i].ShowPhonetics);

@@ -30,9 +30,9 @@ namespace Chang.FSM
 
             // var preloaderState = new PreloadState(_gameBus, OnStateResult);
             var lobbyState = new LobbyState(_gameBus, OnStateResult);
-            var pagesState = new PagesState(_diContainer, _gameBus, OnStateResult);
+            var pagesState = new PagesState(/*_diContainer, */_gameBus, OnStateResult);
 
-            _diContainer.Inject(pagesState);
+            _diContainer.Inject(pagesState); // todo Chang do i need to inject these states
             // _diContainer.Inject(preloaderState);
             _diContainer.Inject(lobbyState);
 

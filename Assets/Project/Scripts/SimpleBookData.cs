@@ -30,6 +30,7 @@ namespace Chang
         QuestionType QuestionType { get; }
         HashSet<string> GetConfigKeys();
         HashSet<string> GetSoundKeys();
+        HashSet<string> GetNeedDemonstrationKeys();
     }
 
     public class SimpleQuestSelectWord : ISimpleQuestion
@@ -48,7 +49,14 @@ namespace Chang
 
         public HashSet<string> GetSoundKeys()
         {
-            return new HashSet<string>(MixWordsFileNames);
+            var keys = new HashSet<string> { CorrectWordFileName };
+            keys.AddRange(MixWordsFileNames);
+            return keys;
+        }
+
+        public HashSet<string> GetNeedDemonstrationKeys()
+        {
+            return new HashSet<string> { CorrectWordFileName };
         }
     }
 
@@ -61,6 +69,7 @@ namespace Chang
 
         public HashSet<string> GetConfigKeys() => new(MatchWordsFileNames);
         public HashSet<string> GetSoundKeys() => new(MatchWordsFileNames);
+        public HashSet<string> GetNeedDemonstrationKeys() => new(MatchWordsFileNames);
     }
 
     public class SimpleQuestDemonstrationWord : ISimpleQuestion
@@ -70,5 +79,6 @@ namespace Chang
 
         public HashSet<string> GetConfigKeys() => new() { CorrectWordFileName };
         public HashSet<string> GetSoundKeys() => new() { CorrectWordFileName };
+        public HashSet<string> GetNeedDemonstrationKeys() => new() { CorrectWordFileName };
     }
 }

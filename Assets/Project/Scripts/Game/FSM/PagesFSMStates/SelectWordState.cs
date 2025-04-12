@@ -2,8 +2,10 @@ using System;
 using DMZ.FSM;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Chang.Resources;
 using Chang.Services;
+using Cysharp.Threading.Tasks;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -32,9 +34,12 @@ namespace Chang.FSM
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly PagesSoundController _pagesSoundController;
+        [Inject] private readonly WordPathHelper _wordPathHelper;
+        [Inject] private readonly IResourcesManager _assetManager;
 
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
+        private PageService _pageService;
 
         public override QuestionType Type => QuestionType.SelectWord;
 
@@ -45,25 +50,29 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
+
+            _pageService = new PageService(_wordPathHelper, _assetManager);
             Bus.OnHintUsed.Subscribe(OnHint);
             _gameOverlayController.EnableHintButton(true);
-            StateBody();
+            StateBodyAsync().Forget();
         }
 
         public override void Exit()
         {
             base.Exit();
+
+            _pageService.Dispose();
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
         }
 
-        private void StateBody()
+        private async UniTask StateBodyAsync()
         {
-            // 1 instantiate screen and initialise with data.
-            if (Bus.CurrentLesson.CurrentQuestionData.QuestionType != Type)
-                throw new ArgumentException("Question type doesnt match with state type");
+            ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
 
-            var questionData = (QuestSelectWordData)Bus.CurrentLesson.CurrentQuestionData;
+            await _pageService.LoadContentAsync(question);
+
+            QuestSelectWordData questionData = GetQuestionData((SimpleQuestSelectWord)question);
             _correctWord = questionData.CorrectWord;
             _mixWords ??= new List<PhraseData>();
             _mixWords.Clear();
@@ -87,9 +96,31 @@ namespace Chang.FSM
             OnClickPlaySound();
         }
 
+        private QuestSelectWordData GetQuestionData(SimpleQuestSelectWord selectWord)
+        {
+            QuestSelectWordData selectWordData = new QuestSelectWordData
+            {
+                CorrectWord = _pageService.Configs[selectWord.CorrectWordFileName].Item.PhraseData,
+                MixWords = new List<PhraseData>()
+            };
+
+            var mixWordsAmount = Bus.GameType == GameType.Learn
+                ? ProjectConstants.MIX_WORDS_AMOUNT_IN_LEARN_SELECT_WORD_PAGE
+                : ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE;
+
+            var mixWords = selectWord.MixWordsFileNames.Take(mixWordsAmount);
+            foreach (var fileName in mixWords)
+            {
+                var data = _pageService.Configs[fileName].Item.PhraseData;
+                selectWordData.MixWords.Add(data);
+            }
+
+            return selectWordData;
+        }
+
         private void OnClickPlaySound()
         {
-            _pagesSoundController.PlaySound(_correctWord.AudioClip);
+            _pagesSoundController.PlaySound(_pageService.Sounds[_correctWord.Key].Item);
         }
 
         private void OnHint(bool isHintUsed)

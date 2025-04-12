@@ -8,7 +8,6 @@ using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Sirenix.Utilities;
-using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -25,17 +24,14 @@ namespace Chang.FSM
         [Inject] private readonly DownloadModel _downloadModel;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly WordPathHelper _wordPathHelper;
-
-        private readonly DiContainer _diContainer;
+        [Inject] private readonly DiContainer _diContainer;
 
         private PagesBus _pagesBus;
         private PagesFSM _pagesFsm;
         private CancellationTokenSource _cts;
 
-        public PagesState(DiContainer diContainer, GameBus gameBus, Action<StateType> onStateResult)
-            : base(gameBus, onStateResult)
+        public PagesState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
-            _diContainer = diContainer;
         }
 
         public void Dispose()
@@ -62,7 +58,7 @@ namespace Chang.FSM
         {
             _downloadModel.ShowUi.Value = true;
             _downloadModel.SetProgress(0);
-            
+
             await PreloadContent();
 
             _screenManager.SetActivePagesContainer(true);
@@ -83,9 +79,9 @@ namespace Chang.FSM
 
             _pagesFsm = new PagesFSM(_diContainer, _pagesBus);
             _pagesFsm.Initialize();
-            
-            OnContinue();
-            
+
+            await OnContinueAsync();
+
             _downloadModel.SetProgress(100);
             _downloadModel.ShowUi.Value = false;
         }
@@ -200,7 +196,6 @@ namespace Chang.FSM
             await OnContinueAsync();
         }
 
-
         private void OnContinue()
         {
             OnContinueAsync().Forget();
@@ -226,56 +221,38 @@ namespace Chang.FSM
                 }
             }
 
+            // If the lesson has finished
             if (lesson.SimpleQuestionQueue.Count == 0)
             {
-                // the lesson has finished
-                // todo chang UML needs to be updated
                 SwitchState(QuestionType.Result);
+                return;
             }
-            else
-            {
-                ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
-                IQuestData questionData = await CreateQuestData(nextQuestion);
+            
+            ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
+            QuestionType nextQuestionType = nextQuestion.QuestionType;
 
-                if (nextQuestion.QuestionType == QuestionType.SelectWord)
+            // If demonstration word is required
+            if (nextQuestion.QuestionType != QuestionType.DemonstrationWord)
+            {
+                HashSet<string> keys = nextQuestion.GetNeedDemonstrationKeys();
+
+                foreach (var fileName in keys)
                 {
-                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
-                    if (IsNeedDemonstration(selectWord.CorrectWordFileName))
+                    if (IsNeedDemonstration(fileName))
                     {
                         var demonstration = new SimpleQuestDemonstrationWord
                         {
-                            CorrectWordFileName = selectWord.CorrectWordFileName
+                            CorrectWordFileName = fileName
                         };
-
                         lesson.InsertNextQuest(demonstration);
-                        var questionSelectWordData = (QuestSelectWordData)questionData;
-                        questionData = new QuestDemonstrateWordData(questionSelectWordData.CorrectWord);
+                        nextQuestionType = QuestionType.DemonstrationWord;
+                        break;
                     }
                 }
-                else if (nextQuestion.QuestionType == QuestionType.MatchWords)
-                {
-                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
-                    foreach (var fileName in matchWords.MatchWordsFileNames)
-                    {
-                        if (IsNeedDemonstration(fileName))
-                        {
-                            var demonstration = new SimpleQuestDemonstrationWord
-                            {
-                                CorrectWordFileName = fileName
-                            };
-                            lesson.InsertNextQuest(demonstration);
-
-                            var phraseData = await LoadPhraseConfigData(fileName);
-                            questionData = new QuestDemonstrateWordData(phraseData);
-                            break; // no need to create and load all demonstration screens at once
-                        }
-                    }
-                }
-
-                lesson.DequeueAndSetSipmlQuestion();
-                lesson.SetCurrentQuestionData(questionData);
-                SwitchState(questionData.QuestionType);
             }
+
+            lesson.DequeueAndSetSipmlQuestion();
+            SwitchState(nextQuestionType);
         }
 
         private void SwitchState(QuestionType questionType)
@@ -314,70 +291,6 @@ namespace Chang.FSM
             return true;
         }
 
-        private async UniTask<QuestDataBase> CreateQuestData(ISimpleQuestion nextQuestion)
-        {
-            switch (nextQuestion.QuestionType)
-            {
-                case QuestionType.SelectWord:
-                    var selectWord = (SimpleQuestSelectWord)nextQuestion;
-                    var selectWordData = new QuestSelectWordData
-                    {
-                        CorrectWord = await LoadPhraseConfigData(selectWord.CorrectWordFileName),
-                        MixWords = new List<PhraseData>()
-                    };
-
-                    var mixWordsAmount = _pagesBus.GameType == GameType.Learn
-                        ? ProjectConstants.MIX_WORDS_AMOUNT_IN_LEARN_SELECT_WORD_PAGE
-                        : ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE;
-
-                    var mixWords = selectWord.MixWordsFileNames.Take(mixWordsAmount);
-
-                    foreach (var fileName in mixWords)
-                    {
-                        var data = await LoadPhraseConfigData(fileName);
-                        selectWordData.MixWords.Add(data);
-                    }
-
-                    return selectWordData;
-
-                case QuestionType.MatchWords:
-                    var matchWords = (SimpleQuestMatchWords)nextQuestion;
-                    var matchWordsData = new QuestMatchWordsData(new List<PhraseData>());
-                    foreach (var fileName in matchWords.MatchWordsFileNames)
-                    {
-                        var data = await LoadPhraseConfigData(fileName);
-                        matchWordsData.MatchWords.Add(data);
-                    }
-
-                    return matchWordsData;
-
-                // case QuestionType.DemonstrationWord:
-                //     var demonstration = (SimpleQuestDemonstrationWord)nextQuestion;
-                //     var demonstrationWordData = await LoadPhraseConfigData(demonstration.CorrectWordFileName);
-                //     return new QuestDemonstrateWordData(demonstrationWordData);
-
-                default:
-                    throw new ArgumentOutOfRangeException($"simple question not handled {nextQuestion.QuestionType}");
-            }
-        }
-
-        private async UniTask<PhraseData> LoadPhraseConfigData(string fileName)
-        {
-            var configPath = _wordPathHelper.GetConfigPath(fileName);
-
-            // todo chang DISPOSE handler!!!
-            DisposableAsset<PhraseConfig> configAsset = await _assetManager.LoadAssetAsync<PhraseConfig>(configPath);
-            var config = configAsset.Item;
-
-            var audioClipPath = _wordPathHelper.GetSoundPath(fileName);
-
-            // todo chang DISPOSE handler!!!
-            DisposableAsset<AudioClip> clipAsset = await _assetManager.LoadAssetAsync<AudioClip>(audioClipPath);
-            config.AudioClip = clipAsset.Item;
-            return config.PhraseData;
-        }
-
-        // if no records stored about this question or the question mark is 1 (or 0)
         private bool IsNeedDemonstration(string fileName)
         {
             bool logExists = _profileService.TryGetLog(fileName, out var questLog);

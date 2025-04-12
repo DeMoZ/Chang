@@ -1,9 +1,8 @@
-using System;
 using System.IO;
 
 namespace Chang.Resources
 {
-    public class WordPathHelper : IDisposable
+    public class WordPathHelper
     {
         public string GetConfigPath(string key)
         {
@@ -25,11 +24,6 @@ namespace Chang.Resources
                 AssetPaths.Addressables.SoundWords,
                 keyParts[2],
                 $"{keyParts[3]}.mp3");
-        }
-
-        public void Dispose()
-        {
-            // TODO release managed resources here
         }
     }
 }
