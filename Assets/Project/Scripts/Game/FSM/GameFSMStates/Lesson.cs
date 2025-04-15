@@ -16,7 +16,6 @@ namespace Chang
         public bool IsGeneratedMathWordsQuestPlayed;
         
         public ISimpleQuestion CurrentSimpleQuestion { get; private set; }
-        public IQuestData CurrentQuestionData { get; private set; }
         public List<ISimpleQuestion> SimpleQuestions { get; private set; }
         public Queue<ISimpleQuestion> SimpleQuestionQueue { get; private set; }
         
@@ -57,11 +56,6 @@ namespace Chang
         {
             SimpleQuestions.Add(question);
             SimpleQuestionQueue.Enqueue(question);
-        }
-        
-        public void SetCurrentQuestionData(IQuestData data)
-        {
-            CurrentQuestionData = data;
         }
 
         public void EnqueueCurrentQuestion()

@@ -10,18 +10,12 @@ namespace Chang
         public Languages Language { get; private set; } = Languages.Thai;
         public WordData Word { get; private set; }
         public bool ShowPhonetics { get; private set; }
-        public AudioClip AudioClip { get; private set; }
-        public Sprite Sprite { get; private set; }
         
-        public PhraseData(string key, /*Languages language,*/ AudioClip audioClip, Sprite sprite, WordData word)
+        public PhraseData(string key, /*Languages language,*/WordData word)
         {
             Key = key;
             //Language = language;
-            AudioClip = audioClip;
-            Sprite = sprite;
             Word = word;
-            
-            Word.AudioClip = audioClip;
         }
 
         public void SetPhonetics(bool showPhonetics)

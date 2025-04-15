@@ -10,17 +10,19 @@ namespace Chang.Services
     public class AuthorizationService : IDisposable
     {
         public Action OnPlayerLoggedOut;
-        private readonly MainScreenBus _mainScreenBus;
+
+        // todo chang check repeat logout/login
+        //private readonly MainScreenBus _mainScreenBus;
         private readonly LogInController _logInController;
         private readonly CancellationTokenSource _cts = new();
 
         [Inject]
-        public AuthorizationService(MainScreenBus mainScreenBus, LogInController logInController)
+        public AuthorizationService(LogInController logInController)
         {
-            _mainScreenBus = mainScreenBus;
+            //_mainScreenBus = mainScreenBus;
             _logInController = logInController;
 
-            _mainScreenBus.OnLogOutClicked += OnLogOutClicked;
+            //_mainScreenBus.OnLogOutClicked += OnLogOutClicked;
             _logInController.OnLoggedOut += OnLoggedOut;
         }
 
@@ -29,7 +31,7 @@ namespace Chang.Services
             _cts?.Cancel();
             _cts?.Dispose();
 
-            _mainScreenBus.OnLogOutClicked -= OnLogOutClicked;
+            // _mainScreenBus.OnLogOutClicked -= OnLogOutClicked;
             _logInController.OnLoggedOut -= OnLoggedOut;
         }
 
@@ -46,7 +48,7 @@ namespace Chang.Services
         {
             _logInController.LogOutAsync();
         }
-        
+
         private void OnLoggedOut()
         {
             OnPlayerLoggedOut?.Invoke();

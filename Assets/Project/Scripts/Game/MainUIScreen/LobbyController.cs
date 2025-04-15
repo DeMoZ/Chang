@@ -8,7 +8,6 @@ using Chang.GameBook;
 using Chang.Profile;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
-
 namespace Chang
 {
     public class LobbyController : IViewController
@@ -50,16 +49,16 @@ namespace Chang
             _profileController = profileController;
             _repetitionService = repetitionService;
 
-            _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClickedAsync;
-            _mainScreenBus.OnGameBookSectionRepeatClicked += OnGameBookLessonRepeatClickedAsync;
-            _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClickedAsync;
+            _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClicked;
+            _mainScreenBus.OnGameBookSectionRepeatClicked += OnGameBookLessonRepeatClicked;
+            _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClicked;
         }
 
         public void Dispose()
         {
-            _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClickedAsync;
-            _mainScreenBus.OnGameBookSectionRepeatClicked -= OnGameBookLessonRepeatClickedAsync;
-            _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClickedAsync;
+            _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClicked;
+            _mainScreenBus.OnGameBookSectionRepeatClicked -= OnGameBookLessonRepeatClicked;
+            _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClicked;
         }
 
         public void Init(Action onExitState)
@@ -113,8 +112,12 @@ namespace Chang
             _currentTabType = tabType;
         }
 
-        // todo chang fix async
-        private async void OnGameBookLessonClickedAsync(string name)
+        private void OnGameBookLessonClicked(string name)
+        {
+            OnGameBookLessonClickedAsync(name).Forget();
+        }
+
+        private async UniTask OnGameBookLessonClickedAsync(string name)
         {
             if (_isLoading)
                 return;
@@ -129,33 +132,41 @@ namespace Chang
             lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
 
             _gameBus.CurrentLesson = lesson;
-            _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 
             _gameBus.GameType = GameType.Learn;
             _onExitState?.Invoke();
         }
 
-        private async void OnGameBookLessonRepeatClickedAsync(string section)
+        private void OnGameBookLessonRepeatClicked(string section)
+        {
+            OnGameBookLessonRepeatClickedAsync(section).Forget();
+        }
+
+        private async UniTask OnGameBookLessonRepeatClickedAsync(string section)
         {
             if (_isLoading)
                 return;
 
             var repetitions = _repetitionService.GetSectionRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount, section);
-            await MakeRepetition(repetitions);
+            await MakeRepetitionAsync(repetitions);
         }
 
-        // todo chang fix async
-        private async void OnGeneralRepeatClickedAsync()
+        private void OnGeneralRepeatClicked()
+        {
+            OnGeneralRepeatClickedAsync().Forget();
+        }
+
+        private async UniTask OnGeneralRepeatClickedAsync()
         {
             if (_isLoading)
                 return;
 
             var repetitions = _repetitionService.GetGeneralRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount);
-            await MakeRepetition(repetitions);
+            await MakeRepetitionAsync(repetitions);
         }
 
-        private async UniTask MakeRepetition(List<QuestLog> repetitions)
+        private async UniTask MakeRepetitionAsync(List<QuestLog> repetitions)
         {
             if (repetitions.Count < 4)
             {
@@ -172,7 +183,6 @@ namespace Chang
             {
                 switch (questLog.QuestionType)
                 {
-                    // todo chang new SimpleQuestion using word from log and also need to populate it with the other words quests.
                     case QuestionType.SelectWord:
                         var simpleQuest = new SimpleQuestSelectWord();
                         simpleQuest.CorrectWordFileName = questLog.FileName;
@@ -199,7 +209,6 @@ namespace Chang
             lesson.SetSimpleQuestions(questions);
 
             _gameBus.CurrentLesson = lesson;
-            _gameBus.PreloadFor = PreloadType.LessonData;
             _isLoading = false;
 
             _gameBus.GameType = GameType.Repetition;

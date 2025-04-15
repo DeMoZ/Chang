@@ -14,8 +14,8 @@ namespace Chang.UI
         [SerializeField] private Button _continuteBtn;
 
         public override QuestionType ScreenType { get; } = QuestionType.MatchWords;
-        
-        public void Init( Action onContinueClick)
+
+        public void Init(Action onContinueClick)
         {
             Clear();
             _continuteBtn.onClick.AddListener(() => onContinueClick());
@@ -26,14 +26,14 @@ namespace Chang.UI
             Clear();
             _continuteBtn.onClick.RemoveAllListeners();
         }
-        
+
         public CToggle AddItem(bool isLeft)
         {
             var toggle = Instantiate(_matchWordPrefab, isLeft ? _leftWordsContent : _rightWordsContent);
             toggle.SetGroup(isLeft ? _leftTogglesGroup : _rightTogglesGroup);
             return toggle;
         }
-        
+
         public void EnableContinueButton(bool enable)
         {
             _continuteBtn.gameObject.SetActive(enable);

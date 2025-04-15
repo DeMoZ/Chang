@@ -7,7 +7,7 @@ namespace Chang.FSM
 {
     public class GameFSM : FSMResultBase<StateType>
     {
-        protected override StateType _defaultStateType => StateType.Preload;
+        protected override StateType _defaultStateType => StateType.Lobby; 
 
         private readonly DiContainer _diContainer;
         private readonly GameBus _gameBus;
@@ -26,21 +26,16 @@ namespace Chang.FSM
 
         protected override void Init()
         {
-            _gameBus.PreloadFor = PreloadType.Boot;
-
-            var pagesState = new PagesState(_diContainer, _gameBus, OnStateResult);
-            var preloaderState = new PreloadState(_gameBus, OnStateResult);
             var lobbyState = new LobbyState(_gameBus, OnStateResult);
+            var pagesState = new PagesState(_gameBus, OnStateResult);
 
             _diContainer.Inject(pagesState);
-            _diContainer.Inject(preloaderState);
             _diContainer.Inject(lobbyState);
 
             lobbyState.Init();
 
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
-                { StateType.Preload, preloaderState },
                 { StateType.Lobby, lobbyState },
                 { StateType.PlayPages, pagesState },
             };
@@ -57,5 +52,13 @@ namespace Chang.FSM
         {
             Debug.Log($"New game stateType {stateType}");
         }
+        
+        // todo Chang need to implement tests
+        //await _resourcesManager.Init();
+        // #if DEVELOPMENT
+        //             var tests = new Tests(_resourcesManager);
+        //             await tests.Run();
+        //             tests.Dispose();
+        // #endif
     }
 }

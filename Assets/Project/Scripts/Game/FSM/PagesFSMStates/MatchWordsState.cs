@@ -14,12 +14,12 @@ namespace Chang.FSM
     public class MatchWordsStateResult : IQuestionResult
     {
         public readonly List<SelectWordResult> Results = new();
-        public string Key { get; }
-        public string Presentation { get; }
+        public string Key { get; } = string.Empty;
+        public string Presentation { get; } = string.Empty;
         public QuestionType Type => QuestionType.MatchWords;
         public bool IsCorrect => true;
 
-        public object[] Info { get; }
+        public object[] Info { get; } = null;
     }
 
     public class MatchWordsState : ResultStateBase<QuestionType, PagesBus>
@@ -27,6 +27,9 @@ namespace Chang.FSM
         [Inject] private readonly MatchWordsController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
+        [Inject] private readonly WordPathHelper _wordPathHelper;
+        [Inject] private readonly IResourcesManager _assetManager;
+        [Inject] private readonly PagesSoundController _pagesSoundController;
 
         private List<WordData> _leftWords;
         private List<WordData> _rightWords;
@@ -35,7 +38,8 @@ namespace Chang.FSM
 
         private int _correctCount;
         private MatchWordsStateResult _result;
-
+        private PageService _pageService;
+        
         public MatchWordsState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
         }
@@ -43,29 +47,43 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
+
+            _pageService = new PageService(_wordPathHelper, _assetManager);
             Bus.OnHintUsed.Subscribe(OnHint);
-            StateBody();
+            StateBodyAsync().Forget();
         }
 
         public override void Exit()
         {
             base.Exit();
+            
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
+            _pageService.Dispose();
             _stateController.Clear();
-
+            _result = null;
             _leftWords.Clear();
             _rightWords.Clear();
         }
 
-        private void StateBody()
+        private async UniTask StateBodyAsync()
         {
+            ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
+
+            await _pageService.LoadContentAsync(question);
+            
+            QuestMatchWordsData questionData = new QuestMatchWordsData(new List<PhraseData>());
+            foreach (var fileName in question.GetConfigKeys())
+            {
+                var data = _pageService.Configs[fileName].Item.PhraseData;
+                questionData.MatchWords.Add(data);
+            }
+
             _correctCount = 0;
             _result = new MatchWordsStateResult();
 
             _stateController.EnableContinueButton(false);
 
-            var questionData = (QuestMatchWordsData)Bus.CurrentLesson.CurrentQuestionData;
             var words = questionData.MatchWords.Select(p => p.Word);
 
             foreach (var word in words)
@@ -81,8 +99,14 @@ namespace Chang.FSM
 
             var isLeftLearnLanguage = RandomUtils.GetRandomBool();
             Debug.Log($"isLeft: {isLeftLearnLanguage}");
-            _stateController.Init(isLeftLearnLanguage, _leftWords, _rightWords, OnToggleValueChanged, OnContinueClicked);
+            _stateController.Init(isLeftLearnLanguage, _leftWords, _rightWords, OnToggleValueChanged, OnContinueClicked, OnPlaySound);
             _stateController.SetViewActive(true);
+        }
+
+        private void OnPlaySound(string key)
+        {
+            var clip =  _pageService.Sounds[key].Item;
+            _pagesSoundController.PlaySound(clip);
         }
 
         private void OnToggleValueChanged(int leftIndex, int rightIndex)
@@ -90,7 +114,7 @@ namespace Chang.FSM
             var isCorrect = _leftWords[leftIndex] == _rightWords[rightIndex];
             Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
 
-            _stateController.ShowCorrect(leftIndex, rightIndex, isCorrect).Forget();
+            _stateController.ShowCorrectAsync(leftIndex, rightIndex, isCorrect).Forget();
             var leftResult = new SelectWordResult(
                 Path.Combine(
                     Bus.CurrentLanguage.ToString(),
@@ -131,6 +155,7 @@ namespace Chang.FSM
 
             Bus.QuestionResult = _result;
             _gameOverlayController.OnCheck?.Invoke();
+            _stateController.EnableContinueButton(false);
         }
 
         private void OnHint(bool isHintUsed)

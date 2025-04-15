@@ -14,8 +14,6 @@ namespace Chang.Services
         private readonly IDataProvider _prefsDataProvider;
         private readonly IDataProvider _unityCloudDataProvider;
 
-        private CancellationTokenSource _cts;
-
         [Inject]
         public ProfileService(PlayerProfile playerProfile)
         {
@@ -26,21 +24,18 @@ namespace Chang.Services
 
         public void Dispose()
         {
-            _cts?.Cancel();
-            _cts?.Dispose();
             _prefsDataProvider.Dispose();
             _unityCloudDataProvider.Dispose();
         }
 
-        public async UniTask LoadStoredData()
+        public async UniTask LoadStoredData(CancellationToken ct)
         {
-            _cts = new CancellationTokenSource();
 
             //var prefsProfileData = await _prefsDataProvider.LoadProfileDataAsync(_cts.Token);
             //var prefsProgressData = await _prefsDataProvider.LoadProgressDataAsync(_cts.Token);
 
-            var unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(_cts.Token);
-            var unityProgressData = await _unityCloudDataProvider.LoadProgressDataAsync(_cts.Token);
+            var unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(ct);
+            var unityProgressData = await _unityCloudDataProvider.LoadProgressDataAsync(ct);
 
             // todo chang merge data with prefs. But for now will use only cloud data
 

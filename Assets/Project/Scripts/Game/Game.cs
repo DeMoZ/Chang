@@ -1,8 +1,5 @@
 using System;
 using Chang.FSM;
-using Chang.Resources;
-using Chang.Services;
-using UnityEngine.SceneManagement;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -10,43 +7,22 @@ namespace Chang
 {
     public class Game : IInitializable, IDisposable
     {
-        private readonly IResourcesManager _resourcesManager;
-
-        private GameFSM _gameFSM;
-        private readonly AuthorizationService _authorizationService;
+        private readonly GameFSM _gameFSM;
 
         [Inject]
-        public Game(AuthorizationService authorizationService, IResourcesManager resourcesManager, GameFSM gameFSM)
+        public Game(GameFSM gameFSM)
         {
-            _authorizationService = authorizationService;
-            _resourcesManager = resourcesManager;
             _gameFSM = gameFSM;
-
-            _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
         }
 
-        public async void Initialize()
+        public void Initialize()
         {
-            Debug.Log($"Initialize");
-            await _resourcesManager.InitAsync();
-
-#if DEVELOPMENT
-            var tests = new Tests(_resourcesManager);
-            await tests.Run();
-            tests.Dispose();
-#endif
-
-            _gameFSM.Initialize();
+            Debug.Log($"{nameof(Initialize)}");
+            _gameFSM.Initialize();;
         }
 
         public void Dispose()
         {
-            _authorizationService.OnPlayerLoggedOut -= OnLoggedOut;
-        }
-
-        private void OnLoggedOut()
-        {
-            SceneManager.LoadScene("Bootstrap");
         }
     }
 }

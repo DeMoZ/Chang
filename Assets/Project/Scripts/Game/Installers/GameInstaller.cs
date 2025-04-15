@@ -1,12 +1,14 @@
+using Chang.FSM;
 using UnityEngine;
 using Zenject;
 using Chang.UI;
 using Chang.GameBook;
-using DMZ.Legacy.LoginScreen;
+using Chang.Resources;
+using Chang.Services;
 
 namespace Chang
 {
-    public class ScreenInstaller : MonoInstaller
+    public class GameInstaller : MonoInstaller
     {
         [SerializeField] private MainUiView mainUiScreen;
         [SerializeField] private RepetitionView repetitionScreen;
@@ -15,31 +17,32 @@ namespace Chang
         [SerializeField] private GameOverlayView gameOverlayScreen;
         [SerializeField] private SystemUiScreen systemUiScreen;
 
-        [Space] 
-        [SerializeField] private GameObject pagesContainer;
+        [Space] [SerializeField] private GameObject pagesContainer;
 
-        [Space] 
-        [SerializeField] private PlayResultView playResultScreen;
+        [Space] [SerializeField] private PlayResultView playResultScreen;
         [SerializeField] private DemonstrationWordView demonstrationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;
-        
-        [SerializeField] private PreloaderView preloaderScreen;
 
-        [Space] 
-        [SerializeField] private LogInView logInScreen;
+        [Space] [SerializeField] private LoadingView loadingScreenPrefab;
+        [SerializeField] private Transform loadingScreenContainer;
 
-        [Space]
-        [SerializeField] private AudioSource pagesAudioSource;
-        
-        private LogInController _loginController;
-
+        [Space] [SerializeField] private AudioSource pagesAudioSource;
 
         public override void InstallBindings()
         {
-            Debug.Log($"{nameof(ScreenInstaller)} InstallBindings");
+            Debug.Log($"{nameof(GameInstaller)} InstallBindings");
 
             Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<Game>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<WordPathHelper>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
+
+            Container.BindInstance(pagesAudioSource).AsSingle();
 
             #region Views
 
@@ -52,8 +55,6 @@ namespace Chang
             Container.BindInstance(demonstrationScreen).AsSingle();
             Container.BindInstance(matchWordScreen).AsSingle();
             Container.BindInstance(selectWordScreen).AsSingle();
-            Container.BindInstance(preloaderScreen).AsSingle();
-            Container.BindInstance(logInScreen).AsSingle();
             Container.BindInstance(profileScreen).AsSingle();
             Container.BindInstance(systemUiScreen).AsSingle();
 
@@ -69,32 +70,11 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<PreloaderController>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SystemUiController>().AsSingle();
-            
             Container.BindInterfacesAndSelfTo<PagesSoundController>().AsSingle();
+
             #endregion
-
-            Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
-
-            Container.BindInstance(pagesAudioSource).AsSingle();
-
-            BindLogin();
-        }
-
-        private void BindLogin()
-        {
-            var loginModel = new LogInModel();
-            _loginController = new LogInController(loginModel);
-            Container.BindInstance(loginModel).AsSingle();
-            logInScreen.Init(loginModel);
-            Container.BindInstance(_loginController).AsSingle();
-        }
-
-        public void OnDestroy()
-        {
-            _loginController?.Dispose();
         }
     }
 }

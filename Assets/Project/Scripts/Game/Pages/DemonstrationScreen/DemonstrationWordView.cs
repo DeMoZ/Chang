@@ -42,7 +42,7 @@ namespace Chang.UI
             var word = correctWord.Word.GetTranslation();
             mix.Set(word, correctWord.Word.Phonetic, _toggleGroup, onToggleValueChanged);
             mix.EnablePhonetics(false);
-            PagesSoundController.RegisterListener(correctWord.AudioClip.name, OnSoundPlay);
+            PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
             _playStopBtn.OnClick += OnClickPlaySound;
         }
 

@@ -56,7 +56,7 @@ namespace Chang.UI
                 _mixWordToggles.Add(mix);
             }
             
-            PagesSoundController.RegisterListener(correctWord.AudioClip.name, OnSoundPlay);
+            PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
             _playStopBtn.OnClick += OnClickPlaySound;
         }
 
