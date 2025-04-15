@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Chang.Resources
@@ -18,8 +19,8 @@ namespace Chang.Resources
                     return;
                 }
 
-                _handle.SafeRelease();
-
+                Addressables.Release(_handle);
+                
                 OnDispose?.Invoke();
                 OnDispose = null;
 

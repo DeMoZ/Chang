@@ -26,21 +26,16 @@ namespace Chang.FSM
 
         protected override void Init()
         {
-            // _gameBus.PreloadFor = PreloadType.Boot;
-
-            // var preloaderState = new PreloadState(_gameBus, OnStateResult);
             var lobbyState = new LobbyState(_gameBus, OnStateResult);
-            var pagesState = new PagesState(/*_diContainer, */_gameBus, OnStateResult);
+            var pagesState = new PagesState(_gameBus, OnStateResult);
 
-            _diContainer.Inject(pagesState); // todo Chang do i need to inject these states
-            // _diContainer.Inject(preloaderState);
+            _diContainer.Inject(pagesState);
             _diContainer.Inject(lobbyState);
 
             lobbyState.Init();
 
             _states = new Dictionary<StateType, IResultState<StateType>>
             {
-                // { StateType.Preload, preloaderState },
                 { StateType.Lobby, lobbyState },
                 { StateType.PlayPages, pagesState },
             };

@@ -62,6 +62,9 @@ namespace Chang.FSM
             base.Exit();
 
             _pageService.Dispose();
+            _correctWord = null;
+            _mixWords?.Clear();
+            _mixWords = null;
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
         }

@@ -61,7 +61,7 @@ namespace Chang.FSM
             _stateController.SetViewActive(false);
             _pageService.Dispose();
             _stateController.Clear();
-
+            _result = null;
             _leftWords.Clear();
             _rightWords.Clear();
         }
@@ -114,7 +114,7 @@ namespace Chang.FSM
             var isCorrect = _leftWords[leftIndex] == _rightWords[rightIndex];
             Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
 
-            _stateController.ShowCorrect(leftIndex, rightIndex, isCorrect).Forget();
+            _stateController.ShowCorrectAsync(leftIndex, rightIndex, isCorrect).Forget();
             var leftResult = new SelectWordResult(
                 Path.Combine(
                     Bus.CurrentLanguage.ToString(),

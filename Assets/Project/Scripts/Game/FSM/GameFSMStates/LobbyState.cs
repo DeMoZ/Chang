@@ -15,6 +15,8 @@ namespace Chang.FSM
 {
     public class LobbyState : ResultStateBase<StateType, GameBus>
     {
+        private const string BookKey = "BookJson";
+
         public override StateType Type => StateType.Lobby;
 
         [Inject] private readonly LobbyController _lobbyController;
@@ -51,12 +53,11 @@ namespace Chang.FSM
             // todo chang download additional addressables related to profile?
 
             Debug.Log("LoadGameBookConfigAsync start");
-            var key = "BookJson";
-            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(key, _cts.Token);
+            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(BookKey, _cts.Token);
 
             if (asset.Item == null)
             {
-                Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)}() asset is null, key: {key}");
+                Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)}() asset is null, BookKey: {BookKey}");
                 return;
             }
 

@@ -30,6 +30,7 @@ namespace Chang
         QuestionType QuestionType { get; }
         HashSet<string> GetConfigKeys();
         HashSet<string> GetSoundKeys();
+        HashSet<string> GetImageKeys();
         HashSet<string> GetNeedDemonstrationKeys();
     }
 
@@ -53,6 +54,11 @@ namespace Chang
             keys.AddRange(MixWordsFileNames);
             return keys;
         }
+        
+        public HashSet<string> GetImageKeys()
+        {
+            return new HashSet<string> { CorrectWordFileName };
+        }
 
         public HashSet<string> GetNeedDemonstrationKeys()
         {
@@ -69,6 +75,7 @@ namespace Chang
 
         public HashSet<string> GetConfigKeys() => new(MatchWordsFileNames);
         public HashSet<string> GetSoundKeys() => new(MatchWordsFileNames);
+        public HashSet<string> GetImageKeys() => new();
         public HashSet<string> GetNeedDemonstrationKeys() => new(MatchWordsFileNames);
     }
 
@@ -79,6 +86,7 @@ namespace Chang
 
         public HashSet<string> GetConfigKeys() => new() { CorrectWordFileName };
         public HashSet<string> GetSoundKeys() => new() { CorrectWordFileName };
+        public HashSet<string> GetImageKeys() => new() { CorrectWordFileName };
         public HashSet<string> GetNeedDemonstrationKeys() => new() { CorrectWordFileName };
     }
 }

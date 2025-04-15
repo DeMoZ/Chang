@@ -17,19 +17,7 @@ namespace Chang.Resources
     public class AddressablesAssetManager : IResourcesManager
     {
         private bool _isDisposed;
-
-        private List<IDisposable> _disposables = new();
-
         private Sprite _missingSprite;
-
-        // private WordsProvider _wordsProvider;
-        // private SoundWordsProvider _soundWordsProvider; 
-
-        public AddressablesAssetManager()
-        {
-            // _wordsProvider = new _wordsProvider();
-            // _soundWordsProvider = new _soundWordsProvider();
-        }
 
         public void Dispose()
         {
@@ -39,13 +27,6 @@ namespace Chang.Resources
             }
 
             _isDisposed = true;
-
-            foreach (var disposable in _disposables)
-            {
-                disposable?.Dispose();
-            }
-
-            _disposables.Clear();
         }
 
         public bool IsAssetExists(string key)
@@ -74,18 +55,9 @@ namespace Chang.Resources
         {
             throw new NotImplementedException();
         }
-
-        // public UniTask<T> LoadAssetAsync<T>(string key, CancellationToken cancellationToken = default) where T : Object
-        // {
-        //     // todo chang disposable asset? or handle and then dissposable asset is not required?
-        //     throw new NotImplementedException();
-        // }
-
-        // todo chang implement with progress? or cant it be moved into downloader class?
-        //public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, IProgress<float> progress, CancellationToken ct) where T : Object
+        
         public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct) where T : Object
         {
-            // InitializationGuard();
             bool isKeyNotFound = false;
             AsyncOperationHandle<T> handle = default;
             T result = null;
@@ -97,14 +69,14 @@ namespace Chang.Resources
             }
             catch (OperationCanceledException)
             {
-                handle.SafeRelease();
+                Addressables.Release(handle);
                 return DisposableAsset<T>.Empty();
             }
             catch (InvalidKeyException ex)
             {
                 Debug.Log($"<color=Yellow>Warning</color> not found asset with key '{key}': {ex.Message}");
                 isKeyNotFound = true;
-                handle.SafeRelease();
+                Addressables.Release(handle);
             }
 
             if (isKeyNotFound)
@@ -117,13 +89,13 @@ namespace Chang.Resources
                 }
                 catch (OperationCanceledException)
                 {
-                    handle.SafeRelease();
+                    Addressables.Release(handle);
                     return DisposableAsset<T>.Empty();
                 }
                 catch (Exception ex)
                 {
                     Debug.LogError($"Error loading asset with cached path '{key}': {ex.Message}");
-                    handle.SafeRelease();
+                    Addressables.Release(handle);
                     return DisposableAsset<T>.Empty();
                 }
             }
@@ -131,7 +103,7 @@ namespace Chang.Resources
             if (handle.Result == null)
             {
                 Debug.LogError($"missing asset with key '{key}'");
-                handle.SafeRelease();
+                Addressables.Release(handle);
                 return DisposableAsset<T>.Empty();
             }
 

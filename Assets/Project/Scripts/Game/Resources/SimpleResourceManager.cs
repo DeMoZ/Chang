@@ -137,7 +137,6 @@ namespace Chang.Resources
 
         public void Dispose()
         {
-            //Addressables.ReleaseInstance(this); 
         }
 
         public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken token) where T : Object

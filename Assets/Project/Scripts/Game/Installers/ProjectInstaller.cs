@@ -28,6 +28,7 @@ namespace Chang
         private void OnApplicationPause(bool pauseStatus)
         {
             Debug.Log($"{nameof(OnApplicationPause)} = {pauseStatus}");
+            // todo chang when pause implemented (backlog)
             // AudioListener.pause = pauseStatus;
             // UIBus.OnApplicationPause += pauseStatus;
         }

@@ -11,6 +11,7 @@ namespace Chang.Services
     {
         public Action OnPlayerLoggedOut;
 
+        // todo chang check repeat logout/login
         //private readonly MainScreenBus _mainScreenBus;
         private readonly LogInController _logInController;
         private readonly CancellationTokenSource _cts = new();

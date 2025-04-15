@@ -94,7 +94,7 @@ namespace Chang
             }
         }
 
-        public async UniTask ShowCorrect(int leftIndex, int rightIndex, bool isCorrect)
+        public async UniTask ShowCorrectAsync(int leftIndex, int rightIndex, bool isCorrect)
         {
             _leftToggles[leftIndex].IsOn = false;
             _rightToggles[rightIndex].IsOn = false;

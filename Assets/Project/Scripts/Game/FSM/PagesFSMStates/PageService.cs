@@ -4,6 +4,7 @@ using System.Threading;
 using Chang.Resources;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Chang.FSM
 {
@@ -17,7 +18,7 @@ namespace Chang.FSM
 
         public Dictionary<string, DisposableAsset<PhraseConfig>> Configs { get; private set; }
         public Dictionary<string, DisposableAsset<AudioClip>> Sounds { get; private set; }
-        // Dictionary<string, DisposableAsset<Image>> _images;
+        public Dictionary<string, DisposableAsset<Image>> Images { get; private set; }
 
         public PageService(WordPathHelper wordPathHelper, IResourcesManager assetManager)
         {
@@ -29,6 +30,7 @@ namespace Chang.FSM
             _disposableAssets = new List<IDisposableAsset>();
             Configs = new Dictionary<string, DisposableAsset<PhraseConfig>>();
             Sounds = new Dictionary<string, DisposableAsset<AudioClip>>();
+            Images = new Dictionary<string, DisposableAsset<Image>>();
         }
 
         public void Dispose()
@@ -44,40 +46,38 @@ namespace Chang.FSM
             _disposableAssets = null;
             Configs = null;
             Sounds = null;
-            //_images = null;
+            Images = null;
         }
 
         public async UniTask LoadContentAsync(ISimpleQuestion nextQuestion)
         {
             var configKeys = nextQuestion.GetConfigKeys();
             var soundKeys = nextQuestion.GetSoundKeys();
+            var imageKeys = nextQuestion.GetImageKeys();
 
             foreach (var key in configKeys)
             {
-                var path = _wordPathHelper.GetConfigPath(key);
-                var asset = await _assetManager.LoadAssetAsync<PhraseConfig>(path);
+                string path = _wordPathHelper.GetConfigPath(key);
+                DisposableAsset<PhraseConfig> asset = await _assetManager.LoadAssetAsync<PhraseConfig>(path, _cts.Token);
                 _disposableAssets.Add(asset);
                 Configs.Add(key, asset);
             }
 
             foreach (var key in soundKeys)
             {
-                var path = _wordPathHelper.GetSoundPath(key);
-                var asset = await _assetManager.LoadAssetAsync<AudioClip>(path);
+                string path = _wordPathHelper.GetSoundPath(key);
+                DisposableAsset<AudioClip> asset = await _assetManager.LoadAssetAsync<AudioClip>(path, _cts.Token);
                 _disposableAssets.Add(asset);
                 Sounds.Add(Configs[key].Item.Key, asset);
             }
 
-            // todo chang images
-            // Dictionary<string, List<IDisposableAsset>> images = new();
-            //var imageKeys = nextQuestion.GetImageKeys();
-            // foreach (var key in imageKeys)
-            // {
-            //    var path = _wordPathHelper.GetSoundPath(key);
-            //    var asset = await _assetManager.LoadAssetAsync<Image>(path);
-            //    _disposableAssets.Add(asset);
-            //    _sounds.Add(_configs[key].Item.Key, asset);
-            // }
+            foreach (var key in imageKeys)
+            {
+                string path = _wordPathHelper.GetSoundPath(key);
+                DisposableAsset<Image> asset = await _assetManager.LoadAssetAsync<Image>(path, _cts.Token);
+                _disposableAssets.Add(asset);
+                Images.Add(Configs[key].Item.Key, asset);
+            }
         }
     }
 }

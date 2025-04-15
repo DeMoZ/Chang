@@ -16,13 +16,6 @@ namespace Chang.Editor.Addressables
         public class ToolConstants
         {
             public const string SOME_CONFIG_PATH = "Assets/Project/Scripts/Editor/Addressables/SomeConfig.asset";
-
-            #region Groups
-
-            public const string BASIC_LABEL = "Basic";
-            public const string LOCAL_LABEL = "LOCAL";
-
-            #endregion
         }
 
         [MenuItem("Chang/Content/Addressables/Addressables Resources Window")]
@@ -85,8 +78,6 @@ namespace Chang.Editor.Addressables
             }
         }
 
-        #region Delete
-
         [PropertySpace(5f)]
         [FoldoutGroup("Checkers")]
         [HorizontalGroup("Checkers/Line1")]
@@ -96,8 +87,6 @@ namespace Chang.Editor.Addressables
         {
             CheckLabels();
         }
-
-        #endregion
 
         [PropertySpace(5f)]
         [InfoBox("Open some config file")]

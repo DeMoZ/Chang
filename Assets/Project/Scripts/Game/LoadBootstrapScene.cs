@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
@@ -6,11 +7,18 @@ namespace Chang
 {
     public class LoadBootstrapScene : MonoBehaviour
     {
-        async void Start()
+        private async void Start()
         {
-            await BootstrapProcesses();
+            try
+            {
+                await BootstrapProcesses();
 
-            SceneManager.LoadScene("Bootstrap", LoadSceneMode.Single);
+                SceneManager.LoadScene("Bootstrap", LoadSceneMode.Single);
+            }
+            catch (Exception e)
+            {
+                throw new NotImplementedException(); // todo cnang handle exception
+            }
         }
 
         private async UniTask BootstrapProcesses()

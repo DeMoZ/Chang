@@ -39,7 +39,7 @@ namespace Chang
         private async UniTask LoadingSequenceAsync()
         {
             DMZLogger.Log($"{nameof(LoadingSequenceAsync)}: Start");
-            RunRestartTrigger();
+            RunRestartTriggerAsync();
 
             try
             {
@@ -48,7 +48,7 @@ namespace Chang
 
                 _cts = new CancellationTokenSource();
 
-                // on every step need to emulate error with disposing everything that supposed to
+                // todo chang on every step need to emulate error with disposing everything that supposed to
                 DMZLogger.Log($"Initialize start");
 
                 _downloadModel.SimulateProgress(2f, from: 0, to: 0.1f, ct: _cts.Token).Forget();
@@ -73,7 +73,8 @@ namespace Chang
             }
         }
 
-        private async void RunRestartTrigger()
+        // todo chang remove
+        private async void RunRestartTriggerAsync()
         {
             DMZLogger.Log("Waiting for spacebar press...");
             while (!Input.GetKeyDown(KeyCode.Space))

@@ -18,7 +18,6 @@ namespace Chang
             
             Container.BindInstance(logInScreen).AsSingle();
             Container.BindInstance(loadingScreen).AsSingle();
-            //Container.Inject(loadingScreen);
 
             #endregion
             

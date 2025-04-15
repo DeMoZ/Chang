@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using Chang.Resources;
@@ -59,7 +58,7 @@ namespace Chang.FSM
             _downloadModel.ShowUi.Value = true;
             _downloadModel.SetProgress(0);
 
-            await PreloadContent();
+            await PreloadContentAsync();
 
             _screenManager.SetActivePagesContainer(true);
 
@@ -90,8 +89,7 @@ namespace Chang.FSM
         {
             base.Exit();
 
-            _pagesBus = null;
-            _pagesFsm.Dispose();
+            Dispose();
             _screenManager.SetActivePagesContainer(false);
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
@@ -103,7 +101,7 @@ namespace Chang.FSM
             _gameOverlayController.OnExitToLobby();
         }
 
-        private async UniTask PreloadContent()
+        private async UniTask PreloadContentAsync()
         {
             HashSet<string> keys = new();
             foreach (ISimpleQuestion quest in Bus.CurrentLesson.SimpleQuestions)
@@ -130,7 +128,7 @@ namespace Chang.FSM
         {
             OnCheckAsync().Forget();
         }
-
+        
         private async UniTask OnCheckAsync()
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
