@@ -14,6 +14,8 @@ namespace Chang.Services
         private readonly IDataProvider _prefsDataProvider;
         private readonly IDataProvider _unityCloudDataProvider;
 
+        public string PlayerId => _unityCloudDataProvider.PlayerId;
+
         [Inject]
         public ProfileService(PlayerProfile playerProfile)
         {
@@ -30,7 +32,6 @@ namespace Chang.Services
 
         public async UniTask LoadStoredData(CancellationToken ct)
         {
-
             //var prefsProfileData = await _prefsDataProvider.LoadProfileDataAsync(_cts.Token);
             //var prefsProgressData = await _prefsDataProvider.LoadProgressDataAsync(_cts.Token);
 
@@ -72,7 +73,7 @@ namespace Chang.Services
         {
             return _playerProfile.ProgressData;
         }
-        
+
         public int GetMark(string key)
         {
             if (_playerProfile.ProgressData.Questions.TryGetValue(key, out var questLog))

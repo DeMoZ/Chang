@@ -11,5 +11,6 @@ namespace Chang.Services.DataProvider
         UniTask SaveProfileDataAsync(ProfileData data);
         UniTask<ProgressData> LoadProgressDataAsync(CancellationToken ct);
         UniTask SaveProgressDataAsync(ProgressData data);
+        string PlayerId { get; }
     }
 }

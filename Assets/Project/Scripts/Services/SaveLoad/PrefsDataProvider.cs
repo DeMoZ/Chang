@@ -8,6 +8,8 @@ namespace Chang.Services.DataProvider
 {
     public class PrefsDataProvider : IDataProvider
     {
+        public string PlayerId => string.Empty; // todo chang save and load player ID 
+        
         private JsonSerializerSettings _jSettings = new()
         {
             Formatting = Formatting.Indented,

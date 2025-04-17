@@ -32,9 +32,7 @@ namespace Chang
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(GameInstaller)} InstallBindings");
-
-            Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
-
+            
             Container.BindInterfacesAndSelfTo<Game>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();

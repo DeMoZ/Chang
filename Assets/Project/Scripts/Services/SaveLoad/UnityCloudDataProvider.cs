@@ -12,6 +12,8 @@ namespace Chang.Services.DataProvider
 {
     public class UnityCloudDataProvider : IDataProvider
     {
+        public string PlayerId => AuthenticationService.Instance.PlayerId;
+
         private readonly JsonSerializerSettings _jSettings = new()
         {
             Formatting = Formatting.Indented,

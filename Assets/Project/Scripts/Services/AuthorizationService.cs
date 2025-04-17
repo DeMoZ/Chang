@@ -11,18 +11,17 @@ namespace Chang.Services
     {
         public Action OnPlayerLoggedOut;
 
-        // todo chang check repeat logout/login
-        //private readonly MainScreenBus _mainScreenBus;
+        private readonly MainScreenBus _mainScreenBus;
         private readonly LogInController _logInController;
         private readonly CancellationTokenSource _cts = new();
 
         [Inject]
-        public AuthorizationService(LogInController logInController)
+        public AuthorizationService(LogInController logInController, MainScreenBus mainScreenBus)
         {
-            //_mainScreenBus = mainScreenBus;
+            _mainScreenBus = mainScreenBus;
             _logInController = logInController;
 
-            //_mainScreenBus.OnLogOutClicked += OnLogOutClicked;
+            _mainScreenBus.OnLogOutClicked += OnLogOutClicked;
             _logInController.OnLoggedOut += OnLoggedOut;
         }
 
@@ -31,7 +30,7 @@ namespace Chang.Services
             _cts?.Cancel();
             _cts?.Dispose();
 
-            // _mainScreenBus.OnLogOutClicked -= OnLogOutClicked;
+            _mainScreenBus.OnLogOutClicked -= OnLogOutClicked;
             _logInController.OnLoggedOut -= OnLoggedOut;
         }
 

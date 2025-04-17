@@ -12,6 +12,8 @@ namespace Chang.Services.DataProvider
     [CreateAssetMenu(menuName = "Chang/Services/SaveLoad Config", fileName = "SaveLoadConfig")]
     public class ScriptableObjectDataProviderEditor : ScriptableObject, IDataProvider
     {
+        public string PlayerId => string.Empty; // todo chang save and load player ID
+        
         private JsonSerializerSettings _jSettings = new()
         {
             Formatting = Formatting.Indented,

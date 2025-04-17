@@ -5,28 +5,27 @@ namespace Chang
 {
     public class ProfileController : IViewController
     {
-        private readonly GameBus _gameBus;
-
-        // private readonly MainScreenBus _mainScreenBus;
+        private readonly MainScreenBus _mainScreenBus;
         private readonly ProfileView _view;
         private readonly AuthorizationService _authorizationService;
+        private readonly ProfileService _profileService;
 
         [Inject]
         public ProfileController(
-            GameBus gameBus,
-            // MainScreenBus mainScreenBus,
+            MainScreenBus mainScreenBus,
             ProfileView view,
-            AuthorizationService authorizationService)
+            AuthorizationService authorizationService,
+            ProfileService profileService)
         {
-            _gameBus = gameBus;
-            //_mainScreenBus = mainScreenBus;
+            _mainScreenBus = mainScreenBus;
             _view = view;
             _authorizationService = authorizationService;
+            _profileService = profileService;
         }
 
         public void Init()
         {
-            // _view.Init(_mainScreenBus.OnLogOutClicked);
+            _view.Init(_mainScreenBus.OnLogOutClicked);
         }
 
         public void Dispose()
@@ -36,6 +35,14 @@ namespace Chang
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
+
+            if (!active)
+            {
+                return;
+            }
+            
+            _view.SetUserId(_profileService.PlayerId);
+            _view.SetUserName("temp_name"); // todo chang implement user name
         }
 
         public void Set()

@@ -18,6 +18,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<PlayerProfile>().AsSingle();
             Container.BindInterfacesAndSelfTo<AuthorizationService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
 
             var loginModel = new LogInModel();
             var loginController = new LogInController(loginModel);
