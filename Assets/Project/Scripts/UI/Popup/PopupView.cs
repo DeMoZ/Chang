@@ -1,4 +1,5 @@
 using System;
+using DMZ.Events;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,31 +31,31 @@ namespace Popup
             header.Text = text;
             header.gameObject.SetActive(true);
         }
-        
-        public void CreateLabel(string text)
+
+        public void CreateLabel(DMZState<string> text)
         {
-            LabelView header = Instantiate(labelPrefab, content);
-            header.Text = text;
-            header.gameObject.SetActive(true);
+            LabelView label = Instantiate(labelPrefab, content);
+            label.Text = text;
+            label.Init();
+            label.gameObject.SetActive(true);
         }
 
         public void CreateLabelAndInput(
-            string labelText,
+            DMZState<string> labelText,
             string inputText,
-            Action<string> onInputTextChanged,
-            Action<Color> onSetInputColor)
+            Action<string> onInputTextChanged)
         {
             LabelAndInputView labelAndInput = Instantiate(labelAndInputPrefab, content);
             labelAndInput.LabelText = labelText;
             labelAndInput.InputText = inputText;
             labelAndInput.OnInputTextChanged = onInputTextChanged;
-            labelAndInput.OnInputTextColor = onSetInputColor;
+            labelAndInput.Init();
             labelAndInput.gameObject.SetActive(true);
         }
 
         public void CreateButton(string text,
             Action onClick,
-            Action<bool> onSetInteractable)
+            DMZState<bool> onSetInteractable)
         {
             if (_buttonsContainer == null)
             {
@@ -73,6 +74,7 @@ namespace Popup
             button.Text = text;
             button.OnClick = onClick;
             button.OnSetInteractable = onSetInteractable;
+            button.Init();
             button.gameObject.SetActive(true);
         }
     }

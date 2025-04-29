@@ -2,6 +2,7 @@ using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
 using DMZ.Legacy.LoginScreen;
+using Popup;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -24,6 +25,16 @@ namespace Chang
             var loginController = new LogInController(loginModel);
             Container.BindInstances(loginModel);
             Container.BindInstance(loginController);
+            
+            var popupManager = FindFirstObjectByType<PopupManager>();
+            if (popupManager != null)
+            {
+                Container.BindInstance(popupManager).AsSingle();
+            }
+            else
+            {
+                Debug.LogError("PopupManager not found in the scene.");
+            }
         }
 
         private void OnApplicationPause(bool pauseStatus)

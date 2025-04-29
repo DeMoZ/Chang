@@ -1,4 +1,5 @@
 using System;
+using DMZ.Events;
 using TMPro;
 using UnityEngine;
 
@@ -10,12 +11,7 @@ namespace Popup
         [SerializeField] private TMP_InputField inputField;
 
         public Action<string> OnInputTextChanged { get; set; }
-        public Action<Color> OnInputTextColor { get; set; }
-
-        public string LabelText
-        {
-            set => labelText.text = value;
-        }
+        public DMZState<string> LabelText { get; set; }
 
         public string InputText
         {
@@ -23,21 +19,22 @@ namespace Popup
             set => inputField.text = value;
         }
 
-        private void OnEnable()
+        public void Init()
         {
             inputField.onValueChanged.AddListener(InputTextChanged);
-            OnInputTextColor += SetInputTextColor;
+            LabelText.Subscribe(SetLabelText);
         }
 
-        private void SetInputTextColor(Color color)
-        {
-            inputField.textComponent.color = color;
-        }
-
-        private void OnDisable()
+        private void OnDestroy()
         {
             inputField.onValueChanged.RemoveListener(InputTextChanged);
-            OnInputTextColor -= SetInputTextColor;
+            LabelText.Unsubscribe(SetLabelText);
+        }
+
+        private void SetLabelText(string text)
+        {
+            Debug.Log($"Set label text: {text}");
+            labelText.text = text;
         }
 
         private void InputTextChanged(string text)

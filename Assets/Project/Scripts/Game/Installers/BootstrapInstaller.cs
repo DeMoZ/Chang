@@ -9,7 +9,7 @@ namespace Chang
     {
         [SerializeField] private LoadingView loadingScreen;
         [SerializeField] private LogInView logInScreen;
-
+        
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(InstallBindings)}");
@@ -18,13 +18,13 @@ namespace Chang
             
             Container.BindInstance(logInScreen).AsSingle();
             Container.BindInstance(loadingScreen).AsSingle();
-
+            
             #endregion
             
             #region Controllers
 
-            Container.BindInterfacesAndSelfTo<Bootstrap>().AsSingle();
             Container.BindInterfacesTo<LoadingController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<Bootstrap>().AsSingle();
 
             #endregion
         }

@@ -108,6 +108,7 @@ namespace Chang.FSM
             {
                 keys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
                 keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
+                keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
             }
 
             await _assetDownloader.PreloadAsync(keys, _cts.Token);

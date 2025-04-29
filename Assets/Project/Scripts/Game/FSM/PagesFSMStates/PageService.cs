@@ -73,7 +73,7 @@ namespace Chang.FSM
 
             foreach (var key in imageKeys)
             {
-                string path = _wordPathHelper.GetSoundPath(key);
+                string path = _wordPathHelper.GetImagePath(key);
                 DisposableAsset<Image> asset = await _assetManager.LoadAssetAsync<Image>(path, _cts.Token);
                 _disposableAssets.Add(asset);
                 Images.Add(Configs[key].Item.Key, asset);

@@ -3,13 +3,15 @@ using Chang;
 
 namespace Popup
 {
-    public class PopupController : IViewController
+    public class PopupController<TModel> : IViewController where TModel : IDisposable
     {
         private PopupView _view;
+        private TModel _model;
 
-        public void Init(PopupView view)
+        public void Init(PopupView view, TModel model)
         {
             _view = view;
+            _model = model;
         }
 
         public void CreatePopup(params IPopupElement[] elements)
@@ -28,10 +30,10 @@ namespace Popup
                 }
                 else if (element is PopupLabelAndInput labelAndInput)
                 {
-                    _view.CreateLabelAndInput(labelAndInput.LabelText,
+                    _view.CreateLabelAndInput(
+                        labelAndInput.LabelText,
                         labelAndInput.InputText,
-                        labelAndInput.OnInputTextChanged, 
-                        labelAndInput.OnSetInputColor);
+                        labelAndInput.OnInputTextChanged);
                 }
                 else if (element is PopupButton button)
                 {
@@ -48,12 +50,13 @@ namespace Popup
 
         public void SetViewActive(bool active)
         {
-            throw new System.NotImplementedException();
+            _view.gameObject.SetActive(active);
         }
 
         public void Dispose()
         {
-            // TODO release managed resources here
+            _model.Dispose();
+            UnityEngine.Object.Destroy(_view.gameObject);
         }
     }
 }

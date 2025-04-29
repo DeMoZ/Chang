@@ -1,4 +1,5 @@
 using System;
+using DMZ.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,25 +17,26 @@ namespace Popup
         }
 
         public Action OnClick { get; set; }
-        public Action<bool> OnSetInteractable { get; set; }
+        public DMZState<bool> OnSetInteractable { get; set; }
 
-        private void OnEnable()
+        public void Init()
         {
             button.onClick.AddListener(OnClicked);
-            OnSetInteractable += SetInteractable;
+            OnSetInteractable.Subscribe(SetInteractable);
         }
-        
-        private void OnDisable()
+
+        private void OnDestroy()
         {
             button.onClick.RemoveListener(OnClicked);
-            OnSetInteractable -= SetInteractable;
+            OnSetInteractable.Unsubscribe(SetInteractable);
         }
-        
+
         private void SetInteractable(bool interactable)
         {
+            Debug.LogWarning("SetInteractable: " + interactable);
             button.interactable = interactable;
         }
-        
+
         private void OnClicked()
         {
             OnClick?.Invoke();

@@ -25,5 +25,18 @@ namespace Chang.Resources
                 keyParts[2],
                 $"{keyParts[3]}.mp3");
         }
+        
+        public string GetImagePath(string key)
+        {
+            // Assets/Project/Resources_Bundled/Thai/ImageWords/Fruits/Coconut.jpg
+            // key = Thai/Words/Fruits/Coconut
+            string[] keyParts = key.Split('/');
+            return Path.Combine(
+                AssetPaths.Addressables.Root,
+                keyParts[0],
+                AssetPaths.Addressables.ImageWords,
+                keyParts[2],
+                $"{keyParts[3]}.jpg");
+        }
     }
 }
