@@ -15,7 +15,6 @@ namespace Chang
         [SerializeField] private ProfileView profileScreen;
         [SerializeField] private GameBookView gameBookScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
-        [SerializeField] private SystemUiScreen systemUiScreen;
 
         [Space, SerializeField] private PagesContainer pagesContainer;
 
@@ -52,7 +51,6 @@ namespace Chang
             Container.BindInstance(matchWordScreen).AsSingle();
             Container.BindInstance(selectWordScreen).AsSingle();
             Container.BindInstance(profileScreen).AsSingle();
-            Container.BindInstance(systemUiScreen).AsSingle();
 
             #endregion
 
@@ -67,7 +65,6 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<SystemUiController>().AsSingle();
             Container.BindInterfacesAndSelfTo<PagesSoundController>().AsSingle();
 
             #endregion

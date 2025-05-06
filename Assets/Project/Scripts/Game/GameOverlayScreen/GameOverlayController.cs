@@ -1,5 +1,6 @@
 using System;
 using Chang.UI;
+using Popup;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -9,7 +10,9 @@ namespace Chang
     public class GameOverlayController : IViewController
     {
         private readonly GameOverlayView _view;
-        private readonly SystemUiController _systemUiController;
+        private readonly PopupManager _popupManager;
+
+        private PopupController<YesNoPopupModel> _exitPopupController;
 
         public Action OnCheck;
         public Action OnContinue;
@@ -17,10 +20,11 @@ namespace Chang
         public Action OnHint;
 
         [Inject]
-        public GameOverlayController(GameOverlayView view, GameBus gameBus, SystemUiController systemUiController)
+        public GameOverlayController(GameOverlayView view, GameBus gameBus, PopupManager popupManager)
         {
             _view = view;
-            _systemUiController = systemUiController;
+            _popupManager = popupManager;
+
             _view.Init(OnCheckBtn, OnContinueBtn, OnReturnBtn, OnHintBtn);
         }
 
@@ -36,17 +40,17 @@ namespace Chang
             EnableContinueButton(false);
             EnableHintButton(false);
         }
-        
+
         public void EnableReturnButton(bool enable)
         {
             _view.EnableReturnButton(enable);
         }
-        
+
         public void EnableCheckButton(bool enable)
         {
             _view.EnableCheckButton(enable);
         }
-        
+
         public void EnableHintButton(bool enable)
         {
             _view.EnableHintButton(enable);
@@ -78,18 +82,19 @@ namespace Chang
         private void OnReturnBtn()
         {
             // todo chang localization
-            _systemUiController.ShowConfirmPopup(
-                OnConfirmReturn,
-                headerText: string.Empty,
-                message: new() { "Are you sure want to exit the lesson" },
-                sureBtnText: "Yes", notSureBtnText: "No");
+            var yesModel = new YesNoPopupModel();
+            yesModel.HeaderText.Value = string.Empty;
+            yesModel.LabelText.Value = "Are you sure want to exit the lesson";
+            yesModel.OnOkClicked += () => OnConfirmReturn(true);
+            yesModel.OnCancelClicked += () => OnConfirmReturn(false);
+            _exitPopupController = _popupManager.ShowYesNoPopup(yesModel);
         }
 
         private void OnConfirmReturn(bool confirm)
         {
             Debug.Log($"OnConfirmReturn {confirm}");
-            _systemUiController.ClosePopup();
-            
+            _popupManager.DisposePopup(_exitPopupController);
+
             if (confirm)
             {
                 OnReturnFromGame?.Invoke();

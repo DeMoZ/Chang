@@ -13,6 +13,7 @@ namespace Popup
         public void Init()
         {
             Text.Subscribe(SetLabelText);
+            SetLabelText(Text.Value);
         }
 
         private void OnDestroy()
@@ -20,7 +21,7 @@ namespace Popup
             Text.Unsubscribe(SetLabelText);
         }
 
-        private void SetLabelText(string txt)
+        public void SetLabelText(string txt)
         {
             Debug.Log($"Set label text: {txt}");
             text.text = txt;

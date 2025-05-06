@@ -10,10 +10,9 @@ namespace Popup
 
         private void Start()
         {
-            popupController = new();
-            ChangeNamePopupModel model = new();
             PopupView view = Instantiate(popupViewPrefab, transform);
-            popupController.Init(view, model);
+            ChangeNamePopupModel model = new();
+            popupController = new PopupController<ChangeNamePopupModel>(view, model);
 
             // CreateTstPopup();
             CreateInputNamePopup();

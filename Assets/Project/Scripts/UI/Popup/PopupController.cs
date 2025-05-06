@@ -7,9 +7,9 @@ namespace Popup
     {
         private PopupView _view;
 
-        public TModel Model {get; private set;}
+        public TModel Model { get; }
 
-        public void Init(PopupView view, TModel model)
+        public PopupController(PopupView view, TModel model)
         {
             _view = view;
             Model = model;
