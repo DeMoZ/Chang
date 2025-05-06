@@ -22,6 +22,7 @@ namespace Popup
         public void Init()
         {
             inputField.onValueChanged.AddListener(InputTextChanged);
+            SetLabelText(LabelText.Value);
             LabelText.Subscribe(SetLabelText);
         }
 
