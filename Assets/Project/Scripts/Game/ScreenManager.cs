@@ -8,12 +8,12 @@ namespace Chang
     public class ScreenManager : IDisposable
     {
         private LobbyController _mainUiController;
-        private GameObject _pagesContainer;
+        private PagesContainer _pagesContainer;
         private List<IViewController> _pageControllers = new();
 
         [Inject]
         public ScreenManager(LobbyController mainUiController,
-            [Inject(Id = "PagesContainer")] GameObject pagesContainer,
+            PagesContainer pagesContainer,
             DemonstrationWordController demonstrationController,
             MatchWordsController matchTranslationController,
             SelectWordController selectTranslationController)
@@ -41,7 +41,7 @@ namespace Chang
         
         public void SetActivePagesContainer(bool active)
         {
-            _pagesContainer.SetActive(active);
+            _pagesContainer.gameObject.SetActive(active);
         }
     }
 }

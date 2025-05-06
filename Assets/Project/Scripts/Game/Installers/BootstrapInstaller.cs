@@ -7,7 +7,7 @@ namespace Chang
 {
     public class BootstrapInstaller : MonoInstaller<BootstrapInstaller>
     {
-        [SerializeField] private LoadingView loadingScreen;
+        [SerializeField] private LoadingUiView loadingScreen;
         [SerializeField] private LogInView logInScreen;
         
         public override void InstallBindings()
@@ -23,7 +23,6 @@ namespace Chang
             
             #region Controllers
 
-            Container.BindInterfacesTo<LoadingController>().AsSingle();
             Container.BindInterfacesAndSelfTo<Bootstrap>().AsSingle();
 
             #endregion

@@ -25,6 +25,13 @@ namespace Chang.Profile
         [field: SerializeField]
         public string UnityCloudSavePlayerId { get; private set; }
 
+        /// <summary>
+        /// Player name
+        /// </summary>
+        [JsonProperty]
+        [field: SerializeField]
+        public string Name { get; set; }
+        
         [JsonConstructor]
         public ProfileData(bool isInitialized, DateTime utcTime, string unityCloudSavePlayerId)
         {
@@ -37,6 +44,11 @@ namespace Chang.Profile
         {
             UtcTime = DateTime.UtcNow;
             IsInitialized = true;
+        }
+        
+        public void SetTime(DateTime utcTime)
+        {
+            UtcTime = utcTime;
         }
     }
 }

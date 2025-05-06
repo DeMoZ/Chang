@@ -41,7 +41,7 @@ namespace Chang.Editor.Addressables
         [Button(ButtonSizes.Medium, Name = "Open Catalog"), GUIColor(1f, 1f, 1f)]
         public void OpenCatalogFolder()
         {
-            OpenFolder(GetCaTalogPath()); // todo chang open catalog
+            OpenFolder(GetCatalogPath()); // todo chang open catalog
         }
 
         [PropertySpace(5f)]
@@ -93,7 +93,7 @@ namespace Chang.Editor.Addressables
         [Button(ButtonSizes.Medium, Name = "Open some config file"), GUIColor(1f, 1f, 1f)]
         [FoldoutGroup("Config Tools")]
         [HorizontalGroup("Config Tools/Horizontal")]
-        public void OpenSomeConfigFle()
+        public void OpenSomeConfigFile()
         {
             Object configFile = AssetDatabase.LoadAssetAtPath<Object>(ToolConstants.SOME_CONFIG_PATH);
             if (configFile != null)
@@ -236,7 +236,7 @@ namespace Chang.Editor.Addressables
 #endif
         }
         
-        private string GetCaTalogPath()
+        private string GetCatalogPath()
         {
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
             return Path.Combine(Environment.GetFolderPath(

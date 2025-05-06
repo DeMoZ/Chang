@@ -71,6 +71,8 @@ namespace Chang.FSM
                 Sounds.Add(Configs[key].Item.Key, asset);
             }
 
+            return;
+            // todo chang images
             foreach (var key in imageKeys)
             {
                 string path = _wordPathHelper.GetImagePath(key);

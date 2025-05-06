@@ -14,18 +14,18 @@ namespace Chang
     {
         private readonly AddressablesDownloader _assetDownloader;
         private readonly AuthorizationService _authorizationService;
-        private readonly DownloadModel _downloadModel;
+        private readonly LoadingUiController _loadingUiController;
 
         private CancellationTokenSource _cts;
 
         [Inject]
         public Bootstrap(AddressablesDownloader addresablesDownloader,
             AuthorizationService authorizationService,
-            DownloadModel downloadModel)
+            LoadingUiController loadingUiController)
         {
             _assetDownloader = addresablesDownloader;
             _authorizationService = authorizationService;
-            _downloadModel = downloadModel;
+            _loadingUiController = loadingUiController;
 
             _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
         }
@@ -51,8 +51,8 @@ namespace Chang
                 // todo chang on every step need to emulate error with disposing everything that supposed to
                 DMZLogger.Log($"Initialize start");
 
-                _downloadModel.SimulateProgress(2f, from: 0, to: 0.1f, ct: _cts.Token).Forget();
-                _downloadModel.ShowUi.Value = true;
+                _loadingUiController.SimulateProgress(2f, from: 0, to: 0.1f, ct: _cts.Token);
+                _loadingUiController.Show(LoadingElements.Background & LoadingElements.Bar);
 
                 //0 *skip for now download game settings from unity cloud ? Without authorization?
 

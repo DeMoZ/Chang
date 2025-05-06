@@ -15,7 +15,7 @@ namespace Chang.UI
 
         [Space] 
         [SerializeField] private Button _checkBtn;
-        [SerializeField] private VocabularyContinueView _continue;
+        [SerializeField] private PagesContinueView _continue;
 
         private UnityAction _checkBtnListener;
         private UnityAction _continueBtnListener;

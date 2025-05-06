@@ -6,12 +6,13 @@ namespace Popup
     public class PopupController<TModel> : IViewController where TModel : IDisposable
     {
         private PopupView _view;
-        private TModel _model;
+
+        public TModel Model {get; private set;}
 
         public void Init(PopupView view, TModel model)
         {
             _view = view;
-            _model = model;
+            Model = model;
         }
 
         public void CreatePopup(params IPopupElement[] elements)
@@ -55,7 +56,7 @@ namespace Popup
 
         public void Dispose()
         {
-            _model.Dispose();
+            Model.Dispose();
             UnityEngine.Object.Destroy(_view.gameObject);
         }
     }

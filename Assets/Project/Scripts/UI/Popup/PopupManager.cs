@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Chang;
 using DMZ.Events;
@@ -20,31 +19,55 @@ namespace Popup
 
             popupController.CreatePopup(
                 new PopupHeader("Change Name"),
-                new PopupLabelAndInput(model.LabelText, string.Empty,
-                    text => { model.OnNameInput?.Invoke(text); },
+                new PopupLabelAndInput(model.LabelText, model.NameInput.Value,
+                    text => { model.NameInput.Value = text; },
                     color => { }
                 ),
                 new PopupButton("Cancel", () =>
                 {
-                    Debug.Log("Cancelled");
+                    Debug.Log($"{model.GetType()} Cancelled");
                     model.OnChangeNameCancel?.Invoke();
                 }, new DMZState<bool>()),
                 new PopupButton("Submit",
                     () =>
                     {
-                        Debug.Log("Submitted");
+                        Debug.Log($"{model.GetType()} Submitted");
                         model.OnChangeNameSubmit?.Invoke();
                     },
                     model.OnSetSubmitInteractable));
-            
+
             _popupStack.Push(popupController);
-            model.OnNameInput?.Invoke(string.Empty); // trigger initial validation
+            return popupController;
+        }
+
+        public PopupController<ErrorPopupModel> ShowErrorPopup(ErrorPopupModel model)
+        {
+            PopupView popupView = Instantiate(popupPrefab, transform);
+            PopupController<ErrorPopupModel> popupController = new();
+            popupController.Init(popupView, model);
+
+            popupController.CreatePopup(
+                new PopupHeader("Error"),
+                new PopupLabel(model.LabelText),
+                new PopupButton("Ok", () =>
+                    {
+                        Debug.Log($"{model.GetType()} Ok clicked");
+                        model.OnOkClicked?.Invoke();
+                    }
+                    , new DMZState<bool>())
+            );
+
+            _popupStack.Push(popupController);
             return popupController;
         }
 
         public void Dispose()
         {
             // TODO release managed resources here
+            foreach (var popup in _popupStack)
+            {
+                popup.Dispose();
+            }
         }
 
         public void DisposePopup(IViewController controller)
@@ -53,12 +76,12 @@ namespace Popup
             controller.SetViewActive(false);
             controller.Dispose();
         }
-        
+
         private static void RemoveFromStack<T>(ref Stack<T> stack, T item)
         {
             var tempList = new List<T>(stack);
             tempList.Remove(item);
-            tempList.Reverse(); 
+            tempList.Reverse();
             stack.Clear();
             stack = new Stack<T>(tempList);
         }

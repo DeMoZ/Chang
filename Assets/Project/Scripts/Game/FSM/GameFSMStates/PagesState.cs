@@ -20,7 +20,7 @@ namespace Chang.FSM
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
         [Inject] private readonly AddressablesDownloader _assetDownloader;
-        [Inject] private readonly DownloadModel _downloadModel;
+        [Inject] private readonly LoadingUiController _loadingUiController;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly DiContainer _diContainer;
@@ -55,8 +55,8 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
-            _downloadModel.ShowUi.Value = true;
-            _downloadModel.SetProgress(0);
+            _loadingUiController.Show(LoadingElements.Background & LoadingElements.Bar);
+            _loadingUiController.SetProgress(0);
 
             await PreloadContentAsync();
 
@@ -81,8 +81,8 @@ namespace Chang.FSM
 
             await OnContinueAsync();
 
-            _downloadModel.SetProgress(100);
-            _downloadModel.ShowUi.Value = false;
+            _loadingUiController.SetProgress(100);
+            _loadingUiController.Hide();
         }
 
         public override void Exit()
@@ -108,7 +108,7 @@ namespace Chang.FSM
             {
                 keys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
                 keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
-                keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
+                // todo chang images keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
             }
 
             await _assetDownloader.PreloadAsync(keys, _cts.Token);
@@ -129,7 +129,7 @@ namespace Chang.FSM
         {
             OnCheckAsync().Forget();
         }
-        
+
         private async UniTask OnCheckAsync()
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
@@ -174,7 +174,7 @@ namespace Chang.FSM
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
-            await _profileService.SaveAsync(); // todo chang in case of bug move before _gameOverlayController.EnableContinueButton(true); 
+            await _profileService.SaveProgressAsync(); // todo chang in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
 
         private async UniTask OnCheckMatchWordsAsync()
@@ -191,7 +191,7 @@ namespace Chang.FSM
                 _pagesBus.LessonLog.Add(result);
             }
 
-            await _profileService.SaveAsync();
+            await _profileService.SaveProgressAsync();
             await OnContinueAsync();
         }
 
@@ -226,7 +226,7 @@ namespace Chang.FSM
                 SwitchState(QuestionType.Result);
                 return;
             }
-            
+
             ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
             QuestionType nextQuestionType = nextQuestion.QuestionType;
 

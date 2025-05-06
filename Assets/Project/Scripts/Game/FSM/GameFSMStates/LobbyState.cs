@@ -22,7 +22,7 @@ namespace Chang.FSM
         [Inject] private readonly LobbyController _lobbyController;
         [Inject] private readonly AddressablesAssetManager _assetManager;
         [Inject] private readonly ProfileService _profileService;
-        [Inject] private readonly DownloadModel _downloadModel;
+        [Inject] private readonly LoadingUiController _loadingUiController;
 
         private CancellationTokenSource _cts;
 
@@ -45,8 +45,8 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
-            _downloadModel.SimulateProgress(2f, ct: _cts.Token).Forget();
-            _downloadModel.ShowUi.Value = true;
+            _loadingUiController.SimulateProgress(2f, ct: _cts.Token);
+            _loadingUiController.Show(LoadingElements.Background & LoadingElements.Bar);
 
             await _profileService.LoadStoredData(_cts.Token);
 
@@ -75,8 +75,8 @@ namespace Chang.FSM
 
             Debug.Log("LoadGameBookConfigAsync end");
 
-            _downloadModel.SetProgress(1f);
-            _downloadModel.ShowUi.Value = false;
+            _loadingUiController.SetProgress(1f);
+            _loadingUiController.Hide();
 
             _lobbyController.Enter();
         }

@@ -24,13 +24,13 @@ namespace Chang.Resources
     /// </summary>
     public class AddressablesDownloader
     {
-        private readonly DownloadModel _downloadModel;
+        private readonly LoadingUiController _loadingUiController;
 
         private bool _isInitialized;
 
-        public AddressablesDownloader(DownloadModel downloadModel)
+        public AddressablesDownloader(LoadingUiController loadingUiController)
         {
-            _downloadModel = downloadModel;
+            _loadingUiController = loadingUiController;;
         }
 
         public async UniTask PreloadGameStartAddressables(CancellationToken ct)
@@ -74,14 +74,14 @@ namespace Chang.Resources
                 return;
             }
 
-            _downloadModel.ShowUi.Value = true;
-            _downloadModel.SetProgress(0);
+            _loadingUiController.Show(LoadingElements.Background & LoadingElements.Bar & LoadingElements.Percent);
+            _loadingUiController.SetProgress(0);
 
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Intersection);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
                 Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                _downloadModel.SetProgress(downloadHandle.PercentComplete);
+                _loadingUiController.SetProgress(downloadHandle.PercentComplete);
                 await UniTask.Yield(ct);
             }
 
@@ -90,7 +90,7 @@ namespace Chang.Resources
                 Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
             }
 
-            _downloadModel.ShowUi.Value = false;
+            _loadingUiController.Hide();
             downloadHandle.Release();
         }
 
@@ -123,16 +123,15 @@ namespace Chang.Resources
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
                 Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                _downloadModel.SetProgress(downloadHandle.PercentComplete);
+                _loadingUiController.SetProgress(downloadHandle.PercentComplete);
                 await UniTask.Yield(ct);
             }
-            
+
             if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
             {
                 Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
             }
-            
-            _downloadModel.ShowUi.Value = false;
+
             downloadHandle.Release();
         }
 
