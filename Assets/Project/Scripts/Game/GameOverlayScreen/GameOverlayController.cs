@@ -93,6 +93,7 @@ namespace Chang
         {
             Debug.Log($"OnConfirmReturn {confirm}");
             _popupManager.DisposePopup(_exitPopupController);
+            _exitPopupController = null;
 
             if (confirm)
             {

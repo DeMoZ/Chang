@@ -62,6 +62,7 @@ namespace Chang
         private void OnChangeNameCancel()
         {
             _popupManager.DisposePopup(_changeNameController);
+            _changeNameController = null;
         }
 
         private void OnChangeNameSubmit()
@@ -81,6 +82,7 @@ namespace Chang
                 if (_changeNameController != null)
                 {
                     _popupManager.DisposePopup(_changeNameController);
+                    _changeNameController = null;
                 }
 
                 UpdateScreen();
@@ -93,6 +95,7 @@ namespace Chang
             finally
             {
                 _popupManager.DisposePopup(_loadingUiController);
+                _loadingUiController = null;
             }
         }
 

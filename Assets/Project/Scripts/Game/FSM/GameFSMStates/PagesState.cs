@@ -91,6 +91,7 @@ namespace Chang.FSM
 
             _loadingUiController.SetProgress(100);
             _popupManager.DisposePopup(_loadingUiController);
+            _loadingUiController = null;
         }
 
         public override void Exit()

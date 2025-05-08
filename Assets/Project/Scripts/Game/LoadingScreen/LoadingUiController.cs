@@ -15,8 +15,9 @@ namespace Chang
 
         private CancellationTokenSource _cts;
         private DMZState<float> _progress = new();
-
+        
         public LoadingUiModel Model => _model;
+        public Action OnDispose;
 
         public LoadingUiController(LoadingUiView view, LoadingUiModel model)
         {
@@ -40,6 +41,9 @@ namespace Chang
 
             _model.Dispose();
             UnityEngine.Object.Destroy(_view.gameObject);
+            
+            OnDispose?.Invoke();
+            OnDispose = null;
         }
 
         public void Update(LoadingUiModel model)
@@ -62,7 +66,7 @@ namespace Chang
             _progress.Value = progress;
         }
 
-        public async UniTask SimulateProgress(float duration, float from = 0, float to = 1, CancellationToken ct = default)
+        public async UniTask SimulateProgress(float duration, float from = 0, float to = 1)
         {
             _cts?.Cancel();
             _cts = new CancellationTokenSource();
@@ -73,18 +77,23 @@ namespace Chang
             }
 
             _progress.Value = from;
-
             float elapsed = 0f;
-            while (elapsed < duration)
-            {
-                if (ct.IsCancellationRequested || _cts.Token.IsCancellationRequested)
-                {
-                    return;
-                }
 
-                elapsed += Time.deltaTime;
-                _progress.Value = Mathf.Lerp(from, to, elapsed / duration);
-                await UniTask.Yield(ct);
+            try
+            {
+                while (elapsed < duration)
+                {
+                    if (_cts.Token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    elapsed += Time.deltaTime;
+                    _progress.Value = Mathf.Lerp(from, to, elapsed / duration);
+                }
+            }
+            catch (OperationCanceledException e)
+            {
             }
 
             _progress.Value = to;

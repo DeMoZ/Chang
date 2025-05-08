@@ -32,6 +32,13 @@ namespace Chang
             _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
         }
 
+        public void Dispose()
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _authorizationService.OnPlayerLoggedOut -= OnLoggedOut;
+        }
+        
         public void Initialize()
         {
             DMZLogger.Log($"{nameof(Initialize)}");
@@ -55,7 +62,7 @@ namespace Chang
 
                 _loadingUiController = _popupManager.ShowLoadingUi(
                     new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
-                _loadingUiController.SimulateProgress(2f, from: 0, to: 0.1f, ct: _cts.Token).Forget();
+                _loadingUiController.SimulateProgress(2f, from: 0, to: 0.1f).Forget();
 
                 //0 *skip for now download game settings from unity cloud ? Without authorization?
 
@@ -87,13 +94,6 @@ namespace Chang
 
             DMZLogger.Log("Spacebar pressed! Restarting...");
             SceneManager.LoadScene("Bootstrap");
-        }
-
-        public void Dispose()
-        {
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _authorizationService.OnPlayerLoggedOut -= OnLoggedOut;
         }
 
         private void OnLoggedOut()

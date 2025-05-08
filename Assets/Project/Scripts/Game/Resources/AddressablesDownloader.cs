@@ -93,6 +93,7 @@ namespace Chang.Resources
             }
 
             _popupManager.DisposePopup(_loadingUiController);
+            _loadingUiController = null;
             downloadHandle.Release();
         }
 

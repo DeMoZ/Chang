@@ -49,7 +49,7 @@ namespace Chang.FSM
         {
             _loadingUiController = _popupManager.ShowLoadingUi(
                 new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
-            _loadingUiController.SimulateProgress(2f, ct: _cts.Token);
+            _loadingUiController.SimulateProgress(2f);
 
             await _profileService.LoadStoredData(_cts.Token);
 
