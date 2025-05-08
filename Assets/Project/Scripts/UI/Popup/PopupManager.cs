@@ -6,10 +6,10 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Popup
 {
-    public class PopupManager : MonoBehaviour
+    public partial class PopupManager : MonoBehaviour
     {
         [SerializeField] private PopupView popupPrefab;
-
+        
         private Stack<IViewController> _popupStack = new();
 
         public PopupController<ChangeNamePopupModel> ShowChangeNamePopup(ChangeNamePopupModel model)
@@ -86,13 +86,14 @@ namespace Popup
             return popupController;
         }
 
-        public void Dispose()
+        public void OnDestroy()
         {
-            // TODO release managed resources here
             foreach (var popup in _popupStack)
             {
                 popup.Dispose();
             }
+
+            _popupStack.Clear();
         }
 
         public void DisposePopup(IViewController controller)

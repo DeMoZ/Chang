@@ -12,27 +12,36 @@ namespace Chang
         private readonly ProfileView _view;
         private readonly ProfileService _profileService;
         private readonly PopupManager _popupManager;
-        private readonly LoadingUiController _loadingUiController;
 
         private PopupController<ChangeNamePopupModel> _changeNameController;
+        private LoadingUiController _loadingUiController;
 
         [Inject]
         public ProfileController(
             MainScreenBus mainScreenBus,
             ProfileView view,
             ProfileService profileService,
-            PopupManager popupManager,
-            LoadingUiController loadingUiController)
+            PopupManager popupManager)
         {
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
             _popupManager = popupManager;
-            _loadingUiController = loadingUiController;
         }
 
         public void Dispose()
         {
+            if (_loadingUiController != null)
+            {
+                _popupManager.DisposePopup(_loadingUiController);
+                _loadingUiController = null;
+            }
+
+            if (_changeNameController != null)
+            {
+                _popupManager.DisposePopup(_changeNameController);
+                _changeNameController = null;
+            }
         }
 
         public void Init()
@@ -66,7 +75,7 @@ namespace Chang
 
             try
             {
-                _loadingUiController.Show(LoadingElements.Animation);
+                _loadingUiController = _popupManager.ShowLoadingUi(new LoadingUiModel(LoadingElements.Animation));
                 await _profileService.SaveProfileDataAsync();
 
                 if (_changeNameController != null)
@@ -83,7 +92,7 @@ namespace Chang
             }
             finally
             {
-                _loadingUiController.Hide();
+                _popupManager.DisposePopup(_loadingUiController);
             }
         }
 

@@ -7,6 +7,7 @@ using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Newtonsoft.Json;
+using Popup;
 using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -22,8 +23,9 @@ namespace Chang.FSM
         [Inject] private readonly LobbyController _lobbyController;
         [Inject] private readonly AddressablesAssetManager _assetManager;
         [Inject] private readonly ProfileService _profileService;
-        [Inject] private readonly LoadingUiController _loadingUiController;
+        [Inject] private readonly PopupManager _popupManager;
 
+        private LoadingUiController _loadingUiController;
         private CancellationTokenSource _cts;
 
         public LobbyState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
@@ -45,8 +47,9 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
+            _loadingUiController = _popupManager.ShowLoadingUi(
+                new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
             _loadingUiController.SimulateProgress(2f, ct: _cts.Token);
-            _loadingUiController.Show(LoadingElements.Background & LoadingElements.Bar);
 
             await _profileService.LoadStoredData(_cts.Token);
 
@@ -76,7 +79,11 @@ namespace Chang.FSM
             Debug.Log("LoadGameBookConfigAsync end");
 
             _loadingUiController.SetProgress(1f);
-            _loadingUiController.Hide();
+            if (_loadingUiController != null)
+            {
+                _popupManager.DisposePopup(_loadingUiController);
+                _loadingUiController = null;
+            }
 
             _lobbyController.Enter();
         }

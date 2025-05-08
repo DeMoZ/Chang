@@ -13,7 +13,6 @@ namespace Chang
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(InstallBindings)}");
-            Container.BindInterfacesAndSelfTo<LoadingUiController>().AsSingle();
             Container.BindInterfacesAndSelfTo<AddressablesAssetManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<AddressablesDownloader>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerProfile>().AsSingle();
@@ -26,16 +25,6 @@ namespace Chang
             var loginController = new LogInController(loginModel);
             Container.BindInstances(loginModel);
             Container.BindInstance(loginController);
-            
-            var loadingUiView = FindFirstObjectByType<LoadingUiView>();
-            if (loadingUiView != null)
-            {
-                Container.BindInstance(loadingUiView).AsSingle();
-            }
-            else
-            {
-                Debug.LogError("LoadingUiView not found in the scene.");
-            }
             
             var popupManager = FindFirstObjectByType<PopupManager>();
             if (popupManager != null)

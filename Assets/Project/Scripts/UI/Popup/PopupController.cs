@@ -13,6 +13,8 @@ namespace Popup
         {
             _view = view;
             Model = model;
+            
+            _view.name = $"Popup_{typeof(TModel).Name}";
         }
 
         public void CreatePopup(params IPopupElement[] elements)

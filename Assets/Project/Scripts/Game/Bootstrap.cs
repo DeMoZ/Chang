@@ -4,6 +4,7 @@ using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.DebugSystem;
+using Popup;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -14,18 +15,19 @@ namespace Chang
     {
         private readonly AddressablesDownloader _assetDownloader;
         private readonly AuthorizationService _authorizationService;
-        private readonly LoadingUiController _loadingUiController;
+        private readonly PopupManager _popupManager;
 
+        private LoadingUiController _loadingUiController;
         private CancellationTokenSource _cts;
 
         [Inject]
         public Bootstrap(AddressablesDownloader addresablesDownloader,
             AuthorizationService authorizationService,
-            LoadingUiController loadingUiController)
+            PopupManager popupManager)
         {
             _assetDownloader = addresablesDownloader;
             _authorizationService = authorizationService;
-            _loadingUiController = loadingUiController;
+            _popupManager = popupManager;
 
             _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
         }
@@ -51,8 +53,9 @@ namespace Chang
                 // todo chang on every step need to emulate error with disposing everything that supposed to
                 DMZLogger.Log($"Initialize start");
 
-                _loadingUiController.SimulateProgress(2f, from: 0, to: 0.1f, ct: _cts.Token);
-                _loadingUiController.Show(LoadingElements.Background & LoadingElements.Bar);
+                _loadingUiController = _popupManager.ShowLoadingUi(
+                    new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
+                _loadingUiController.SimulateProgress(2f, from: 0, to: 0.1f, ct: _cts.Token).Forget();
 
                 //0 *skip for now download game settings from unity cloud ? Without authorization?
 

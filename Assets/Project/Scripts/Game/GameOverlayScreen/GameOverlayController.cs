@@ -81,7 +81,6 @@ namespace Chang
 
         private void OnReturnBtn()
         {
-            // todo chang localization
             var yesModel = new YesNoPopupModel();
             yesModel.HeaderText.Value = string.Empty;
             yesModel.LabelText.Value = "Are you sure want to exit the lesson";

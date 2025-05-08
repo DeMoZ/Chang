@@ -1,34 +1,30 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DMZ.Events;
+using Popup;
 using UnityEngine;
-using Zenject;
 
 namespace Chang
 {
-    [Flags]
-    public enum LoadingElements
-    {
-        Background = 1 << 0,
-        Bar = 1 << 1,
-        Percent = 1 << 2,
-        Animation = 1 << 3,
-        None = 0,
-    }
-
-    public class LoadingUiController : IDisposable
+    public class LoadingUiController : IViewController
     {
         private readonly LoadingUiView _view;
-        
-        private CancellationTokenSource _cts;
+        private readonly LoadingUiModel _model;
 
+        private CancellationTokenSource _cts;
         private DMZState<float> _progress = new();
-        
-        [Inject]
-        public LoadingUiController(LoadingUiView view)
+
+        public LoadingUiModel Model => _model;
+
+        public LoadingUiController(LoadingUiView view, LoadingUiModel model)
         {
             _view = view;
+            _model = model;
+
+            _view.EnableBlocker(true);
+            Update(_model);
 
             _progress.Subscribe(SetViewProgress);
         }
@@ -37,35 +33,35 @@ namespace Chang
         {
             _cts?.Cancel();
             _cts?.Dispose();
-            
+
             _progress.Unsubscribe(SetViewProgress);
             _progress.Dispose();
             _progress = null;
+
+            _model.Dispose();
+            UnityEngine.Object.Destroy(_view.gameObject);
         }
 
-        public void Show(LoadingElements elements)
+        public void Update(LoadingUiModel model)
         {
-            _view.EnableBlocker(true);
+            // _view.name = $"Loading_{string.Join("", GetFlags(model.Elements))}";
+            _view.EnableBackground((model.Elements & LoadingElements.Background) == LoadingElements.Background);
+            _view.EnableProgressSlider((model.Elements & LoadingElements.Bar) == LoadingElements.Bar);
+            _view.EnablePercents((model.Elements & LoadingElements.Percent) == LoadingElements.Percent);
+            _view.EnableLoadingAnimation((model.Elements & LoadingElements.Animation) == LoadingElements.Animation);
+        }
 
-            _view.EnableBackground((elements & LoadingElements.Background) != 0);
-            _view.EnableProgressSlider((elements & LoadingElements.Bar) != 0);
-            _view.EnablePercents((elements & LoadingElements.Percent) != 0);
-            _view.EnableLoadingAnimation((elements & LoadingElements.Animation) != 0);
-
+        public void SetViewActive(bool active)
+        {
             _view.gameObject.SetActive(true);
         }
 
-        public void Hide()
-        {
-            _view.gameObject.SetActive(false);
-        }
-        
         public void SetProgress(float progress)
         {
             _cts?.Cancel();
             _progress.Value = progress;
         }
-        
+
         public async UniTask SimulateProgress(float duration, float from = 0, float to = 1, CancellationToken ct = default)
         {
             _cts?.Cancel();
@@ -93,10 +89,21 @@ namespace Chang
 
             _progress.Value = to;
         }
-        
+
         private void SetViewProgress(float value)
         {
             _view.SetProgress(value);
+        }
+
+        private static IEnumerable<LoadingElements> GetFlags(LoadingElements elements)
+        {
+            foreach (LoadingElements value in Enum.GetValues(typeof(LoadingElements)))
+            {
+                if (value != 0 && elements.HasFlag(value))
+                {
+                    yield return value;
+                }
+            }
         }
     }
 }

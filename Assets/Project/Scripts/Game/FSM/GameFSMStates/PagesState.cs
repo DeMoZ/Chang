@@ -6,6 +6,7 @@ using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
+using Popup;
 using Sirenix.Utilities;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -20,11 +21,12 @@ namespace Chang.FSM
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
         [Inject] private readonly AddressablesDownloader _assetDownloader;
-        [Inject] private readonly LoadingUiController _loadingUiController;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly DiContainer _diContainer;
+        [Inject] private readonly PopupManager _popupManager;
 
+        private LoadingUiController _loadingUiController;
         private PagesBus _pagesBus;
         private PagesFSM _pagesFsm;
         private CancellationTokenSource _cts;
@@ -40,6 +42,12 @@ namespace Chang.FSM
 
             _pagesFsm.Dispose();
             _pagesBus.Dispose();
+
+            if (_loadingUiController != null)
+            {
+                _popupManager.DisposePopup(_loadingUiController);
+                _loadingUiController = null;
+            }
         }
 
         public override void Enter()
@@ -55,7 +63,7 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
-            _loadingUiController.Show(LoadingElements.Background & LoadingElements.Bar);
+            _loadingUiController = _popupManager.ShowLoadingUi(new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar));
             _loadingUiController.SetProgress(0);
 
             await PreloadContentAsync();
@@ -82,7 +90,7 @@ namespace Chang.FSM
             await OnContinueAsync();
 
             _loadingUiController.SetProgress(100);
-            _loadingUiController.Hide();
+            _popupManager.DisposePopup(_loadingUiController);
         }
 
         public override void Exit()

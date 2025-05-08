@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Popup;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -22,15 +22,16 @@ namespace Chang.Resources
     /// <summary>
     /// Downloads addressables assets from the server.
     /// </summary>
-    public class AddressablesDownloader
+    public class AddressablesDownloader : IDisposable
     {
-        private readonly LoadingUiController _loadingUiController;
+        private readonly PopupManager _popupManager;
 
         private bool _isInitialized;
+        private LoadingUiController _loadingUiController;
 
-        public AddressablesDownloader(LoadingUiController loadingUiController)
+        public AddressablesDownloader(PopupManager popupManager)
         {
-            _loadingUiController = loadingUiController;;
+            _popupManager = popupManager;
         }
 
         public async UniTask PreloadGameStartAddressables(CancellationToken ct)
@@ -74,7 +75,8 @@ namespace Chang.Resources
                 return;
             }
 
-            _loadingUiController.Show(LoadingElements.Background & LoadingElements.Bar & LoadingElements.Percent);
+            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent);
+            _loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
             _loadingUiController.SetProgress(0);
 
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Intersection);
@@ -90,7 +92,7 @@ namespace Chang.Resources
                 Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
             }
 
-            _loadingUiController.Hide();
+            _popupManager.DisposePopup(_loadingUiController);
             downloadHandle.Release();
         }
 
@@ -170,6 +172,15 @@ namespace Chang.Resources
 
             _isInitialized = true;
             handle.Release();
+        }
+
+        public void Dispose()
+        {
+            if (_loadingUiController != null)
+            {
+                _popupManager.DisposePopup(_loadingUiController);
+                _loadingUiController = null;
+            }
         }
     }
 }
