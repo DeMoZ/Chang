@@ -53,9 +53,7 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
-
-            _cts?.Cancel();
-            _cts?.Dispose();
+            
             _cts = new CancellationTokenSource();
 
             EnterAsync().Forget();
