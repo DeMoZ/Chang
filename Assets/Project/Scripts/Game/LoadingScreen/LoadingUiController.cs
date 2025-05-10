@@ -66,7 +66,7 @@ namespace Chang
             _progress.Value = progress;
         }
 
-        public async UniTask SimulateProgress(float duration, float from = 0, float to = 1)
+        public async UniTaskVoid SimulateProgress(float duration, float from = 0, float to = 1)
         {
             _cts?.Cancel();
             _cts = new CancellationTokenSource();
@@ -87,16 +87,19 @@ namespace Chang
                     {
                         return;
                     }
-
+                    
+                    await UniTask.Yield(PlayerLoopTiming.Update, _cts.Token);
                     elapsed += Time.deltaTime;
                     _progress.Value = Mathf.Lerp(from, to, elapsed / duration);
                 }
+                
+                _progress.Value = to;
             }
             catch (OperationCanceledException e)
             {
+                // todo chang handle?
+                Debug.Log($"cancel operation {e}");
             }
-
-            _progress.Value = to;
         }
 
         private void SetViewProgress(float value)
