@@ -20,6 +20,7 @@ namespace Chang
 
         private LoadingUiController _loadingUiController;
         private CancellationTokenSource _cts;
+        private bool _restarterIsRunning;
 
         [Inject]
         public Bootstrap(AddressablesDownloader addresablesDownloader,
@@ -31,12 +32,15 @@ namespace Chang
             _popupManager = popupManager;
             _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
         }
-        
+
         public void Initialize()
         {
             DMZLogger.Log($"{nameof(Initialize)}");
+#if UNITY_EDITOR
+            RunRestartTriggerAsync().Forget();
+#endif
         }
-        
+
         public void Dispose()
         {
             _cts?.Cancel();
@@ -49,18 +53,16 @@ namespace Chang
             Debug.Log("OnLoggedOut");
             LoadRebootScene();
         }
-        
+
         public void LoadRebootScene()
         {
             DMZLogger.Log($"Load Reboot Scene");
             SceneManager.LoadScene(ProjectConstants.REBOOT_SCENE);
         }
-        
+
         public async UniTaskVoid LoadingSequenceAsync()
         {
             DMZLogger.Log($"{nameof(LoadingSequenceAsync)}: Start");
-            // todo chang comment
-            RunRestartTriggerAsync().Forget();
 
             // todo chang on every step need to emulate error with disposing everything that supposed to
             try
@@ -93,7 +95,13 @@ namespace Chang
 
         private async UniTaskVoid RunRestartTriggerAsync()
         {
+            if (_restarterIsRunning)
+            {
+                return;
+            }
+            
             DMZLogger.Log("Waiting for spacebar press...");
+            _restarterIsRunning = true;
             while (!Input.GetKeyDown(KeyCode.Space))
             {
                 await UniTask.Yield();
