@@ -18,7 +18,7 @@ namespace Chang.Services
 
         public List<QuestLog> GetSectionRepetition(Languages language, int amount, string key)
         {
-            Dictionary<string, QuestLog> progressQuestions = _profileService.GetProgress().Questions;
+            Dictionary<string, QuestLog> progressQuestions = _profileService.ProgressData.Questions;
             var progressList = progressQuestions
                 .Select(q => q.Value)
                 .Where(q => q.Language == language && string.Equals(q.Section, key)).ToList();
@@ -36,7 +36,7 @@ namespace Chang.Services
         public List<QuestLog> GetGeneralRepetition(Languages language, int amount)
         {
             // todo chang filter by language
-            var progressQuestions = _profileService.GetProgress().Questions;
+            var progressQuestions = _profileService.ProgressData.Questions;
             var progressList = progressQuestions.Select(q => q.Value).Where(q => q.SuccessSequence < 10);
 
             // var sortedWords = words

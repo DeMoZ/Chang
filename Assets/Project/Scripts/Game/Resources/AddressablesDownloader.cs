@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Popup;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -22,24 +22,26 @@ namespace Chang.Resources
     /// <summary>
     /// Downloads addressables assets from the server.
     /// </summary>
-    public class AddressablesDownloader
+    public class AddressablesDownloader : IDisposable
     {
-        private readonly DownloadModel _downloadModel;
+        private readonly PopupManager _popupManager;
 
         private bool _isInitialized;
 
-        public AddressablesDownloader(DownloadModel downloadModel)
+        public AddressablesDownloader(PopupManager popupManager)
         {
-            _downloadModel = downloadModel;
+            _popupManager = popupManager;
         }
 
-        public async UniTask PreloadGameStartAddressables(CancellationToken ct)
+        public async UniTask PreloadAtGameStartAsync(Action<float> percents, CancellationToken ct)
         {
-            await PreloadAssetAsync(BundleLabels.Labels.Base, ct);
+            await PreloadLabelsAsync(BundleLabels.Labels.Base, percents, ct);
         }
 
-        public async UniTask PreloadAssetAsync(BundleLabels.Labels labels, CancellationToken ct)
+        public async UniTask PreloadLabelsAsync(BundleLabels.Labels labels, Action<float> percents, CancellationToken ct)
         {
+            Debug.Log($"{nameof(PreloadLabelsAsync)}");
+
             if (labels == 0)
             {
                 Debug.LogError("No labels provided for preloading assets.");
@@ -47,19 +49,19 @@ namespace Chang.Resources
             }
 
             var keys = labels.ToString().Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-            await PreloadAssetAsync(keys, ct);
+            await PreloadLabelsAsync(keys, percents, ct);
         }
 
-        public async UniTask PreloadAssetAsync(IEnumerable<string> keys, CancellationToken ct)
+        public async UniTask PreloadLabelsAsync(IEnumerable<string> keys, Action<float> percents, CancellationToken ct)
         {
             await InitializationGuard();
-
+            Debug.Log($"{nameof(PreloadLabelsAsync)}");
             AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
             await getDownloadSizeHandle.Task;
 
             if (getDownloadSizeHandle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"{nameof(PreloadAssetAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                Debug.LogError($"{nameof(PreloadLabelsAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
                 getDownloadSizeHandle.Release();
                 return;
             }
@@ -73,38 +75,35 @@ namespace Chang.Resources
                 Debug.Log("No assets need to be downloaded.");
                 return;
             }
-
-            _downloadModel.ShowUi.Value = true;
-            _downloadModel.SetProgress(0);
-
+            
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Intersection);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
                 Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                _downloadModel.SetProgress(downloadHandle.PercentComplete);
+                percents?.Invoke(downloadHandle.PercentComplete);
                 await UniTask.Yield(ct);
             }
 
             if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
+                Debug.LogError($"{nameof(PreloadLabelsAsync)} download failed: {downloadHandle.OperationException}");
             }
-
-            _downloadModel.ShowUi.Value = false;
+            
             downloadHandle.Release();
         }
 
         /// <summary>
-        /// Without download screen 
+        /// Preload on enter pages state
         /// </summary>
-        public async UniTask PreloadAsync(IEnumerable<string> keys, CancellationToken ct)
+        public async UniTask PreloadPagesStateAsync(IEnumerable<string> keys, Action<float> percents, CancellationToken ct)
         {
+            Debug.Log($"{nameof(PreloadPagesStateAsync)}");
             AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
             await getDownloadSizeHandle.Task;
 
             if (getDownloadSizeHandle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"{nameof(PreloadAssetAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                Debug.LogError($"{nameof(PreloadPagesStateAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
                 getDownloadSizeHandle.Release();
                 return;
             }
@@ -122,17 +121,15 @@ namespace Chang.Resources
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
-                Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                _downloadModel.SetProgress(downloadHandle.PercentComplete);
+                percents?.Invoke(downloadHandle.PercentComplete);
                 await UniTask.Yield(ct);
             }
-            
+
             if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
+                Debug.LogError($"{nameof(PreloadPagesStateAsync)} download failed: {downloadHandle.OperationException}");
             }
-            
-            _downloadModel.ShowUi.Value = false;
+
             downloadHandle.Release();
         }
 
@@ -171,6 +168,10 @@ namespace Chang.Resources
 
             _isInitialized = true;
             handle.Release();
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

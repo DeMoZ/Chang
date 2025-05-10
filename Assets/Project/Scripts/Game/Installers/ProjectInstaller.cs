@@ -2,6 +2,8 @@ using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
 using DMZ.Legacy.LoginScreen;
+using Popup;
+using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -12,15 +14,49 @@ namespace Chang
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(InstallBindings)}");
-            Container.BindInterfacesAndSelfTo<DownloadModel>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ErrorHandler>().AsSingle();
+            Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
             Container.BindInterfacesAndSelfTo<AddressablesAssetManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<AddressablesDownloader>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerProfile>().AsSingle();
+            
+            BingPopupManager();
+            BindLogin();
+
             Container.BindInterfacesAndSelfTo<AuthorizationService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
-            Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
+            
+            Container.BindInterfacesAndSelfTo<Bootstrap>().AsSingle();
+        }
 
+        private void BingPopupManager()
+        {
+            var popupManager = FindFirstObjectByType<PopupManager>();
+            if (popupManager != null)
+            {
+                Container.BindInstance(popupManager).AsSingle();
+            }
+            else
+            {
+                Debug.LogError("PopupManager not found in the scene.");
+            }
+        }
+
+        private void BindLogin()
+        {
             var loginModel = new LogInModel();
+            
+            var logInView = FindFirstObjectByType<LogInView>(FindObjectsInactive.Include);
+            if (logInView != null)
+            {
+                Container.BindInstance(logInView).AsSingle();
+            }
+            else
+            {
+                Debug.LogError("LogInView not found in the scene.");
+            }
+            logInView.Init(loginModel);
+            
             var loginController = new LogInController(loginModel);
             Container.BindInstances(loginModel);
             Container.BindInstance(loginController);

@@ -14,14 +14,16 @@ namespace Chang.Services
         private readonly IDataProvider _prefsDataProvider;
         private readonly IDataProvider _unityCloudDataProvider;
 
+        public ProgressData ProgressData => _playerProfile.ProgressData;
+        public ProfileData ProfileData => _playerProfile.ProfileData;
         public string PlayerId => _unityCloudDataProvider.PlayerId;
 
         [Inject]
-        public ProfileService(PlayerProfile playerProfile)
+        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler)
         {
             _playerProfile = playerProfile;
             _prefsDataProvider = new PrefsDataProvider();
-            _unityCloudDataProvider = new UnityCloudDataProvider();
+            _unityCloudDataProvider = new UnityCloudDataProvider(errorHandler);
         }
 
         public void Dispose()
@@ -43,8 +45,17 @@ namespace Chang.Services
             _playerProfile.ProfileData = unityProfileData;
             _playerProfile.ProgressData = unityProgressData;
         }
+        
+        public async UniTask SaveProfileDataAsync()
+        {
+            _playerProfile.ProfileData.SetTime(DateTime.UtcNow);
 
-        public async UniTask SaveAsync()
+            await _prefsDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData);
+            await _unityCloudDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData);
+            await SaveIntoScriptableObject();
+        }
+        
+        public async UniTask SaveProgressAsync()
         {
             _playerProfile.ProgressData.SetTime(DateTime.UtcNow);
 
@@ -67,11 +78,6 @@ namespace Chang.Services
             _playerProfile.ProgressData.SetTime(logUnit.UtcTime);
             questLog.SetTime(logUnit.UtcTime);
             questLog.AddLog(logUnit);
-        }
-
-        public ProgressData GetProgress()
-        {
-            return _playerProfile.ProgressData;
         }
 
         public int GetMark(string key)

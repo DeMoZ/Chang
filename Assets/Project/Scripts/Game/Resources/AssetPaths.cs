@@ -21,9 +21,10 @@ namespace Chang.Resources
 
         public static class Addressables
         {
-            public const string Root = "Assets/Project/Resources_Bundled";
-            public static string Words = "Words";
-            public static string SoundWords = "SoundWords";
+            public const string Root = "Assets/Project/Resources_Bundled/";
+            public static string Words = "Words/";
+            public static string SoundWords = "SoundWords/";
+            public static string ImageWords = "ImageWords/";
         }
 
         public static class Resources

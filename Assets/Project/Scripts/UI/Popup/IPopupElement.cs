@@ -1,4 +1,5 @@
 using System;
+using DMZ.Events;
 using UnityEngine;
 
 namespace Popup
@@ -16,12 +17,12 @@ namespace Popup
             Text = text;
         }
     }
-    
+
     public class PopupLabel : IPopupElement
     {
-        public string Text { get; set; }
+        public DMZState<string> Text { get; set; }
 
-        public PopupLabel(string text)
+        public PopupLabel(DMZState<string> text)
         {
             Text = text;
         }
@@ -31,9 +32,9 @@ namespace Popup
     {
         public string Text { get; set; }
         public Action OnClick { get; set; }
-        public Action<bool> OnSetInteractable { get; set; }
+        public DMZState<bool> OnSetInteractable { get; set; }
 
-        public PopupButton(string text, Action onClick, Action<bool> onSetInteractable)
+        public PopupButton(string text, Action onClick, DMZState<bool> onSetInteractable)
         {
             Text = text;
             OnClick = onClick;
@@ -43,12 +44,15 @@ namespace Popup
 
     public class PopupLabelAndInput : IPopupElement
     {
-        public string LabelText { get; set; }
+        public DMZState<string> LabelText { get; set; }
         public string InputText { get; set; }
         public Action<string> OnInputTextChanged { get; set; }
         public Action<Color> OnSetInputColor { get; set; }
 
-        public PopupLabelAndInput(string labelText, string inputText, Action<string> onInputTextChanged, Action<Color> onSetInputColor)
+        public PopupLabelAndInput(DMZState<string> labelText,
+            string inputText,
+            Action<string> onInputTextChanged,
+            Action<Color> onSetInputColor)
         {
             LabelText = labelText;
             InputText = inputText;

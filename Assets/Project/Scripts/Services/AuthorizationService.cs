@@ -50,6 +50,7 @@ namespace Chang.Services
 
         private void OnLoggedOut()
         {
+            Debug.Log("OnLoggedOut");
             OnPlayerLoggedOut?.Invoke();
         }
     }

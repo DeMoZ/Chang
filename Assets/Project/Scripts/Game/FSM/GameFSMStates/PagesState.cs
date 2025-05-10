@@ -6,6 +6,7 @@ using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
+using Popup;
 using Sirenix.Utilities;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -20,10 +21,10 @@ namespace Chang.FSM
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
         [Inject] private readonly AddressablesDownloader _assetDownloader;
-        [Inject] private readonly DownloadModel _downloadModel;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly DiContainer _diContainer;
+        [Inject] private readonly PopupManager _popupManager;
 
         private PagesBus _pagesBus;
         private PagesFSM _pagesFsm;
@@ -46,8 +47,6 @@ namespace Chang.FSM
         {
             base.Enter();
 
-            _cts?.Cancel();
-            _cts?.Dispose();
             _cts = new CancellationTokenSource();
 
             EnterAsync().Forget();
@@ -55,10 +54,11 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
-            _downloadModel.ShowUi.Value = true;
-            _downloadModel.SetProgress(0);
+            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent);
+            var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
+            loadingUiController.SetProgress(0);
 
-            await PreloadContentAsync();
+            await PreloadContentAsync(loadingUiController.SetProgress);
 
             _screenManager.SetActivePagesContainer(true);
 
@@ -79,10 +79,10 @@ namespace Chang.FSM
             _pagesFsm = new PagesFSM(_diContainer, _pagesBus);
             _pagesFsm.Initialize();
 
-            await OnContinueAsync();
+            loadingUiController.SetProgress(100);
+            _popupManager.DisposePopup(loadingUiController);
 
-            _downloadModel.SetProgress(100);
-            _downloadModel.ShowUi.Value = false;
+            await OnContinueAsync();
         }
 
         public override void Exit()
@@ -101,16 +101,17 @@ namespace Chang.FSM
             _gameOverlayController.OnExitToLobby();
         }
 
-        private async UniTask PreloadContentAsync()
+        private async UniTask PreloadContentAsync(Action<float> percents)
         {
             HashSet<string> keys = new();
             foreach (ISimpleQuestion quest in Bus.CurrentLesson.SimpleQuestions)
             {
                 keys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
                 keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
+                // todo chang images keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
             }
 
-            await _assetDownloader.PreloadAsync(keys, _cts.Token);
+            await _assetDownloader.PreloadPagesStateAsync(keys, percents, _cts.Token);
         }
 
         private void ExitToLobby()
@@ -128,7 +129,7 @@ namespace Chang.FSM
         {
             OnCheckAsync().Forget();
         }
-        
+
         private async UniTask OnCheckAsync()
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
@@ -173,7 +174,7 @@ namespace Chang.FSM
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
-            await _profileService.SaveAsync(); // todo chang in case of bug move before _gameOverlayController.EnableContinueButton(true); 
+            await _profileService.SaveProgressAsync(); // todo chang in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
 
         private async UniTask OnCheckMatchWordsAsync()
@@ -190,7 +191,7 @@ namespace Chang.FSM
                 _pagesBus.LessonLog.Add(result);
             }
 
-            await _profileService.SaveAsync();
+            await _profileService.SaveProgressAsync();
             await OnContinueAsync();
         }
 
@@ -225,7 +226,7 @@ namespace Chang.FSM
                 SwitchState(QuestionType.Result);
                 return;
             }
-            
+
             ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
             QuestionType nextQuestionType = nextQuestion.QuestionType;
 

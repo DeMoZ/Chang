@@ -1,11 +1,10 @@
-using Chang.FSM;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Chang.UI
 {
-    public class VocabularyContinueView : MonoBehaviour
+    public class PagesContinueView : MonoBehaviour
     {
         [SerializeField] public Button _continueBtn;
         [SerializeField] private Color _correctColor = Color.green;
