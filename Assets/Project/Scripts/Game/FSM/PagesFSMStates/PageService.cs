@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Chang.Resources;
 using Cysharp.Threading.Tasks;
+using Popup;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ namespace Chang.FSM
     {
         private readonly WordPathHelper _wordPathHelper;
         private readonly IResourcesManager _assetManager;
+        private readonly PopupManager _popupManager;
 
         private List<IDisposableAsset> _disposableAssets;
         private CancellationTokenSource _cts;
@@ -20,10 +22,11 @@ namespace Chang.FSM
         public Dictionary<string, DisposableAsset<AudioClip>> Sounds { get; private set; }
         public Dictionary<string, DisposableAsset<Image>> Images { get; private set; }
 
-        public PageService(WordPathHelper wordPathHelper, IResourcesManager assetManager)
+        public PageService(WordPathHelper wordPathHelper, IResourcesManager assetManager, PopupManager popupManager)
         {
             _wordPathHelper = wordPathHelper;
             _assetManager = assetManager;
+            _popupManager = popupManager;
 
             _cts = new CancellationTokenSource();
 
@@ -51,6 +54,9 @@ namespace Chang.FSM
 
         public async UniTask LoadContentAsync(ISimpleQuestion nextQuestion)
         {
+            var loadingModel = new LoadingUiModel(LoadingElements.Animation);
+            var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
+            
             var configKeys = nextQuestion.GetConfigKeys();
             var soundKeys = nextQuestion.GetSoundKeys();
             var imageKeys = nextQuestion.GetImageKeys();
@@ -70,16 +76,17 @@ namespace Chang.FSM
                 _disposableAssets.Add(asset);
                 Sounds.Add(Configs[key].Item.Key, asset);
             }
-
-            return;
+            
             // todo chang images
-            foreach (var key in imageKeys)
-            {
-                string path = _wordPathHelper.GetImagePath(key);
-                DisposableAsset<Image> asset = await _assetManager.LoadAssetAsync<Image>(path, _cts.Token);
-                _disposableAssets.Add(asset);
-                Images.Add(Configs[key].Item.Key, asset);
-            }
+            // foreach (var key in imageKeys)
+            // {
+            //     string path = _wordPathHelper.GetImagePath(key);
+            //     DisposableAsset<Image> asset = await _assetManager.LoadAssetAsync<Image>(path, _cts.Token);
+            //     _disposableAssets.Add(asset);
+            //     Images.Add(Configs[key].Item.Key, asset);
+            // }
+            
+            _popupManager.DisposePopup(loadingUiController);
         }
     }
 }

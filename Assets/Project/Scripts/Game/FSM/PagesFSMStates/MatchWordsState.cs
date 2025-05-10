@@ -6,6 +6,7 @@ using System.Linq;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
+using Popup;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -14,12 +15,13 @@ namespace Chang.FSM
     public class MatchWordsStateResult : IQuestionResult
     {
         public readonly List<SelectWordResult> Results = new();
+        
+        public object[] Info { get; } = null;
+        
         public string Key { get; } = string.Empty;
         public string Presentation { get; } = string.Empty;
         public QuestionType Type => QuestionType.MatchWords;
         public bool IsCorrect => true;
-
-        public object[] Info { get; } = null;
     }
 
     public class MatchWordsState : ResultStateBase<QuestionType, PagesBus>
@@ -30,6 +32,7 @@ namespace Chang.FSM
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly PagesSoundController _pagesSoundController;
+        [Inject] private readonly PopupManager _popupManager;
 
         private List<WordData> _leftWords;
         private List<WordData> _rightWords;
@@ -48,7 +51,7 @@ namespace Chang.FSM
         {
             base.Enter();
 
-            _pageService = new PageService(_wordPathHelper, _assetManager);
+            _pageService = new PageService(_wordPathHelper, _assetManager, _popupManager);
             Bus.OnHintUsed.Subscribe(OnHint);
             StateBodyAsync().Forget();
         }

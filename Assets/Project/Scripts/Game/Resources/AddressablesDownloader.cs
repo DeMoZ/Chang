@@ -27,20 +27,21 @@ namespace Chang.Resources
         private readonly PopupManager _popupManager;
 
         private bool _isInitialized;
-        private LoadingUiController _loadingUiController;
 
         public AddressablesDownloader(PopupManager popupManager)
         {
             _popupManager = popupManager;
         }
 
-        public async UniTask PreloadGameStartAddressables(CancellationToken ct)
+        public async UniTask PreloadAtGameStartAsync(Action<float> percents, CancellationToken ct)
         {
-            await PreloadAssetAsync(BundleLabels.Labels.Base, ct);
+            await PreloadLabelsAsync(BundleLabels.Labels.Base, percents, ct);
         }
 
-        public async UniTask PreloadAssetAsync(BundleLabels.Labels labels, CancellationToken ct)
+        public async UniTask PreloadLabelsAsync(BundleLabels.Labels labels, Action<float> percents, CancellationToken ct)
         {
+            Debug.Log($"{nameof(PreloadLabelsAsync)}");
+
             if (labels == 0)
             {
                 Debug.LogError("No labels provided for preloading assets.");
@@ -48,19 +49,19 @@ namespace Chang.Resources
             }
 
             var keys = labels.ToString().Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-            await PreloadAssetAsync(keys, ct);
+            await PreloadLabelsAsync(keys, percents, ct);
         }
 
-        public async UniTask PreloadAssetAsync(IEnumerable<string> keys, CancellationToken ct)
+        public async UniTask PreloadLabelsAsync(IEnumerable<string> keys, Action<float> percents, CancellationToken ct)
         {
             await InitializationGuard();
-
+            Debug.Log($"{nameof(PreloadLabelsAsync)}");
             AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
             await getDownloadSizeHandle.Task;
 
             if (getDownloadSizeHandle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"{nameof(PreloadAssetAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                Debug.LogError($"{nameof(PreloadLabelsAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
                 getDownloadSizeHandle.Release();
                 return;
             }
@@ -74,40 +75,35 @@ namespace Chang.Resources
                 Debug.Log("No assets need to be downloaded.");
                 return;
             }
-
-            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent);
-            _loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
-            _loadingUiController.SetProgress(0);
-
+            
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Intersection);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
                 Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                _loadingUiController.SetProgress(downloadHandle.PercentComplete);
+                percents?.Invoke(downloadHandle.PercentComplete);
                 await UniTask.Yield(ct);
             }
 
             if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
+                Debug.LogError($"{nameof(PreloadLabelsAsync)} download failed: {downloadHandle.OperationException}");
             }
-
-            _popupManager.DisposePopup(_loadingUiController);
-            _loadingUiController = null;
+            
             downloadHandle.Release();
         }
 
         /// <summary>
-        /// Without download screen 
+        /// Preload on enter pages state
         /// </summary>
-        public async UniTask PreloadAsync(IEnumerable<string> keys, CancellationToken ct)
+        public async UniTask PreloadPagesStateAsync(IEnumerable<string> keys, Action<float> percents, CancellationToken ct)
         {
+            Debug.Log($"{nameof(PreloadPagesStateAsync)}");
             AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
             await getDownloadSizeHandle.Task;
 
             if (getDownloadSizeHandle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"{nameof(PreloadAssetAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                Debug.LogError($"{nameof(PreloadPagesStateAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
                 getDownloadSizeHandle.Release();
                 return;
             }
@@ -125,14 +121,13 @@ namespace Chang.Resources
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
-                Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                _loadingUiController.SetProgress(downloadHandle.PercentComplete);
+                percents?.Invoke(downloadHandle.PercentComplete);
                 await UniTask.Yield(ct);
             }
 
             if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"{nameof(PreloadAssetAsync)} download failed: {downloadHandle.OperationException}");
+                Debug.LogError($"{nameof(PreloadPagesStateAsync)} download failed: {downloadHandle.OperationException}");
             }
 
             downloadHandle.Release();
@@ -177,11 +172,6 @@ namespace Chang.Resources
 
         public void Dispose()
         {
-            if (_loadingUiController != null)
-            {
-                _popupManager.DisposePopup(_loadingUiController);
-                _loadingUiController = null;
-            }
         }
     }
 }

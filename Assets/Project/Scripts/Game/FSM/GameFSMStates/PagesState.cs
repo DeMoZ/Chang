@@ -26,7 +26,6 @@ namespace Chang.FSM
         [Inject] private readonly DiContainer _diContainer;
         [Inject] private readonly PopupManager _popupManager;
 
-        private LoadingUiController _loadingUiController;
         private PagesBus _pagesBus;
         private PagesFSM _pagesFsm;
         private CancellationTokenSource _cts;
@@ -42,18 +41,12 @@ namespace Chang.FSM
 
             _pagesFsm.Dispose();
             _pagesBus.Dispose();
-
-            if (_loadingUiController != null)
-            {
-                _popupManager.DisposePopup(_loadingUiController);
-                _loadingUiController = null;
-            }
         }
 
         public override void Enter()
         {
             base.Enter();
-            
+
             _cts = new CancellationTokenSource();
 
             EnterAsync().Forget();
@@ -61,10 +54,11 @@ namespace Chang.FSM
 
         private async UniTask EnterAsync()
         {
-            _loadingUiController = _popupManager.ShowLoadingUi(new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar));
-            _loadingUiController.SetProgress(0);
+            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent);
+            var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
+            loadingUiController.SetProgress(0);
 
-            await PreloadContentAsync();
+            await PreloadContentAsync(loadingUiController.SetProgress);
 
             _screenManager.SetActivePagesContainer(true);
 
@@ -85,11 +79,10 @@ namespace Chang.FSM
             _pagesFsm = new PagesFSM(_diContainer, _pagesBus);
             _pagesFsm.Initialize();
 
-            await OnContinueAsync();
+            loadingUiController.SetProgress(100);
+            _popupManager.DisposePopup(loadingUiController);
 
-            _loadingUiController.SetProgress(100);
-            _popupManager.DisposePopup(_loadingUiController);
-            _loadingUiController = null;
+            await OnContinueAsync();
         }
 
         public override void Exit()
@@ -108,7 +101,7 @@ namespace Chang.FSM
             _gameOverlayController.OnExitToLobby();
         }
 
-        private async UniTask PreloadContentAsync()
+        private async UniTask PreloadContentAsync(Action<float> percents)
         {
             HashSet<string> keys = new();
             foreach (ISimpleQuestion quest in Bus.CurrentLesson.SimpleQuestions)
@@ -118,7 +111,7 @@ namespace Chang.FSM
                 // todo chang images keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
             }
 
-            await _assetDownloader.PreloadAsync(keys, _cts.Token);
+            await _assetDownloader.PreloadPagesStateAsync(keys, percents, _cts.Token);
         }
 
         private void ExitToLobby()

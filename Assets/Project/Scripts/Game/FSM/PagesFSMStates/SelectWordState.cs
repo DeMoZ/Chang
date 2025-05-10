@@ -6,6 +6,7 @@ using System.Linq;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
+using Popup;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -36,6 +37,7 @@ namespace Chang.FSM
         [Inject] private readonly PagesSoundController _pagesSoundController;
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly IResourcesManager _assetManager;
+        [Inject] private readonly PopupManager _popupManager;
 
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
@@ -51,7 +53,7 @@ namespace Chang.FSM
         {
             base.Enter();
 
-            _pageService = new PageService(_wordPathHelper, _assetManager);
+            _pageService = new PageService(_wordPathHelper, _assetManager, _popupManager);
             Bus.OnHintUsed.Subscribe(OnHint);
             _gameOverlayController.EnableHintButton(true);
             StateBodyAsync().Forget();

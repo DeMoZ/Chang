@@ -18,7 +18,6 @@ namespace Chang
         private readonly AuthorizationService _authorizationService;
         private readonly PopupManager _popupManager;
 
-        private LoadingUiController _loadingUiController;
         private CancellationTokenSource _cts;
         private bool _restarterIsRunning;
 
@@ -71,21 +70,23 @@ namespace Chang
                 _cts?.Dispose();
 
                 _cts = new CancellationTokenSource();
-                _loadingUiController = _popupManager.ShowLoadingUi(
-                    new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
-                _loadingUiController.SimulateProgress(2f, from: 0, to: 0.1f).Forget();
+                var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent);
+                var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
+                loadingUiController.SimulateProgress(2f, from: 0, to: 0.1f).Forget();
 
                 //0 *skip for now download game settings from unity cloud ? Without authorization?
 
                 //1 download addressables Base
-                await _assetDownloader.PreloadGameStartAddressables(_cts.Token);
+
+                await _assetDownloader.PreloadAtGameStartAsync(percent => { loadingUiController.SetProgress(percent); }, _cts.Token);
+                loadingUiController.SetProgress(1);
 
                 //2 authorization   
                 await _authorizationService.AuthenticateAsync();
 
                 DMZLogger.Log($"{nameof(LoadingSequenceAsync)}: Finish");
-
                 SceneManager.LoadScene(ProjectConstants.GAME_SCENE);
+                _popupManager.DisposePopup(loadingUiController);
             }
             catch (Exception e)
             {
@@ -99,7 +100,7 @@ namespace Chang
             {
                 return;
             }
-            
+
             DMZLogger.Log("Waiting for spacebar press...");
             _restarterIsRunning = true;
             while (!Input.GetKeyDown(KeyCode.Space))
