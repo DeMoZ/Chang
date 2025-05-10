@@ -8,6 +8,7 @@ using Popup;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
@@ -28,38 +29,46 @@ namespace Chang
             _assetDownloader = addresablesDownloader;
             _authorizationService = authorizationService;
             _popupManager = popupManager;
-
             _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
         }
-
+        
+        public void Initialize()
+        {
+            DMZLogger.Log($"{nameof(Initialize)}");
+        }
+        
         public void Dispose()
         {
             _cts?.Cancel();
             _cts?.Dispose();
             _authorizationService.OnPlayerLoggedOut -= OnLoggedOut;
         }
-        
-        public void Initialize()
-        {
-            DMZLogger.Log($"{nameof(Initialize)}");
-            LoadingSequenceAsync().Forget();
-        }
 
-        private async UniTask LoadingSequenceAsync()
+        private void OnLoggedOut()
+        {
+            Debug.Log("OnLoggedOut");
+            LoadRebootScene();
+        }
+        
+        public void LoadRebootScene()
+        {
+            DMZLogger.Log($"Load Reboot Scene");
+            SceneManager.LoadScene(ProjectConstants.REBOOT_SCENE);
+        }
+        
+        public async UniTaskVoid LoadingSequenceAsync()
         {
             DMZLogger.Log($"{nameof(LoadingSequenceAsync)}: Start");
-            RunRestartTriggerAsync();
+            // todo chang comment
+            RunRestartTriggerAsync().Forget();
 
+            // todo chang on every step need to emulate error with disposing everything that supposed to
             try
             {
                 _cts?.Cancel();
                 _cts?.Dispose();
 
                 _cts = new CancellationTokenSource();
-
-                // todo chang on every step need to emulate error with disposing everything that supposed to
-                DMZLogger.Log($"Initialize start");
-
                 _loadingUiController = _popupManager.ShowLoadingUi(
                     new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
                 _loadingUiController.SimulateProgress(2f, from: 0, to: 0.1f).Forget();
@@ -74,8 +83,7 @@ namespace Chang
 
                 DMZLogger.Log($"{nameof(LoadingSequenceAsync)}: Finish");
 
-                // to the next scene
-                SceneManager.LoadScene("Game");
+                SceneManager.LoadScene(ProjectConstants.GAME_SCENE);
             }
             catch (Exception e)
             {
@@ -83,8 +91,7 @@ namespace Chang
             }
         }
 
-        // todo chang remove
-        private async void RunRestartTriggerAsync()
+        private async UniTaskVoid RunRestartTriggerAsync()
         {
             DMZLogger.Log("Waiting for spacebar press...");
             while (!Input.GetKeyDown(KeyCode.Space))
@@ -92,13 +99,7 @@ namespace Chang
                 await UniTask.Yield();
             }
 
-            DMZLogger.Log("Spacebar pressed! Restarting...");
-            SceneManager.LoadScene("Bootstrap");
-        }
-
-        private void OnLoggedOut()
-        {
-            SceneManager.LoadScene("Bootstrap");
+            OnLoggedOut();
         }
     }
 }

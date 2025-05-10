@@ -164,8 +164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73908e624f0c64e03bd4d3b5186796e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingScreen: {fileID: 0}
-  logInScreen: {fileID: 645714543}
 --- !u!114 &57403385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764,17 +762,6 @@ Transform:
   - {fileID: 57403383}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &645714543 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6054969009718030015, guid: 76e4f6a39a2034ccc8e1c508ef8d6f6a, type: 3}
-  m_PrefabInstance: {fileID: 102228436}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54dce446113154195a8a3b8c56d16a83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &683731677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,7 +1037,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 31
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 101
+  m_SortingOrder: 1001
   m_TargetDisplay: 0
 --- !u!224 &1204891461
 RectTransform:

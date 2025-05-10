@@ -1,5 +1,9 @@
 public static class ProjectConstants
 {
+    public const string BOOTSTRAP_SCENE = "Bootstrap";
+    public const string REBOOT_SCENE = "Reboot";
+    public const string GAME_SCENE = "Game";
+    
     #region Pages
 
     public const int MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE = 4;

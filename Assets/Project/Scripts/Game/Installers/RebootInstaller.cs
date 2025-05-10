@@ -3,7 +3,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
-    public class BootstrapInstaller : MonoInstaller<BootstrapInstaller>
+    public class RebootInstaller : MonoInstaller<RebootInstaller>
     {
         public override void InstallBindings()
         {
@@ -14,7 +14,7 @@ namespace Chang
         {
             Debug.Log($"{nameof(Start)}");
             Bootstrap bootstrap = Container.Resolve<Bootstrap>();
-            bootstrap.LoadRebootScene();
+            bootstrap.LoadingSequenceAsync().Forget();
         }
     }
 }
