@@ -202,6 +202,8 @@ namespace Chang.FSM
 
         private async UniTask OnContinueAsync()
         {
+            await UniTask.Yield(_cts.Token);
+            
             if (_pagesFsm.CurrentStateType == QuestionType.Result)
             {
                 ExitToLobby();

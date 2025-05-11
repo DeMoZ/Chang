@@ -118,12 +118,14 @@ namespace Chang.FSM
             Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
 
             _stateController.ShowCorrectAsync(leftIndex, rightIndex, isCorrect).Forget();
+            string path = Path.Combine(
+                Bus.CurrentLanguage.ToString(),
+                AssetPaths.Addressables.Words,
+                _leftWords[leftIndex].Section,
+                _leftWords[leftIndex].Key);
+            
             var leftResult = new SelectWordResult(
-                Path.Combine(
-                    Bus.CurrentLanguage.ToString(),
-                    AssetPaths.Addressables.Words,
-                    _leftWords[leftIndex].Section,
-                    _leftWords[leftIndex].Key),
+                _wordPathHelper.NormalizePath(path),
                 _leftWords[leftIndex].LearnWord, isCorrect,
                 _leftWords[leftIndex].LearnWord, _leftWords[leftIndex].Phonetic);
 
@@ -131,12 +133,14 @@ namespace Chang.FSM
 
             if (!isCorrect)
             {
+                path = Path.Combine(
+                    Bus.CurrentLanguage.ToString(),
+                    AssetPaths.Addressables.Words,
+                    _rightWords[rightIndex].Section,
+                    _rightWords[rightIndex].Key);
+                
                 var rightResult = new SelectWordResult(
-                    Path.Combine(
-                        Bus.CurrentLanguage.ToString(),
-                        AssetPaths.Addressables.Words,
-                        _rightWords[rightIndex].Section,
-                        _rightWords[rightIndex].Key),
+                    _wordPathHelper.NormalizePath(path),
                     _rightWords[rightIndex].LearnWord, false,
                     _rightWords[rightIndex].LearnWord, _rightWords[rightIndex].Phonetic);
 

@@ -17,7 +17,7 @@ namespace Chang
             }
             catch (Exception e)
             {
-                throw new NotImplementedException(); // todo cnang handle exception
+                throw new NotImplementedException(e.Message); // todo cnang handle exception
             }
         }
 

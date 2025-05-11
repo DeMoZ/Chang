@@ -139,12 +139,15 @@ namespace Chang.FSM
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index].Key == _correctWord.Key;
             object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
+            
+            string path = Path.Combine(
+                Bus.CurrentLanguage.ToString(),
+                AssetPaths.Addressables.Words,
+                _correctWord.Word.Section,
+                _correctWord.Word.Key);
+            
             var result = new SelectWordResult(
-                Path.Combine(
-                    Bus.CurrentLanguage.ToString(),
-                    AssetPaths.Addressables.Words,
-                    _correctWord.Word.Section,
-                    _correctWord.Word.Key),
+                _wordPathHelper.NormalizePath(path),
                 _correctWord.Word.LearnWord, isCorrect, info);
             Bus.QuestionResult = result;
         }

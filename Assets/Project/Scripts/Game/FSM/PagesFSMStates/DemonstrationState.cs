@@ -89,12 +89,13 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
             object[] info = { _correctWord.Word.LearnWord, false };
+            string path = Path.Combine(
+                Bus.CurrentLanguage.ToString(),
+                AssetPaths.Addressables.Words,
+                _correctWord.Word.Section,
+                _correctWord.Word.Key); 
             var result = new DemonstrationWordResult(
-                Path.Combine(
-                    Bus.CurrentLanguage.ToString(),
-                    AssetPaths.Addressables.Words,
-                    _correctWord.Word.Section,
-                    _correctWord.Word.Key),
+                _wordPathHelper.NormalizePath(path),
                 _correctWord.Word.LearnWord,
                 info);
             Bus.QuestionResult = result;
