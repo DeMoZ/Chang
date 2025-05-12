@@ -1,3 +1,4 @@
+using UnityEngine.SceneManagement;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -13,8 +14,13 @@ namespace Chang
         public override void Start()
         {
             Debug.Log($"{nameof(Start)}");
-            Bootstrap bootstrap = Container.Resolve<Bootstrap>();
-            bootstrap.LoadRebootScene();
+            LoadRebootScene();
+        }
+        
+        private void LoadRebootScene()
+        {
+            Debug.Log("LoadRebootScene");
+            SceneManager.LoadScene(ProjectConstants.REBOOT_SCENE);
         }
     }
 }

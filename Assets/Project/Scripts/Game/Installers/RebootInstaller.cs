@@ -8,13 +8,13 @@ namespace Chang
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(InstallBindings)}");
+            
+            Container.BindInterfacesAndSelfTo<Reboot>().AsSingle();
         }
 
         public override void Start()
         {
             Debug.Log($"{nameof(Start)}");
-            Bootstrap bootstrap = Container.Resolve<Bootstrap>();
-            bootstrap.LoadingSequenceAsync().Forget();
         }
     }
 }
