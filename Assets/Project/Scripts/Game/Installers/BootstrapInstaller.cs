@@ -1,4 +1,3 @@
-using UnityEngine.SceneManagement;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -9,18 +8,13 @@ namespace Chang
         public override void InstallBindings()
         {
             Debug.Log($"{nameof(InstallBindings)}");
+            
+            Container.BindInterfacesAndSelfTo<Bootstrap>().AsSingle();
         }
 
-        public override void Start()
-        {
-            Debug.Log($"{nameof(Start)}");
-            LoadRebootScene();
-        }
-        
-        private void LoadRebootScene()
-        {
-            Debug.Log("LoadRebootScene");
-            SceneManager.LoadScene(ProjectConstants.REBOOT_SCENE);
-        }
+        // public override void Start()
+        // {
+        //     Debug.Log($"{nameof(Start)}");
+        // }
     }
 }

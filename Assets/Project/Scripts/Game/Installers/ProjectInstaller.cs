@@ -25,8 +25,6 @@ namespace Chang
 
             Container.BindInterfacesAndSelfTo<AuthorizationService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
-            
-            Container.BindInterfacesAndSelfTo<Bootstrap>().AsSingle();
         }
 
         private void BingPopupManager()
