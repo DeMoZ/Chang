@@ -29,8 +29,8 @@ namespace Chang.FSM
             var lobbyState = new LobbyState(_gameBus, OnStateResult);
             var pagesState = new PagesState(_gameBus, OnStateResult);
 
-            _diContainer.Inject(pagesState);
             _diContainer.Inject(lobbyState);
+            _diContainer.Inject(pagesState);
 
             lobbyState.Init();
 
