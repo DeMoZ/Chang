@@ -50,14 +50,14 @@ namespace Chang
             _repetitionService = repetitionService;
 
             _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClicked;
-            _mainScreenBus.OnGameBookSectionRepeatClicked += OnGameBookLessonRepeatClicked;
+            _mainScreenBus.OnGameBookSectionRepeatClicked += OnGameBookSectionRepeatClicked;
             _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClicked;
         }
 
         public void Dispose()
         {
             _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClicked;
-            _mainScreenBus.OnGameBookSectionRepeatClicked -= OnGameBookLessonRepeatClicked;
+            _mainScreenBus.OnGameBookSectionRepeatClicked -= OnGameBookSectionRepeatClicked;
             _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClicked;
         }
 
@@ -138,35 +138,25 @@ namespace Chang
             _onExitState?.Invoke();
         }
 
-        private void OnGameBookLessonRepeatClicked(string section)
-        {
-            OnGameBookLessonRepeatClickedAsync(section).Forget();
-        }
-
-        private async UniTask OnGameBookLessonRepeatClickedAsync(string section)
+        private void OnGameBookSectionRepeatClicked(string section)
         {
             if (_isLoading)
                 return;
 
             var repetitions = _repetitionService.GetSectionRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount, section);
-            await MakeRepetitionAsync(repetitions);
+            MakeRepetitionAsync(repetitions).Forget();
         }
 
         private void OnGeneralRepeatClicked()
-        {
-            OnGeneralRepeatClickedAsync().Forget();
-        }
-
-        private async UniTask OnGeneralRepeatClickedAsync()
         {
             if (_isLoading)
                 return;
 
             var repetitions = _repetitionService.GetGeneralRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount);
-            await MakeRepetitionAsync(repetitions);
+            MakeRepetitionAsync(repetitions).Forget();
         }
 
-        private async UniTask MakeRepetitionAsync(List<QuestLog> repetitions)
+        private async UniTaskVoid MakeRepetitionAsync(List<QuestLog> repetitions)
         {
             if (repetitions.Count < 4)
             {
@@ -175,7 +165,7 @@ namespace Chang
             }
 
             _isLoading = true;
-            await UniTask.DelayFrame(1);
+            await UniTask.DelayFrame(1); // todo chang remove delay and make method sync ?
 
             var questions = new List<ISimpleQuestion>();
 
