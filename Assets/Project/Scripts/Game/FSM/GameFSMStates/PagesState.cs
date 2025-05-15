@@ -82,7 +82,7 @@ namespace Chang.FSM
             loadingUiController.SetProgress(100);
             _popupManager.DisposePopup(loadingUiController);
 
-            await OnContinueAsync();
+            OnContinueAsync().Forget();
         }
 
         public override void Exit()
@@ -139,17 +139,17 @@ namespace Chang.FSM
             {
                 case QuestionType.DemonstrationWord:
                 case QuestionType.SelectWord:
-                    await OnCheckSelectWordAsync();
+                    OnCheckSelectWordAsync().Forget();
                     break;
                 case QuestionType.MatchWords:
-                    await OnCheckMatchWordsAsync();
+                    OnCheckMatchWordsAsync().Forget();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"simple question not handled {_pagesFsm.CurrentStateType}");
             }
         }
 
-        private async UniTask OnCheckSelectWordAsync()
+        private async UniTaskVoid OnCheckSelectWordAsync()
         {
             Debug.Log($"{nameof(OnCheckSelectWordAsync)}");
 
@@ -177,7 +177,7 @@ namespace Chang.FSM
             await _profileService.SaveProgressAsync(); // todo chang in case of bug move before _gameOverlayController.EnableContinueButton(true); 
         }
 
-        private async UniTask OnCheckMatchWordsAsync()
+        private async UniTaskVoid OnCheckMatchWordsAsync()
         {
             Debug.Log($"{nameof(OnCheckMatchWordsAsync)}");
 
@@ -192,7 +192,7 @@ namespace Chang.FSM
             }
 
             await _profileService.SaveProgressAsync();
-            await OnContinueAsync();
+            OnContinueAsync().Forget();
         }
 
         private void OnContinue()
@@ -200,7 +200,7 @@ namespace Chang.FSM
             OnContinueAsync().Forget();
         }
 
-        private async UniTask OnContinueAsync()
+        private async UniTaskVoid OnContinueAsync()
         {
             await UniTask.Yield(_cts.Token);
             
@@ -312,10 +312,4 @@ namespace Chang.FSM
             return isSmallMark;
         }
     }
-}
-
-public struct ContinueButtonInfo
-{
-    public bool IsCorrect;
-    public string InfoText;
 }
