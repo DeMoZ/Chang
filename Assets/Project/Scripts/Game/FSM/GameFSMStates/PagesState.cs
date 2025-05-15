@@ -13,6 +13,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
+    // todo chang class contains async methods without cancellation token
     public class PagesState : ResultStateBase<StateType, GameBus>, IDisposable
     {
         public override StateType Type => StateType.PlayPages;
