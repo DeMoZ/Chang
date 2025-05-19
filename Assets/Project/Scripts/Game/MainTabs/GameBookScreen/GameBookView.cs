@@ -1,5 +1,4 @@
 using UnityEngine;
-
 namespace Chang.GameBook
 {
     public class GameBookView : MonoBehaviour
@@ -10,10 +9,12 @@ namespace Chang.GameBook
         [SerializeField] private GameBookItem upLessonPrefab;
         [SerializeField] private GameBookItem downLessonPrefab;
         [SerializeField] private Transform content;
-        [SerializeField] private Color[] colors;
-
-        public Color GetNextColor(int index) => colors[index % colors.Length];
-
+        [SerializeField] private Gradient sectionsColors;
+        [SerializeField] private Gradient lessonMarkColors;
+        
+        public Color GetNextColor(int index) => sectionsColors.colorKeys[index % sectionsColors.colorKeys.Length].color;
+        public Color GetLessonColor(float index) => lessonMarkColors.Evaluate(index);
+        
         public SectionBlock InstantiateSectionBlock(out GameBookSection section)
         {
             var got = Instantiate(sectionBlockPrefab, content);

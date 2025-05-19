@@ -7,19 +7,20 @@ namespace Chang.GameBook
 {
     public class GameBookItem : MonoBehaviour
     {
-        [SerializeField] private TMP_Text lable;
+        [SerializeField] private TMP_Text label;
         [SerializeField] private GameObject doneState;
+        [SerializeField] private Image doneStateImage;
         [SerializeField] private GameObject nextState;
-        [SerializeField] private GameObject wiatState;
+        [SerializeField] private GameObject waitState;
         [SerializeField] private Button button;
 
-        public void Init(string key, string lableText, int state, Action<string> onItemClick)
+        public void Init(string key, string labelText, int state, Action<string> onItemClick)
         {
-            lable.text = lableText;
+            label.text = labelText;
 
             doneState.SetActive(state == 0);
             nextState.SetActive(state == 1);
-            wiatState.SetActive(state == 2);
+            waitState.SetActive(state == 2);
 
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => onItemClick.Invoke(key));
@@ -28,6 +29,11 @@ namespace Chang.GameBook
         private void OnDestroy()
         {
             button.onClick.RemoveAllListeners();
+        }
+
+        public void SetColor(Color color)
+        {
+            doneStateImage.color = color;
         }
     }
 }

@@ -91,7 +91,8 @@ namespace Chang.FSM
 
             foreach (var word in words)
             {
-                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetMark(word.Key)));
+                string key = $"{Bus.CurrentLanguage}/{word.LogKey}";
+                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetMark(key)));
             }
 
             _leftWords = new List<WordData>(words);

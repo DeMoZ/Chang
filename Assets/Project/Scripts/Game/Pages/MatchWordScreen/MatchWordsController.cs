@@ -63,7 +63,7 @@ namespace Chang
                 var toggle = _view.AddItem(true);
                 _leftToggles.Add(toggle);
 
-                var word = _isLeftLearnLanguage ? left[i].LearnWord : left[i].GetTranslation();
+                var word = _isLeftLearnLanguage ? left[i].LearnWord : left[i].Translation;
                 toggle.Set(word, left[i].Phonetic, isOn =>
                 {
                     OnToggleValueChanged(true, index, isOn);
@@ -81,7 +81,7 @@ namespace Chang
                 var toggle = _view.AddItem(false);
                 _rightToggles.Add(toggle);
 
-                var word = _isLeftLearnLanguage ? right[i].GetTranslation() : right[i].LearnWord;
+                var word = _isLeftLearnLanguage ? right[i].Translation : right[i].LearnWord;
                 toggle.Set(word, right[i].Phonetic, isOn =>
                 {
                     OnToggleValueChanged(false, index, isOn);

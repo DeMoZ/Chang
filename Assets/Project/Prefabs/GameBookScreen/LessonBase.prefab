@@ -189,10 +189,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc01f6aac9fd4207a41c3b1c4cfb326, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lable: {fileID: 5773965285093828271}
+  label: {fileID: 5773965285093828271}
   doneState: {fileID: 7502811682783497494}
+  doneStateImage: {fileID: 131764412586590933}
   nextState: {fileID: 3307721061625821125}
-  wiatState: {fileID: 5242676709062207258}
+  waitState: {fileID: 5242676709062207258}
   button: {fileID: 7105579576331967014}
 --- !u!1 &3307721061625821125
 GameObject:
@@ -515,7 +516,7 @@ GameObject:
   - component: {fileID: 3807341172599226267}
   - component: {fileID: 5773965285093828271}
   m_Layer: 0
-  m_Name: Lable
+  m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

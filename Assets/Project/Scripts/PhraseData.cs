@@ -10,6 +10,7 @@ namespace Chang
         public Languages Language { get; private set; } = Languages.Thai;
         public WordData Word { get; private set; }
         public bool ShowPhonetics { get; private set; }
+        public string LogKey => $"{Language}/{Word.LogKey}";
         
         public PhraseData(string key, /*Languages language,*/WordData word)
         {
@@ -38,7 +39,9 @@ namespace Chang
         public List<Translation> Meanings { get; private set; }
         public bool ShowPhonetics { get; private set; }
         public AudioClip AudioClip { get; set; } 
-
+        public string LogKey => $"Words/{Section}/{Key}";
+        public string Translation => Meanings.FirstOrDefault(t => t.Language == Languages.English)?.Meaning;
+        
         public WordData(string section, string key, string learnWord, string phonetic, List<Translation> meanings)
         {
             Section = section;
@@ -58,11 +61,6 @@ namespace Chang
             ShowPhonetics = showPhonetics;
         }
 
-        public string GetTranslation()
-        {
-            return Meanings.FirstOrDefault(t => t.Language == Languages.English)?.Meaning;
-        }
-        
         public void SetShowPhonetics(bool showPhonetics)
         {
             ShowPhonetics = showPhonetics;

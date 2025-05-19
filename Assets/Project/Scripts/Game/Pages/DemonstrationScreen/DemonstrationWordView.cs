@@ -39,7 +39,7 @@ namespace Chang.UI
 
             // init translation words
             var mix = Instantiate(_mixWordPrefab, _mixWordContent);
-            var word = correctWord.Word.GetTranslation();
+            var word = correctWord.Word.Translation;
             mix.Set(word, correctWord.Word.Phonetic, _toggleGroup, onToggleValueChanged);
             mix.EnablePhonetics(false);
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);

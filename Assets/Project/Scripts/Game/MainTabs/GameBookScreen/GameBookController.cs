@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
+using Chang.Services;
 using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -11,17 +13,19 @@ namespace Chang.GameBook
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
         private readonly GameBookView _view;
+        private readonly ProfileService _profileService;
 
         private Dictionary<string, SimpleLessonData> _lessons = new();
         private List<GameBookSection> _sectionItems = new();
         private CancellationTokenSource _cancellationTokenSource;
 
         [Inject]
-        public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view)
+        public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view, ProfileService profileService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
+            _profileService = profileService;
         }
 
         public void Dispose()
@@ -36,7 +40,7 @@ namespace Chang.GameBook
         {
             _view.gameObject.SetActive(active);
         }
-        
+
         public void Set()
         {
             _sectionItems.Clear();
@@ -45,13 +49,13 @@ namespace Chang.GameBook
 
             for (var i = 0; i < _gameBus.SimpleBookData.Sections.Count; i++)
             {
-                var baseColor = _view.GetNextColor(i);
-                var section = _gameBus.SimpleBookData.Sections[i];
-                
-                var sectionBlock = _view.InstantiateSectionBlock(out var sectionItem);
+                Color baseColor = _view.GetNextColor(i);
+                SimpleSection section = _gameBus.SimpleBookData.Sections[i];
+
+                SectionBlock sectionBlock = _view.InstantiateSectionBlock(out var sectionItem);
                 sectionBlock.SetBaseColor(baseColor);
                 sectionItem.name = $"SectionBlock_{section.Section}";
-                
+
                 sectionItem.Init(section.Section, OnSectionRepetitionClick);
                 sectionItem.name = $"Section_{section.Section}";
                 sectionItem.SetBaseColor(baseColor);
@@ -76,8 +80,28 @@ namespace Chang.GameBook
 
                     lessonItem.Init(key, (m + 1).ToString(), 0, OnLessonClick);
                     lessonItem.name = $"Item {key}";
+                    lessonItem.SetColor(GetLessonColor(section.Lessons[m].Questions));
                 }
             }
+        }
+
+        private Color GetLessonColor(List<ISimpleQuestion> questions)
+        {
+            int sum = 0;
+            int total = questions.Count * 10;
+            foreach (ISimpleQuestion question in questions)
+            {
+                if (question is SimpleQuestSelectWord selectWord)
+                {
+                    sum += _profileService.GetMark(selectWord.CorrectWordFileName);
+                }
+                else
+                {
+                    throw new NotImplementedException($"Question type {question.QuestionType} is not implemented");
+                }
+            }
+
+            return _view.GetLessonColor((float)sum / total);
         }
 
         private void OnSectionRepetitionClick(string key)

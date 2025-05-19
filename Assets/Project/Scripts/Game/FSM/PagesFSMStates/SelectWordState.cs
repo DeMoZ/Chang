@@ -85,13 +85,14 @@ namespace Chang.FSM
             _mixWords.AddRange(questionData.MixWords);
             _mixWords.Shuffle();
 
-            var mark = _profileService.GetMark(_correctWord.Word.Key);
-            var isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
+            string key = $"{Bus.CurrentLanguage}/{_correctWord.Word.LogKey}";
+            int mark = _profileService.GetMark(key);
+            bool isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
             _correctWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
 
             foreach (var mixWord in _mixWords)
             {
-                mark = _profileService.GetMark(mixWord.Word.Key);
+                mark = _profileService.GetMark(mixWord.LogKey);
                 mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
             }
 
@@ -139,13 +140,13 @@ namespace Chang.FSM
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index].Key == _correctWord.Key;
             object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
-            
+
             string path = Path.Combine(
                 Bus.CurrentLanguage.ToString(),
                 AssetPaths.Addressables.Words,
                 _correctWord.Word.Section,
                 _correctWord.Word.Key);
-            
+
             var result = new SelectWordResult(
                 _wordPathHelper.NormalizePath(path),
                 _correctWord.Word.LearnWord, isCorrect, info);
