@@ -7,7 +7,6 @@ namespace Chang.Profile
     [Serializable]
     public class QuestLog
     {
-        private readonly (int min, int max) MarkRange = (0, 10);
         private readonly (int min, int max) SuccesSequeseRange = (0, 10);
 
         public Languages Language { get; set; }
@@ -89,7 +88,8 @@ namespace Chang.Profile
                 increment = ProjectConstants.MARK_INCREMENT;
             }
 
-            Mark = Math.Clamp(Mark + (unit.IsCorrect ? increment : ProjectConstants.MARK_DICREMENT), MarkRange.min, MarkRange.max);
+            Mark = Math.Clamp(Mark + (unit.IsCorrect 
+                ? increment : ProjectConstants.MARK_DICREMENT), ProjectConstants.MARK_MIN, ProjectConstants.MARK_MAX);
             SuccessSequence = unit.IsCorrect ? Math.Clamp(SuccessSequence + 1, SuccesSequeseRange.min, SuccesSequeseRange.max) : 0;
         }
     }

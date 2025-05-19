@@ -23,4 +23,7 @@ public static class ProjectConstants
     public const int MARK_DICREMENT = -3;
 
     #endregion
+    
+    public const int MARK_MIN = 0;
+    public const int MARK_MAX = 10;
 }

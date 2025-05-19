@@ -87,13 +87,13 @@ namespace Chang.GameBook
 
         private Color GetLessonColor(List<ISimpleQuestion> questions)
         {
-            int sum = 0;
-            int total = questions.Count * 10;
+            float sum = 0;
+
             foreach (ISimpleQuestion question in questions)
             {
                 if (question is SimpleQuestSelectWord selectWord)
                 {
-                    sum += _profileService.GetMark(selectWord.CorrectWordFileName);
+                    sum += (float)_profileService.GetMark(selectWord.CorrectWordFileName) / ProjectConstants.MARK_MAX;
                 }
                 else
                 {
@@ -101,7 +101,7 @@ namespace Chang.GameBook
                 }
             }
 
-            return _view.GetLessonColor((float)sum / total);
+            return _view.GetLessonColor(sum);
         }
 
         private void OnSectionRepetitionClick(string key)
