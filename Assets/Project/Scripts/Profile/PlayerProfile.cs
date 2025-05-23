@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Chang.Profile
 {
@@ -7,7 +8,16 @@ namespace Chang.Profile
         public ProfileData ProfileData;
         public ProgressData ProgressData;
 
+        /// <summary>
+        /// key Thai/Fruits, value section
+        /// </summary>
+        public Dictionary<string, SimpleSection> ReorderedSections { get; private set; } = new();
+
         public PlayerProfile()
+        {
+        }
+
+        public void Dispose()
         {
         }
 
@@ -18,8 +28,9 @@ namespace Chang.Profile
         {
         }
 
-        public void Dispose()
+        public void AddReorderSection(string key, SimpleSection section)
         {
+            ReorderedSections[key] = section;
         }
     }
 }

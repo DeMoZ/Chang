@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Zenject;
 using Chang.Services;
@@ -20,9 +21,11 @@ namespace Chang
         private readonly GameBookController _gameBookController;
         private readonly RepetitionController _repetitionController;
         private readonly ProfileController _profileController;
+        private readonly ProfileService _profileService;
         private readonly RepetitionService _repetitionService;
 
         private bool _isLoading;
+        private CancellationTokenSource _cts;
 
         /// <summary>
         /// should return to this tab after play any other game state
@@ -39,6 +42,7 @@ namespace Chang
             GameBookController gameBookController,
             RepetitionController repetitionController,
             ProfileController profileController,
+            ProfileService profileService,
             RepetitionService repetitionService)
         {
             _gameBus = gameBus;
@@ -47,11 +51,13 @@ namespace Chang
             _gameBookController = gameBookController;
             _repetitionController = repetitionController;
             _profileController = profileController;
+            _profileService = profileService;
             _repetitionService = repetitionService;
 
             _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClicked;
             _mainScreenBus.OnGameBookSectionRepeatClicked += OnGameBookSectionRepeatClicked;
             _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClicked;
+            _cts = new CancellationTokenSource();
         }
 
         public void Dispose()
@@ -59,6 +65,8 @@ namespace Chang
             _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClicked;
             _mainScreenBus.OnGameBookSectionRepeatClicked -= OnGameBookSectionRepeatClicked;
             _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClicked;
+            _cts.Cancel();
+            _cts.Dispose();
         }
 
         public void Init(Action onExitState)
@@ -112,21 +120,32 @@ namespace Chang
             _currentTabType = tabType;
         }
 
-        private void OnGameBookLessonClicked(string name)
+        private void OnGameBookLessonClicked(string sectionName, int lessonIndex)
         {
-            OnGameBookLessonClickedAsync(name).Forget();
+            OnGameBookLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
         }
 
-        private async UniTask OnGameBookLessonClickedAsync(string name)
+        private async UniTaskVoid OnGameBookLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
         {
             if (_isLoading)
                 return;
 
             _isLoading = true;
-            await UniTask.DelayFrame(1);
+            await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
 
-            var simpleLesson = _gameBus.SimpleLessons[name];
-            var lesson = new Lesson();
+            SimpleLessonData simpleLesson;
+            string key = _profileService.ReorderedSectionKey(sectionName);
+            if (_profileService.ReorderedSections.TryGetValue(key, out SimpleSection section))
+            {
+                simpleLesson = section.Lessons[lessonIndex - 1];
+            }
+            else
+            {
+                key = $"{_profileService.ProfileData.LearnLanguage}Lesson{sectionName}_{lessonIndex}";
+                simpleLesson = _gameBus.SimpleLessons[key];
+            }
+
+            Lesson lesson = new Lesson();
             lesson.FileName = simpleLesson.FileName;
             lesson.GenerateQuestMatchWordsData = simpleLesson.GenerateQuestMatchWordsData;
             lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
@@ -144,7 +163,7 @@ namespace Chang
                 return;
 
             var repetitions = _repetitionService.GetSectionRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount, section);
-            MakeRepetitionAsync(repetitions).Forget();
+            MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
         private void OnGeneralRepeatClicked()
@@ -153,10 +172,10 @@ namespace Chang
                 return;
 
             var repetitions = _repetitionService.GetGeneralRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount);
-            MakeRepetitionAsync(repetitions).Forget();
+            MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
-        private async UniTaskVoid MakeRepetitionAsync(List<QuestLog> repetitions)
+        private async UniTaskVoid MakeRepetitionAsync(List<QuestLog> repetitions, CancellationToken ct)
         {
             if (repetitions.Count < 4)
             {
@@ -165,7 +184,7 @@ namespace Chang
             }
 
             _isLoading = true;
-            await UniTask.DelayFrame(1); // todo chang remove delay and make method sync ?
+            await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
 
             var questions = new List<ISimpleQuestion>();
 

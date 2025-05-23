@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.Utilities;
 
 namespace Chang
@@ -8,6 +9,9 @@ namespace Chang
         public string FileName; // json field
         public List<SimpleSection> Sections;
         public Languages Language;
+        
+        private Dictionary<string, SimpleSection> _sectionsDict;
+        public Dictionary<string, SimpleSection> SectionsDict => _sectionsDict ??= Sections.ToDictionary(s => s.Section);
     }
 
     public class SimpleSection

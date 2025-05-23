@@ -32,6 +32,10 @@ namespace Chang.Profile
         [field: SerializeField]
         public string Name { get; set; }
         
+        [field: SerializeField]
+        public Languages LearnLanguage { get; set; } = Languages.Thai;
+        public Languages NativeLanguage { get; set; } = Languages.English;
+        
         [JsonConstructor]
         public ProfileData(bool isInitialized, DateTime utcTime, string unityCloudSavePlayerId)
         {

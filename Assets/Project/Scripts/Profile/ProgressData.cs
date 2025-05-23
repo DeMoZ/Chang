@@ -16,13 +16,12 @@ namespace Chang.Profile
         public DateTime UtcTime { get; private set; }
 
         public Dictionary<string, QuestLog> Questions { get; private set; }
-
+        
         [JsonConstructor]
         public ProgressData(DateTime utcTime, Dictionary<string, QuestLog> questions)
         {
             UtcTime = utcTime;
             Questions = ValidateQuestions(questions);
-            // Questions = questions;
         }
 
         public ProgressData()

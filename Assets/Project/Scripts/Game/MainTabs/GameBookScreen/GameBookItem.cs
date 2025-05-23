@@ -14,7 +14,7 @@ namespace Chang.GameBook
         [SerializeField] private GameObject waitState;
         [SerializeField] private Button button;
 
-        public void Init(string key, string labelText, int state, Action<string> onItemClick)
+        public void Init(string labelText, int state, Action onItemClick)
         {
             label.text = labelText;
 
@@ -23,7 +23,7 @@ namespace Chang.GameBook
             waitState.SetActive(state == 2);
 
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => onItemClick.Invoke(key));
+            button.onClick.AddListener(onItemClick.Invoke);
         }
 
         private void OnDestroy()

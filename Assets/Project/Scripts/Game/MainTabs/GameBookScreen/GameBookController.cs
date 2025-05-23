@@ -16,7 +16,7 @@ namespace Chang.GameBook
         private readonly ProfileService _profileService;
 
         private Dictionary<string, SimpleLessonData> _lessons = new();
-        private List<GameBookSection> _sectionItems = new();
+        private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cancellationTokenSource;
 
         [Inject]
@@ -43,7 +43,7 @@ namespace Chang.GameBook
 
         public void Set()
         {
-            _sectionItems.Clear();
+            _sectionBlocks.Clear();
             _lessons.Clear();
             _view.Clear();
 
@@ -55,33 +55,13 @@ namespace Chang.GameBook
                 SectionBlock sectionBlock = _view.InstantiateSectionBlock(out var sectionItem);
                 sectionBlock.SetBaseColor(baseColor);
                 sectionItem.name = $"SectionBlock_{section.Section}";
+                _sectionBlocks.Add(section.Section, sectionBlock);
 
-                sectionItem.Init(section.Section, OnSectionRepetitionClick);
+                sectionItem.Init(section.Section, OnSectionSortClick, OnSectionRepetitionClick);
                 sectionItem.name = $"Section_{section.Section}";
                 sectionItem.SetBaseColor(baseColor);
-                _sectionItems.Add(sectionItem);
 
-                RectTransform row = null;
-                int count = -1;
-                for (int m = 0; m < section.Lessons.Count; m++)
-                {
-                    if (m / 6 > count)
-                    {
-                        count++;
-                        row = _view.InstantiateRow(sectionBlock.Container);
-                    }
-
-                    var key = $"{section.Section}_{m + 1}";
-                    _lessons[key] = section.Lessons[m];
-
-                    var lessonItem = m % 2 == 0
-                        ? _view.InstantiateUpLesson(row)
-                        : _view.InstantiateDownLesson(row);
-
-                    lessonItem.Init(key, (m + 1).ToString(), 0, OnLessonClick);
-                    lessonItem.name = $"Item {key}";
-                    lessonItem.SetColor(GetLessonColor(section.Lessons[m].Questions));
-                }
+                PopulateSection(section, sectionBlock);
             }
         }
 
@@ -104,16 +84,75 @@ namespace Chang.GameBook
             return _view.GetLessonColor(sum);
         }
 
+        private void OnSectionSortClick(string key)
+        {
+            Debug.Log($"OnSectionSortClick key: {key}");
+            SimpleSection section = _gameBus.SimpleBookData.Sections.Find(s => s.Section == key);
+
+            if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(section.Section), out _))
+            {
+                _profileService.ReorderedSections.Remove(_profileService.ReorderedSectionKey(section.Section));
+            }
+            else
+            {
+                _profileService.ReorderSection(_gameBus.CurrentLanguage, section);
+            }
+
+            SectionBlock sectionBlock = _sectionBlocks[key];
+
+            foreach (Transform child in sectionBlock.Container)
+            {
+                if (!child.name.Contains("Section"))
+                {
+                    UnityEngine.Object.Destroy(child.gameObject);
+                }
+            }
+
+            PopulateSection(section, sectionBlock);
+        }
+
+        private void PopulateSection(SimpleSection section, SectionBlock sectionBlock)
+        {
+            if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(section.Section), out var reorderedSection))
+            {
+                section = reorderedSection;
+            }
+
+            RectTransform row = null;
+            int count = -1;
+            for (int m = 0; m < section.Lessons.Count; m++)
+            {
+                if (m / 6 > count)
+                {
+                    count++;
+                    row = _view.InstantiateRow(sectionBlock.Container);
+                }
+
+                string sectionName = section.Section;
+                int lessonIndex = m + 1;
+                string key = $"{section.Section}_{m + 1}";
+                _lessons[key] = section.Lessons[m];
+
+                GameBookItem lessonItem = m % 2 == 0
+                    ? _view.InstantiateUpLesson(row)
+                    : _view.InstantiateDownLesson(row);
+
+                lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
+                lessonItem.name = $"Item {key}";
+                lessonItem.SetColor(GetLessonColor(section.Lessons[m].Questions));
+            }
+        }
+
         private void OnSectionRepetitionClick(string key)
         {
             Debug.Log($"OnSectionRepetitionClick key: {key}");
             _mainScreenBus.OnGameBookSectionRepeatClicked?.Invoke(key);
         }
 
-        private void OnLessonClick(string key)
+        private void OnLessonClick(string sectionName, int lessonIndex)
         {
-            Debug.Log($"Clicked on item {key}");
-            _mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[key].FileName);
+            Debug.Log($"Clicked on item {sectionName}_{lessonIndex}");
+            _mainScreenBus.OnGameBookLessonClicked?.Invoke(sectionName, lessonIndex);
         }
     }
 }

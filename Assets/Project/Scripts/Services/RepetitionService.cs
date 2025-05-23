@@ -29,10 +29,9 @@ namespace Chang.Services
 
         /// <summary>
         /// First iteration of the repetition filter
-        /// todo chang add more logic to the filter
         /// </summary>
-        /// <param name="amount"></param>
         /// <returns></returns>
+        // todo chang add more logic to the filter
         public List<QuestLog> GetGeneralRepetition(Languages language, int amount)
         {
             // todo chang filter by language

@@ -8,13 +8,15 @@ namespace Chang.GameBook
     public class GameBookSection : Colorizable
     {
         [SerializeField] private TMP_Text label;
+        [SerializeField] private Button sortSectionButton;
         [SerializeField] private Button repeatSectionButton;
         
-        public string LabelText => label.text;
-        
-        public void Init(string key, Action<string> onSectionRepetitionClick)
+        public void Init(string key, Action<string> onSectionSortClick, Action<string> onSectionRepetitionClick)
         {
             label.text = key;
+            
+            sortSectionButton.onClick.RemoveAllListeners();
+            sortSectionButton.onClick.AddListener(() => onSectionSortClick.Invoke(key));
             
             repeatSectionButton.onClick.RemoveAllListeners();
             repeatSectionButton.onClick.AddListener(() => onSectionRepetitionClick.Invoke(key));
@@ -22,6 +24,7 @@ namespace Chang.GameBook
 
         private void OnDestroy()
         {
+            sortSectionButton.onClick.RemoveAllListeners();
             repeatSectionButton.onClick.RemoveAllListeners();
         }
     }

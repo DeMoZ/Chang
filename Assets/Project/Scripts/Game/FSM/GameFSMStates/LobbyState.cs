@@ -58,7 +58,7 @@ namespace Chang.FSM
             Debug.Log("LoadGameBookConfigAsync start");
             DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(BookKey, _cts.Token);
 
-            if (asset.Item == null)
+            if (!asset.Item)
             {
                 Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)}() asset is null, BookKey: {BookKey}");
                 return;
