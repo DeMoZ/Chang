@@ -85,7 +85,7 @@ namespace Chang.FSM
             _mixWords.AddRange(questionData.MixWords);
             _mixWords.Shuffle();
 
-            string key = $"{Bus.CurrentLanguage}/{_correctWord.Word.LogKey}";
+            string key = $"{_profileService.ProfileData.LearnLanguage}/{_correctWord.Word.LogKey}"; // todo chang use section lang/section/word
             int mark = _profileService.GetMark(key);
             bool isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
             _correctWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
@@ -142,7 +142,7 @@ namespace Chang.FSM
             object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
 
             string path = Path.Combine(
-                Bus.CurrentLanguage.ToString(),
+                _profileService.ProfileData.LearnLanguage.ToString(),
                 AssetPaths.Addressables.Words,
                 _correctWord.Word.Section,
                 _correctWord.Word.Key);

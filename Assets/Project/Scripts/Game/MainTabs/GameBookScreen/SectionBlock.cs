@@ -6,5 +6,6 @@ namespace Chang.GameBook
     {
         [SerializeField] private RectTransform container;
         public RectTransform Container => container;
+        public GameBookSection SectionView { get; set; }
     }
 }

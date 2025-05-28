@@ -9,19 +9,19 @@ namespace Chang
     {
         private const int ShowLogLimitAmount = 30;
 
-        private readonly GameBus _gameBus;
+        private readonly ProfileService _profileService;
         private readonly MainScreenBus _mainScreenBus;
         private readonly RepetitionView _view;
         private readonly RepetitionService _repetitionService;
 
         [Inject]
         public RepetitionController(
-            GameBus gameBus,
+            ProfileService profileService,
             MainScreenBus mainScreenBus,
             RepetitionView view,
             RepetitionService repetitionService)
         {
-            _gameBus = gameBus;
+            _profileService = profileService;
             _mainScreenBus = mainScreenBus;
             _view = view;
             _repetitionService = repetitionService;
@@ -38,7 +38,7 @@ namespace Chang
 
         public void Set()
         {
-            var sortedList = _repetitionService.GetGeneralRepetition(_gameBus.CurrentLanguage, ShowLogLimitAmount);
+            var sortedList = _repetitionService.GetGeneralRepetition(_profileService.ProfileData.LearnLanguage, ShowLogLimitAmount);
             _view.Set(sortedList);
         }
 

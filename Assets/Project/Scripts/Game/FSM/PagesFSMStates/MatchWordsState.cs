@@ -91,7 +91,7 @@ namespace Chang.FSM
 
             foreach (var word in words)
             {
-                string key = $"{Bus.CurrentLanguage}/{word.LogKey}";
+                string key = $"{_profileService.ProfileData.LearnLanguage}/{word.LogKey}"; // todo chang use section lang/section/word
                 word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetMark(key)));
             }
 
@@ -120,7 +120,7 @@ namespace Chang.FSM
 
             _stateController.ShowCorrectAsync(leftIndex, rightIndex, isCorrect).Forget();
             string path = Path.Combine(
-                Bus.CurrentLanguage.ToString(),
+                _profileService.ProfileData.LearnLanguage.ToString(),
                 AssetPaths.Addressables.Words,
                 _leftWords[leftIndex].Section,
                 _leftWords[leftIndex].Key);
@@ -135,7 +135,7 @@ namespace Chang.FSM
             if (!isCorrect)
             {
                 path = Path.Combine(
-                    Bus.CurrentLanguage.ToString(),
+                    _profileService.ProfileData.LearnLanguage.ToString(),
                     AssetPaths.Addressables.Words,
                     _rightWords[rightIndex].Section,
                     _rightWords[rightIndex].Key);

@@ -13,6 +13,5 @@ namespace Chang
         
         public Lesson CurrentLesson { get; set; }
         public GameType GameType { get; set; }
-        public Languages CurrentLanguage { get; set; } = Languages.Thai; // todo chang need to select language in game
     }
 }

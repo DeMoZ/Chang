@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Chang.Profile;
 using Chang.Services;
 using UnityEngine;
 using Zenject;
@@ -14,18 +15,24 @@ namespace Chang.GameBook
         private readonly MainScreenBus _mainScreenBus;
         private readonly GameBookView _view;
         private readonly ProfileService _profileService;
+        private readonly RepetitionService _repetitionService;
 
         private Dictionary<string, SimpleLessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
-        private CancellationTokenSource _cancellationTokenSource;
 
         [Inject]
-        public GameBookController(GameBus gameBus, MainScreenBus mainScreenBus, GameBookView view, ProfileService profileService)
+        public GameBookController(
+            GameBus gameBus,
+            MainScreenBus mainScreenBus,
+            GameBookView view,
+            ProfileService profileService,
+            RepetitionService repetitionService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
+            _repetitionService = repetitionService;
         }
 
         public void Dispose()
@@ -50,18 +57,21 @@ namespace Chang.GameBook
             for (var i = 0; i < _gameBus.SimpleBookData.Sections.Count; i++)
             {
                 Color baseColor = _view.GetNextColor(i);
-                SimpleSection section = _gameBus.SimpleBookData.Sections[i];
+                SimpleSection simpleSection = _gameBus.SimpleBookData.Sections[i];
 
-                SectionBlock sectionBlock = _view.InstantiateSectionBlock(out var sectionItem);
+                SectionBlock sectionBlock = _view.InstantiateSectionBlock();
                 sectionBlock.SetBaseColor(baseColor);
-                sectionItem.name = $"SectionBlock_{section.Section}";
-                _sectionBlocks.Add(section.Section, sectionBlock);
+                sectionBlock.SectionView.name = $"SectionBlock_{simpleSection.Section}";
+                _sectionBlocks.Add(simpleSection.Section, sectionBlock);
 
-                sectionItem.Init(section.Section, OnSectionSortClick, OnSectionRepetitionClick);
-                sectionItem.name = $"Section_{section.Section}";
-                sectionItem.SetBaseColor(baseColor);
+                sectionBlock.SectionView.Init(simpleSection.Section,
+                    () => OnSectionSortClick(simpleSection.Section),
+                    () => OnSectionRepetitionClick(simpleSection.Section));
 
-                PopulateSection(section, sectionBlock);
+                sectionBlock.SectionView.name = $"Section_{simpleSection.Section}";
+                sectionBlock.SectionView.SetBaseColor(baseColor);
+
+                PopulateSection(simpleSection, sectionBlock);
             }
         }
 
@@ -95,7 +105,7 @@ namespace Chang.GameBook
             }
             else
             {
-                _profileService.ReorderSection(_gameBus.CurrentLanguage, section);
+                _profileService.ReorderSection(section);
             }
 
             SectionBlock sectionBlock = _sectionBlocks[key];
@@ -113,7 +123,19 @@ namespace Chang.GameBook
 
         private void PopulateSection(SimpleSection section, SectionBlock sectionBlock)
         {
-            if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(section.Section), out var reorderedSection))
+            List<QuestLog> repetitions = _repetitionService
+                .GetSectionRepetition(_profileService.ProfileData.LearnLanguage, ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section);
+            
+            int repetitionsCount = repetitions.Count;
+            string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
+            
+            sectionBlock.SectionView.SetSortToggle(
+                repetitionsCount > 0 && _profileService.ReorderedSections.ContainsKey(reorderedSectionKey),
+                repetitionsCount > 0);
+
+            sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_AMOUNT);
+
+            if (_profileService.ReorderedSections.TryGetValue(reorderedSectionKey, out var reorderedSection))
             {
                 section = reorderedSection;
             }

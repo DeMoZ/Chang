@@ -15,13 +15,12 @@ namespace Chang.GameBook
         public Color GetNextColor(int index) => sectionsColors.colorKeys[index % sectionsColors.colorKeys.Length].color;
         public Color GetLessonColor(float index) => lessonMarkColors.Evaluate(index);
         
-        public SectionBlock InstantiateSectionBlock(out GameBookSection section)
+        public SectionBlock InstantiateSectionBlock()
         {
-            var got = Instantiate(sectionBlockPrefab, content);
-            got.gameObject.SetActive(true);
-
-            section = InstantiateSection(got.Container);
-            return got;
+            var go = Instantiate(sectionBlockPrefab, content);
+            go.gameObject.SetActive(true);
+            go.SectionView = InstantiateSection(go.Container);
+            return go;
         }
 
         public RectTransform InstantiateRow(RectTransform sectionBlock)
@@ -34,10 +33,10 @@ namespace Chang.GameBook
 
         public GameBookItem InstantiateUpLesson(RectTransform row)
         {
-            var got = Instantiate(upLessonPrefab, row);
-            got.gameObject.SetActive(true);
+            var go = Instantiate(upLessonPrefab, row);
+            go.gameObject.SetActive(true);
 
-            return got;
+            return go;
         }
 
         public GameBookItem InstantiateDownLesson(RectTransform row)

@@ -90,7 +90,7 @@ namespace Chang.FSM
             Debug.Log($"toggle isOn: {isOn}");
             object[] info = { _correctWord.Word.LearnWord, false };
             string path = Path.Combine(
-                Bus.CurrentLanguage.ToString(),
+                _profileService.ProfileData.LearnLanguage.ToString(),
                 AssetPaths.Addressables.Words,
                 _correctWord.Word.Section,
                 _correctWord.Word.Key); 

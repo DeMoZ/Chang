@@ -13,8 +13,6 @@ namespace Chang
 {
     public class LobbyController : IViewController
     {
-        private const int GeneralRepetitionAmount = 10;
-
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
         private readonly MainUiView _view;
@@ -162,7 +160,9 @@ namespace Chang
             if (_isLoading)
                 return;
 
-            var repetitions = _repetitionService.GetSectionRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount, section);
+            var repetitions = _repetitionService
+                .GetSectionRepetition(_profileService.ProfileData.LearnLanguage, ProjectConstants.SECTION_REPETITION_AMOUNT, section);
+            
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
@@ -171,7 +171,9 @@ namespace Chang
             if (_isLoading)
                 return;
 
-            var repetitions = _repetitionService.GetGeneralRepetition(_gameBus.CurrentLanguage, GeneralRepetitionAmount);
+            var repetitions = _repetitionService
+                .GetGeneralRepetition(_profileService.ProfileData.LearnLanguage, ProjectConstants.GENERAL_REPETITION_AMOUNT);
+            
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 

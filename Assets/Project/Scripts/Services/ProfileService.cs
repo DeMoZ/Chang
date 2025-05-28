@@ -99,7 +99,7 @@ namespace Chang.Services
             return _playerProfile.ProgressData.Questions.TryGetValue(key, out questLog);
         }
 
-        public void ReorderSection(Languages language, SimpleSection section)
+        public void ReorderSection(SimpleSection section)
         {
             SimpleSection newSection = new SimpleSection
             {
