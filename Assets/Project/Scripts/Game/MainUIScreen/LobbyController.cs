@@ -160,9 +160,7 @@ namespace Chang
             if (_isLoading)
                 return;
 
-            var repetitions = _repetitionService
-                .GetSectionRepetition(_profileService.ProfileData.LearnLanguage, ProjectConstants.SECTION_REPETITION_AMOUNT, section);
-            
+            var repetitions = _repetitionService.GetSectionRepetition(ProjectConstants.SECTION_REPETITION_AMOUNT, section);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
@@ -171,9 +169,7 @@ namespace Chang
             if (_isLoading)
                 return;
 
-            var repetitions = _repetitionService
-                .GetGeneralRepetition(_profileService.ProfileData.LearnLanguage, ProjectConstants.GENERAL_REPETITION_AMOUNT);
-            
+            var repetitions = _repetitionService.GetGeneralRepetition(ProjectConstants.GENERAL_REPETITION_AMOUNT);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 

@@ -71,11 +71,11 @@ namespace Chang.Services
         public void AddLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
         {
             Debug.LogWarning($"AddLog key: {key}, isCorrect {isCorrect}");
-
-            if (!_playerProfile.ProgressData.Questions.TryGetValue(key, out var questLog))
+            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
+            if (!logs.TryGetValue(key, out var questLog))
             {
                 questLog = new QuestLog(key, presentation, type);
-                _playerProfile.ProgressData.Questions[key] = questLog;
+                logs[key] = questLog;
             }
 
             var logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
@@ -86,7 +86,8 @@ namespace Chang.Services
 
         public int GetMark(string key)
         {
-            if (_playerProfile.ProgressData.Questions.TryGetValue(key, out var questLog))
+            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
+            if (logs.TryGetValue(key, out var questLog))
             {
                 return questLog.Mark;
             }
@@ -96,7 +97,8 @@ namespace Chang.Services
 
         public bool TryGetLog(string key, out QuestLog questLog)
         {
-            return _playerProfile.ProgressData.Questions.TryGetValue(key, out questLog);
+            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
+            return logs.TryGetValue(key, out questLog);
         }
 
         public void ReorderSection(SimpleSection section)

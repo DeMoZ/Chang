@@ -38,7 +38,7 @@ namespace Chang
 
         public void Set()
         {
-            var sortedList = _repetitionService.GetGeneralRepetition(_profileService.ProfileData.LearnLanguage, ShowLogLimitAmount);
+            var sortedList = _repetitionService.GetGeneralRepetition(ShowLogLimitAmount);
             _view.Set(sortedList);
         }
 

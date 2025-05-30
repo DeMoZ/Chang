@@ -123,12 +123,11 @@ namespace Chang.GameBook
 
         private void PopulateSection(SimpleSection section, SectionBlock sectionBlock)
         {
-            List<QuestLog> repetitions = _repetitionService
-                .GetSectionRepetition(_profileService.ProfileData.LearnLanguage, ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section);
-            
+            List<QuestLog> repetitions = _repetitionService.GetSectionRepetition(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section);
+
             int repetitionsCount = repetitions.Count;
             string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
-            
+
             sectionBlock.SectionView.SetSortToggle(
                 repetitionsCount > 0 && _profileService.ReorderedSections.ContainsKey(reorderedSectionKey),
                 repetitionsCount > 0);

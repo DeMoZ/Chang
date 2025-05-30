@@ -49,7 +49,8 @@ namespace Chang.Services.DataProvider
                 ProgressData.SerializedUtcTime = ProgressData.UtcTime.ToString();
 
                 ProgressData.SerializedQuestions = new List<(string, QuestLog)>();
-                foreach (var pair in data.Questions)
+                Dictionary<string, QuestLog> logs = data.GetQuestLogs(Languages.Thai); // todo chang use current language
+                foreach (var pair in logs)
                 {
                     ProgressData.SerializedQuestions.Add(new ValueTuple<string, QuestLog>(pair.Key, pair.Value));
                 }

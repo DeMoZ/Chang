@@ -8,6 +8,10 @@ namespace Chang.Services
 {
     public class RepetitionService : IDisposable
     {
+        private const float MarkWeight = 0.25f;
+        private const float SequenceWeight = 0.4f;
+        private const float TimeWeight = 0.015f;
+
         private readonly ProfileService _profileService;
 
         [Inject]
@@ -16,10 +20,11 @@ namespace Chang.Services
             _profileService = profileService;
         }
 
-        public List<QuestLog> GetSectionRepetition(Languages language, int amount, string key)
+        public List<QuestLog> GetSectionRepetition(int amount, string key)
         {
-            Dictionary<string, QuestLog> progressQuestions = _profileService.ProgressData.Questions;
-            var progressList = progressQuestions
+            var language = _profileService.ProfileData.LearnLanguage;
+            Dictionary<string, QuestLog> log = _profileService.ProgressData.GetQuestLogs(language);
+            var progressList = log
                 .Select(q => q.Value)
                 .Where(q => q.Language == language && string.Equals(q.Section, key)).ToList();
 
@@ -32,11 +37,19 @@ namespace Chang.Services
         /// </summary>
         /// <returns></returns>
         // todo chang add more logic to the filter
-        public List<QuestLog> GetGeneralRepetition(Languages language, int amount)
+        public List<QuestLog> _GetGeneralRepetition(int amount)
         {
-            // todo chang filter by language
-            var progressQuestions = _profileService.ProgressData.Questions;
-            var progressList = progressQuestions.Select(q => q.Value).Where(q => q.SuccessSequence < 10);
+            // todo chang what to count?
+            // 1. Success sequence
+            // 2. Date
+            // 3. Mark
+            
+            var language = _profileService.ProfileData.LearnLanguage;
+            Dictionary<string, QuestLog> log = _profileService.ProgressData.GetQuestLogs(language);
+            var progressList = log
+                .Select(q => q.Value)
+                .Where(q => q.SuccessSequence < 10)
+                .OrderBy(q => q.SuccessSequence);
 
             // var sortedWords = words
             //     .OrderBy(word => word.Mark)
@@ -44,11 +57,7 @@ namespace Chang.Services
             //     .Take(10)
             //     .ToList();
 
-            // todo chang what to count?
-            // 1. Iteration
-            // 2. Date
-            // 3. Mark
-
+            
             // todo chang should be sorted by the sequence and time  too
             var sortedList = progressList.OrderBy(w => w.Mark)
                 //.ThenBy(w => w.UtcTime)
@@ -56,6 +65,27 @@ namespace Chang.Services
                 .ToList();
 
             return sortedList;
+        }
+
+        public List<QuestLog> GetGeneralRepetition(int amount)
+        {
+            Languages language = _profileService.ProfileData.LearnLanguage;
+            Dictionary<string, QuestLog> log = _profileService.ProgressData.GetQuestLogs(language);
+
+            var progressList = log
+                .Select(q => q.Value)
+                .OrderByDescending(OrderByWeight)
+                .Take(amount)
+                .ToList();
+
+            return progressList;
+        }
+
+        private float OrderByWeight(QuestLog questLog)
+        {
+            double timeWeight = (DateTime.UtcNow - questLog.UtcTime).TotalMinutes * TimeWeight;
+            double weight = questLog.Mark * MarkWeight + questLog.SuccessSequence * SequenceWeight + timeWeight;
+            return (float)weight;
         }
 
         public void Dispose()

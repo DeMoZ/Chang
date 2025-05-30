@@ -15,19 +15,27 @@ namespace Chang.Profile
         [field: SerializeField]
         public DateTime UtcTime { get; private set; }
 
-        public Dictionary<string, QuestLog> Questions { get; private set; }
+        public Dictionary<string, QuestLog> ThaiQuestLogs { get; private set; }
+        
+        // [Obsolete("Use ThaiQuestLogs instead", false)]
+        // public Dictionary<string, QuestLog> Questions { get; private set; }
         
         [JsonConstructor]
-        public ProgressData(DateTime utcTime, Dictionary<string, QuestLog> questions)
+        public ProgressData(DateTime utcTime, Dictionary<string, QuestLog> thaiQuestLogs, Dictionary<string, QuestLog> questions)
         {
             UtcTime = utcTime;
-            Questions = ValidateQuestions(questions);
+            
+            // todo chang questions is Obsolete: Use thaiQuestLogs instead
+            // that is also will move into something like dictionary of dictionaries.
+            // also ProgressData will be used only for one language and will be loaded as one ProgressData per language
+            thaiQuestLogs ??= questions;
+            ThaiQuestLogs = ValidateQuestions(thaiQuestLogs);
         }
 
         public ProgressData()
         {
             UtcTime = DateTime.UtcNow;
-            Questions = new Dictionary<string, QuestLog>();
+            ThaiQuestLogs = new Dictionary<string, QuestLog>();
         }
 
         public void SetTime(DateTime utcTime)
@@ -35,11 +43,25 @@ namespace Chang.Profile
             UtcTime = utcTime;
         }
 
-        public Dictionary<string, QuestLog> ValidateQuestions(Dictionary<string, QuestLog> questions)
+        public Dictionary<string, QuestLog> GetQuestLogs(Languages language)
+        {
+            switch (language)
+            {
+                case Languages.Thai:
+                    return ThaiQuestLogs;
+                
+                default:
+                    Debug.LogWarning($"No QuestLog for Language: {language}");
+                    return new Dictionary<string, QuestLog>();
+            }
+        }
+        
+        private Dictionary<string, QuestLog> ValidateQuestions(Dictionary<string, QuestLog> questLogs)
         {
             Dictionary<string, QuestLog> result = new();
+            questLogs ??= new Dictionary<string, QuestLog>();
 
-            foreach (var pair in questions)
+            foreach (var pair in questLogs)
             {
                 if (pair.Value.QuestionType == QuestionType.None)
                 {
