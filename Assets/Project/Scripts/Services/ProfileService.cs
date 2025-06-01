@@ -59,7 +59,8 @@ namespace Chang.Services
             await SaveIntoScriptableObject();
         }
 
-        public async UniTask SaveProgressAsync()
+        // todo chang use ct (supress)
+        public async UniTask SaveProgressAsync(CancellationToken ct)
         {
             _playerProfile.ProgressData.SetTime(DateTime.UtcNow);
 

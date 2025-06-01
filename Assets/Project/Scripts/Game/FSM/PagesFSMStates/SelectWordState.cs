@@ -3,10 +3,13 @@ using DMZ.FSM;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using Popup;
+using Project.Services.PagesContentProvider;
+using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -31,6 +34,8 @@ namespace Chang.FSM
 
     public class SelectWordState : ResultStateBase<QuestionType, PagesBus>
     {
+        private readonly IPagesContentProvider _pagesContentProvider;
+        
         [Inject] private readonly SelectWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
@@ -38,44 +43,47 @@ namespace Chang.FSM
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly PopupManager _popupManager;
-
+        
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
-        private PageService _pageService;
+        private CancellationTokenSource _cts;
 
         public override QuestionType Type => QuestionType.SelectWord;
 
-        public SelectWordState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public SelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
+            _pagesContentProvider = pagesContentProvider;
         }
 
         public override void Enter()
         {
             base.Enter();
-
-            _pageService = new PageService(_wordPathHelper, _assetManager, _popupManager);
+            
             Bus.OnHintUsed.Subscribe(OnHint);
             _gameOverlayController.EnableHintButton(true);
-            StateBodyAsync().Forget();
+            _cts = new CancellationTokenSource();
+            StateBodyAsync(_cts.Token).Forget();
         }
 
         public override void Exit()
         {
             base.Exit();
-
-            _pageService.Dispose();
+            _cts?.Cancel();
+            _cts?.Dispose();
+            
             _correctWord = null;
             _mixWords?.Clear();
             _mixWords = null;
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
+            _pagesContentProvider.ClearCache();
         }
 
-        private async UniTask StateBodyAsync()
+        private async UniTask StateBodyAsync(CancellationToken ct)
         {
             ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
-
-            await _pageService.LoadContentAsync(question);
+            
+            await _pagesContentProvider.GetContentAsync(question, ct);
 
             QuestSelectWordData questionData = GetQuestionData((SimpleQuestSelectWord)question);
             _correctWord = questionData.CorrectWord;
@@ -104,9 +112,18 @@ namespace Chang.FSM
 
         private QuestSelectWordData GetQuestionData(SimpleQuestSelectWord selectWord)
         {
+            var path = _wordPathHelper.GetConfigPath(selectWord.CorrectWordFileName);
+            var config = _pagesContentProvider.GetAsset<PhraseConfig>(path);
+
+            if (!config)
+            {
+                Debug.LogError($"SelectWordState: Config not found at path {path}");
+                return null;
+            }
+            
             QuestSelectWordData selectWordData = new QuestSelectWordData
             {
-                CorrectWord = _pageService.Configs[selectWord.CorrectWordFileName].Item.PhraseData,
+                CorrectWord = config.PhraseData,
                 MixWords = new List<PhraseData>()
             };
 
@@ -117,8 +134,13 @@ namespace Chang.FSM
             var mixWords = selectWord.MixWordsFileNames.Take(mixWordsAmount);
             foreach (var fileName in mixWords)
             {
-                var data = _pageService.Configs[fileName].Item.PhraseData;
-                selectWordData.MixWords.Add(data);
+                path = _wordPathHelper.GetConfigPath(fileName);
+                var asset = _pagesContentProvider.GetAsset<PhraseConfig>(path);
+
+                if (asset)
+                {
+                    selectWordData.MixWords.Add(asset.PhraseData);    
+                }
             }
 
             return selectWordData;
@@ -126,7 +148,12 @@ namespace Chang.FSM
 
         private void OnClickPlaySound()
         {
-            _pagesSoundController.PlaySound(_pageService.Sounds[_correctWord.Key].Item);
+            var path = _wordPathHelper.GetSoundPath(_correctWord.LogKey);
+            var asset = _pagesContentProvider.GetAsset<AudioClip>(path);
+            if (asset)
+            {
+                _pagesSoundController.PlaySound(asset);
+            }
         }
 
         private void OnHint(bool isHintUsed)

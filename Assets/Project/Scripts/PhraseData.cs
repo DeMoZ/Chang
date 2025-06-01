@@ -12,10 +12,9 @@ namespace Chang
         public bool ShowPhonetics { get; private set; }
         public string LogKey => $"{Language}/{Word.LogKey}";
         
-        public PhraseData(string key, /*Languages language,*/WordData word)
+        public PhraseData(string key, WordData word)
         {
             Key = key;
-            //Language = language;
             Word = word;
         }
 

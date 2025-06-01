@@ -7,13 +7,13 @@ using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
+using Project.Services.PagesContentProvider;
 using Sirenix.Utilities;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    // todo chang class contains async methods without cancellation token
     public class PagesState : ResultStateBase<StateType, GameBus>, IDisposable
     {
         public override StateType Type => StateType.PlayPages;
@@ -29,6 +29,7 @@ namespace Chang.FSM
 
         private PagesBus _pagesBus;
         private PagesFSM _pagesFsm;
+        private IPagesContentProvider _pagesContentProvider;
         private CancellationTokenSource _cts;
 
         public PagesState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
@@ -49,17 +50,17 @@ namespace Chang.FSM
             base.Enter();
 
             _cts = new CancellationTokenSource();
-
-            EnterAsync().Forget();
+            _pagesContentProvider = new NoCachePagesContentProvider(_assetManager, _assetDownloader, _wordPathHelper, _popupManager);
+            EnterAsync(_cts.Token).Forget();
         }
 
-        private async UniTask EnterAsync()
+        private async UniTask EnterAsync(CancellationToken ct)
         {
             var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent);
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
             loadingUiController.SetProgress(0);
 
-            await PreloadContentAsync(loadingUiController.SetProgress);
+            await PreloadContentAsync(loadingUiController.SetProgress, ct);
 
             _screenManager.SetActivePagesContainer(true);
 
@@ -77,13 +78,13 @@ namespace Chang.FSM
                 GameType = Bus.GameType,
             };
 
-            _pagesFsm = new PagesFSM(_diContainer, _pagesBus);
+            _pagesFsm = new PagesFSM(_diContainer, _pagesBus, _pagesContentProvider);
             _pagesFsm.Initialize();
 
             loadingUiController.SetProgress(100);
             _popupManager.DisposePopup(loadingUiController);
 
-            OnContinueAsync().Forget();
+            OnContinueAsync(ct).Forget();
         }
 
         public override void Exit()
@@ -91,6 +92,7 @@ namespace Chang.FSM
             base.Exit();
 
             Dispose();
+            _pagesContentProvider.Dispose();
             _screenManager.SetActivePagesContainer(false);
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
@@ -102,17 +104,9 @@ namespace Chang.FSM
             _gameOverlayController.OnExitToLobby();
         }
 
-        private async UniTask PreloadContentAsync(Action<float> percents)
+        private async UniTask PreloadContentAsync(Action<float> percents, CancellationToken ct)
         {
-            HashSet<string> keys = new();
-            foreach (ISimpleQuestion quest in Bus.CurrentLesson.SimpleQuestions)
-            {
-                keys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
-                keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
-                // todo chang images keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
-            }
-
-            await _assetDownloader.PreloadPagesStateAsync(keys, percents, _cts.Token);
+            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentLesson.SimpleQuestions, percents, ct);
         }
 
         private void ExitToLobby()
@@ -128,10 +122,10 @@ namespace Chang.FSM
 
         private void OnCheck()
         {
-            OnCheckAsync().Forget();
+            OnCheckAsync(_cts.Token).Forget();
         }
 
-        private async UniTask OnCheckAsync()
+        private async UniTask OnCheckAsync(CancellationToken ct)
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
@@ -140,17 +134,17 @@ namespace Chang.FSM
             {
                 case QuestionType.DemonstrationWord:
                 case QuestionType.SelectWord:
-                    OnCheckSelectWordAsync().Forget();
+                    OnCheckSelectWordAsync(ct).Forget();
                     break;
                 case QuestionType.MatchWords:
-                    OnCheckMatchWordsAsync().Forget();
+                    OnCheckMatchWordsAsync(ct).Forget();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"simple question not handled {_pagesFsm.CurrentStateType}");
             }
         }
 
-        private async UniTaskVoid OnCheckSelectWordAsync()
+        private async UniTaskVoid OnCheckSelectWordAsync(CancellationToken ct)
         {
             Debug.Log($"{nameof(OnCheckSelectWordAsync)}");
 
@@ -175,10 +169,10 @@ namespace Chang.FSM
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
-            await _profileService.SaveProgressAsync(); // todo chang in case of bug move before _gameOverlayController.EnableContinueButton(true); 
+            await _profileService.SaveProgressAsync(ct);
         }
 
-        private async UniTaskVoid OnCheckMatchWordsAsync()
+        private async UniTaskVoid OnCheckMatchWordsAsync(CancellationToken ct)
         {
             Debug.Log($"{nameof(OnCheckMatchWordsAsync)}");
 
@@ -192,19 +186,19 @@ namespace Chang.FSM
                 _pagesBus.LessonLog.Add(result);
             }
 
-            await _profileService.SaveProgressAsync();
-            OnContinueAsync().Forget();
+            await _profileService.SaveProgressAsync(ct);
+            OnContinueAsync(ct).Forget();
         }
 
         private void OnContinue()
         {
-            OnContinueAsync().Forget();
+            OnContinueAsync(_cts.Token).Forget();
         }
 
-        private async UniTaskVoid OnContinueAsync()
+        private async UniTaskVoid OnContinueAsync(CancellationToken ct)
         {
-            await UniTask.Yield(_cts.Token);
-            
+            await UniTask.Yield(ct);
+
             if (_pagesFsm.CurrentStateType == QuestionType.Result)
             {
                 ExitToLobby();

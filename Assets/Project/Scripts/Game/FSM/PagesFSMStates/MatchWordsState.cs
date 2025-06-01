@@ -3,10 +3,13 @@ using DMZ.FSM;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using Popup;
+using Project.Services.PagesContentProvider;
+using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -15,9 +18,9 @@ namespace Chang.FSM
     public class MatchWordsStateResult : IQuestionResult
     {
         public readonly List<SelectWordResult> Results = new();
-        
+
         public object[] Info { get; } = null;
-        
+
         public string Key { get; } = string.Empty;
         public string Presentation { get; } = string.Empty;
         public QuestionType Type => QuestionType.MatchWords;
@@ -26,6 +29,8 @@ namespace Chang.FSM
 
     public class MatchWordsState : ResultStateBase<QuestionType, PagesBus>
     {
+        private readonly IPagesContentProvider _pagesContentProvider;
+
         [Inject] private readonly MatchWordsController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
@@ -36,49 +41,61 @@ namespace Chang.FSM
 
         private List<WordData> _leftWords;
         private List<WordData> _rightWords;
+        private CancellationTokenSource _cts;
 
         public override QuestionType Type => QuestionType.MatchWords;
 
         private int _correctCount;
         private MatchWordsStateResult _result;
-        private PageService _pageService;
-        
-        public MatchWordsState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+
+        public MatchWordsState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus,
+            onStateResult)
         {
+            _pagesContentProvider = pagesContentProvider;
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            _pageService = new PageService(_wordPathHelper, _assetManager, _popupManager);
             Bus.OnHintUsed.Subscribe(OnHint);
-            StateBodyAsync().Forget();
+            _cts = new CancellationTokenSource();
+            StateBodyAsync(_cts.Token).Forget();
         }
 
         public override void Exit()
         {
             base.Exit();
-            
+
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
-            _pageService.Dispose();
+            _pagesContentProvider.ClearCache();
             _stateController.Clear();
             _result = null;
             _leftWords.Clear();
             _rightWords.Clear();
         }
 
-        private async UniTask StateBodyAsync()
+        private async UniTask StateBodyAsync(CancellationToken ct)
         {
             ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
 
-            await _pageService.LoadContentAsync(question);
-            
+            await _pagesContentProvider.GetContentAsync(question, ct);
+
             QuestMatchWordsData questionData = new QuestMatchWordsData(new List<PhraseData>());
+            string path = string.Empty;
             foreach (var fileName in question.GetConfigKeys())
             {
-                var data = _pageService.Configs[fileName].Item.PhraseData;
+                path = _wordPathHelper.GetConfigPath(fileName);
+                var asset = _pagesContentProvider.GetAsset<PhraseConfig>(path);
+                
+                if (!asset)
+                {
+                    Debug.LogError($"Asset not found: {path}");
+                    continue;
+                }
+
+                var data = asset.PhraseData;
                 questionData.MatchWords.Add(data);
             }
 
@@ -91,7 +108,7 @@ namespace Chang.FSM
 
             foreach (var word in words)
             {
-                string key = $"{_profileService.ProfileData.LearnLanguage}/{word.LogKey}"; // todo chang use section lang/section/word
+                string key = $"{_profileService.ProfileData.LearnLanguage}/{word.LogKey}";
                 word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetMark(key)));
             }
 
@@ -109,8 +126,13 @@ namespace Chang.FSM
 
         private void OnPlaySound(string key)
         {
-            var clip =  _pageService.Sounds[key].Item;
-            _pagesSoundController.PlaySound(clip);
+            string path = _wordPathHelper.GetSoundPath($"{_profileService.ProfileData.LearnLanguage}/{key}");
+            AudioClip asset = _pagesContentProvider.GetAsset<AudioClip>(path);
+
+            if (asset)
+            {
+                _pagesSoundController.PlaySound(asset);
+            }
         }
 
         private void OnToggleValueChanged(int leftIndex, int rightIndex)
@@ -124,7 +146,7 @@ namespace Chang.FSM
                 AssetPaths.Addressables.Words,
                 _leftWords[leftIndex].Section,
                 _leftWords[leftIndex].Key);
-            
+
             var leftResult = new SelectWordResult(
                 _wordPathHelper.NormalizePath(path),
                 _leftWords[leftIndex].LearnWord, isCorrect,
@@ -139,7 +161,7 @@ namespace Chang.FSM
                     AssetPaths.Addressables.Words,
                     _rightWords[rightIndex].Section,
                     _rightWords[rightIndex].Key);
-                
+
                 var rightResult = new SelectWordResult(
                     _wordPathHelper.NormalizePath(path),
                     _rightWords[rightIndex].LearnWord, false,

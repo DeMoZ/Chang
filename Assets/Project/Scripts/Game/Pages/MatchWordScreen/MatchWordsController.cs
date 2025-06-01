@@ -69,7 +69,7 @@ namespace Chang
                     OnToggleValueChanged(true, index, isOn);
                     if (isOn && _isLeftLearnLanguage)
                     {
-                        onPlaySound?.Invoke(left[index].Key);
+                        onPlaySound?.Invoke(left[index].LogKey);
                     }
                 });
                 toggle.EnablePhonetics(_isLeftLearnLanguage && right[i].ShowPhonetics);
@@ -87,7 +87,7 @@ namespace Chang
                     OnToggleValueChanged(false, index, isOn);
                     if (isOn && !_isLeftLearnLanguage)
                     {
-                        onPlaySound?.Invoke(right[index].Key);
+                        onPlaySound?.Invoke(right[index].LogKey);
                     }
                 });
                 toggle.EnablePhonetics(!_isLeftLearnLanguage && right[i].ShowPhonetics);
