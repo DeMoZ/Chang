@@ -87,7 +87,7 @@ namespace Chang.FSM
             foreach (var fileName in question.GetConfigKeys())
             {
                 path = _wordPathHelper.GetConfigPath(fileName);
-                var asset = _pagesContentProvider.GetAsset<PhraseConfig>(path);
+                var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
                 
                 if (!asset)
                 {
@@ -127,7 +127,7 @@ namespace Chang.FSM
         private void OnPlaySound(string key)
         {
             string path = _wordPathHelper.GetSoundPath($"{_profileService.ProfileData.LearnLanguage}/{key}");
-            AudioClip asset = _pagesContentProvider.GetAsset<AudioClip>(path);
+            AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
             {

@@ -78,7 +78,7 @@ namespace Chang.FSM
             await _pagesContentProvider.GetContentAsync(question, ct);
 
             var path = _wordPathHelper.GetConfigPath(((SimpleQuestDemonstrationWord)question).CorrectWordFileName);
-            var asset = _pagesContentProvider.GetAsset<PhraseConfig>(path);
+            var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
             if (!asset )
             {
@@ -98,7 +98,7 @@ namespace Chang.FSM
         private void OnClickPlaySound()
         {
             var path = _wordPathHelper.GetSoundPath(_correctWord.LogKey);
-            var asset = _pagesContentProvider.GetAsset<AudioClip>(path);
+            var asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
             {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Popup;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -24,15 +23,8 @@ namespace Chang.Resources
     /// </summary>
     public class AddressablesDownloader : IDisposable
     {
-        private readonly PopupManager _popupManager;
-
         private bool _isInitialized;
-
-        public AddressablesDownloader(PopupManager popupManager)
-        {
-            _popupManager = popupManager;
-        }
-
+        
         public async UniTask PreloadAtGameStartAsync(Action<float> percents, CancellationToken ct)
         {
             await PreloadLabelsAsync(BundleLabels.Labels.Base, percents, ct);
@@ -75,7 +67,7 @@ namespace Chang.Resources
                 Debug.Log("No assets need to be downloaded.");
                 return;
             }
-            
+
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Intersection);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
@@ -87,47 +79,6 @@ namespace Chang.Resources
             if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
             {
                 Debug.LogError($"{nameof(PreloadLabelsAsync)} download failed: {downloadHandle.OperationException}");
-            }
-            
-            downloadHandle.Release();
-        }
-
-        /// <summary>
-        /// Preload on enter pages state
-        /// </summary>
-        public async UniTask PreloadPagesStateAsync(IEnumerable<string> keys, Action<float> percents, CancellationToken ct)
-        {
-            Debug.Log($"{nameof(PreloadPagesStateAsync)}");
-            AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
-            await getDownloadSizeHandle.Task;
-
-            if (getDownloadSizeHandle.Status != AsyncOperationStatus.Succeeded)
-            {
-                Debug.LogError($"{nameof(PreloadPagesStateAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
-                getDownloadSizeHandle.Release();
-                return;
-            }
-
-            long totalDownloadSize = getDownloadSizeHandle.Result;
-            Debug.Log($"Total download size: {totalDownloadSize} bytes");
-            getDownloadSizeHandle.Release();
-
-            if (totalDownloadSize == 0)
-            {
-                Debug.Log("No assets need to be downloaded.");
-                return;
-            }
-
-            AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
-            while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
-            {
-                percents?.Invoke(downloadHandle.PercentComplete);
-                await UniTask.Yield(ct);
-            }
-
-            if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
-            {
-                Debug.LogError($"{nameof(PreloadPagesStateAsync)} download failed: {downloadHandle.OperationException}");
             }
 
             downloadHandle.Release();

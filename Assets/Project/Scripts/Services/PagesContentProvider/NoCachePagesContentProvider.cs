@@ -9,6 +9,8 @@ using JetBrains.Annotations;
 using Popup;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Project.Services.PagesContentProvider
 {
@@ -61,7 +63,7 @@ namespace Project.Services.PagesContentProvider
                 // todo chang images keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
             }
 
-            await _assetDownloader.PreloadPagesStateAsync(keys, percents, ct);
+            await Preload(keys, percents, ct);
         }
 
         public async UniTask GetContentAsync(ISimpleQuestion nextQuestion, CancellationToken ct)
@@ -138,7 +140,7 @@ namespace Project.Services.PagesContentProvider
         }
         
         [CanBeNull]
-        public T GetAsset<T>(string key) where T : class
+        public T GetCachedAsset<T>(string key) where T : class
         {
             if (Content.TryGetValue(key, out var asset))
             {
@@ -150,6 +152,44 @@ namespace Project.Services.PagesContentProvider
 
             Debug.LogError($"Item of type {typeof(T)} not found for key: {key}");
             return null;
+        }
+        
+        private async UniTask Preload(HashSet<string> keys, Action<float> percents, CancellationToken ct)
+        {
+            Debug.Log($"{nameof(Preload)}");
+            AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
+            await getDownloadSizeHandle.Task;
+
+            if (getDownloadSizeHandle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError($"{nameof(Preload)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                getDownloadSizeHandle.Release();
+                return;
+            }
+
+            long totalDownloadSize = getDownloadSizeHandle.Result;
+            Debug.Log($"Total download size: {totalDownloadSize} bytes");
+            getDownloadSizeHandle.Release();
+
+            if (totalDownloadSize == 0)
+            {
+                Debug.Log("No assets need to be downloaded.");
+                return;
+            }
+
+            AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
+            while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
+            {
+                percents?.Invoke(downloadHandle.PercentComplete);
+                await UniTask.Yield(ct);
+            }
+
+            if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError($"{nameof(Preload)} download failed: {downloadHandle.OperationException}");
+            }
+
+            downloadHandle.Release();
         }
     }
 }

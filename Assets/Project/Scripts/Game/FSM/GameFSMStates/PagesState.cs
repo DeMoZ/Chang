@@ -50,10 +50,10 @@ namespace Chang.FSM
             base.Enter();
 
             _cts = new CancellationTokenSource();
-            _pagesContentProvider = new NoCachePagesContentProvider(_assetManager, _assetDownloader, _wordPathHelper, _popupManager);
+            _pagesContentProvider = new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager);
             EnterAsync(_cts.Token).Forget();
         }
-
+    
         private async UniTask EnterAsync(CancellationToken ct)
         {
             var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent);

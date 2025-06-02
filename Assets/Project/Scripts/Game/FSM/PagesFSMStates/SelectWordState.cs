@@ -113,7 +113,7 @@ namespace Chang.FSM
         private QuestSelectWordData GetQuestionData(SimpleQuestSelectWord selectWord)
         {
             var path = _wordPathHelper.GetConfigPath(selectWord.CorrectWordFileName);
-            var config = _pagesContentProvider.GetAsset<PhraseConfig>(path);
+            var config = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
             if (!config)
             {
@@ -135,7 +135,7 @@ namespace Chang.FSM
             foreach (var fileName in mixWords)
             {
                 path = _wordPathHelper.GetConfigPath(fileName);
-                var asset = _pagesContentProvider.GetAsset<PhraseConfig>(path);
+                var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
                 if (asset)
                 {
@@ -149,7 +149,7 @@ namespace Chang.FSM
         private void OnClickPlaySound()
         {
             var path = _wordPathHelper.GetSoundPath(_correctWord.LogKey);
-            var asset = _pagesContentProvider.GetAsset<AudioClip>(path);
+            var asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
             if (asset)
             {
                 _pagesSoundController.PlaySound(asset);
