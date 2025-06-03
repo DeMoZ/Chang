@@ -17,19 +17,16 @@ namespace Project.Services.PagesContentProvider
     public class NoCachePagesContentProvider : IPagesContentProvider
     {
         private readonly IResourcesManager _assetManager;
-        private readonly AddressablesDownloader _assetDownloader;
         private readonly WordPathHelper _wordPathHelper;
         private readonly PopupManager _popupManager;
 
         private Dictionary<string, IDisposableAsset> Content { get; set; }
 
         public NoCachePagesContentProvider(IResourcesManager assetManager,
-            AddressablesDownloader assetDownloader,
             WordPathHelper wordPathHelper,
             PopupManager popupManager)
         {
             _assetManager = assetManager;
-            _assetDownloader = assetDownloader;
             _wordPathHelper = wordPathHelper;
             _popupManager = popupManager;
 
@@ -49,11 +46,11 @@ namespace Project.Services.PagesContentProvider
             {
                 disposable.Value.Dispose();
             }
-            
+
             Content.Clear();
         }
 
-        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float> percents, CancellationToken ct)
+        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> progress, CancellationToken ct)
         {
             HashSet<string> keys = new();
             foreach (ISimpleQuestion quest in questions)
@@ -63,7 +60,7 @@ namespace Project.Services.PagesContentProvider
                 // todo chang images keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
             }
 
-            await Preload(keys, percents, ct);
+            await Preload(keys, progress, ct);
         }
 
         public async UniTask GetContentAsync(ISimpleQuestion nextQuestion, CancellationToken ct)
@@ -126,7 +123,7 @@ namespace Project.Services.PagesContentProvider
 
             _popupManager.DisposePopup(loadingUiController);
         }
-        
+
         [CanBeNull]
         public PhraseConfig GetPhraseConfig(string key)
         {
@@ -138,7 +135,7 @@ namespace Project.Services.PagesContentProvider
             Debug.LogError($"PhraseConfig not found for key: {key}");
             return null;
         }
-        
+
         [CanBeNull]
         public T GetCachedAsset<T>(string key) where T : class
         {
@@ -153,8 +150,8 @@ namespace Project.Services.PagesContentProvider
             Debug.LogError($"Item of type {typeof(T)} not found for key: {key}");
             return null;
         }
-        
-        private async UniTask Preload(HashSet<string> keys, Action<float> percents, CancellationToken ct)
+
+        private async UniTask Preload(HashSet<string> keys, Action<float, float> progress, CancellationToken ct)
         {
             Debug.Log($"{nameof(Preload)}");
             AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
@@ -180,7 +177,7 @@ namespace Project.Services.PagesContentProvider
             AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
             while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
             {
-                percents?.Invoke(downloadHandle.PercentComplete);
+                progress?.Invoke(downloadHandle.PercentComplete * totalDownloadSize, totalDownloadSize);
                 await UniTask.Yield(ct);
             }
 

@@ -78,7 +78,7 @@ namespace Chang.FSM
 
             Debug.Log("LoadGameBookConfigAsync end");
 
-            _loadingUiController.SetProgress(1f);
+            _loadingUiController.SetPercents(1f);
             if (_loadingUiController != null)
             {
                 _popupManager.DisposePopup(_loadingUiController);

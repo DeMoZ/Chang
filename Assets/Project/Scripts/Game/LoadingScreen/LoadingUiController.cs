@@ -14,8 +14,9 @@ namespace Chang
         private readonly LoadingUiModel _model;
 
         private CancellationTokenSource _cts;
-        private DMZState<float> _progress = new();
-        
+        private DMZState<float> _percents = new();
+        private DMZState<string> _bytes = new();
+
         public LoadingUiModel Model => _model;
         public Action OnDispose;
 
@@ -27,7 +28,7 @@ namespace Chang
             _view.EnableBlocker(true);
             Update(_model);
 
-            _progress.Subscribe(SetViewProgress);
+            _percents.Subscribe(SetViewProgress);
         }
 
         public void Dispose()
@@ -35,13 +36,13 @@ namespace Chang
             _cts?.Cancel();
             _cts?.Dispose();
 
-            _progress.Unsubscribe(SetViewProgress);
-            _progress.Dispose();
-            _progress = null;
+            _percents.Unsubscribe(SetViewProgress);
+            _percents.Dispose();
+            _percents = null;
 
             _model.Dispose();
             UnityEngine.Object.Destroy(_view.gameObject);
-            
+
             OnDispose?.Invoke();
             OnDispose = null;
         }
@@ -60,10 +61,23 @@ namespace Chang
             _view.gameObject.SetActive(true);
         }
 
-        public void SetProgress(float progress)
+        public void SetPercents(float progress)
         {
             _cts?.Cancel();
-            _progress.Value = progress;
+            _percents.Value = progress;
+        }
+
+        public void SetBytes(float current, float total)
+        {
+            _cts?.Cancel();
+            _bytes.Value = $"{current}/{total}";
+        }
+
+        public void SetPercentsAndBytes(float current, float total)
+        {
+            _cts?.Cancel();
+            SetPercents(current / total);
+            SetBytes(current, total);
         }
 
         public async UniTaskVoid SimulateProgress(float duration, float from = 0, float to = 1)
@@ -73,10 +87,10 @@ namespace Chang
 
             if (from < 0)
             {
-                from = _progress.Value;
+                from = _percents.Value;
             }
 
-            _progress.Value = from;
+            _percents.Value = from;
             float elapsed = 0f;
 
             try
@@ -87,13 +101,13 @@ namespace Chang
                     {
                         return;
                     }
-                    
+
                     await UniTask.Yield(PlayerLoopTiming.Update, _cts.Token);
                     elapsed += Time.deltaTime;
-                    _progress.Value = Mathf.Lerp(from, to, elapsed / duration);
+                    _percents.Value = Mathf.Lerp(from, to, elapsed / duration);
                 }
-                
-                _progress.Value = to;
+
+                _percents.Value = to;
             }
             catch (OperationCanceledException e)
             {

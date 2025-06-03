@@ -57,8 +57,8 @@ namespace Chang
 
                 //1 download addressables Base
 
-                await _assetDownloader.PreloadAtGameStartAsync(percent => { loadingUiController.SetProgress(percent); }, _cts.Token);
-                loadingUiController.SetProgress(1);
+                await _assetDownloader.PreloadAtGameStartAsync(percent => { loadingUiController.SetPercents(percent); }, _cts.Token);
+                loadingUiController.SetPercents(1);
 
                 //2 authorization   
                 await _authorizationService.AuthenticateAsync();

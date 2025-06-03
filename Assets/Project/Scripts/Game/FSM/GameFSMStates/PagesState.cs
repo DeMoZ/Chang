@@ -53,14 +53,14 @@ namespace Chang.FSM
             _pagesContentProvider = new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager);
             EnterAsync(_cts.Token).Forget();
         }
-    
+
         private async UniTask EnterAsync(CancellationToken ct)
         {
-            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent);
+            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent | LoadingElements.Bytes);
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
-            loadingUiController.SetProgress(0);
+            loadingUiController.SetPercentsAndBytes(0, 0);
 
-            await PreloadContentAsync(loadingUiController.SetProgress, ct);
+            await PreloadContentAsync(loadingUiController.SetPercentsAndBytes, ct);
 
             _screenManager.SetActivePagesContainer(true);
 
@@ -81,7 +81,7 @@ namespace Chang.FSM
             _pagesFsm = new PagesFSM(_diContainer, _pagesBus, _pagesContentProvider);
             _pagesFsm.Initialize();
 
-            loadingUiController.SetProgress(100);
+            loadingUiController.SetPercents(1);
             _popupManager.DisposePopup(loadingUiController);
 
             OnContinueAsync(ct).Forget();
@@ -104,9 +104,9 @@ namespace Chang.FSM
             _gameOverlayController.OnExitToLobby();
         }
 
-        private async UniTask PreloadContentAsync(Action<float> percents, CancellationToken ct)
+        private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
         {
-            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentLesson.SimpleQuestions, percents, ct);
+            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentLesson.SimpleQuestions, progress, ct);
         }
 
         private void ExitToLobby()

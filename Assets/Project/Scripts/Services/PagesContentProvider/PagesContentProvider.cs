@@ -21,7 +21,7 @@ namespace Project.Services.PagesContentProvider
         private readonly WordPathHelper _wordPathHelper;
         private readonly PopupManager _popupManager;
 
-        private Action<float> _percents;
+        private Action<float, float> _progress;
 
         private Dictionary<string, IDisposableAsset> Content { get; set; }
 
@@ -52,25 +52,25 @@ namespace Project.Services.PagesContentProvider
             // no clear cache on pages switch, so don't implement this method
         }
 
-        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float> percents, CancellationToken ct)
+        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> progress, CancellationToken ct)
         {
-            _percents = percents;
+            _progress = progress;
 
-            HashSet<string> configKeys = new();
-            HashSet<string> soundKeys = new();
             HashSet<string> imageKeys = new();
+            HashSet<string> soundKeys = new();
+            HashSet<string> configKeys = new();
 
             HashSet<string> totalKeys = new();
             foreach (ISimpleQuestion quest in questions)
             {
-                configKeys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
-                soundKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
                 // todo chang imageKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
+                soundKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
+                configKeys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
             }
 
-            totalKeys.UnionWith(configKeys);
-            totalKeys.UnionWith(soundKeys);
             totalKeys.UnionWith(imageKeys);
+            totalKeys.UnionWith(soundKeys);
+            totalKeys.UnionWith(configKeys);
 
             long totalToLoad = await GetDownloadSize(totalKeys, ct);
 
@@ -80,28 +80,12 @@ namespace Project.Services.PagesContentProvider
                 return;
             }
 
-            Dictionary<string, IDisposableAsset> configs = new();
-            Dictionary<string, IDisposableAsset> sounds = new();
             // todo chang Dictionary<string, IDisposableAsset> images = new();
+            Dictionary<string, IDisposableAsset> sounds = new();
+            Dictionary<string, IDisposableAsset> configs = new();
 
             long currentToLoad = 0;
             long downloadSize = 0;
-
-            downloadSize = await GetDownloadSize(configKeys, ct);
-            if (downloadSize > 0)
-            {
-                currentToLoad += downloadSize;
-                configs = await Preload<PhraseConfig>(configKeys, progress => { CountProgress(progress, currentToLoad, totalToLoad); },
-                    ct);
-            }
-
-            downloadSize = await GetDownloadSize(soundKeys, ct);
-            if (downloadSize > 0)
-            {
-                currentToLoad += downloadSize;
-                sounds = await Preload<AudioClip>(soundKeys, progress => { CountProgress(progress, currentToLoad, totalToLoad); },
-                    ct);
-            }
 
             // todo chang
             // downloadSize = await GetDownloadSize(imageKeys, ct);
@@ -112,9 +96,25 @@ namespace Project.Services.PagesContentProvider
             //      ct);
             // }
 
-            Merge(Content, configs);
-            Merge(Content, sounds);
+            downloadSize = await GetDownloadSize(soundKeys, ct);
+            if (downloadSize > 0)
+            {
+                currentToLoad += downloadSize;
+                sounds = await Preload<AudioClip>(soundKeys, bytes => { CountProgress(bytes, currentToLoad, totalToLoad); },
+                    ct);
+            }
+
+            downloadSize = await GetDownloadSize(configKeys, ct);
+            if (downloadSize > 0)
+            {
+                currentToLoad += downloadSize;
+                configs = await Preload<PhraseConfig>(configKeys, bytes => { CountProgress(bytes, currentToLoad, totalToLoad); },
+                    ct);
+            }
+
             // todo chang Merge(Content,images);
+            Merge(Content, sounds);
+            Merge(Content, configs);
         }
 
         public async UniTask GetContentAsync(ISimpleQuestion nextQuestion, CancellationToken ct)
@@ -225,13 +225,12 @@ namespace Project.Services.PagesContentProvider
             }
         }
 
-        private void CountProgress(float progress, long currentLoad, long totalToLoad)
+        private void CountProgress(float bytes, long currentLoad, long totalToLoad)
         {
-            var percent = (currentLoad + progress) / totalToLoad;
-            _percents?.Invoke(percent);
+            _progress?.Invoke(currentLoad + bytes, totalToLoad);
         }
 
-        private async UniTask<Dictionary<string, IDisposableAsset>> Preload<T>(HashSet<string> keys, Action<float> progress, CancellationToken ct)
+        private async UniTask<Dictionary<string, IDisposableAsset>> Preload<T>(HashSet<string> keys, Action<float> bytes, CancellationToken ct)
             where T : class
         {
             Debug.Log($"{nameof(Preload)}");
@@ -252,7 +251,7 @@ namespace Project.Services.PagesContentProvider
                     progress: Progress.Create<float>(p =>
                     {
                         individualProgress[index] = p;
-                        progress?.Invoke(individualProgress.Sum());
+                        bytes?.Invoke(individualProgress.Sum());
                     }), cancellationToken: ct));
             }
 
