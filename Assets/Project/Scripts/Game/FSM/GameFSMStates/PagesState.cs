@@ -125,11 +125,12 @@ namespace Chang.FSM
             OnCheckAsync(_cts.Token).Forget();
         }
 
-        private async UniTask OnCheckAsync(CancellationToken ct)
+        private async UniTaskVoid OnCheckAsync(CancellationToken ct)
         {
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
-
+            await UniTask.Yield(ct);
+            
             switch (_pagesFsm.CurrentStateType)
             {
                 case QuestionType.DemonstrationWord:
