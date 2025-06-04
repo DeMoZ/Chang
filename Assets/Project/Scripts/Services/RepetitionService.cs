@@ -20,16 +20,20 @@ namespace Chang.Services
             _profileService = profileService;
         }
 
-        public List<QuestLog> GetSectionRepetition(int amount, string key)
+        public List<QuestLog> GetSectionRepetition(int amount, string section)
         {
             var language = _profileService.ProfileData.LearnLanguage;
             Dictionary<string, QuestLog> log = _profileService.ProgressData.GetQuestLogs(language);
+
             var progressList = log
                 .Select(q => q.Value)
-                .Where(q => q.Language == language && string.Equals(q.Section, key)).ToList();
+                .Where(q => string.Equals(q.Section, section))
+                .OrderByDescending(OrderByWeight)
+                .Take(amount)
+                .ToList();
 
             progressList.Shuffle();
-            return progressList.Take(amount).ToList();
+            return progressList;
         }
         
         public List<QuestLog> GetGeneralRepetition(int amount)
@@ -43,6 +47,7 @@ namespace Chang.Services
                 .Take(amount)
                 .ToList();
 
+            progressList.Shuffle();
             return progressList;
         }
 

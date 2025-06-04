@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Chang.Profile;
 using Chang.Services;
 using UnityEngine;
@@ -75,15 +74,15 @@ namespace Chang.GameBook
             }
         }
 
-        private Color GetLessonColor(List<ISimpleQuestion> questions)
+        private Color GetLessonColor(SimpleLessonData lessonData)
         {
             float sum = 0;
 
-            foreach (ISimpleQuestion question in questions)
+            foreach (ISimpleQuestion question in lessonData.Questions)
             {
                 if (question is SimpleQuestSelectWord selectWord)
                 {
-                    sum += (float)_profileService.GetMark(selectWord.CorrectWordFileName) / ProjectConstants.MARK_MAX;
+                    sum += (float)_profileService.GetMark(selectWord.CorrectWordFileName) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
                 }
                 else
                 {
@@ -91,6 +90,7 @@ namespace Chang.GameBook
                 }
             }
 
+            // Debug.Log($"GetLessonColor for {lessonData.Section}, {lessonData.Name} sum: {sum}");
             return _view.GetLessonColor(sum);
         }
 
@@ -160,7 +160,8 @@ namespace Chang.GameBook
 
                 lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
                 lessonItem.name = $"Item {key}";
-                lessonItem.SetColor(GetLessonColor(section.Lessons[m].Questions));
+                var color = GetLessonColor(section.Lessons[m]);
+                lessonItem.SetColor(color);
             }
         }
 
