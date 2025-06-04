@@ -132,7 +132,7 @@ namespace Chang.GameBook
                 repetitionsCount > 0 && _profileService.ReorderedSections.ContainsKey(reorderedSectionKey),
                 repetitionsCount > 0);
 
-            sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_AMOUNT);
+            sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
 
             if (_profileService.ReorderedSections.TryGetValue(reorderedSectionKey, out var reorderedSection))
             {

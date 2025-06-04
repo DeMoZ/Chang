@@ -27,6 +27,7 @@ public static class ProjectConstants
     public const int MARK_MIN = 0;
     public const int MARK_MAX = 10;
     
+    public const int SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT = 4;
     public const int SECTION_REPETITION_AMOUNT = 10;
     public const int GENERAL_REPETITION_AMOUNT = 10;
 }

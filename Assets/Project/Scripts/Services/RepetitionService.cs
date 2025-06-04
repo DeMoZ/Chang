@@ -31,42 +31,7 @@ namespace Chang.Services
             progressList.Shuffle();
             return progressList.Take(amount).ToList();
         }
-
-        /// <summary>
-        /// First iteration of the repetition filter
-        /// </summary>
-        /// <returns></returns>
-        // todo chang add more logic to the filter
-        public List<QuestLog> _GetGeneralRepetition(int amount)
-        {
-            // todo chang what to count?
-            // 1. Success sequence
-            // 2. Date
-            // 3. Mark
-            
-            var language = _profileService.ProfileData.LearnLanguage;
-            Dictionary<string, QuestLog> log = _profileService.ProgressData.GetQuestLogs(language);
-            var progressList = log
-                .Select(q => q.Value)
-                .Where(q => q.SuccessSequence < 10)
-                .OrderBy(q => q.SuccessSequence);
-
-            // var sortedWords = words
-            //     .OrderBy(word => word.Mark)
-            //     .ThenBy(word => word.LastReviewed)
-            //     .Take(10)
-            //     .ToList();
-
-            
-            // todo chang should be sorted by the sequence and time  too
-            var sortedList = progressList.OrderBy(w => w.Mark)
-                //.ThenBy(w => w.UtcTime)
-                .Take(amount)
-                .ToList();
-
-            return sortedList;
-        }
-
+        
         public List<QuestLog> GetGeneralRepetition(int amount)
         {
             Languages language = _profileService.ProfileData.LearnLanguage;
