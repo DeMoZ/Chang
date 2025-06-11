@@ -1,5 +1,7 @@
 using System;
+using System.Threading;
 using Chang.Services;
+using Cysharp.Threading.Tasks;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -36,9 +38,9 @@ namespace Chang
             _view.Init(_mainScreenBus.OnRepeatClicked);
         }
 
-        public void Set()
+        public async UniTask SetAsync(CancellationToken ct)
         {
-            var sortedList = _repetitionService.GetGeneralRepetition(ShowLogLimitAmount);
+            var sortedList = await _repetitionService.GetGeneralRepetitionAsync(ShowLogLimitAmount, ct);
             _view.Set(sortedList);
         }
 

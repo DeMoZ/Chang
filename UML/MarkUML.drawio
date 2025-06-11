@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1377" dy="412" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2339" dy="1132" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -707,6 +707,11 @@
         <mxCell id="Lu0rhVknPE36FcJh_iOr-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Lu0rhVknPE36FcJh_iOr-8" target="Lu0rhVknPE36FcJh_iOr-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Lu0rhVknPE36FcJh_iOr-8" target="Lu0rhVknPE36FcJh_iOr-28">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="Lu0rhVknPE36FcJh_iOr-8" value="&lt;b&gt;LobbyController&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="40" y="830" width="141.82" height="20" as="geometry" />
         </mxCell>
@@ -722,20 +727,44 @@
         <mxCell id="Lu0rhVknPE36FcJh_iOr-11" value="&lt;b&gt;RepetitionService&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="250" y="840" width="141.82" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Lu0rhVknPE36FcJh_iOr-12" value="&lt;div&gt;GetGeneralRepetition&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="250" y="870" width="149.09" height="20" as="geometry" />
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-12" value="&lt;div&gt;GetGeneralRepetitionAsync&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="250" y="880" width="149.09" height="20" as="geometry" />
         </mxCell>
         <mxCell id="Lu0rhVknPE36FcJh_iOr-14" value="&lt;div&gt;MakeRepetitionAsync&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="36.36" y="930" width="149.09" height="20" as="geometry" />
+          <mxGeometry x="36.37" y="910" width="149.09" height="20" as="geometry" />
         </mxCell>
         <mxCell id="Lu0rhVknPE36FcJh_iOr-16" value="Returns List&amp;lt;QuestLog&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontSize=10;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="260.91" y="890" width="120" height="20" as="geometry" />
+          <mxGeometry x="260.91" y="900" width="120" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Lu0rhVknPE36FcJh_iOr-17" value="take QuestLogs &lt;b&gt;success sequence&lt;/b&gt; &amp;lt; 10" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontSize=10;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="270" y="910" width="198.75" height="20" as="geometry" />
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-19" value="take sort by&amp;nbsp;&lt;b style=&quot;text-align: center;&quot;&gt;OrderByWeight&lt;/b&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;take amount&lt;br&gt;Shuffle&lt;b&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontSize=10;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="270" y="920" width="140" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Lu0rhVknPE36FcJh_iOr-18" value="take QuestLogs sort by &lt;b&gt;success sequence&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontSize=10;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="270" y="930" width="198.75" height="20" as="geometry" />
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-21" value="Returns List&amp;lt;QuestLog&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontSize=10;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="260.91" y="1000" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-22" value="take Section log&lt;br&gt;take sort by&amp;nbsp;&lt;span style=&quot;text-align: center;&quot;&gt;&lt;b style=&quot;&quot;&gt;&lt;font&gt;OrderByWeight&lt;/font&gt;&lt;/b&gt;&lt;/span&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;take amount&lt;br&gt;Shuffle&lt;b&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontSize=10;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="270" y="1020" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-23" value="&lt;div&gt;OrderByWeight&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="250" y="1090" width="149.09" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-24" value="time = (TimeNow-LogTime).TotalMinutes * TimeWeight&lt;br&gt;mark = logMark*MarkWeight&lt;br&gt;sequence = Sequence*SequenseWeight&lt;br&gt;result = time + mark + sequence" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontSize=10;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="270" y="1110" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-25" value="&lt;div&gt;GetSectionRepetitionAsync&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="250" y="980" width="149.09" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" source="Lu0rhVknPE36FcJh_iOr-28" target="Lu0rhVknPE36FcJh_iOr-29" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Lu0rhVknPE36FcJh_iOr-28" target="Lu0rhVknPE36FcJh_iOr-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-28" value="&lt;div&gt;OnSectionRepetitionClick&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="40" y="980" width="149.09" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Lu0rhVknPE36FcJh_iOr-29" value="&lt;div&gt;MakeRepetitionAsync&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="40.01" y="1010" width="149.09" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Chang.Profile;
 using Chang.Services;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -18,6 +20,7 @@ namespace Chang.GameBook
 
         private Dictionary<string, SimpleLessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
+        private CancellationTokenSource _cts;
 
         [Inject]
         public GameBookController(
@@ -32,22 +35,28 @@ namespace Chang.GameBook
             _view = view;
             _profileService = profileService;
             _repetitionService = repetitionService;
-        }
-
-        public void Dispose()
-        {
+            
+            // todo chang local cts should be initialized in enter state and disposed in exit state
+            // need to provide this methods first
+            _cts = new CancellationTokenSource();
         }
 
         public void Init()
         {
         }
-
+        
+        public void Dispose()
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+        }
+        
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
         }
 
-        public void Set()
+        public async UniTask SetAsync(CancellationToken ct)
         {
             _sectionBlocks.Clear();
             _lessons.Clear();
@@ -70,7 +79,7 @@ namespace Chang.GameBook
                 sectionBlock.SectionView.name = $"Section_{simpleSection.Section}";
                 sectionBlock.SectionView.SetBaseColor(baseColor);
 
-                PopulateSection(simpleSection, sectionBlock);
+                await PopulateSectionAsync(simpleSection, sectionBlock, ct);
             }
         }
 
@@ -118,12 +127,13 @@ namespace Chang.GameBook
                 }
             }
 
-            PopulateSection(section, sectionBlock);
+            PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
         }
 
-        private void PopulateSection(SimpleSection section, SectionBlock sectionBlock)
+        private async UniTask PopulateSectionAsync(SimpleSection section, SectionBlock sectionBlock, CancellationToken ct)
         {
-            List<QuestLog> repetitions = _repetitionService.GetSectionRepetition(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section);
+            List<QuestLog> repetitions = await _repetitionService
+                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section, ct);
 
             int repetitionsCount = repetitions.Count;
             string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);

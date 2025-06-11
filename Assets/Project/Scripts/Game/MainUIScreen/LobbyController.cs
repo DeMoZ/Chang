@@ -92,21 +92,26 @@ namespace Chang
 
         private void OnToggleSelected(bool isOn, MainTabType tabType)
         {
+            OnToggleSelectedAsync(isOn, tabType, _cts.Token).Forget();
+        }
+        private async UniTaskVoid OnToggleSelectedAsync(bool isOn, MainTabType tabType, CancellationToken ct)
+        {
             if (_isLoading || !isOn)
                 return;
 
+            // todo chang show loading animation ?
             switch (tabType)
             {
                 case MainTabType.Lessons:
-                    _gameBookController.Set();
+                    await _gameBookController.SetAsync(ct);
                     break;
 
                 case MainTabType.Repetition:
-                    _repetitionController.Set();
+                    await _repetitionController.SetAsync(ct);
                     break;
 
                 case MainTabType.Profile:
-                    _profileController.Set();
+                    await _profileController.SetAsync(ct);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tabType), tabType, null);
@@ -157,19 +162,31 @@ namespace Chang
 
         private void OnGameBookSectionRepeatClicked(string section)
         {
+            OnGameBookSectionRepeatClickedAsync(section, _cts.Token).Forget();
+        }
+
+        private async UniTaskVoid OnGameBookSectionRepeatClickedAsync(string section, CancellationToken ct)
+        {
             if (_isLoading)
                 return;
 
-            var repetitions = _repetitionService.GetSectionRepetition(ProjectConstants.SECTION_REPETITION_AMOUNT, section);
+            // todo chang show loading animation ?
+            var repetitions = await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
         private void OnGeneralRepeatClicked()
         {
+            OnGeneralRepeatClickedAsync(_cts.Token).Forget();
+        }
+        
+        private async UniTaskVoid OnGeneralRepeatClickedAsync(CancellationToken ct)
+        {
             if (_isLoading)
                 return;
 
-            var repetitions = _repetitionService.GetGeneralRepetition(ProjectConstants.GENERAL_REPETITION_AMOUNT);
+            // todo chang show loading animation ?
+            var repetitions = await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 

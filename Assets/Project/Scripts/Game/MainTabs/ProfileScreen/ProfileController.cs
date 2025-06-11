@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using Popup;
@@ -117,8 +118,9 @@ namespace Chang
             _view.SetUserName(_profileService.ProfileData.Name);
         }
 
-        public void Set()
+        public async UniTask SetAsync(CancellationToken ct)
         {
+            await UniTask.NextFrame(ct);
         }
     }
 }

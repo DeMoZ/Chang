@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Chang.Profile;
+using Cysharp.Threading.Tasks;
 using Zenject;
 
 namespace Chang.Services
@@ -20,35 +22,63 @@ namespace Chang.Services
             _profileService = profileService;
         }
 
-        public List<QuestLog> GetSectionRepetition(int amount, string section)
+        public async UniTask<List<QuestLog>> GetSectionRepetitionAsync(int amount, string section, CancellationToken ct)
         {
             var language = _profileService.ProfileData.LearnLanguage;
             Dictionary<string, QuestLog> log = _profileService.ProgressData.GetQuestLogs(language);
 
-            var progressList = log
+            // todo chang issues with thread pool in web build. How to make sorting and filtering on main thread faster ?
+            // return await UniTask.RunOnThreadPool(() =>
+            // {
+            //     ct.ThrowIfCancellationRequested();
+            //
+            //     var progressList = log
+            //         .Select(q => q.Value)
+            //         .Where(q => string.Equals(q.Section, section))
+            //         .OrderByDescending(OrderByWeight)
+            //         .Take(amount)
+            //         .ToList();
+            //
+            //     ct.ThrowIfCancellationRequested();
+            //     progressList.Shuffle();
+            //     return progressList;
+            // }, cancellationToken: ct);
+            await UniTask.Yield(ct);
+            return log
                 .Select(q => q.Value)
                 .Where(q => string.Equals(q.Section, section))
                 .OrderByDescending(OrderByWeight)
                 .Take(amount)
                 .ToList();
-
-            progressList.Shuffle();
-            return progressList;
         }
-        
-        public List<QuestLog> GetGeneralRepetition(int amount)
+
+        public async UniTask<List<QuestLog>> GetGeneralRepetitionAsync(int amount, CancellationToken ct)
         {
             Languages language = _profileService.ProfileData.LearnLanguage;
             Dictionary<string, QuestLog> log = _profileService.ProgressData.GetQuestLogs(language);
-
-            var progressList = log
+            
+            // todo chang issues with thread pool in web build. How to make sorting and filtering on main thread faster ?
+            // return await UniTask.RunOnThreadPool(() =>
+            // {
+            //     ct.ThrowIfCancellationRequested();
+            //
+            //     var progressList = log
+            //         .Select(q => q.Value)
+            //         .OrderByDescending(OrderByWeight)
+            //         .Take(amount)
+            //         .ToList();
+            //     
+            //     ct.ThrowIfCancellationRequested();
+            //     progressList.Shuffle();
+            //     return progressList;
+            // }, cancellationToken: ct);
+            
+            await UniTask.Yield(ct);
+            return log
                 .Select(q => q.Value)
                 .OrderByDescending(OrderByWeight)
                 .Take(amount)
                 .ToList();
-
-            progressList.Shuffle();
-            return progressList;
         }
 
         private float OrderByWeight(QuestLog questLog)
