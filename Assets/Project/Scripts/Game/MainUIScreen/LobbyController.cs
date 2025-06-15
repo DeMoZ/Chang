@@ -192,7 +192,7 @@ namespace Chang
 
         private async UniTaskVoid MakeRepetitionAsync(List<QuestLog> repetitions, CancellationToken ct)
         {
-            if (repetitions.Count < 4)
+            if (repetitions.Count < ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT)
             {
                 Debug.LogWarning("Not enough logs for general repetition");
                 return;
