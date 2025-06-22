@@ -47,7 +47,7 @@ namespace DMZ.FSM
 
             if (!nextStateType.Equals(_currentState.Value.Type))
             {
-                _currentState.Value.Exit();
+                _currentState.Value?.Exit();
                 _currentState.Value = _states[nextStateType];
                 _currentState.Value.Enter();
             }

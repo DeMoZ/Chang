@@ -14,27 +14,6 @@ namespace DMZ.FSM
 
         protected abstract void Init();
 
-        // protected FSMResultBase()
-        // {
-        // }
-        //
-        // public void OnEnter()
-        // {
-        //     _currentState.Value = _states[_defaultStateType];
-        //     _currentState.Value.OnStateResult += OnStateResult;
-        //
-        //     _currentState.Value.Enter();
-        // }
-        //
-        // public void OnExit()
-        // {
-        //     _currentState.Value.OnStateResult -= OnStateResult;
-        //
-        //     _currentState.Value.Exit();
-        // }
-
-        //public IResultState<T> GetState => _currentState.Value;
-
         public void Dispose()
         {
             _currentState.Unsubscribe(state => OnStateChanged(state.Type));
@@ -47,8 +26,7 @@ namespace DMZ.FSM
         /// <param name="stateType"></param>
         protected void OnStateResult(T stateType)
         {
-            _currentState.Value.Exit();
-
+            _currentState.Value?.Exit();
             _currentState.Value = _states[stateType];
             _currentState.Value.Enter();
         }
