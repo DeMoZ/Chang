@@ -17,15 +17,7 @@ namespace Chang.FSM
         {
             _diContainer = diContainer;
             _gameBus = gameBus;
-        }
-
-        public void Initialize()
-        {
-            Init();
-        }
-
-        protected override void Init()
-        {
+            
             var lobbyState = new LobbyState(_gameBus, OnStateResult);
             var pagesState = new PagesState(_gameBus, OnStateResult);
 
@@ -41,6 +33,15 @@ namespace Chang.FSM
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));
+        }
+
+        public void Initialize()
+        {
+            Init();
+        }
+
+        protected override void Init()
+        {
             _currentState.Value = _states[_defaultStateType];
             _currentState.Value.Enter();
         }
