@@ -1,0 +1,477 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c571a11817261443ab6922debec7b8ae, type: 3}
+  m_Name: 7_ThaiPromptsBank
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::PromptsBank
+  _folders:
+  - Assets/Project/Resources_Bundled/Thai/Words/WeekDays
+  - Assets/Project/Resources_Bundled/Thai/Words/Fruits
+  - Assets/Project/Resources_Bundled/Thai/Words/Beverages
+  - Assets/Project/Resources_Bundled/Thai/Words/Food
+  - Assets/Project/Resources_Bundled/Thai/Words/Colors
+  - Assets/Project/Resources_Bundled/Thai/Words/Ocupation
+  - Assets/Project/Resources_Bundled/Thai/Words/Introduce
+  - Assets/Project/Resources_Bundled/Thai/Words/Greetings
+  - Assets/Project/Resources_Bundled/Thai/Words/Places
+  - Assets/Project/Resources_Bundled/Thai/Words/FamilyAndPeople
+  - Assets/Project/Resources_Bundled/Thai/Words/Clothes
+  - Assets/Project/Resources_Bundled/Thai/Words/PointThings
+  - Assets/Project/Resources_Bundled/Thai/Words/Numbers
+  - Assets/Project/Resources_Bundled/Thai/Words/Shopping
+  - Assets/Project/Resources_Bundled/Thai/Words/Months
+  - Assets/Project/Resources_Bundled/Thai/Words/HowToCook
+  - Assets/Project/Resources_Bundled/Thai/Words/Sweetness
+  - Assets/Project/Resources_Bundled/Thai/Words/Prepositions
+  _promptItems:
+  - Section: Introduce
+    Text: Make me a picture 192*192 picell representing word "****" and the background
+      should be transparate. The drawing should looks like hand writen
+    Words:
+    - Value: (Me, you) too!
+    - Value: A polite particle
+    - Value: Come from
+    - Value: Country
+    - Value: female, yes
+    - Value: Hello
+    - Value: male, yes
+    - Value: Name
+    - Value: Nice to meet you
+    - Value: To be + People/Person from...
+    - Value: What?
+    - Value: What about...?
+    - Value: Where
+  - Section: WeekDays
+    Text: 
+    Words:
+    - Value: Christmas's day
+    - Value: Friday
+    - Value: Holiday, day off
+    - Value: Long weekend
+    - Value: Monday
+    - Value: New year's day
+    - Value: Public holiday
+    - Value: Saturday
+    - Value: Sunday
+    - Value: Thai New year's day
+    - Value: 'The day after
+
+        tomorrow'
+    - Value: The day before yesterday
+    - Value: Thursday
+    - Value: Today
+    - Value: Tomorrow
+    - Value: Tuesday
+    - Value: Wednesday
+    - Value: Week
+    - Value: Weekend
+    - Value: Yesterday
+  - Section: Fruits
+    Text: 
+    Words:
+    - Value: Banana
+    - Value: Coconut
+    - Value: Durian
+    - Value: Guava
+    - Value: Mango
+    - Value: Orange
+    - Value: Papaya
+    - Value: Pineapple
+    - Value: Watermelon
+  - Section: Beverages
+    Text: 
+    Words:
+    - Value: ... Juice
+    - Value: Beer
+    - Value: Big, Large
+    - Value: Bottle
+    - Value: Bucket
+    - Value: Can
+    - Value: 'Classifiers for
+
+        small items'
+    - Value: Cocoa
+    - Value: Coffee
+    - Value: Cold (for drink), with ice
+    - Value: Glass, mug, cup
+    - Value: Green tea
+    - Value: Hot
+    - Value: Ice
+    - Value: Lemon tea
+    - Value: Liquor
+    - Value: Medium
+    - Value: Milk
+    - Value: 'Not cold,
+
+        Room-temperature'
+    - Value: Red wine
+    - Value: Small
+    - Value: Smoothie, Blend
+    - Value: Soda
+    - Value: Tea
+    - Value: Thai tea
+    - Value: Water (Normal)
+    - Value: White wine
+  - Section: Food
+    Text: 
+    Words:
+    - Value: Beef
+    - Value: Boiled egg
+    - Value: Cabbage
+    - Value: Carrot
+    - Value: Chicken
+    - Value: Chili
+    - Value: Chinese kale
+    - Value: Crab
+    - Value: Crispy pork
+    - Value: Cucumber
+    - Value: Fish
+    - Value: Fish sauce
+    - Value: Fried egg
+    - Value: Fried rice
+    - Value: Garlic
+    - Value: Green curry
+    - Value: Light soy sauce
+    - Value: Lime
+    - Value: Long bean
+    - Value: Meat
+    - Value: Minced pork
+    - Value: Morning glory
+    - Value: Mushroom
+    - Value: Noodle soup
+    - Value: Omelette
+    - Value: Onion
+    - Value: Papaya salad (Central Thai style)
+    - Value: Pepper
+    - Value: Pork
+    - Value: Potato
+    - Value: Salt
+    - Value: Seafood
+    - Value: Seasoning
+    - Value: Shrimp
+    - Value: Soy sauce
+    - Value: Spicy sour soup
+    - Value: Squid
+    - Value: Stir fried basil
+    - Value: Stir fried mixed vegetables
+    - Value: Stir fried noodles with peanuts
+    - Value: Sugar
+    - Value: Tomato
+    - Value: Vegetable
+    - Value: Vinegar
+  - Section: Colors
+    Text: 
+    Words:
+    - Value: Black
+    - Value: Blue
+    - Value: Brown
+    - Value: Color
+    - Value: Dark
+    - Value: Dark blue
+    - Value: Green
+    - Value: Grey
+    - Value: Light
+    - Value: Orange
+    - Value: Pink
+    - Value: Purple
+    - Value: Red
+    - Value: White
+    - Value: Yellow
+  - Section: Ocupation
+    Text: 
+    Words:
+    - Value: Dentist
+    - Value: Doctor
+    - Value: Maid, Housewife
+    - Value: Masseuse
+    - Value: Pharmacist
+    - Value: Police
+    - Value: Security guard
+    - Value: Teacher
+  - Section: Greetings
+    Text: 
+    Words:
+    - Value: Bye (Informal)
+    - Value: Drive safe
+    - Value: Go home safely
+    - Value: Good bye (Formal)
+    - Value: Have you eaten yet?
+    - Value: Hi
+    - Value: How are you?
+    - Value: How is it going?
+    - Value: I am about to go home.
+    - Value: I am good
+    - Value: I am leaving, I have to go.
+    - Value: I have eaten (already)
+    - Value: I haven't eaten yet
+    - Value: I'm not (so) good
+    - Value: I'm sick
+    - Value: I went... / I went to...
+    - Value: I will go / I am going to ...
+    - Value: May I be excused? (Formal)
+    - Value: Not yet
+    - Value: Safe travel
+    - Value: See you again, See you later
+    - Value: So so
+    - Value: Where are you going?
+    - Value: "Where did you go? / \nWhere are you coming from?"
+  - Section: Places
+    Text: 
+    Words:
+    - Value: '...
+
+        Shop'
+    - Value: Airport
+    - Value: Bakery shop
+    - Value: Bank
+    - Value: Barber
+    - Value: Bedroom
+    - Value: Book store
+    - Value: Bus stop
+    - Value: Church
+    - Value: Coffee shop
+    - Value: Company
+    - Value: Dental clinic
+    - Value: Embassy
+    - Value: Garage
+    - Value: Gas station
+    - Value: Grocery store
+    - Value: Hair salon
+    - Value: Hospital
+    - Value: Hotel
+    - Value: House
+    - Value: Immigration
+    - Value: Kitchen
+    - Value: Living room
+    - Value: Market
+    - Value: Massage shop
+    - Value: Minitruck stand
+    - Value: Motorcycle stand
+    - Value: Nail salon
+    - Value: Pharmacy
+    - Value: Photo shop
+    - Value: Police station
+    - Value: Post office
+    - Value: Restaurant
+    - Value: Restroom
+    - Value: School
+    - Value: Shopping mall
+    - Value: Sky train station
+    - Value: Sport court/field
+    - Value: Stadium
+    - Value: Station
+    - Value: Swimming pool
+    - Value: Tailor shop
+    - Value: Taxi stand
+    - Value: Temple
+    - Value: The beach (dry area)
+    - Value: The sea / the beach
+    - Value: Train station
+    - Value: Transportation stand / Queue
+    - Value: University
+    - Value: Van stand
+    - Value: Workplace
+  - Section: FamilyAndPeople
+    Text: 
+    Words:
+    - Value: Boss
+    - Value: Chief
+    - Value: Colleague
+    - Value: Dad
+    - Value: Daughter
+    - Value: Friend
+    - Value: Friend at.../from... +place
+    - Value: Girlfriend, Boyfriend
+    - Value: Grand children
+    - Value: Grandma (Dad side)
+    - Value: Grandma (Mom side)
+    - Value: Grandpa (Dad side)
+    - Value: Grandpa (Mom side)
+    - Value: Husband
+    - Value: In-law (for female)
+    - Value: In-law (for male)
+    - Value: Kid of someone
+    - Value: Mom
+    - Value: Neighbor
+    - Value: Older brother
+    - Value: Older brother of mom & dad
+    - Value: Older sibling
+    - Value: Older sister
+    - Value: Older sister of mom & dad
+    - Value: People at...
+    - Value: Son
+    - Value: Wife
+    - Value: Younger brother
+    - Value: Younger brother - Sister of Mom
+    - Value: Younger sibling
+    - Value: Younger sister
+  - Section: Clothes
+    Text: 
+    Words:
+    - Value: Clothes
+    - Value: Dress
+    - Value: Jeans
+    - Value: Pants
+    - Value: Polo shirt
+    - Value: Shirt
+    - Value: Short pants
+    - Value: Skirt
+    - Value: Sweater
+    - Value: T-Shirt
+    - Value: Top (clothes)
+    - Value: Trousers
+  - Section: PointThings
+    Text: 
+    Words:
+    - Value: Over there
+    - Value: That
+    - Value: That one
+    - Value: That one over there
+    - Value: This
+    - Value: This one
+  - Section: Numbers
+    Text: 
+    Words:
+    - Value: 0
+    - Value: 1
+    - Value: 1,000
+    - Value: 1,000,000
+    - Value: 2
+    - Value: 3
+    - Value: 4
+    - Value: 5
+    - Value: 6
+    - Value: 7
+    - Value: 8
+    - Value: 9
+    - Value: 10
+    - Value: 10,000
+    - Value: 10,000,000
+    - Value: 11
+    - Value: 20
+    - Value: 21
+    - Value: 30
+    - Value: 31
+    - Value: 40
+    - Value: 41
+    - Value: 50
+    - Value: 51
+    - Value: 60
+    - Value: 61
+    - Value: 70
+    - Value: 71
+    - Value: 80
+    - Value: 81
+    - Value: 90
+    - Value: 91
+    - Value: 100
+    - Value: 100,000
+  - Section: Shopping
+    Text: 
+    Words:
+    - Value: A classifier for clothes
+    - Value: Beautiful
+    - Value: Big
+    - Value: Brand
+    - Value: Can
+    - Value: Can?
+    - Value: Cannot
+    - Value: Change to
+    - Value: Fit perfect
+    - Value: "I\u2019ll take, I want to buy/order"
+    - Value: Look, see
+    - Value: Lower
+    - Value: May I..., Asking permissions
+    - Value: Pay
+    - Value: Size
+    - Value: Small
+    - Value: Too much
+    - Value: Try, Try on
+    - Value: Wear
+  - Section: Months
+    Text: 
+    Words:
+    - Value: April
+    - Value: August
+    - Value: December
+    - Value: February
+    - Value: January
+    - Value: July
+    - Value: June
+    - Value: March
+    - Value: May
+    - Value: Month
+    - Value: November
+    - Value: October
+    - Value: September
+  - Section: HowToCook
+    Text: 
+    Words:
+    - Value: Bake
+    - Value: Boil
+    - Value: Curry
+    - Value: Deep fry
+    - Value: Grill
+    - Value: Soft boil
+    - Value: Spicy sour salad
+    - Value: Spicy sour soup
+    - Value: Stir fry
+    - Value: Toast
+  - Section: Sweetness
+    Text: 
+    Words:
+    - Value: Add, put in..., with
+    - Value: Extra sweet, Add more sweet
+    - Value: Less sweet
+    - Value: No added, not put, without
+    - Value: Not sweet
+    - Value: Not sweet at all
+    - Value: Standard sweet
+    - Value: Sugar
+    - Value: Sweet
+    - Value: Syrup
+  - Section: Prepositions
+    Text: 
+    Words:
+    - Value: (Keep) continue
+    - Value: Alley
+    - Value: Area, near, row
+    - Value: Arrive
+    - Value: At, at exact area
+    - Value: Behind / After
+    - Value: Beside
+    - Value: Between
+    - Value: Come across, find, see
+    - Value: Drive
+    - Value: End of
+    - Value: Go straight
+    - Value: In
+    - Value: In front of
+    - Value: Keep at some side
+    - Value: Leave from
+    - Value: Left side
+    - Value: Make a U-turn
+    - Value: Near
+    - Value: Next to
+    - Value: On
+    - Value: Once/When
+    - Value: Opposite
+    - Value: Pass
+    - Value: Right side
+    - Value: Road
+    - Value: See
+    - Value: Turn
+    - Value: Under
+    - Value: Until
+    - Value: Walk
+    - Value: Way
+    - Value: Which
+    - Value: With
