@@ -12,7 +12,7 @@ public class PromptsBank : ScriptableObject
     [SerializeField, FolderPath, VerticalGroup("Folders")]
     private List<string> _folders;
 
-    [SerializeField] private List<PromptItem> _promptItems;
+    [SerializeField, TableList] private List<PromptItem> _promptItems;
 
     [Button, VerticalGroup("Folders")]
     private void PrepareWithWordsInFolders()
@@ -55,9 +55,18 @@ public class PromptsBank : ScriptableObject
                 }
 
                 prompt.Words = pair.Value
-                    .Select(w => w.Meanings.FirstOrDefault(m => m.Language == Languages.English))
-                    .Where(m => m != null && !string.IsNullOrWhiteSpace(m.Meaning))
-                    .Select(m => new WordEntry { Value = m.Meaning, Owner = prompt })
+                    .Select(w => new
+                    {
+                        Word = w,
+                        Meaning = w.Meanings.FirstOrDefault(m => m.Language == Languages.English)
+                    })
+                    .Where(x => x.Meaning != null && !string.IsNullOrWhiteSpace(x.Meaning.Meaning))
+                    .Select(x => new WordEntry
+                    {
+                        Value = x.Meaning.Meaning,
+                        Owner = prompt,
+                        Name = x.Word.Key
+                    })
                     .ToList();
             }
         }
@@ -94,8 +103,9 @@ public class PromptsBank : ScriptableObject
 [Serializable]
 public class PromptItem
 {
+    [TableColumnWidth(100, Resizable = false)]
     [HideLabel] public string Section;
-    [HideLabel, Multiline(7)] public string Text;
+    [HideLabel, Multiline(4)] public string Text;
 
     public List<WordEntry> Words;
 
@@ -112,6 +122,20 @@ public class PromptItem
         GUIUtility.systemCopyBuffer = prompt;
         Debug.Log($"Prompt {index} created with Section: {Section}, Word: {Words[index].Value}, Text:\n{prompt}");
     }
+    
+    public void MakeName(int index)
+    {
+        if (string.IsNullOrEmpty(Section) || string.IsNullOrEmpty(Text) || Words == null || Words.Count == 0)
+        {
+            Debug.LogWarning(
+                $"Prompt {index} is not valid. Section: {Section}, Text: {Text}, Words count: {Words?.Count}");
+            return;
+        }
+        
+        string name = Words[index].Name;
+        GUIUtility.systemCopyBuffer = name;
+        Debug.Log($"Name {index} created with Section: {Section}, Word: {Words[index].Value}, Name:\n{name}");
+    }
 
     public void OnValidate()
     {
@@ -127,6 +151,7 @@ public class PromptItem
 public class WordEntry
 {
     [HideInInspector] public string Value;
+    [HideInInspector] public string Name;
     [NonSerialized] public PromptItem Owner;
 
 #if UNITY_EDITOR
@@ -134,8 +159,8 @@ public class WordEntry
     private void DrawInline()
     {
         EditorGUILayout.BeginHorizontal();
-        var buttonContent = new GUIContent("Do", "Make a prompt for this word");
-        if (GUILayout.Button(buttonContent, GUILayout.Width(40)))
+        var buttonContent = new GUIContent("Prompt", "Make a prompt for this word");
+        if (GUILayout.Button(buttonContent, GUILayout.Width(52)))
         {
             if (Owner?.Words != null)
             {
@@ -143,8 +168,19 @@ public class WordEntry
                 if (idx >= 0) Owner.MakePrompt(idx);
             }
         }
-
+        
+        buttonContent = new GUIContent("Name", "Make a file name for this word");
+        if (GUILayout.Button(buttonContent, GUILayout.Width(45)))
+        {
+            if (Owner?.Words != null)
+            {
+                int idx = Owner.Words.IndexOf(this);
+                if (idx >= 0) Owner.MakeName(idx);
+            }
+        }
+        
         Value = EditorGUILayout.TextField(Value);
+        Name = EditorGUILayout.TextField(Name);
         EditorGUILayout.EndHorizontal();
     }
 #endif
