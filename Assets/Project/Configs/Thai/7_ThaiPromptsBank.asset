@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c571a11817261443ab6922debec7b8ae, type: 3}
   m_Name: 7_ThaiPromptsBank
   m_EditorClassIdentifier: Assembly-CSharp-Editor::PromptsBank
+  CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
   _folders:
   - Assets/Project/Resources_Bundled/Thai/Words/WeekDays
   - Assets/Project/Resources_Bundled/Thai/Words/Fruits
@@ -33,11 +34,11 @@ MonoBehaviour:
   - Assets/Project/Resources_Bundled/Thai/Words/Prepositions
   _promptItems:
   - Section: Introduce
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: (Me, you) too!
       Name: _Me__you__too_
@@ -66,11 +67,11 @@ MonoBehaviour:
     - Value: Where
       Name: Where
   - Section: WeekDays
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Christmas's day
       Name: Christmas_s_day
@@ -115,11 +116,11 @@ MonoBehaviour:
     - Value: Yesterday
       Name: Yesterday
   - Section: Fruits
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Banana
       Name: Banana
@@ -140,11 +141,12 @@ MonoBehaviour:
     - Value: Watermelon
       Name: Watermelon
   - Section: Beverages
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: ... Juice
       Name: ____Juice
@@ -205,11 +207,12 @@ MonoBehaviour:
     - Value: White wine
       Name: White_wine
   - Section: Food
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Beef
       Name: Beef
@@ -300,11 +303,12 @@ MonoBehaviour:
     - Value: Vinegar
       Name: Vinegar
   - Section: Colors
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Black
       Name: Black
@@ -337,11 +341,12 @@ MonoBehaviour:
     - Value: Yellow
       Name: Yellow
   - Section: Ocupation
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Dentist
       Name: Dentist
@@ -360,11 +365,12 @@ MonoBehaviour:
     - Value: Teacher
       Name: Teacher
   - Section: Greetings
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Bye (Informal)
       Name: Bye__Informal_
@@ -415,11 +421,12 @@ MonoBehaviour:
     - Value: "Where did you go? / \nWhere are you coming from?"
       Name: Where_did_you_g_748364865
   - Section: Places
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: '...
 
@@ -526,11 +533,12 @@ MonoBehaviour:
     - Value: Workplace
       Name: Workplace
   - Section: FamilyAndPeople
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Boss
       Name: Boss
@@ -595,11 +603,12 @@ MonoBehaviour:
     - Value: Younger sister
       Name: Younger_sister
   - Section: Clothes
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Clothes
       Name: Clothes
@@ -626,11 +635,12 @@ MonoBehaviour:
     - Value: Trousers
       Name: Trousers
   - Section: PointThings
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Over there
       Name: Over_there
@@ -645,11 +655,11 @@ MonoBehaviour:
     - Value: This one
       Name: This_one
   - Section: Numbers
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: 0
       Name: 0
@@ -720,11 +730,11 @@ MonoBehaviour:
     - Value: 100,000
       Name: 100_000
   - Section: Shopping
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: A classifier for clothes
       Name: A_classifier_fo_1144734862
@@ -765,11 +775,12 @@ MonoBehaviour:
     - Value: Wear
       Name: Wear
   - Section: Months
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: April
       Name: April
@@ -798,11 +809,12 @@ MonoBehaviour:
     - Value: September
       Name: September
   - Section: HowToCook
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Bake
       Name: Bake
@@ -825,11 +837,12 @@ MonoBehaviour:
     - Value: Toast
       Name: Toast
   - Section: Sweetness
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: Add, put in..., with
       Name: Add__put_in_____with
@@ -852,11 +865,12 @@ MonoBehaviour:
     - Value: Syrup
       Name: Syrup
   - Section: Prepositions
-    Text: Create a 192x192 pixel image representing a "****". The drawing should
-      look like a kid's drawing, with natural imperfections and a casual style. The
-      background should be a solid color that contrasts with the guava, ensuring
-      the fruit does not blend into the background. No text or letters should be
-      included in the image
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Configs/Thai/ThaiImagesWords
     Words:
     - Value: (Keep) continue
       Name: _Keep__continue
