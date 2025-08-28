@@ -104,7 +104,10 @@ namespace Chang.FSM
                 mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
             }
 
-            _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged, OnClickPlaySound);
+            string spritePath = _wordPathHelper.GetTexturePath(((SimpleQuestSelectWord)question).CorrectWordFileName);
+            Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
+            
+            _stateController.Init(isQuestInTranslation, _correctWord, sprite, _mixWords, OnToggleValueChanged, OnClickPlaySound);
             _stateController.SetViewActive(true);
 
             OnClickPlaySound();

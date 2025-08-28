@@ -8,11 +8,11 @@
       "hash": "f7b3c2fbe1628518a12340576e779fd80837480e"
     },
     "com.unity.2d.animation": {
-      "version": "10.2.0",
+      "version": "12.0.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "9.1.0",
+        "com.unity.2d.common": "11.0.1",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.collections": "1.2.4",
         "com.unity.modules.animation": "1.0.0",
@@ -21,28 +21,28 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.aseprite": {
-      "version": "1.2.4",
+      "version": "2.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "6.0.6",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.2d.tilemap": "1.0.0",
+        "com.unity.2d.common": "11.0.1",
         "com.unity.mathematics": "1.2.6",
         "com.unity.modules.animation": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.common": {
-      "version": "11.0.0",
+      "version": "11.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.burst": "1.8.4",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.mathematics": "1.1.0",
+        "com.unity.modules.uielements": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.uielements": "1.0.0"
+        "com.unity.burst": "1.8.4"
       },
       "url": "https://packages.unity.com"
     },
@@ -68,11 +68,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.psdimporter": {
-      "version": "10.1.0",
+      "version": "11.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "9.1.0",
+        "com.unity.2d.common": "11.0.1",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.2d.tilemap": "1.0.0"
       },
@@ -85,12 +85,12 @@
       "dependencies": {}
     },
     "com.unity.2d.spriteshape": {
-      "version": "10.1.0",
+      "version": "12.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "9.1.0",
         "com.unity.mathematics": "1.1.0",
+        "com.unity.2d.common": "11.0.1",
         "com.unity.modules.physics2d": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -105,18 +105,18 @@
       }
     },
     "com.unity.2d.tilemap.extras": {
-      "version": "4.3.0",
+      "version": "5.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.tilemap": "1.0.0",
         "com.unity.modules.tilemap": "1.0.0",
+        "com.unity.2d.tilemap": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.adaptiveperformance": {
-      "version": "5.1.4",
+      "version": "5.1.5",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -126,18 +126,18 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.addressables": {
-      "version": "2.6.0",
+      "version": "2.7.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.profiling.core": "1.0.2",
-        "com.unity.test-framework": "1.4.5",
+        "com.unity.scriptablebuildpipeline": "2.4.1",
         "com.unity.modules.assetbundle": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
         "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
         "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.scriptablebuildpipeline": "2.4.0",
-        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0",
+        "com.unity.profiling.core": "1.0.2",
+        "com.unity.test-framework": "1.4.5"
       },
       "url": "https://packages.unity.com"
     },
@@ -185,7 +185,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.21",
+      "version": "1.8.24",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -208,8 +208,8 @@
       "dependencies": {
         "com.unity.burst": "1.8.19",
         "com.unity.mathematics": "1.3.2",
-        "com.unity.test-framework": "1.4.6",
         "com.unity.nuget.mono-cecil": "1.11.5",
+        "com.unity.test-framework": "1.4.6",
         "com.unity.test-framework.performance": "3.0.3"
       },
       "url": "https://packages.unity.com"
@@ -242,14 +242,14 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.2d.animation": "10.2.0",
+        "com.unity.2d.animation": "12.0.2",
         "com.unity.2d.pixel-perfect": "5.1.0",
-        "com.unity.2d.psdimporter": "10.1.0",
+        "com.unity.2d.psdimporter": "11.0.1",
         "com.unity.2d.sprite": "1.0.0",
-        "com.unity.2d.spriteshape": "10.1.0",
+        "com.unity.2d.spriteshape": "12.0.1",
         "com.unity.2d.tilemap": "1.0.0",
-        "com.unity.2d.tilemap.extras": "4.3.0",
-        "com.unity.2d.aseprite": "1.2.4"
+        "com.unity.2d.tilemap.extras": "5.0.1",
+        "com.unity.2d.aseprite": "2.0.1"
       }
     },
     "com.unity.feature.mobile": {
@@ -258,8 +258,8 @@
       "source": "builtin",
       "dependencies": {
         "com.unity.mobile.android-logcat": "1.4.5",
-        "com.unity.adaptiveperformance": "5.1.4",
-        "com.unity.mobile.notifications": "2.4.0"
+        "com.unity.adaptiveperformance": "5.1.5",
+        "com.unity.mobile.notifications": "2.4.1"
       }
     },
     "com.unity.ide.rider": {
@@ -295,7 +295,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.mobile.notifications": {
-      "version": "2.4.0",
+      "version": "2.4.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -333,7 +333,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "2.4.0",
+      "version": "2.4.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -347,8 +347,8 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.burst": "1.7.2",
-        "com.unity.collections": "2.4.2"
+        "com.unity.collections": "2.4.2",
+        "com.unity.burst": "1.7.2"
       },
       "url": "https://packages.unity.com"
     },
@@ -357,10 +357,10 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.ugui": "1.0.0",
-        "com.unity.services.core": "1.14.0",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.unity.modules.unitywebrequest": "1.0.0"
+        "com.unity.services.core": "1.14.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.ugui": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -370,12 +370,12 @@
       "source": "registry",
       "dependencies": {
         "com.unity.services.core": "1.10.1",
-        "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.modules.unitywebrequestwww": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0",
         "com.unity.modules.unitywebrequestaudio": "1.0.0",
         "com.unity.modules.unitywebrequesttexture": "1.0.0",
-        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+        "com.unity.modules.unitywebrequestwww": "1.0.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
       "url": "https://packages.unity.com"
     },
@@ -394,9 +394,9 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.androidjni": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.unity.modules.unitywebrequest": "1.0.0"
+        "com.unity.modules.androidjni": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -428,7 +428,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.8.7",
+      "version": "1.8.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {

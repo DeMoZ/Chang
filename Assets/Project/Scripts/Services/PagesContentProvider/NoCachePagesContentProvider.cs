@@ -40,6 +40,11 @@ namespace Project.Services.PagesContentProvider
             Content = null;
         }
 
+        public AudioClip GetCachedAudioClip(string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ClearCache()
         {
             foreach (var disposable in Content)
@@ -149,6 +154,11 @@ namespace Project.Services.PagesContentProvider
 
             Debug.LogError($"Item of type {typeof(T)} not found for key: {key}");
             return null;
+        }
+
+        public Sprite GetCachedSprite(string key)
+        {
+            throw new NotImplementedException();
         }
 
         private async UniTask Preload(HashSet<string> keys, Action<float, float> progress, CancellationToken ct)

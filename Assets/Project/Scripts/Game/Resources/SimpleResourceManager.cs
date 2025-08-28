@@ -5,6 +5,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using Object = UnityEngine.Object;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -144,7 +145,12 @@ namespace Chang.Resources
             await UniTask.Yield(token);
             throw new NotImplementedException();
         }
-       /*
+
+        public Sprite LoadMissingSprite()
+        {
+            throw new NotImplementedException();
+        }
+        /*
         public async UniTask<T> LoadAssetAsync<T>(string key, CancellationToken token) where T : Object
         {
             while (!_isInitialized)

@@ -11,6 +11,7 @@ using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UI;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Project.Services.PagesContentProvider
@@ -52,7 +53,8 @@ namespace Project.Services.PagesContentProvider
             // no clear cache on pages switch, so don't implement this method
         }
 
-        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> progress, CancellationToken ct)
+        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> progress,
+            CancellationToken ct)
         {
             _progress = progress;
 
@@ -63,7 +65,7 @@ namespace Project.Services.PagesContentProvider
             HashSet<string> totalKeys = new();
             foreach (ISimpleQuestion quest in questions)
             {
-                // todo chang imageKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
+                imageKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetTexturePath(k)));
                 soundKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
                 configKeys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
             }
@@ -80,39 +82,38 @@ namespace Project.Services.PagesContentProvider
                 return;
             }
 
-            // todo chang Dictionary<string, IDisposableAsset> images = new();
+            Dictionary<string, IDisposableAsset> images = new();
             Dictionary<string, IDisposableAsset> sounds = new();
             Dictionary<string, IDisposableAsset> configs = new();
 
             long currentToLoad = 0;
             long downloadSize = 0;
 
-            // todo chang
-            // downloadSize = await GetDownloadSize(imageKeys, ct);
-            // if (downloadSize > 0)
-            // {
-            // currentToLoad += downloadSize;
-            // images = await Preload<Image>(imageKeys, progress => { CountProgress(progress, currentToLoad, totalToLoad); },
-            //      ct);
-            // }
+            downloadSize = await GetDownloadSize(imageKeys, ct);
+            if (downloadSize > 0)
+            {
+                currentToLoad += downloadSize;
+                images = await Preload<Texture2D>(imageKeys,
+                    progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
+            }
 
             downloadSize = await GetDownloadSize(soundKeys, ct);
             if (downloadSize > 0)
             {
                 currentToLoad += downloadSize;
-                sounds = await Preload<AudioClip>(soundKeys, bytes => { CountProgress(bytes, currentToLoad, totalToLoad); },
-                    ct);
+                sounds = await Preload<AudioClip>(soundKeys,
+                    bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
             }
 
             downloadSize = await GetDownloadSize(configKeys, ct);
             if (downloadSize > 0)
             {
                 currentToLoad += downloadSize;
-                configs = await Preload<PhraseConfig>(configKeys, bytes => { CountProgress(bytes, currentToLoad, totalToLoad); },
-                    ct);
+                configs = await Preload<PhraseConfig>(configKeys,
+                    bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
             }
 
-            // todo chang Merge(Content,images);
+            Merge(Content, images);
             Merge(Content, sounds);
             Merge(Content, configs);
         }
@@ -158,22 +159,24 @@ namespace Project.Services.PagesContentProvider
                 Content[path] = asset;
             }
 
-            // todo chang images
-            // foreach (var key in imageKeys)
-            // {
-            //     string path = _wordPathHelper.GetImagePath(key);
-            //
-            //     if (Content.TryGetValue(path, out var configAsset))
-            //     {
-            //         if (configAsset != null)
-            //         {
-            //             continue;
-            //         }
-            //     }
-            //
-            //     DisposableAsset<Image> asset = await _assetManager.LoadAssetAsync<Image>(path, _cts.Token);
-            //     Content[path] = asset;
-            // }
+            foreach (var key in imageKeys)
+            {
+                string path = _wordPathHelper.GetTexturePath(key);
+            
+                if (Content.TryGetValue(path, out var configAsset))
+                {
+                    if (configAsset != null)
+                    {
+                        continue;
+                    }
+                }
+            
+                DisposableAsset<Texture2D> asset = await _assetManager.LoadAssetAsync<Texture2D>(path, ct);
+                if (asset.Item != null)
+                {
+                    Content[path] = asset;
+                }
+            }
 
             _popupManager.DisposePopup(loadingUiController);
         }
@@ -193,6 +196,36 @@ namespace Project.Services.PagesContentProvider
             return null;
         }
 
+        public Sprite GetCachedSprite(string path)
+        {
+            Texture2D texture = GetCachedAsset<Texture2D>(path);
+            
+            if (texture == null)
+            {
+                Debug.LogError($"Texture not found for key: {path}");
+                return _assetManager.LoadMissingSprite();
+            }
+            
+            return CreateSprite(texture);
+        }
+        
+        private static Sprite CreateSprite(Texture2D texture, float pixelsPerUnit = 100f)
+        {
+            if (texture == null) return null;
+            return Sprite.Create(
+                texture,
+                new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f),
+                pixelsPerUnit
+            );
+        }
+        
+        public AudioClip GetCachedAudioClip(string name)
+        {
+            string path = _wordPathHelper.GetSoundPath(name);
+            return GetCachedAsset<AudioClip>(path);
+        }
+
         private async UniTask<long> GetDownloadSize(HashSet<string> keys, CancellationToken ct)
         {
             AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
@@ -206,7 +239,8 @@ namespace Project.Services.PagesContentProvider
                     return getDownloadSizeHandle.Result;
                 }
 
-                Debug.LogError($"{nameof(GetDownloadSize)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                Debug.LogError(
+                    $"{nameof(GetDownloadSize)} failed to get download size: {getDownloadSizeHandle.OperationException}");
                 return 0;
             }
             catch (OperationCanceledException)
@@ -230,7 +264,8 @@ namespace Project.Services.PagesContentProvider
             _progress?.Invoke(currentLoad + bytes, totalToLoad);
         }
 
-        private async UniTask<Dictionary<string, IDisposableAsset>> Preload<T>(HashSet<string> keys, Action<float> bytes, CancellationToken ct)
+        private async UniTask<Dictionary<string, IDisposableAsset>> Preload<T>(HashSet<string> keys,
+            Action<float> bytes, CancellationToken ct)
             where T : class
         {
             Debug.Log($"{nameof(Preload)}");
@@ -265,7 +300,8 @@ namespace Project.Services.PagesContentProvider
             return result;
         }
 
-        private void Merge(Dictionary<string, IDisposableAsset> toDictionary, Dictionary<string, IDisposableAsset> fromDictionary)
+        private void Merge(Dictionary<string, IDisposableAsset> toDictionary,
+            Dictionary<string, IDisposableAsset> fromDictionary)
         {
             foreach (var pair in fromDictionary)
             {
