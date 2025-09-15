@@ -181,6 +181,7 @@ public class PromptItem
             
             AssetDatabase.StopAssetEditing();
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 
