@@ -93,7 +93,7 @@ namespace Project.Services.PagesContentProvider
             if (downloadSize > 0)
             {
                 currentToLoad += downloadSize;
-                images = await Preload<Texture2D>(imageKeys,
+                images = await Preload<Sprite>(imageKeys,
                     progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
             }
 
@@ -171,7 +171,7 @@ namespace Project.Services.PagesContentProvider
                     }
                 }
             
-                DisposableAsset<Texture2D> asset = await _assetManager.LoadAssetAsync<Texture2D>(path, ct);
+                DisposableAsset<Sprite> asset = await _assetManager.LoadAssetAsync<Sprite>(path, ct);
                 if (asset.Item != null)
                 {
                     Content[path] = asset;
@@ -198,7 +198,7 @@ namespace Project.Services.PagesContentProvider
 
         public Sprite GetCachedSprite(string path)
         {
-            Texture2D texture = GetCachedAsset<Texture2D>(path);
+            Sprite texture = GetCachedAsset<Sprite>(path);
             
             if (texture == null)
             {
@@ -206,7 +206,7 @@ namespace Project.Services.PagesContentProvider
                 return _assetManager.LoadMissingSprite();
             }
             
-            return CreateSprite(texture);
+            return texture;
         }
         
         private static Sprite CreateSprite(Texture2D texture, float pixelsPerUnit = 100f)
