@@ -86,10 +86,12 @@ namespace Chang.FSM
             }
             
             QuestDemonstrateWordData questionData = new QuestDemonstrateWordData(asset.PhraseData);
-
             _correctWord = questionData.CorrectWord;
-
-            _stateController.Init(_correctWord, OnToggleValueChanged, OnClickPlaySound);
+            
+            string spritePath = _wordPathHelper.GetTexturePath(((SimpleQuestDemonstrationWord)question).CorrectWordFileName);
+            var sprite = _pagesContentProvider.GetCachedSprite(spritePath);
+            
+            _stateController.Init(_correctWord, sprite, OnToggleValueChanged, OnClickPlaySound);
             _stateController.SetViewActive(true);
 
             OnClickPlaySound();

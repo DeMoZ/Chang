@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Chang;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Project.Services.PagesContentProvider
 {
@@ -22,7 +23,11 @@ namespace Project.Services.PagesContentProvider
         /// Get an asset from the cache by its key.
         /// </summary>
         T GetCachedAsset<T>(string key) where T : class;
-
+        
+        Sprite GetCachedSprite(string key);
+        AudioClip GetCachedAudioClip(string key);
+        
+        
         /// <summary>
         /// Clears all cached content on Page Exit.
         /// </summary>

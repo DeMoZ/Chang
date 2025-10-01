@@ -20,6 +20,7 @@ namespace Chang.UI
         private Action _onClickPlaySound;
         
         public void Init(PhraseData correctWord,
+            Sprite sprite,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
@@ -44,6 +45,8 @@ namespace Chang.UI
             mix.EnablePhonetics(false);
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
             _playStopBtn.OnClick += OnClickPlaySound;
+            
+            _questionImage.sprite = sprite;
         }
 
         private void OnSoundPlay(bool play)

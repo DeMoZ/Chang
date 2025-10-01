@@ -25,6 +25,7 @@ namespace Chang.UI
 
         public void Init(bool isQuestInTranslation, 
             PhraseData correctWord, 
+            Sprite sprite,
             List<PhraseData> mixWords,
             Action<int, bool> onToggleValueChanged,
             Action onClickPlaySound)
@@ -55,6 +56,8 @@ namespace Chang.UI
 
                 _mixWordToggles.Add(mix);
             }
+            
+            _questionImage.sprite = sprite;
             
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
             _playStopBtn.OnClick += OnClickPlaySound;

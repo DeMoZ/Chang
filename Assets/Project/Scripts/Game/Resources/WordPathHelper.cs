@@ -30,9 +30,9 @@ namespace Chang.Resources
             return NormalizePath(path);
         }
 
-        public string GetImagePath(string key)
+        public string GetTexturePath(string key)
         {
-            // Assets/Project/Resources_Bundled/Thai/ImageWords/Fruits/Coconut.jpg
+            // Assets/Project/Resources_Bundled/Thai/ImageWords/Fruits/Coconut.png
             // key = Thai/Words/Fruits/Coconut
             string[] keyParts = key.Split('/');
             string path = Path.Combine(
@@ -40,7 +40,7 @@ namespace Chang.Resources
                 keyParts[0],
                 AssetPaths.Addressables.ImageWords,
                 keyParts[2],
-                $"{keyParts[3]}.jpg");
+                $"{keyParts[3]}.png");
 
             return NormalizePath(path);
         }

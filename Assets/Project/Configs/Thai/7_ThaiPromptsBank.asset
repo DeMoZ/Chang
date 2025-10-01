@@ -1,0 +1,939 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c571a11817261443ab6922debec7b8ae, type: 3}
+  m_Name: 7_ThaiPromptsBank
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::PromptsBank
+  CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+  _folders:
+  - Assets/Project/Resources_Bundled/Thai/Words/WeekDays
+  - Assets/Project/Resources_Bundled/Thai/Words/Fruits
+  - Assets/Project/Resources_Bundled/Thai/Words/Beverages
+  - Assets/Project/Resources_Bundled/Thai/Words/Food
+  - Assets/Project/Resources_Bundled/Thai/Words/Colors
+  - Assets/Project/Resources_Bundled/Thai/Words/Ocupation
+  - Assets/Project/Resources_Bundled/Thai/Words/Introduce
+  - Assets/Project/Resources_Bundled/Thai/Words/Greetings
+  - Assets/Project/Resources_Bundled/Thai/Words/Places
+  - Assets/Project/Resources_Bundled/Thai/Words/FamilyAndPeople
+  - Assets/Project/Resources_Bundled/Thai/Words/Clothes
+  - Assets/Project/Resources_Bundled/Thai/Words/PointThings
+  - Assets/Project/Resources_Bundled/Thai/Words/Numbers
+  - Assets/Project/Resources_Bundled/Thai/Words/Shopping
+  - Assets/Project/Resources_Bundled/Thai/Words/Months
+  - Assets/Project/Resources_Bundled/Thai/Words/HowToCook
+  - Assets/Project/Resources_Bundled/Thai/Words/Sweetness
+  - Assets/Project/Resources_Bundled/Thai/Words/Prepositions
+  _promptItems:
+  - Section: Introduce
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: (Me, you) too!
+      Name: _Me__you__too_
+    - Value: A polite particle
+      Name: A_polite_particle
+    - Value: Come from
+      Name: Come_from
+    - Value: Country
+      Name: Country
+    - Value: female, yes
+      Name: female__yes
+    - Value: Hello
+      Name: Hello
+    - Value: male, yes
+      Name: male__yes
+    - Value: Name
+      Name: Name
+    - Value: Nice to meet you
+      Name: Nice_to_meet_you
+    - Value: To be + People/Person from...
+      Name: To_be___People__1362113199
+    - Value: What?
+      Name: What_
+    - Value: What about...?
+      Name: What_about____
+    - Value: Where
+      Name: Where
+  - Section: WeekDays
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Christmas's day
+      Name: Christmas_s_day
+    - Value: Friday
+      Name: Friday
+    - Value: Holiday, day off
+      Name: Holiday__day_off
+    - Value: Long weekend
+      Name: Long_weekend
+    - Value: Monday
+      Name: Monday
+    - Value: New year's day
+      Name: New_year_s_day
+    - Value: Public holiday
+      Name: Public_holiday
+    - Value: Saturday
+      Name: Saturday
+    - Value: Sunday
+      Name: Sunday
+    - Value: Thai New year's day
+      Name: Thai_New_year_s_day
+    - Value: 'The day after
+
+        tomorrow'
+      Name: The_day_after_t_1585425685
+    - Value: The day before yesterday
+      Name: The_day_before__111228420
+    - Value: Thursday
+      Name: Thursday
+    - Value: Today
+      Name: Today
+    - Value: Tomorrow
+      Name: Tomorrow
+    - Value: Tuesday
+      Name: Tuesday
+    - Value: Wednesday
+      Name: Wednesday
+    - Value: Week
+      Name: Week
+    - Value: Weekend
+      Name: Weekend
+    - Value: Yesterday
+      Name: Yesterday
+  - Section: Fruits
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Banana
+      Name: Banana
+    - Value: Coconut
+      Name: Coconut
+    - Value: Durian
+      Name: Durian
+    - Value: Guava
+      Name: Guava
+    - Value: Mango
+      Name: Mango
+    - Value: Orange
+      Name: Orange
+    - Value: Papaya
+      Name: Papaya
+    - Value: Pineapple
+      Name: Pineapple
+    - Value: Watermelon
+      Name: Watermelon
+  - Section: Beverages
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: ... Juice
+      Name: ____Juice
+    - Value: Beer
+      Name: Beer
+    - Value: Big, Large
+      Name: Big__Large
+    - Value: Bottle
+      Name: Bottle
+    - Value: Bucket
+      Name: Bucket
+    - Value: Can
+      Name: Can
+    - Value: 'Classifiers for
+
+        small items'
+      Name: Classifiers_for_1989193633
+    - Value: Cocoa
+      Name: Cocoa
+    - Value: Coffee
+      Name: Coffee
+    - Value: Cold (for drink), with ice
+      Name: Cold__for_drink_580381031
+    - Value: Glass, mug, cup
+      Name: Glass__mug__cup
+    - Value: Green tea
+      Name: Green_tea
+    - Value: Hot
+      Name: Hot
+    - Value: Ice
+      Name: Ice
+    - Value: Lemon tea
+      Name: Lemon_tea
+    - Value: Liquor
+      Name: Liquor
+    - Value: Medium
+      Name: Medium
+    - Value: Milk
+      Name: Milk
+    - Value: 'Not cold,
+
+        Room-temperature'
+      Name: Not_cold__Room-_346684810
+    - Value: Red wine
+      Name: Red_wine
+    - Value: Small
+      Name: Small
+    - Value: Smoothie, Blend
+      Name: Smoothie__Blend
+    - Value: Soda
+      Name: Soda
+    - Value: Tea
+      Name: Tea
+    - Value: Thai tea
+      Name: Thai_tea
+    - Value: Water (Normal)
+      Name: Water__Normal_
+    - Value: White wine
+      Name: White_wine
+  - Section: Food
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image. Acceptable for kids
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Beef
+      Name: Beef
+    - Value: Boiled egg
+      Name: Boiled_egg
+    - Value: Cabbage
+      Name: Cabbage
+    - Value: Carrot
+      Name: Carrot
+    - Value: Chicken
+      Name: Chicken
+    - Value: Chili
+      Name: Chili
+    - Value: Chinese kale
+      Name: Chinese_kale
+    - Value: Crab
+      Name: Crab
+    - Value: Crispy pork
+      Name: Crispy_pork
+    - Value: Cucumber
+      Name: Cucumber
+    - Value: Fish
+      Name: Fish
+    - Value: Fish sauce
+      Name: Fish_sauce
+    - Value: Fried egg
+      Name: Fried_egg
+    - Value: Fried rice
+      Name: Fried_rice
+    - Value: Garlic
+      Name: Garlic
+    - Value: Green curry
+      Name: Green_curry
+    - Value: Light soy sauce
+      Name: Light_soy_sauce
+    - Value: Lime
+      Name: Lime
+    - Value: Long bean
+      Name: Long_bean
+    - Value: Meat
+      Name: Meat
+    - Value: Minced pork
+      Name: Minced_pork
+    - Value: Morning glory
+      Name: Morning_glory
+    - Value: Mushroom
+      Name: Mushroom
+    - Value: Noodle soup
+      Name: Noodle_soup
+    - Value: Omelette
+      Name: Omelette
+    - Value: Onion
+      Name: Onion
+    - Value: Papaya salad (Central Thai style)
+      Name: Papaya_salad__C_454048469
+    - Value: Pepper
+      Name: Pepper
+    - Value: Pork
+      Name: Pork
+    - Value: Potato
+      Name: Potato
+    - Value: Salt
+      Name: Salt
+    - Value: Seafood
+      Name: Seafood
+    - Value: Seasoning
+      Name: Seasoning
+    - Value: Shrimp
+      Name: Shrimp
+    - Value: Soy sauce
+      Name: Soy_sauce
+    - Value: Spicy sour soup
+      Name: Spicy_sour_soup
+    - Value: Squid
+      Name: Squid
+    - Value: Stir fried basil
+      Name: Stir_fried_basil
+    - Value: Stir fried mixed vegetables
+      Name: Stir_fried_mixe_1452539439
+    - Value: Stir fried noodles with peanuts
+      Name: Stir_fried_nood_349793073
+    - Value: Sugar
+      Name: Sugar
+    - Value: Tomato
+      Name: Tomato
+    - Value: Vegetable
+      Name: Vegetable
+    - Value: Vinegar
+      Name: Vinegar
+  - Section: Colors
+    Text: Draw how a brush paints a brushstroke of "****" color. The brush should
+      be visible only halfway.
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Black
+      Name: Black
+    - Value: Blue
+      Name: Blue
+    - Value: Brown
+      Name: Brown
+    - Value: Color
+      Name: Color
+    - Value: Dark
+      Name: Dark
+    - Value: Dark blue
+      Name: Dark_blue
+    - Value: Green
+      Name: Green
+    - Value: Grey
+      Name: Grey
+    - Value: Light
+      Name: Light
+    - Value: Orange
+      Name: Orange
+    - Value: Pink
+      Name: Pink
+    - Value: Purple
+      Name: Purple
+    - Value: Red
+      Name: Red
+    - Value: White
+      Name: White
+    - Value: Yellow
+      Name: Yellow
+  - Section: Ocupation
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Dentist
+      Name: Dentist
+    - Value: Doctor
+      Name: Doctor
+    - Value: Maid, Housewife
+      Name: Maid__Housewife
+    - Value: Masseuse
+      Name: Masseuse
+    - Value: Pharmacist
+      Name: Pharmacist
+    - Value: Police
+      Name: Police
+    - Value: Security guard
+      Name: Security_guard
+    - Value: Teacher
+      Name: Teacher
+  - Section: Greetings
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Bye (Informal)
+      Name: Bye__Informal_
+    - Value: Drive safe
+      Name: Drive_safe
+    - Value: Go home safely
+      Name: Go_home_safely
+    - Value: Good bye (Formal)
+      Name: Good_bye__Formal_
+    - Value: Have you eaten yet?
+      Name: Have_you_eaten_yet_
+    - Value: Hi
+      Name: Hi
+    - Value: How are you?
+      Name: How_are_you_
+    - Value: How is it going?
+      Name: How_is_it_going_
+    - Value: I am about to go home.
+      Name: I_am_about_to_g_206640503
+    - Value: I am good
+      Name: I_am_good
+    - Value: I am leaving, I have to go.
+      Name: I_am_leaving__I_70032443
+    - Value: I have eaten (already)
+      Name: I_have_eaten__a_1009370461
+    - Value: I haven't eaten yet
+      Name: I_haven_t_eaten_yet
+    - Value: I'm not (so) good
+      Name: I_m_not__so__good
+    - Value: I'm sick
+      Name: I_m_sick
+    - Value: I went... / I went to...
+      Name: I_went______I_w_1487701201
+    - Value: I will go / I am going to ...
+      Name: I_will_go___I_a_52244770
+    - Value: May I be excused? (Formal)
+      Name: May_I_be_excuse_2094577981
+    - Value: Not yet
+      Name: Not_yet
+    - Value: Safe travel
+      Name: Safe_travel
+    - Value: See you again, See you later
+      Name: See_you_again___1354148661
+    - Value: So so
+      Name: So_so
+    - Value: Where are you going?
+      Name: Where_are_you_going_
+    - Value: "Where did you go? / \nWhere are you coming from?"
+      Name: Where_did_you_g_748364865
+  - Section: Places
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: '...
+
+        Shop'
+      Name: ____Shop
+    - Value: Airport
+      Name: Airport
+    - Value: Bakery shop
+      Name: Bakery_shop
+    - Value: Bank
+      Name: Bank
+    - Value: Barber
+      Name: Barber
+    - Value: Bedroom
+      Name: Bedroom
+    - Value: Book store
+      Name: Book_store
+    - Value: Bus stop
+      Name: Bus_stop
+    - Value: Church
+      Name: Church
+    - Value: Coffee shop
+      Name: Coffee_shop
+    - Value: Company
+      Name: Company
+    - Value: Dental clinic
+      Name: Dental_clinic
+    - Value: Embassy
+      Name: Embassy
+    - Value: Garage
+      Name: Garage
+    - Value: Gas station
+      Name: Gas_station
+    - Value: Grocery store
+      Name: Grocery_store
+    - Value: Hair salon
+      Name: Hair_salon
+    - Value: Hospital
+      Name: Hospital
+    - Value: Hotel
+      Name: Hotel
+    - Value: House
+      Name: House
+    - Value: Immigration
+      Name: Immigration
+    - Value: Kitchen
+      Name: Kitchen
+    - Value: Living room
+      Name: Living_room
+    - Value: Market
+      Name: Market
+    - Value: Massage shop
+      Name: Massage_shop
+    - Value: Minitruck stand
+      Name: Minitruck_stand
+    - Value: Motorcycle stand
+      Name: Motorcycle_stand
+    - Value: Nail salon
+      Name: Nail_salon
+    - Value: Pharmacy
+      Name: Pharmacy
+    - Value: Photo shop
+      Name: Photo_shop
+    - Value: Police station
+      Name: Police_station
+    - Value: Post office
+      Name: Post_office
+    - Value: Restaurant
+      Name: Restaurant
+    - Value: Restroom
+      Name: Restroom
+    - Value: School
+      Name: School
+    - Value: Shopping mall
+      Name: Shopping_mall
+    - Value: Sky train station
+      Name: Sky_train_station
+    - Value: Sport court/field
+      Name: Sport_court_field
+    - Value: Stadium
+      Name: Stadium
+    - Value: Station
+      Name: Station
+    - Value: Swimming pool
+      Name: Swimming_pool
+    - Value: Tailor shop
+      Name: Tailor_shop
+    - Value: Taxi stand
+      Name: Taxi_stand
+    - Value: Temple
+      Name: Temple
+    - Value: The beach (dry area)
+      Name: The_beach__dry_area_
+    - Value: The sea / the beach
+      Name: The_sea___the_beach
+    - Value: Train station
+      Name: Train_station
+    - Value: Transportation stand / Queue
+      Name: Transportation__790904616
+    - Value: University
+      Name: University
+    - Value: Van stand
+      Name: Van_stand
+    - Value: Workplace
+      Name: Workplace
+  - Section: FamilyAndPeople
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Boss
+      Name: Boss
+    - Value: Chief
+      Name: Chief
+    - Value: Colleague
+      Name: Colleague
+    - Value: Dad
+      Name: Dad
+    - Value: Daughter
+      Name: Daughter
+    - Value: Friend
+      Name: Friend
+    - Value: Friend at.../from... +place
+      Name: Friend_at____fr_653745784
+    - Value: Girlfriend, Boyfriend
+      Name: Girlfriend__Boy_22996531
+    - Value: Grand children
+      Name: Grand_children
+    - Value: Grandma (Dad side)
+      Name: Grandma__Dad_side_
+    - Value: Grandma (Mom side)
+      Name: Grandma__Mom_side_
+    - Value: Grandpa (Dad side)
+      Name: Grandpa__Dad_side_
+    - Value: Grandpa (Mom side)
+      Name: Grandpa__Mom_side_
+    - Value: Husband
+      Name: Husband
+    - Value: In-law (for female)
+      Name: In-law__for_female_
+    - Value: In-law (for male)
+      Name: In-law__for_male_
+    - Value: Kid of someone
+      Name: Kid_of_someone
+    - Value: Mom
+      Name: Mom
+    - Value: Neighbor
+      Name: Neighbor
+    - Value: Older brother
+      Name: Older_brother
+    - Value: Older brother of mom & dad
+      Name: Older_brother_o_1373569494
+    - Value: Older sibling
+      Name: Older_sibling
+    - Value: Older sister
+      Name: Older_sister
+    - Value: Older sister of mom & dad
+      Name: Older_sister_of_1675375203
+    - Value: People at...
+      Name: People_at___
+    - Value: Son
+      Name: Son
+    - Value: Wife
+      Name: Wife
+    - Value: Younger brother
+      Name: Younger_brother
+    - Value: Younger brother - Sister of Mom
+      Name: Younger_brother_764245262
+    - Value: Younger sibling
+      Name: Younger_sibling
+    - Value: Younger sister
+      Name: Younger_sister
+  - Section: Clothes
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Clothes
+      Name: Clothes
+    - Value: Dress
+      Name: Dress
+    - Value: Jeans
+      Name: Jeans
+    - Value: Pants
+      Name: Pants
+    - Value: Polo shirt
+      Name: Polo_shirt
+    - Value: Shirt
+      Name: Shirt
+    - Value: Short pants
+      Name: Short_pants
+    - Value: Skirt
+      Name: Skirt
+    - Value: Sweater
+      Name: Sweater
+    - Value: T-Shirt
+      Name: T-Shirt
+    - Value: Top (clothes)
+      Name: Top__clothes_
+    - Value: Trousers
+      Name: Trousers
+  - Section: PointThings
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Over there
+      Name: Over_there
+    - Value: That
+      Name: That
+    - Value: That one
+      Name: That_one
+    - Value: That one over there
+      Name: That_one_over_there
+    - Value: This
+      Name: This
+    - Value: This one
+      Name: This_one
+  - Section: Numbers
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: 0
+      Name: 0
+    - Value: 1
+      Name: 1
+    - Value: 1,000
+      Name: 1_000
+    - Value: 1,000,000
+      Name: 1_000_000
+    - Value: 2
+      Name: 2
+    - Value: 3
+      Name: 3
+    - Value: 4
+      Name: 4
+    - Value: 5
+      Name: 5
+    - Value: 6
+      Name: 6
+    - Value: 7
+      Name: 7
+    - Value: 8
+      Name: 8
+    - Value: 9
+      Name: 9
+    - Value: 10
+      Name: 10
+    - Value: 10,000
+      Name: 10_000
+    - Value: 10,000,000
+      Name: 10_000_000
+    - Value: 11
+      Name: 11
+    - Value: 20
+      Name: 20
+    - Value: 21
+      Name: 21
+    - Value: 30
+      Name: 30
+    - Value: 31
+      Name: 31
+    - Value: 40
+      Name: 40
+    - Value: 41
+      Name: 41
+    - Value: 50
+      Name: 50
+    - Value: 51
+      Name: 51
+    - Value: 60
+      Name: 60
+    - Value: 61
+      Name: 61
+    - Value: 70
+      Name: 70
+    - Value: 71
+      Name: 71
+    - Value: 80
+      Name: 80
+    - Value: 81
+      Name: 81
+    - Value: 90
+      Name: 90
+    - Value: 91
+      Name: 91
+    - Value: 100
+      Name: 100
+    - Value: 100,000
+      Name: 100_000
+  - Section: Shopping
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: A classifier for clothes
+      Name: A_classifier_fo_1144734862
+    - Value: Beautiful
+      Name: Beautiful
+    - Value: Big
+      Name: Big
+    - Value: Brand
+      Name: Brand
+    - Value: Can
+      Name: Can
+    - Value: Can?
+      Name: Can_
+    - Value: Cannot
+      Name: Cannot
+    - Value: Change to
+      Name: Change_to
+    - Value: Fit perfect
+      Name: Fit_perfect
+    - Value: "I\u2019ll take, I want to buy/order"
+      Name: I_ll_take__I_wa_1042517238
+    - Value: Look, see
+      Name: Look__see
+    - Value: Lower
+      Name: Lower
+    - Value: May I..., Asking permissions
+      Name: May_I_____Askin_230518296
+    - Value: Pay
+      Name: Pay
+    - Value: Size
+      Name: Size
+    - Value: Small
+      Name: Small
+    - Value: Too much
+      Name: Too_much
+    - Value: Try, Try on
+      Name: Try__Try_on
+    - Value: Wear
+      Name: Wear
+  - Section: Months
+    Text: Create an image representing a "**** in Thailand". The drawing should look
+      like a kid's drawing, with natural imperfections and a casual style. The background
+      should be a solid color that contrasts with the image, ensuring the image does
+      not blend into the background. No text or letters should be included in the
+      image. One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: April
+      Name: April
+    - Value: August
+      Name: August
+    - Value: December
+      Name: December
+    - Value: February
+      Name: February
+    - Value: January
+      Name: January
+    - Value: July
+      Name: July
+    - Value: June
+      Name: June
+    - Value: March
+      Name: March
+    - Value: May
+      Name: May
+    - Value: Month
+      Name: Month
+    - Value: November
+      Name: November
+    - Value: October
+      Name: October
+    - Value: September
+      Name: September
+  - Section: HowToCook
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Bake
+      Name: Bake
+    - Value: Boil
+      Name: Boil
+    - Value: Curry
+      Name: Curry
+    - Value: Deep fry
+      Name: Deep_fry
+    - Value: Grill
+      Name: Grill
+    - Value: Soft boil
+      Name: Soft_boil
+    - Value: Spicy sour salad
+      Name: Spicy_sour_salad
+    - Value: Spicy sour soup
+      Name: Spicy_sour_soup
+    - Value: Stir fry
+      Name: Stir_fry
+    - Value: Toast
+      Name: Toast
+  - Section: Sweetness
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: Add, put in..., with
+      Name: Add__put_in_____with
+    - Value: Extra sweet, Add more sweet
+      Name: Extra_sweet__Ad_539542451
+    - Value: Less sweet
+      Name: Less_sweet
+    - Value: No added, not put, without
+      Name: No_added__not_p_1633299223
+    - Value: Not sweet
+      Name: Not_sweet
+    - Value: Not sweet at all
+      Name: Not_sweet_at_all
+    - Value: Standard sweet
+      Name: Standard_sweet
+    - Value: Sugar
+      Name: Sugar
+    - Value: Sweet
+      Name: Sweet
+    - Value: Syrup
+      Name: Syrup
+  - Section: Prepositions
+    Text: Create an image representing a "****". The drawing should look like a kid's
+      drawing, with natural imperfections and a casual style. The background should
+      be a solid color that contrasts with the image, ensuring the image does not
+      blend into the background. No text or letters should be included in the image.
+      One element on the image
+    CreateImagesPath: Assets/Project/Resources_Bundled/Thai/ImageWords
+    Words:
+    - Value: (Keep) continue
+      Name: _Keep__continue
+    - Value: Alley
+      Name: Alley
+    - Value: Area, near, row
+      Name: Area__near__row
+    - Value: Arrive
+      Name: Arrive
+    - Value: At, at exact area
+      Name: At__at_exact_area
+    - Value: Behind / After
+      Name: Behind___After
+    - Value: Beside
+      Name: Beside
+    - Value: Between
+      Name: Between
+    - Value: Come across, find, see
+      Name: Come_across__fi_1467305127
+    - Value: Drive
+      Name: Drive
+    - Value: End of
+      Name: End_of
+    - Value: Go straight
+      Name: Go_straight
+    - Value: In
+      Name: In
+    - Value: In front of
+      Name: In_front_of
+    - Value: Keep at some side
+      Name: Keep_at_some_side
+    - Value: Leave from
+      Name: Leave_from
+    - Value: Left side
+      Name: Left_side
+    - Value: Make a U-turn
+      Name: Make_a_U-turn
+    - Value: Near
+      Name: Near
+    - Value: Next to
+      Name: Next_to
+    - Value: On
+      Name: On
+    - Value: Once/When
+      Name: Once_When
+    - Value: Opposite
+      Name: Opposite
+    - Value: Pass
+      Name: Pass
+    - Value: Right side
+      Name: Right_side
+    - Value: Road
+      Name: Road
+    - Value: See
+      Name: See
+    - Value: Turn
+      Name: Turn
+    - Value: Under
+      Name: Under
+    - Value: Until
+      Name: Until
+    - Value: Walk
+      Name: Walk
+    - Value: Way
+      Name: Way
+    - Value: Which
+      Name: Which
+    - Value: With
+      Name: With
