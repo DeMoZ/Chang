@@ -124,9 +124,13 @@ namespace Chang.FSM
             _stateController.SetViewActive(true);
         }
 
-        private void OnPlaySound(string key)
+        private void OnPlaySound(string key, bool isLearnLanguage)
         {
-            string path = _wordPathHelper.GetSoundPath($"{_profileService.ProfileData.LearnLanguage}/{key}");
+            var language = isLearnLanguage?
+                _profileService.ProfileData.LearnLanguage.ToString() :
+                _profileService.ProfileData.NativeLanguage.ToString();
+            
+            string path = _wordPathHelper.GetSoundPath($"{language}/{key}");
             AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)

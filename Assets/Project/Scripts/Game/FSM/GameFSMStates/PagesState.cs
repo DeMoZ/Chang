@@ -50,7 +50,7 @@ namespace Chang.FSM
             base.Enter();
 
             _cts = new CancellationTokenSource();
-            _pagesContentProvider = new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager);
+            _pagesContentProvider = new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager, _profileService);
             EnterAsync(_cts.Token).Forget();
         }
 

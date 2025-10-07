@@ -6,8 +6,8 @@ namespace Chang.Resources
     {
         public string GetConfigPath(string key)
         {
-            // Assets/Project/Resources_Bundled/Thai/Words/Fruits/Coconut.asset
             // key = Thai/Words/Fruits/Coconut
+            // result Assets/Project/Resources_Bundled/Thai/Words/Fruits/Coconut.asset
             string path = Path.Combine(
                 AssetPaths.Addressables.Root,
                 $"{key}.asset");
@@ -17,8 +17,8 @@ namespace Chang.Resources
 
         public string GetSoundPath(string key)
         {
-            // Assets/Project/Resources_Bundled/Thai/SoundWords/Fruits/Coconut.mp3
             // key = Thai/Words/Fruits/Coconut
+            // result Assets/Project/Resources_Bundled/Thai/SoundWords/Fruits/Coconut.mp3
             string[] keyParts = key.Split('/');
             string path = Path.Combine(
                 AssetPaths.Addressables.Root,
@@ -29,11 +29,19 @@ namespace Chang.Resources
 
             return NormalizePath(path);
         }
+        
+        public string GetNativeSoundKey(string key, Languages language)
+        {
+            // key = Thai/Words/Fruits/Coconut
+            string[] keyParts = key.Split('/');
+            keyParts[0] = language.ToString(); 
+            return string.Join("/", keyParts);
+        }
 
         public string GetTexturePath(string key)
         {
-            // Assets/Project/Resources_Bundled/Thai/ImageWords/Fruits/Coconut.png
             // key = Thai/Words/Fruits/Coconut
+            // result Assets/Project/Resources_Bundled/Thai/ImageWords/Fruits/Coconut.png
             string[] keyParts = key.Split('/');
             string path = Path.Combine(
                 AssetPaths.Addressables.Root,

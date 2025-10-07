@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using Chang;
 using Chang.Resources;
+using Chang.Services;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Popup;
@@ -19,16 +20,19 @@ namespace Project.Services.PagesContentProvider
         private readonly IResourcesManager _assetManager;
         private readonly WordPathHelper _wordPathHelper;
         private readonly PopupManager _popupManager;
+        private readonly ProfileService _profileService;
 
         private Dictionary<string, IDisposableAsset> Content { get; set; }
 
         public NoCachePagesContentProvider(IResourcesManager assetManager,
             WordPathHelper wordPathHelper,
-            PopupManager popupManager)
+            PopupManager popupManager,
+            ProfileService profileService)
         {
             _assetManager = assetManager;
             _wordPathHelper = wordPathHelper;
             _popupManager = popupManager;
+            _profileService = profileService;
 
             Content = new Dictionary<string, IDisposableAsset>();
         }
@@ -61,8 +65,10 @@ namespace Project.Services.PagesContentProvider
             foreach (ISimpleQuestion quest in questions)
             {
                 keys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
-                keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
-                // todo chang images keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetImagePath(k)));
+                var soundKeys = quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)).ToList();
+                keys.AddRange(soundKeys);
+                keys.AddRange(GetNativeSoundKeys(soundKeys));
+                keys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetTexturePath(k)));
             }
 
             await Preload(keys, progress, ct);
@@ -74,9 +80,10 @@ namespace Project.Services.PagesContentProvider
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
 
             var configKeys = nextQuestion.GetConfigKeys();
-            var soundKeys = nextQuestion.GetSoundKeys();
             var imageKeys = nextQuestion.GetImageKeys();
-
+            var soundKeys = nextQuestion.GetSoundKeys();
+            soundKeys.AddRange(GetNativeSoundKeys(soundKeys));
+            
             foreach (var key in configKeys)
             {
                 string path = _wordPathHelper.GetConfigPath(key);
@@ -197,6 +204,11 @@ namespace Project.Services.PagesContentProvider
             }
 
             downloadHandle.Release();
+        }
+        
+        private IEnumerable<string> GetNativeSoundKeys(IEnumerable<string> soundKeys)
+        {
+            return soundKeys.Select(key => _wordPathHelper.GetNativeSoundKey(key, _profileService.ProfileData.NativeLanguage));
         }
     }
 }

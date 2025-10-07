@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using Chang;
 using Chang.Resources;
+using Chang.Services;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Popup;
@@ -11,7 +12,6 @@ using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.UI;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Project.Services.PagesContentProvider
@@ -21,6 +21,7 @@ namespace Project.Services.PagesContentProvider
         private readonly IResourcesManager _assetManager;
         private readonly WordPathHelper _wordPathHelper;
         private readonly PopupManager _popupManager;
+        private readonly ProfileService _profileService;
 
         private Action<float, float> _progress;
 
@@ -28,11 +29,13 @@ namespace Project.Services.PagesContentProvider
 
         public PagesContentProvider(IResourcesManager assetManager,
             WordPathHelper wordPathHelper,
-            PopupManager popupManager)
+            PopupManager popupManager,
+            ProfileService profileService)
         {
             _assetManager = assetManager;
             _wordPathHelper = wordPathHelper;
             _popupManager = popupManager;
+            _profileService = profileService;
 
             Content = new Dictionary<string, IDisposableAsset>();
         }
@@ -41,7 +44,7 @@ namespace Project.Services.PagesContentProvider
         {
             foreach (var disposable in Content)
             {
-                disposable.Value.Dispose();
+                disposable.Value?.Dispose();
             }
 
             Content.Clear();
@@ -66,8 +69,8 @@ namespace Project.Services.PagesContentProvider
             foreach (ISimpleQuestion quest in questions)
             {
                 imageKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetTexturePath(k)));
-                soundKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)));
                 configKeys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
+                soundKeys = GetSoundKeys(quest.GetSoundKeys().Select(k => k).ToHashSet()).ToHashSet();
             }
 
             totalKeys.UnionWith(imageKeys);
@@ -120,14 +123,14 @@ namespace Project.Services.PagesContentProvider
 
         public async UniTask GetContentAsync(ISimpleQuestion nextQuestion, CancellationToken ct)
         {
-            var loadingModel = new LoadingUiModel(LoadingElements.Animation);
-            var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
+            LoadingUiModel loadingModel = new(LoadingElements.Animation);
+            LoadingUiController loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
 
-            var configKeys = nextQuestion.GetConfigKeys();
-            var soundKeys = nextQuestion.GetSoundKeys();
-            var imageKeys = nextQuestion.GetImageKeys();
+            HashSet<string> configKeys = nextQuestion.GetConfigKeys();
+            HashSet<string> imageKeys = nextQuestion.GetImageKeys();
+            HashSet<string> soundKeys = GetSoundKeys(nextQuestion.GetSoundKeys().Select(k => k).ToHashSet()).ToHashSet();
 
-            foreach (var key in configKeys)
+            foreach (string key in configKeys)
             {
                 string path = _wordPathHelper.GetConfigPath(key);
 
@@ -140,14 +143,16 @@ namespace Project.Services.PagesContentProvider
                 }
 
                 DisposableAsset<PhraseConfig> asset = await _assetManager.LoadAssetAsync<PhraseConfig>(path, ct);
-                Content[path] = asset;
+
+                if (asset.Item != null)
+                {
+                    Content[path] = asset;
+                }
             }
 
-            foreach (var key in soundKeys)
+            foreach (string key in soundKeys)
             {
-                string path = _wordPathHelper.GetSoundPath(key);
-
-                if (Content.TryGetValue(path, out var configAsset))
+                if (Content.TryGetValue(key, out var configAsset))
                 {
                     if (configAsset != null)
                     {
@@ -155,14 +160,17 @@ namespace Project.Services.PagesContentProvider
                     }
                 }
 
-                DisposableAsset<AudioClip> asset = await _assetManager.LoadAssetAsync<AudioClip>(path, ct);
-                Content[path] = asset;
+                DisposableAsset<AudioClip> asset = await _assetManager.LoadAssetAsync<AudioClip>(key, ct);
+                if (asset.Item != null)
+                {
+                    Content[key] = asset;
+                }
             }
 
-            foreach (var key in imageKeys)
+            foreach (string key in imageKeys)
             {
                 string path = _wordPathHelper.GetTexturePath(key);
-            
+
                 if (Content.TryGetValue(path, out var configAsset))
                 {
                     if (configAsset != null)
@@ -170,8 +178,9 @@ namespace Project.Services.PagesContentProvider
                         continue;
                     }
                 }
-            
+
                 DisposableAsset<Sprite> asset = await _assetManager.LoadAssetAsync<Sprite>(path, ct);
+
                 if (asset.Item != null)
                 {
                     Content[path] = asset;
@@ -198,17 +207,17 @@ namespace Project.Services.PagesContentProvider
 
         public Sprite GetCachedSprite(string path)
         {
-            Sprite texture = GetCachedAsset<Sprite>(path);
-            
-            if (texture == null)
+            Sprite sprite = GetCachedAsset<Sprite>(path);
+
+            if (sprite == null)
             {
                 Debug.LogError($"Texture not found for key: {path}");
                 return _assetManager.LoadMissingSprite();
             }
-            
-            return texture;
+
+            return sprite;
         }
-        
+
         private static Sprite CreateSprite(Texture2D texture, float pixelsPerUnit = 100f)
         {
             if (texture == null) return null;
@@ -219,7 +228,7 @@ namespace Project.Services.PagesContentProvider
                 pixelsPerUnit
             );
         }
-        
+
         public AudioClip GetCachedAudioClip(string name)
         {
             string path = _wordPathHelper.GetSoundPath(name);
@@ -303,10 +312,25 @@ namespace Project.Services.PagesContentProvider
         private void Merge(Dictionary<string, IDisposableAsset> toDictionary,
             Dictionary<string, IDisposableAsset> fromDictionary)
         {
-            foreach (var pair in fromDictionary)
+            foreach (KeyValuePair<string, IDisposableAsset> pair in fromDictionary)
             {
                 toDictionary.TryAdd(pair.Key, pair.Value);
             }
+        }
+
+        private IEnumerable<string> GetSoundKeys(IEnumerable<string> keys)
+        {
+            IEnumerable<string> nativeSoundKeys = GetNativeSoundKeys(keys);
+            IEnumerable<string> soundKeys = keys;
+            soundKeys = soundKeys.Concat(nativeSoundKeys);
+
+            return soundKeys.Select(key => _wordPathHelper.GetSoundPath(key));
+        }
+
+        private IEnumerable<string> GetNativeSoundKeys(IEnumerable<string> soundKeys)
+        {
+            return new List<string>(); // todo chang disable native sound for now. Delete row on native sounds assets ready
+            return soundKeys.Select(key => _wordPathHelper.GetNativeSoundKey(key, _profileService.ProfileData.NativeLanguage));
         }
     }
 }

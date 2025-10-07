@@ -35,7 +35,7 @@ namespace Chang.FSM
     public class SelectWordState : ResultStateBase<QuestionType, PagesBus>
     {
         private readonly IPagesContentProvider _pagesContentProvider;
-        
+
         [Inject] private readonly SelectWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
@@ -43,7 +43,7 @@ namespace Chang.FSM
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly PopupManager _popupManager;
-        
+
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
         private CancellationTokenSource _cts;
@@ -58,7 +58,7 @@ namespace Chang.FSM
         public override void Enter()
         {
             base.Enter();
-            
+
             Bus.OnHintUsed.Subscribe(OnHint);
             _gameOverlayController.EnableHintButton(true);
             _cts = new CancellationTokenSource();
@@ -70,7 +70,7 @@ namespace Chang.FSM
             base.Exit();
             _cts?.Cancel();
             _cts?.Dispose();
-            
+
             _correctWord = null;
             _mixWords?.Clear();
             _mixWords = null;
@@ -82,7 +82,7 @@ namespace Chang.FSM
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
             ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
-            
+
             await _pagesContentProvider.GetContentAsync(question, ct);
 
             QuestSelectWordData questionData = GetQuestionData((SimpleQuestSelectWord)question);
@@ -106,11 +106,11 @@ namespace Chang.FSM
 
             string spritePath = _wordPathHelper.GetTexturePath(((SimpleQuestSelectWord)question).CorrectWordFileName);
             Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
-            
-            _stateController.Init(isQuestInTranslation, _correctWord, sprite, _mixWords, OnToggleValueChanged, OnClickPlaySound);
+
+            _stateController.Init(isQuestInTranslation, _correctWord, sprite, _mixWords, OnToggleValueChanged, () => OnClickPlaySound(!isQuestInTranslation));
             _stateController.SetViewActive(true);
 
-            OnClickPlaySound();
+            OnClickPlaySound(!isQuestInTranslation);
         }
 
         private QuestSelectWordData GetQuestionData(SimpleQuestSelectWord selectWord)
@@ -123,7 +123,7 @@ namespace Chang.FSM
                 Debug.LogError($"SelectWordState: Config not found at path {path}");
                 return null;
             }
-            
+
             QuestSelectWordData selectWordData = new QuestSelectWordData
             {
                 CorrectWord = config.PhraseData,
@@ -142,17 +142,22 @@ namespace Chang.FSM
 
                 if (asset)
                 {
-                    selectWordData.MixWords.Add(asset.PhraseData);    
+                    selectWordData.MixWords.Add(asset.PhraseData);
                 }
             }
 
             return selectWordData;
         }
 
-        private void OnClickPlaySound()
+        private void OnClickPlaySound(bool isLearnLanguage) 
         {
-            var path = _wordPathHelper.GetSoundPath(_correctWord.LogKey);
-            var asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
+            string key =  isLearnLanguage
+                ? _correctWord.LogKey
+                : _wordPathHelper.GetNativeSoundKey(_correctWord.LogKey, _profileService.ProfileData.NativeLanguage);
+            
+            string path = _wordPathHelper.GetSoundPath(key);
+            AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
+            
             if (asset)
             {
                 _pagesSoundController.PlaySound(asset);

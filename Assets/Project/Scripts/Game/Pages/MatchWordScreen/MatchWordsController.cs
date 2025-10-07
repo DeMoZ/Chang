@@ -47,7 +47,7 @@ namespace Chang
         }
 
         public void Init(bool isLeftLearnLanguage, List<WordData> left, List<WordData> right,
-            Action<int, int> onToggleValueChanged, Action onContinueClicked, Action<string> onPlaySound)
+            Action<int, int> onToggleValueChanged, Action onContinueClicked, Action<string, bool> onPlaySound)
         {
             _cts?.Cancel();
             _cts?.Dispose();
@@ -69,7 +69,7 @@ namespace Chang
                     OnToggleValueChanged(true, index, isOn);
                     if (isOn && _isLeftLearnLanguage)
                     {
-                        onPlaySound?.Invoke(left[index].LogKey);
+                        onPlaySound?.Invoke(left[index].LogKey, _isLeftLearnLanguage);
                     }
                 });
                 toggle.EnablePhonetics(_isLeftLearnLanguage && right[i].ShowPhonetics);
@@ -87,7 +87,7 @@ namespace Chang
                     OnToggleValueChanged(false, index, isOn);
                     if (isOn && !_isLeftLearnLanguage)
                     {
-                        onPlaySound?.Invoke(right[index].LogKey);
+                        onPlaySound?.Invoke(right[index].LogKey, !_isLeftLearnLanguage);
                     }
                 });
                 toggle.EnablePhonetics(!_isLeftLearnLanguage && right[i].ShowPhonetics);
