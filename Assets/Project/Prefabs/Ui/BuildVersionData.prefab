@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf89a93c33d4c5c97dacf271ffb934a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onBuildConfig: {fileID: 11400000, guid: 03f6495a3d2d64dcfb97b7b0612b4619, type: 2}
+  onBuildConfig: {fileID: 11400000, guid: 063c49871791140aea7e0de8443f946c, type: 2}
   versionText: {fileID: 369550508484888287}
 --- !u!23 &6806194841874294020
 MeshRenderer:
@@ -73,6 +73,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,6 +96,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
