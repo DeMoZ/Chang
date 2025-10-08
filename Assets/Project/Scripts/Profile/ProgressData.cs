@@ -17,8 +17,13 @@ namespace Chang.Profile
 
         public Dictionary<string, QuestLog> ThaiQuestLogs { get; private set; }
         
-        // [Obsolete("Use ThaiQuestLogs instead", false)]
-        // public Dictionary<string, QuestLog> Questions { get; private set; }
+        #region "May be move to ProfileData"
+        /// <summary>
+        /// Position for scroll in GameBook screen
+        /// </summary>
+        [field: SerializeField]
+        public float GameBookScrollPosition { get; set; } = 1f;
+        #endregion
         
         [JsonConstructor]
         public ProgressData(DateTime utcTime, Dictionary<string, QuestLog> thaiQuestLogs, Dictionary<string, QuestLog> questions)

@@ -1,8 +1,12 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+
 namespace Chang.GameBook
 {
     public class GameBookView : MonoBehaviour
     {
+        [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private SectionBlock sectionBlockPrefab;
         [SerializeField] private RectTransform rowPrefab;
         [SerializeField] private GameBookSection sectionPrefab;
@@ -14,7 +18,12 @@ namespace Chang.GameBook
         
         public Color GetNextColor(int index) => sectionsColors.colorKeys[index % sectionsColors.colorKeys.Length].color;
         public Color GetLessonColor(float index) => lessonMarkColors.Evaluate(index);
-        
+        public float ScrollPosition
+        {
+            get => scrollRect.verticalNormalizedPosition;
+            set => scrollRect.verticalNormalizedPosition = value;
+        }
+
         public SectionBlock InstantiateSectionBlock()
         {
             var go = Instantiate(sectionBlockPrefab, content);

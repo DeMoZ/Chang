@@ -35,7 +35,7 @@ namespace Chang.GameBook
             _view = view;
             _profileService = profileService;
             _repetitionService = repetitionService;
-            
+
             // todo chang local cts should be initialized in enter state and disposed in exit state
             // need to provide this methods first
             _cts = new CancellationTokenSource();
@@ -44,13 +44,13 @@ namespace Chang.GameBook
         public void Init()
         {
         }
-        
+
         public void Dispose()
         {
             _cts?.Cancel();
             _cts?.Dispose();
         }
-        
+
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
@@ -81,6 +81,10 @@ namespace Chang.GameBook
 
                 await PopulateSectionAsync(simpleSection, sectionBlock, ct);
             }
+
+            await UniTask.Yield();
+
+            SetScrollPosition();
         }
 
         private Color GetLessonColor(SimpleLessonData lessonData)
@@ -178,13 +182,27 @@ namespace Chang.GameBook
         private void OnSectionRepetitionClick(string key)
         {
             Debug.Log($"OnSectionRepetitionClick key: {key}");
+            SaveScrollPosition();
             _mainScreenBus.OnGameBookSectionRepeatClicked?.Invoke(key);
         }
 
         private void OnLessonClick(string sectionName, int lessonIndex)
         {
             Debug.Log($"Clicked on item {sectionName}_{lessonIndex}");
+            SaveScrollPosition();
             _mainScreenBus.OnGameBookLessonClicked?.Invoke(sectionName, lessonIndex);
+        }
+
+        private void SaveScrollPosition()
+        {
+            _profileService.ProgressData.GameBookScrollPosition = _view.ScrollPosition;
+            Debug.Log($"Load gamebook scroll position: {_profileService.ProgressData.GameBookScrollPosition}, scroll position: {_view.ScrollPosition}");
+        }
+
+        private void SetScrollPosition()
+        {
+            _view.ScrollPosition = _profileService.ProgressData.GameBookScrollPosition;
+            Debug.Log($"Load gamebook scroll position: {_profileService.ProgressData.GameBookScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
     }
 }

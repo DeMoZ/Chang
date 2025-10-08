@@ -99,6 +99,11 @@ namespace Chang
             if (_isLoading || !isOn)
                 return;
 
+            _gameBookController.SetViewActive(tabType == MainTabType.Lessons);
+            _repetitionController.SetViewActive(tabType == MainTabType.Repetition);
+            _profileController.SetViewActive(tabType == MainTabType.Profile);
+            _currentTabType = tabType;
+            
             // todo chang show loading animation ?
             switch (tabType)
             {
@@ -116,11 +121,6 @@ namespace Chang
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tabType), tabType, null);
             }
-
-            _gameBookController.SetViewActive(tabType == MainTabType.Lessons);
-            _repetitionController.SetViewActive(tabType == MainTabType.Repetition);
-            _profileController.SetViewActive(tabType == MainTabType.Profile);
-            _currentTabType = tabType;
         }
 
         private void OnGameBookLessonClicked(string sectionName, int lessonIndex)
