@@ -14,6 +14,7 @@ namespace Chang
         SelectWord,
         MatchWords,
         DemonstrationDialogue,
+        SentenceSelectWord,
         
         Result = 100,
     }
