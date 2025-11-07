@@ -1,10 +1,9 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Chang.GameBook
 {
-    public class GameBookView : MonoBehaviour
+    public class BookView : MonoBehaviour
     {
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private SectionBlock sectionBlockPrefab;

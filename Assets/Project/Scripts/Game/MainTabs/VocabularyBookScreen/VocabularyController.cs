@@ -10,31 +10,31 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.GameBook
 {
-    public class GameBookController : IViewController
+    public class VocabularyController : IViewController
     {
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
-        private readonly GameBookView _view;
+        private readonly BookVocabularyView _view;
         private readonly ProfileService _profileService;
-        private readonly RepetitionService _repetitionService;
+        private readonly VocabularyRepetitionService _vocabularyRepetitionService;
 
         private Dictionary<string, SimpleLessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
 
         [Inject]
-        public GameBookController(
+        public VocabularyController(
             GameBus gameBus,
             MainScreenBus mainScreenBus,
-            GameBookView view,
+            BookVocabularyView view,
             ProfileService profileService,
-            RepetitionService repetitionService)
+            VocabularyRepetitionService vocabularyRepetitionService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
-            _repetitionService = repetitionService;
+            _vocabularyRepetitionService = vocabularyRepetitionService;
 
             // todo chang local cts should be initialized in enter state and disposed in exit state
             // need to provide this methods first
@@ -136,7 +136,7 @@ namespace Chang.GameBook
 
         private async UniTask PopulateSectionAsync(SimpleSection section, SectionBlock sectionBlock, CancellationToken ct)
         {
-            List<QuestLog> repetitions = await _repetitionService
+            List<QuestLog> repetitions = await _vocabularyRepetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section, ct);
 
             int repetitionsCount = repetitions.Count;
@@ -183,14 +183,14 @@ namespace Chang.GameBook
         {
             Debug.Log($"OnSectionRepetitionClick key: {key}");
             SaveScrollPosition();
-            _mainScreenBus.OnGameBookSectionRepeatClicked?.Invoke(key);
+            _mainScreenBus.OnWordsSectionRepeatClicked?.Invoke(key);
         }
 
         private void OnLessonClick(string sectionName, int lessonIndex)
         {
             Debug.Log($"Clicked on item {sectionName}_{lessonIndex}");
             SaveScrollPosition();
-            _mainScreenBus.OnGameBookLessonClicked?.Invoke(sectionName, lessonIndex);
+            _mainScreenBus.OnWordsLessonClicked?.Invoke(sectionName, lessonIndex);
         }
 
         private void SaveScrollPosition()

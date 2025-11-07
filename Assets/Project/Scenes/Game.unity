@@ -575,6 +575,17 @@ Transform:
   - {fileID: 1720160717}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &553732448 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3402069919314094396, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+  m_PrefabInstance: {fileID: 2252297808241563143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb3793a995f44b59b78742a185667de6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.GameBook.VocabularyBookView
 --- !u!1 &575617842
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,6 +1276,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 849415994}
   m_CullTransparentMesh: 1
+--- !u!114 &888149741 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 646930473074900691, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+  m_PrefabInstance: {fileID: 2252297808241563143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bbe5df93cff4cd2877bdcb5485396f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.GameBook.BookSentenceView
 --- !u!1 &1168933103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1324,17 +1346,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9625bdbafa7944cc28b91421b31d628e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1500397868 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6921478018946604128, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
-  m_PrefabInstance: {fileID: 2252297808241563143}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c88a06c96eda4015ab74742d8e060e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1526929536
@@ -1774,7 +1785,8 @@ MonoBehaviour:
   mainUiScreen: {fileID: 1394104369}
   repetitionScreen: {fileID: 2905783494241543941}
   profileScreen: {fileID: 7857981279451695531}
-  gameBookScreen: {fileID: 1500397868}
+  bookVocabularyScreen: {fileID: 553732448}
+  bookSentencesScreen: {fileID: 888149741}
   gameOverlayScreen: {fileID: 383225373}
   pagesContainer: {fileID: 661310080}
   playResultScreen: {fileID: 2624230485719386419}
@@ -2285,6 +2297,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4200827512723607466, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568023446149641256, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568023446149641256, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568023446149641256, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568023446149641256, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568023446149641256, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}

@@ -7,26 +7,26 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
-    public class RepetitionController : IViewController
+    public class VocabularyRepetitionController : IViewController
     {
         private const int ShowLogLimitAmount = 30;
 
         private readonly ProfileService _profileService;
         private readonly MainScreenBus _mainScreenBus;
         private readonly RepetitionView _view;
-        private readonly RepetitionService _repetitionService;
+        private readonly VocabularyRepetitionService _vocabularyRepetitionService;
 
         [Inject]
-        public RepetitionController(
+        public VocabularyRepetitionController(
             ProfileService profileService,
             MainScreenBus mainScreenBus,
             RepetitionView view,
-            RepetitionService repetitionService)
+            VocabularyRepetitionService vocabularyRepetitionService)
         {
             _profileService = profileService;
             _mainScreenBus = mainScreenBus;
             _view = view;
-            _repetitionService = repetitionService;
+            _vocabularyRepetitionService = vocabularyRepetitionService;
         }
 
         public void Dispose()
@@ -35,12 +35,12 @@ namespace Chang
 
         public void Init()
         {
-            _view.Init(_mainScreenBus.OnRepeatClicked);
+            _view.Init(_mainScreenBus.OnWordsRepeatClicked);
         }
 
         public async UniTask SetAsync(CancellationToken ct)
         {
-            var sortedList = await _repetitionService.GetGeneralRepetitionAsync(ShowLogLimitAmount, ct);
+            var sortedList = await _vocabularyRepetitionService.GetGeneralRepetitionAsync(ShowLogLimitAmount, ct);
             _view.Set(sortedList);
         }
 

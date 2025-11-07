@@ -8,7 +8,7 @@ using Zenject;
 
 namespace Chang.Services
 {
-    public class RepetitionService : IDisposable
+    public class VocabularyRepetitionService : IDisposable
     {
         private const float MarkWeight = 0.25f;
         private const float SequenceWeight = 0.4f;
@@ -17,7 +17,7 @@ namespace Chang.Services
         private readonly ProfileService _profileService;
 
         [Inject]
-        public RepetitionService(ProfileService profileService)
+        public VocabularyRepetitionService(ProfileService profileService)
         {
             _profileService = profileService;
         }

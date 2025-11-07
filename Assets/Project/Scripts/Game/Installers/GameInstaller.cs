@@ -13,7 +13,8 @@ namespace Chang
         [SerializeField] private MainUiView mainUiScreen;
         [SerializeField] private RepetitionView repetitionScreen;
         [SerializeField] private ProfileView profileScreen;
-        [SerializeField] private GameBookView gameBookScreen;
+        [SerializeField] private BookVocabularyView bookVocabularyScreen;
+        [SerializeField] private BookSentenceView bookSentencesScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
 
         [Space, SerializeField] private PagesContainer pagesContainer;
@@ -33,7 +34,8 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<Game>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
-            Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<VocabularyRepetitionService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SentencesRepetitionService>().AsSingle();
             Container.BindInterfacesAndSelfTo<WordPathHelper>().AsSingle();
             Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
 
@@ -43,7 +45,8 @@ namespace Chang
 
             Container.BindInstance(mainUiScreen).AsSingle();
             Container.BindInstance(repetitionScreen).AsSingle();
-            Container.BindInstance(gameBookScreen).AsSingle();
+            Container.BindInstance(bookVocabularyScreen).AsSingle();
+            Container.BindInstance(bookSentencesScreen).AsSingle();
             Container.BindInstance(gameOverlayScreen).AsSingle();
             Container.BindInstance(pagesContainer).AsSingle();
             Container.BindInstance(playResultScreen).AsSingle();
@@ -57,8 +60,13 @@ namespace Chang
             #region Controllers
 
             Container.BindInterfacesAndSelfTo<LobbyController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<RepetitionController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<GameBookController>().AsSingle();
+            
+            Container.BindInterfacesAndSelfTo<VocabularyRepetitionController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<VocabularyController>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<SentencesRepetitionController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SentencesController>().AsSingle();
+            
             Container.BindInterfacesAndSelfTo<GameOverlayController>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayResultController>().AsSingle();
             Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();

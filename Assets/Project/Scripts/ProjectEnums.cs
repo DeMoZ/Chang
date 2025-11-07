@@ -41,9 +41,10 @@ namespace Chang
     public enum MainTabType
     {
         None,
-        Lessons,
+        Vocabulary,
         Repetition,
         Profile,
+        Sentences,
     }
 
     /// <summary>

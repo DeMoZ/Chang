@@ -16,11 +16,14 @@ namespace Chang
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
         private readonly MainUiView _view;
-        private readonly GameBookController _gameBookController;
-        private readonly RepetitionController _repetitionController;
+        private readonly VocabularyController _vocabularyController;
+        private readonly VocabularyRepetitionController _vocabularyRepetitionController;
+        private readonly VocabularyRepetitionService _vocabularyRepetitionService;
+        private readonly SentencesController _sentencesController;
+        private readonly SentencesRepetitionController _sentencesRepetitionController;
+        private readonly SentencesRepetitionService _sentencesRepetitionService;
         private readonly ProfileController _profileController;
         private readonly ProfileService _profileService;
-        private readonly RepetitionService _repetitionService;
 
         private bool _isLoading;
         private CancellationTokenSource _cts;
@@ -28,7 +31,7 @@ namespace Chang
         /// <summary>
         /// should return to this tab after play any other game state
         /// </summary>
-        private MainTabType _currentTabType = MainTabType.Lessons;
+        private MainTabType _currentTabType = MainTabType.Vocabulary;
 
         private Action _onExitState;
 
@@ -37,32 +40,38 @@ namespace Chang
             GameBus gameBus,
             MainScreenBus mainScreenBus,
             MainUiView view,
-            GameBookController gameBookController,
-            RepetitionController repetitionController,
+            VocabularyController vocabularyController,
+            VocabularyRepetitionController vocabularyRepetitionController,
+            VocabularyRepetitionService vocabularyRepetitionService,
+            SentencesController sentencesController,
+            SentencesRepetitionController sentencesRepetitionController,
+            SentencesRepetitionService sentencesRepetitionService,
             ProfileController profileController,
-            ProfileService profileService,
-            RepetitionService repetitionService)
+            ProfileService profileService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
-            _gameBookController = gameBookController;
-            _repetitionController = repetitionController;
+            _vocabularyController = vocabularyController;
+            _vocabularyRepetitionController = vocabularyRepetitionController;
+            _vocabularyRepetitionService = vocabularyRepetitionService;
+            _sentencesController = sentencesController;
+            _sentencesRepetitionController = sentencesRepetitionController;
+            _sentencesRepetitionService = sentencesRepetitionService;
             _profileController = profileController;
             _profileService = profileService;
-            _repetitionService = repetitionService;
 
-            _mainScreenBus.OnGameBookLessonClicked += OnGameBookLessonClicked;
-            _mainScreenBus.OnGameBookSectionRepeatClicked += OnGameBookSectionRepeatClicked;
-            _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClicked;
+            _mainScreenBus.OnWordsLessonClicked += OnWordsLessonClicked;
+            _mainScreenBus.OnWordsSectionRepeatClicked += OnWordsSectionRepeatClicked;
+            _mainScreenBus.OnWordsRepeatClicked += OnWordsGeneralRepeatClicked;
             _cts = new CancellationTokenSource();
         }
 
         public void Dispose()
         {
-            _mainScreenBus.OnGameBookLessonClicked -= OnGameBookLessonClicked;
-            _mainScreenBus.OnGameBookSectionRepeatClicked -= OnGameBookSectionRepeatClicked;
-            _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClicked;
+            _mainScreenBus.OnWordsLessonClicked -= OnWordsLessonClicked;
+            _mainScreenBus.OnWordsSectionRepeatClicked -= OnWordsSectionRepeatClicked;
+            _mainScreenBus.OnWordsRepeatClicked -= OnWordsGeneralRepeatClicked;
             _cts.Cancel();
             _cts.Dispose();
         }
@@ -72,8 +81,10 @@ namespace Chang
             _onExitState = onExitState;
 
             _view.Init(OnToggleSelected);
-            _gameBookController.Init();
-            _repetitionController.Init();
+            _vocabularyController.Init();
+            _vocabularyRepetitionController.Init();
+            _sentencesController.Init();
+            _sentencesRepetitionController.Init();
             _profileController.Init();
         }
 
@@ -99,20 +110,25 @@ namespace Chang
             if (_isLoading || !isOn)
                 return;
 
-            _gameBookController.SetViewActive(tabType == MainTabType.Lessons);
-            _repetitionController.SetViewActive(tabType == MainTabType.Repetition);
+            _vocabularyController.SetViewActive(tabType == MainTabType.Vocabulary);
+            _sentencesController.SetViewActive(tabType == MainTabType.Sentences);
+            _vocabularyRepetitionController.SetViewActive(tabType == MainTabType.Repetition);
             _profileController.SetViewActive(tabType == MainTabType.Profile);
             _currentTabType = tabType;
             
             // todo chang show loading animation ?
             switch (tabType)
             {
-                case MainTabType.Lessons:
-                    await _gameBookController.SetAsync(ct);
+                case MainTabType.Vocabulary:
+                    await _vocabularyController.SetAsync(ct);
+                    break;
+                
+                case MainTabType.Sentences:
+                    await _sentencesController.SetAsync(ct);
                     break;
 
                 case MainTabType.Repetition:
-                    await _repetitionController.SetAsync(ct);
+                    await _vocabularyRepetitionController.SetAsync(ct);
                     break;
 
                 case MainTabType.Profile:
@@ -123,12 +139,12 @@ namespace Chang
             }
         }
 
-        private void OnGameBookLessonClicked(string sectionName, int lessonIndex)
+        private void OnWordsLessonClicked(string sectionName, int lessonIndex)
         {
-            OnGameBookLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
+            OnWordsLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
         }
 
-        private async UniTaskVoid OnGameBookLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
+        private async UniTaskVoid OnWordsLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
         {
             if (_isLoading)
                 return;
@@ -160,22 +176,22 @@ namespace Chang
             _onExitState?.Invoke();
         }
 
-        private void OnGameBookSectionRepeatClicked(string section)
+        private void OnWordsSectionRepeatClicked(string section)
         {
-            OnGameBookSectionRepeatClickedAsync(section, _cts.Token).Forget();
+            OnWordsSectionRepeatClickedAsync(section, _cts.Token).Forget();
         }
 
-        private async UniTaskVoid OnGameBookSectionRepeatClickedAsync(string section, CancellationToken ct)
+        private async UniTaskVoid OnWordsSectionRepeatClickedAsync(string section, CancellationToken ct)
         {
             if (_isLoading)
                 return;
 
             // todo chang show loading animation ?
-            var repetitions = await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
+            var repetitions = await _vocabularyRepetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
-        private void OnGeneralRepeatClicked()
+        private void OnWordsGeneralRepeatClicked()
         {
             OnGeneralRepeatClickedAsync(_cts.Token).Forget();
         }
@@ -186,7 +202,7 @@ namespace Chang
                 return;
 
             // todo chang show loading animation ?
-            var repetitions = await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
+            var repetitions = await _vocabularyRepetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
