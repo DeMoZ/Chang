@@ -20,7 +20,7 @@ namespace Chang.GameBook
         private Dictionary<string, SimpleLessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
-
+        
         [Inject]
         public SentencesController(
             GameBus gameBus,

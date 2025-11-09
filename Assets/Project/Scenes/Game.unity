@@ -1276,17 +1276,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 849415994}
   m_CullTransparentMesh: 1
---- !u!114 &888149741 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 646930473074900691, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
-  m_PrefabInstance: {fileID: 2252297808241563143}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bbe5df93cff4cd2877bdcb5485396f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Chang.GameBook.BookSentenceView
 --- !u!1 &1168933103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1786,7 +1775,7 @@ MonoBehaviour:
   repetitionScreen: {fileID: 2905783494241543941}
   profileScreen: {fileID: 7857981279451695531}
   bookVocabularyScreen: {fileID: 553732448}
-  bookSentencesScreen: {fileID: 888149741}
+  bookSentencesScreen: {fileID: 2252297808241563147}
   gameOverlayScreen: {fileID: 383225373}
   pagesContainer: {fileID: 661310080}
   playResultScreen: {fileID: 2624230485719386419}
@@ -2424,11 +2413,115 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 646930473074900691, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5444193073482160193, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2252297808241563147}
   m_SourcePrefab: {fileID: 100100000, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+--- !u!224 &2252297808241563144 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6665141231501474626, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+  m_PrefabInstance: {fileID: 2252297808241563143}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2252297808241563145 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2356405074876629119, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+  m_PrefabInstance: {fileID: 2252297808241563143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2252297808241563146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5444193073482160193, guid: 25cd2962eaa5b46beb35973c33c68053, type: 3}
+  m_PrefabInstance: {fileID: 2252297808241563143}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2252297808241563147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2252297808241563146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a771def39fd429fa2995e46b92a4a1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.GameBook.BookSentencesView
+  scrollRect: {fileID: 2252297808241563145}
+  sectionBlockPrefab: {fileID: 1322334611555210895, guid: 1db5435580dcc45c49738e46a8b90cb9, type: 3}
+  rowPrefab: {fileID: 312614010915429568, guid: a29055a1f05694f9b91c8302768726c4, type: 3}
+  sectionPrefab: {fileID: 7420873479873045992, guid: 5323b31d5e69a4a9cbcac0967340cc3d, type: 3}
+  upLessonPrefab: {fileID: 2936488994364419870, guid: f78e2e1261be249d187a95545564248d, type: 3}
+  downLessonPrefab: {fileID: 6409940468721343200, guid: 72fd6399336174e23bd95dfd22e93daf, type: 3}
+  content: {fileID: 2252297808241563144}
+  sectionsColors:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  lessonMarkColors:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
 --- !u!1001 &2624230485719386418
 PrefabInstance:
   m_ObjectHideFlags: 0

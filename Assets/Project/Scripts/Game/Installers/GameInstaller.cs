@@ -14,7 +14,7 @@ namespace Chang
         [SerializeField] private RepetitionView repetitionScreen;
         [SerializeField] private ProfileView profileScreen;
         [SerializeField] private BookVocabularyView bookVocabularyScreen;
-        [SerializeField] private BookSentenceView bookSentencesScreen;
+        [SerializeField] private BookSentencesView bookSentencesScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
 
         [Space, SerializeField] private PagesContainer pagesContainer;

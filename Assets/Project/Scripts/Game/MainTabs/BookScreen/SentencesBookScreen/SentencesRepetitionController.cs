@@ -9,12 +9,12 @@ namespace Chang
 
         public void SetViewActive(bool active)
         {
-            throw new System.NotImplementedException();
+//            throw new System.NotImplementedException();
         }
 
         public void Init()
         {
-            throw new System.NotImplementedException();
+//            throw new System.NotImplementedException();
         }
     }
 }
