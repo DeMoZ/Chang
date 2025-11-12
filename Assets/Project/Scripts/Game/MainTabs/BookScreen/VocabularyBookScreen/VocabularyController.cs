@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
+using Chang.Vocabulary;
 
 namespace Chang.GameBook
 {
@@ -18,7 +19,7 @@ namespace Chang.GameBook
         private readonly ProfileService _profileService;
         private readonly VocabularyRepetitionService _vocabularyRepetitionService;
 
-        private Dictionary<string, SimpleLessonData> _lessons = new();
+        private Dictionary<string, LessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
 
@@ -62,24 +63,24 @@ namespace Chang.GameBook
             _lessons.Clear();
             _view.Clear();
 
-            for (var i = 0; i < _gameBus.SimpleBookData.Sections.Count; i++)
+            for (var i = 0; i < _gameBus.VocabularyBookData.Sections.Count; i++)
             {
                 Color baseColor = _view.GetNextColor(i);
-                SimpleSection simpleSection = _gameBus.SimpleBookData.Sections[i];
+                SectionData sectionData = _gameBus.VocabularyBookData.Sections[i];
 
                 SectionBlock sectionBlock = _view.InstantiateSectionBlock();
                 sectionBlock.SetBaseColor(baseColor);
-                sectionBlock.SectionView.name = $"SectionBlock_{simpleSection.Section}";
-                _sectionBlocks.Add(simpleSection.Section, sectionBlock);
+                sectionBlock.SectionView.name = $"SectionBlock_{sectionData.Section}";
+                _sectionBlocks.Add(sectionData.Section, sectionBlock);
 
-                sectionBlock.SectionView.Init(simpleSection.Section,
-                    () => OnSectionSortClick(simpleSection.Section),
-                    () => OnSectionRepetitionClick(simpleSection.Section));
+                sectionBlock.SectionView.Init(sectionData.Section,
+                    () => OnSectionSortClick(sectionData.Section),
+                    () => OnSectionRepetitionClick(sectionData.Section));
 
-                sectionBlock.SectionView.name = $"Section_{simpleSection.Section}";
+                sectionBlock.SectionView.name = $"Section_{sectionData.Section}";
                 sectionBlock.SectionView.SetBaseColor(baseColor);
 
-                await PopulateSectionAsync(simpleSection, sectionBlock, ct);
+                await PopulateSectionAsync(sectionData, sectionBlock, ct);
             }
 
             await UniTask.Yield();
@@ -87,13 +88,13 @@ namespace Chang.GameBook
             SetScrollPosition();
         }
 
-        private Color GetLessonColor(SimpleLessonData lessonData)
+        private Color GetLessonColor(LessonData lessonData)
         {
             float sum = 0;
 
-            foreach (ISimpleQuestion question in lessonData.Questions)
+            foreach (IQuestion question in lessonData.Questions)
             {
-                if (question is SimpleQuestSelectWord selectWord)
+                if (question is Vocabulary.QuestSelectWord selectWord)
                 {
                     sum += (float)_profileService.GetMark(selectWord.CorrectWordFileName) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
                 }
@@ -110,15 +111,15 @@ namespace Chang.GameBook
         private void OnSectionSortClick(string key)
         {
             Debug.Log($"OnSectionSortClick key: {key}");
-            SimpleSection section = _gameBus.SimpleBookData.Sections.Find(s => s.Section == key);
+            SectionData sectionData = _gameBus.VocabularyBookData.Sections.Find(s => s.Section == key);
 
-            if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(section.Section), out _))
+            if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(sectionData.Section), out _))
             {
-                _profileService.ReorderedSections.Remove(_profileService.ReorderedSectionKey(section.Section));
+                _profileService.ReorderedSections.Remove(_profileService.ReorderedSectionKey(sectionData.Section));
             }
             else
             {
-                _profileService.ReorderSection(section);
+                _profileService.ReorderSection(sectionData);
             }
 
             SectionBlock sectionBlock = _sectionBlocks[key];
@@ -131,16 +132,16 @@ namespace Chang.GameBook
                 }
             }
 
-            PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
+            PopulateSectionAsync(sectionData, sectionBlock, _cts.Token).Forget();
         }
 
-        private async UniTask PopulateSectionAsync(SimpleSection section, SectionBlock sectionBlock, CancellationToken ct)
+        private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
         {
             List<QuestLog> repetitions = await _vocabularyRepetitionService
-                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section, ct);
+                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
 
             int repetitionsCount = repetitions.Count;
-            string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
+            string reorderedSectionKey = _profileService.ReorderedSectionKey(sectionData.Section);
 
             sectionBlock.SectionView.SetSortToggle(
                 repetitionsCount > 0 && _profileService.ReorderedSections.ContainsKey(reorderedSectionKey),
@@ -150,12 +151,12 @@ namespace Chang.GameBook
 
             if (_profileService.ReorderedSections.TryGetValue(reorderedSectionKey, out var reorderedSection))
             {
-                section = reorderedSection;
+                sectionData = reorderedSection;
             }
 
             RectTransform row = null;
             int count = -1;
-            for (int m = 0; m < section.Lessons.Count; m++)
+            for (int m = 0; m < sectionData.Lessons.Count; m++)
             {
                 if (m / 6 > count)
                 {
@@ -163,10 +164,10 @@ namespace Chang.GameBook
                     row = _view.InstantiateRow(sectionBlock.Container);
                 }
 
-                string sectionName = section.Section;
+                string sectionName = sectionData.Section;
                 int lessonIndex = m + 1;
-                string key = $"{section.Section}_{m + 1}";
-                _lessons[key] = section.Lessons[m];
+                string key = $"{sectionData.Section}_{m + 1}";
+                _lessons[key] = sectionData.Lessons[m];
 
                 GameBookItem lessonItem = m % 2 == 0
                     ? _view.InstantiateUpLesson(row)
@@ -174,7 +175,7 @@ namespace Chang.GameBook
 
                 lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
                 lessonItem.name = $"Item {key}";
-                var color = GetLessonColor(section.Lessons[m]);
+                var color = GetLessonColor(sectionData.Lessons[m]);
                 lessonItem.SetColor(color);
             }
         }

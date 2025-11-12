@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
-namespace Chang.GameBook
+namespace Chang.Sentences
 {
     public class SentencesController : IViewController
     {
@@ -17,8 +17,8 @@ namespace Chang.GameBook
         private readonly ProfileService _profileService;
         private readonly SentencesRepetitionService _sentencesRepetitionService;
 
-        private Dictionary<string, SimpleLessonData> _lessons = new();
-        private Dictionary<string, SectionBlock> _sectionBlocks = new();
+        private Dictionary<string, LessonData> _lessons = new();
+        private Dictionary<string, GameBook.SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
         
         [Inject]
@@ -86,7 +86,7 @@ namespace Chang.GameBook
             SetScrollPosition();
         }
 
-        private Color GetLessonColor(SimpleLessonData lessonData)
+        private Color GetLessonColor(LessonData lessonData)
         {
             return new Color();
             // float sum = 0;
@@ -109,32 +109,32 @@ namespace Chang.GameBook
 
         private void OnSectionSortClick(string key)
         {
-            Debug.Log($"OnSectionSortClick key: {key}");
-            SimpleSection section = _gameBus.SimpleBookData.Sections.Find(s => s.Section == key);
-
-            if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(section.Section), out _))
-            {
-                _profileService.ReorderedSections.Remove(_profileService.ReorderedSectionKey(section.Section));
-            }
-            else
-            {
-                _profileService.ReorderSection(section);
-            }
-
-            SectionBlock sectionBlock = _sectionBlocks[key];
-
-            foreach (Transform child in sectionBlock.Container)
-            {
-                if (!child.name.Contains("Section"))
-                {
-                    UnityEngine.Object.Destroy(child.gameObject);
-                }
-            }
-
-            PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
+            // Debug.Log($"OnSectionSortClick key: {key}");
+            // Section section = _gameBus.SimpleSentencesBookData.Sections.Find(s => s.SectionName == key);
+            //
+            // if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(section.SectionName), out _))
+            // {
+            //     _profileService.ReorderedSections.Remove(_profileService.ReorderedSectionKey(section.SectionName));
+            // }
+            // else
+            // {
+            //     _profileService.ReorderSection(section);
+            // }
+            //
+            // SectionBlock sectionBlock = _sectionBlocks[key];
+            //
+            // foreach (Transform child in sectionBlock.Container)
+            // {
+            //     if (!child.name.Contains("Section"))
+            //     {
+            //         UnityEngine.Object.Destroy(child.gameObject);
+            //     }
+            // }
+            //
+            // PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
         }
 
-        private async UniTask PopulateSectionAsync(SimpleSection section, SectionBlock sectionBlock, CancellationToken ct)
+        private async UniTask PopulateSectionAsync(Section section, GameBook.SectionBlock sectionBlock, CancellationToken ct)
         {
            await UniTask.Yield();
             // List<QuestLog> repetitions = await _sentencesRepetitionService

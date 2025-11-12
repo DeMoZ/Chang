@@ -11,6 +11,7 @@ using Popup;
 using Project.Services.PagesContentProvider;
 using UnityEngine;
 using Zenject;
+using Chang.Vocabulary;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
@@ -81,11 +82,11 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
+            IQuestion question = Bus.CurrentLesson.currentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 
-            QuestSelectWordData questionData = GetQuestionData((SimpleQuestSelectWord)question);
+            QuestSelectWordData questionData = GetQuestionData((Vocabulary.QuestSelectWord)question);
             _correctWord = questionData.CorrectWord;
             _mixWords ??= new List<PhraseData>();
             _mixWords.Clear();
@@ -104,7 +105,7 @@ namespace Chang.FSM
                 mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
             }
 
-            string spritePath = _wordPathHelper.GetTexturePath(((SimpleQuestSelectWord)question).CorrectWordFileName);
+            string spritePath = _wordPathHelper.GetTexturePath(((Vocabulary.QuestSelectWord)question).CorrectWordFileName);
             Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
 
             _stateController.Init(isQuestInTranslation, _correctWord, sprite, _mixWords, OnToggleValueChanged, () => OnClickPlaySound(!isQuestInTranslation));
@@ -113,7 +114,7 @@ namespace Chang.FSM
             OnClickPlaySound(!isQuestInTranslation);
         }
 
-        private QuestSelectWordData GetQuestionData(SimpleQuestSelectWord selectWord)
+        private QuestSelectWordData GetQuestionData(Vocabulary.QuestSelectWord selectWord)
         {
             var path = _wordPathHelper.GetConfigPath(selectWord.CorrectWordFileName);
             var config = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);

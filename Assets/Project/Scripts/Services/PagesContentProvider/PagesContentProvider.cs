@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Debug = DMZ.DebugSystem.DMZLogger;
+using Chang.Vocabulary;
 
 namespace Project.Services.PagesContentProvider
 {
@@ -56,7 +57,7 @@ namespace Project.Services.PagesContentProvider
             // no clear cache on pages switch, so don't implement this method
         }
 
-        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> progress,
+        public async UniTask PreloadPagesStateAsync(List<IQuestion> questions, Action<float, float> progress,
             CancellationToken ct)
         {
             _progress = progress;
@@ -66,7 +67,7 @@ namespace Project.Services.PagesContentProvider
             HashSet<string> configKeys = new();
 
             HashSet<string> totalKeys = new();
-            foreach (ISimpleQuestion quest in questions)
+            foreach (IQuestion quest in questions)
             {
                 imageKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetTexturePath(k)));
                 configKeys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
@@ -121,7 +122,7 @@ namespace Project.Services.PagesContentProvider
             Merge(Content, configs);
         }
 
-        public async UniTask GetContentAsync(ISimpleQuestion nextQuestion, CancellationToken ct)
+        public async UniTask GetContentAsync(IQuestion nextQuestion, CancellationToken ct)
         {
             LoadingUiModel loadingModel = new(LoadingElements.Animation);
             LoadingUiController loadingUiController = _popupManager.ShowLoadingUi(loadingModel);

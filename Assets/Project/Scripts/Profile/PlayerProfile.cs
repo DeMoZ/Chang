@@ -11,7 +11,7 @@ namespace Chang.Profile
         /// <summary>
         /// key Thai/Fruits, value section
         /// </summary>
-        public Dictionary<string, SimpleSection> ReorderedSections { get; private set; } = new();
+        public Dictionary<string, Vocabulary.SectionData> ReorderedSections { get; private set; } = new();
 
         public PlayerProfile()
         {
@@ -28,9 +28,9 @@ namespace Chang.Profile
         {
         }
 
-        public void AddReorderSection(string key, SimpleSection section)
+        public void AddReorderSection(string key, Vocabulary.SectionData sectionData)
         {
-            ReorderedSections[key] = section;
+            ReorderedSections[key] = sectionData;
         }
     }
 }

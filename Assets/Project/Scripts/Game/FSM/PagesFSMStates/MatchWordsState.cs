@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using Chang.Resources;
 using Chang.Services;
+using Chang.Vocabulary;
 using Cysharp.Threading.Tasks;
 using Popup;
 using Project.Services.PagesContentProvider;
@@ -78,7 +79,7 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
+            IQuestion question = Bus.CurrentLesson.currentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 
@@ -88,7 +89,7 @@ namespace Chang.FSM
             {
                 path = _wordPathHelper.GetConfigPath(fileName);
                 var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
-                
+
                 if (!asset)
                 {
                     Debug.LogError($"Asset not found: {path}");
@@ -126,10 +127,8 @@ namespace Chang.FSM
 
         private void OnPlaySound(string key, bool isLearnLanguage)
         {
-            var language = isLearnLanguage?
-                _profileService.ProfileData.LearnLanguage.ToString() :
-                _profileService.ProfileData.NativeLanguage.ToString();
-            
+            var language = isLearnLanguage ? _profileService.ProfileData.LearnLanguage.ToString() : _profileService.ProfileData.NativeLanguage.ToString();
+
             string path = _wordPathHelper.GetSoundPath($"{language}/{key}");
             AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 

@@ -19,7 +19,7 @@ namespace Chang
         private readonly VocabularyController _vocabularyController;
         private readonly VocabularyRepetitionController _vocabularyRepetitionController;
         private readonly VocabularyRepetitionService _vocabularyRepetitionService;
-        private readonly SentencesController _sentencesController;
+        private readonly Sentences.SentencesController _sentencesController;
         private readonly SentencesRepetitionController _sentencesRepetitionController;
         private readonly SentencesRepetitionService _sentencesRepetitionService;
         private readonly ProfileController _profileController;
@@ -43,7 +43,7 @@ namespace Chang
             VocabularyController vocabularyController,
             VocabularyRepetitionController vocabularyRepetitionController,
             VocabularyRepetitionService vocabularyRepetitionService,
-            SentencesController sentencesController,
+            Sentences.SentencesController sentencesController,
             SentencesRepetitionController sentencesRepetitionController,
             SentencesRepetitionService sentencesRepetitionService,
             ProfileController profileController,
@@ -152,9 +152,9 @@ namespace Chang
             _isLoading = true;
             await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
 
-            SimpleLessonData simpleLesson;
+            Vocabulary.LessonData simpleLesson;
             string key = _profileService.ReorderedSectionKey(sectionName);
-            if (_profileService.ReorderedSections.TryGetValue(key, out SimpleSection section))
+            if (_profileService.ReorderedSections.TryGetValue(key, out Vocabulary.SectionData section))
             {
                 simpleLesson = section.Lessons[lessonIndex - 1];
             }
@@ -164,12 +164,12 @@ namespace Chang
                 simpleLesson = _gameBus.SimpleLessons[key];
             }
 
-            Lesson lesson = new Lesson();
+            Vocabulary.Lesson lesson = new Vocabulary.Lesson();
             lesson.FileName = simpleLesson.FileName;
             lesson.GenerateQuestMatchWordsData = simpleLesson.GenerateQuestMatchWordsData;
             lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
 
-            _gameBus.CurrentLesson = lesson;
+            _gameBus.CurrentVocabularyLesson = lesson;
             _isLoading = false;
 
             _gameBus.GameType = GameType.Learn;
@@ -217,14 +217,14 @@ namespace Chang
             _isLoading = true;
             await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
 
-            var questions = new List<ISimpleQuestion>();
+            var questions = new List<Vocabulary.IQuestion>();
 
             foreach (var questLog in repetitions)
             {
                 switch (questLog.QuestionType)
                 {
                     case QuestionType.SelectWord:
-                        var simpleQuest = new SimpleQuestSelectWord();
+                        var simpleQuest = new Vocabulary.QuestSelectWord();
                         simpleQuest.CorrectWordFileName = questLog.FileName;
                         var words = repetitions
                             .Where(r => r.QuestionType == QuestionType.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
@@ -244,11 +244,11 @@ namespace Chang
                 }
             }
 
-            var lesson = new Lesson();
+            var lesson = new Vocabulary.Lesson();
             lesson.GenerateQuestMatchWordsData = true;
             lesson.SetSimpleQuestions(questions);
 
-            _gameBus.CurrentLesson = lesson;
+            _gameBus.CurrentVocabularyLesson = lesson;
             _isLoading = false;
 
             _gameBus.GameType = GameType.Repetition;

@@ -74,7 +74,7 @@ namespace Chang.FSM
 
             _pagesBus = new PagesBus
             {
-                CurrentLesson = Bus.CurrentLesson,
+                CurrentLesson = Bus.CurrentVocabularyLesson,
                 GameType = Bus.GameType,
             };
 
@@ -106,7 +106,7 @@ namespace Chang.FSM
 
         private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
         {
-            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentLesson.SimpleQuestions, progress, ct);
+            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentVocabularyLesson.SimpleQuestions, progress, ct);
         }
 
         private void ExitToLobby()
@@ -206,7 +206,7 @@ namespace Chang.FSM
                 return;
             }
 
-            Lesson lesson = _pagesBus.CurrentLesson;
+            Vocabulary.Lesson lesson = _pagesBus.CurrentLesson;
 
             // Add generated match words quest at the end of the lesson
             if (lesson.SimpleQuestionQueue.Count == 0)
@@ -225,7 +225,7 @@ namespace Chang.FSM
                 return;
             }
 
-            ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
+            Vocabulary.IQuestion nextQuestion = lesson.PeekNextQuestion();
             QuestionType nextQuestionType = nextQuestion.QuestionType;
 
             // If demonstration word is required
@@ -237,7 +237,7 @@ namespace Chang.FSM
                 {
                     if (IsNeedDemonstration(fileName))
                     {
-                        var demonstration = new SimpleQuestDemonstrationWord
+                        var demonstration = new Vocabulary.QuestDemonstrationWord
                         {
                             CorrectWordFileName = fileName
                         };
@@ -258,9 +258,9 @@ namespace Chang.FSM
             _pagesBus.OnHintUsed.SetSilent(false);
         }
 
-        private bool TryGenerateQuestMatchWordsData(Lesson lesson, out SimpleQuestMatchWords matchWordsQuest)
+        private bool TryGenerateQuestMatchWordsData(Vocabulary.Lesson lesson, out Vocabulary.QuestMatchWords matchWordsQuest)
         {
-            matchWordsQuest = new SimpleQuestMatchWords();
+            matchWordsQuest = new Vocabulary.QuestMatchWords();
             HashSet<string> matchWords = new();
 
             if (!lesson.GenerateQuestMatchWordsData || lesson.IsGeneratedMathWordsQuestPlayed)
@@ -268,7 +268,7 @@ namespace Chang.FSM
                 return false;
             }
 
-            var selectWordQuests = lesson.SimpleQuestions.OfType<SimpleQuestSelectWord>().ToList();
+            var selectWordQuests = lesson.SimpleQuestions.OfType<Vocabulary.QuestSelectWord>().ToList();
             matchWords.AddRange(selectWordQuests.Select(q => q.CorrectWordFileName));
             matchWords.AddRange(selectWordQuests.SelectMany(q => q.MixWordsFileNames));
 

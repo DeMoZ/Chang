@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Chang
+namespace Chang.Vocabulary
 {
     /// <summary>
     /// Stores the data for the current selected or generated lesson 
@@ -15,23 +15,23 @@ namespace Chang
         public bool GenerateQuestMatchWordsData;
         public bool IsGeneratedMathWordsQuestPlayed;
         
-        public ISimpleQuestion CurrentSimpleQuestion { get; private set; }
-        public List<ISimpleQuestion> SimpleQuestions { get; private set; }
-        public Queue<ISimpleQuestion> SimpleQuestionQueue { get; private set; }
+        public Vocabulary.IQuestion currentQuestion { get; private set; }
+        public List<Vocabulary.IQuestion> SimpleQuestions { get; private set; }
+        public Queue<Vocabulary.IQuestion> SimpleQuestionQueue { get; private set; }
         
         public void Dispose()
         {
             FileName = null;
-            CurrentSimpleQuestion = null;
+            currentQuestion = null;
             SimpleQuestionQueue.Clear();
         }
 
         public void DequeueAndSetSipmlQuestion()
         {
-            CurrentSimpleQuestion = SimpleQuestionQueue.Dequeue();
+            currentQuestion = SimpleQuestionQueue.Dequeue();
         }
 
-        public ISimpleQuestion PeekNextQuestion()
+        public Vocabulary.IQuestion PeekNextQuestion()
         {
             return SimpleQuestionQueue.Peek();
         }
@@ -39,20 +39,20 @@ namespace Chang
         /// <summary>
         /// Add quest to the beginning of the queue (example: add demonstration screen)
         /// </summary> 
-        public void InsertNextQuest(ISimpleQuestion quest)
+        public void InsertNextQuest(Vocabulary.IQuestion quest)
         {
-            var tempList = new List<ISimpleQuestion>(SimpleQuestionQueue);
+            var tempList = new List<Vocabulary.IQuestion>(SimpleQuestionQueue);
             tempList.Insert(0, quest);
-            SimpleQuestionQueue = new Queue<ISimpleQuestion>(tempList);
+            SimpleQuestionQueue = new Queue<Vocabulary.IQuestion>(tempList);
         }
 
-        public void SetSimpleQuestions(List<ISimpleQuestion> questions)
+        public void SetSimpleQuestions(List<Vocabulary.IQuestion> questions)
         {
             SimpleQuestions = questions;
-            SimpleQuestionQueue = new Queue<ISimpleQuestion>(questions);
+            SimpleQuestionQueue = new Queue<Vocabulary.IQuestion>(questions);
         }
         
-        public void AddSimpleQuestion(ISimpleQuestion question)
+        public void AddSimpleQuestion(Vocabulary.IQuestion question)
         {
             SimpleQuestions.Add(question);
             SimpleQuestionQueue.Enqueue(question);
@@ -60,7 +60,7 @@ namespace Chang
 
         public void EnqueueCurrentQuestion()
         {
-            SimpleQuestionQueue.Enqueue(CurrentSimpleQuestion);
+            SimpleQuestionQueue.Enqueue(currentQuestion);
         }
     }
 }

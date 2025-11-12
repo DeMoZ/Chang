@@ -15,14 +15,14 @@ public class BookConverter : JsonConverter
         var jsonObject = JObject.Load(reader);
         var questionType = (QuestionType)jsonObject["QuestionType"].Value<int>();
 
-        ISimpleQuestion question;
+        Chang.Vocabulary.IQuestion question;
         switch (questionType)
         {
             case QuestionType.SelectWord:
-                question = new SimpleQuestSelectWord();
+                question = new Chang.Vocabulary.QuestSelectWord();
                 break;
             case QuestionType.MatchWords:
-                question = new SimpleQuestMatchWords();
+                question = new Chang.Vocabulary.QuestMatchWords();
                 break;
             default:
                 throw new NotImplementedException($"Converter for {questionType} is not implemented");
@@ -34,6 +34,6 @@ public class BookConverter : JsonConverter
 
     public override bool CanConvert(Type objectType)
     {
-        return typeof(ISimpleQuestion).IsAssignableFrom(objectType);
+        return typeof(Chang.Vocabulary.IQuestion).IsAssignableFrom(objectType);
     }
 }

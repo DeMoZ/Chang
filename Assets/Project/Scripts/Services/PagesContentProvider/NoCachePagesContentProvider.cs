@@ -12,7 +12,7 @@ using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+using Chang.Vocabulary;
 namespace Project.Services.PagesContentProvider
 {
     public class NoCachePagesContentProvider : IPagesContentProvider
@@ -59,10 +59,10 @@ namespace Project.Services.PagesContentProvider
             Content.Clear();
         }
 
-        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> progress, CancellationToken ct)
+        public async UniTask PreloadPagesStateAsync(List<IQuestion> questions, Action<float, float> progress, CancellationToken ct)
         {
             HashSet<string> keys = new();
-            foreach (ISimpleQuestion quest in questions)
+            foreach (IQuestion quest in questions)
             {
                 keys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
                 var soundKeys = quest.GetSoundKeys().Select(k => _wordPathHelper.GetSoundPath(k)).ToList();
@@ -74,7 +74,7 @@ namespace Project.Services.PagesContentProvider
             await Preload(keys, progress, ct);
         }
 
-        public async UniTask GetContentAsync(ISimpleQuestion nextQuestion, CancellationToken ct)
+        public async UniTask GetContentAsync(IQuestion nextQuestion, CancellationToken ct)
         {
             var loadingModel = new LoadingUiModel(LoadingElements.Animation);
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);

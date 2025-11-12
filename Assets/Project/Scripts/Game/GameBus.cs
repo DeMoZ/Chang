@@ -4,14 +4,15 @@ namespace Chang
 {
     public class GameBus
     {
-        public SimpleBookData SimpleBookData { get; set; }
+        public Vocabulary.VocabularyBookData VocabularyBookData { get; set; }
+        public Sentences.SentencesBookData SentencesBookData { get; set; }
 
         /// <summary>
         /// Runtime collection to get Lesson data by name.
         /// </summary>
-        public Dictionary<string, SimpleLessonData> SimpleLessons { get; set; }
+        public Dictionary<string, Vocabulary.LessonData> SimpleLessons { get; set; }
         
-        public Lesson CurrentLesson { get; set; }
+        public Vocabulary.Lesson CurrentVocabularyLesson { get; set; }
         public GameType GameType { get; set; }
     }
 }

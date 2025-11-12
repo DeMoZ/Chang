@@ -19,7 +19,7 @@ namespace Chang.Services
         public ProgressData ProgressData => _playerProfile.ProgressData;
         public ProfileData ProfileData => _playerProfile.ProfileData;
         public string PlayerId => _unityCloudDataProvider.PlayerId;
-        public Dictionary<string, SimpleSection> ReorderedSections => _playerProfile.ReorderedSections;
+        public Dictionary<string, Vocabulary.SectionData> ReorderedSections => _playerProfile.ReorderedSections;
         public string ReorderedSectionKey(string section) => $"{_playerProfile.ProfileData.LearnLanguage}/{section}";
 
         [Inject]
@@ -102,46 +102,46 @@ namespace Chang.Services
             return logs.TryGetValue(key, out questLog);
         }
 
-        public void ReorderSection(SimpleSection section)
+        public void ReorderSection(Vocabulary.SectionData sectionData)
         {
-            SimpleSection newSection = new SimpleSection
+            Vocabulary.SectionData newSectionData = new Vocabulary.SectionData
             {
-                Section = section.Section,
-                Lessons = new List<SimpleLessonData>()
+                Section = sectionData.Section,
+                Lessons = new List<Vocabulary.LessonData>()
             };
             
-            string key = ReorderedSectionKey(section.Section);
-            List<ISimpleQuestion> questions = section.Lessons.SelectMany(lesson => lesson.Questions).ToList();
-            IOrderedEnumerable<ISimpleQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
-            Queue<ISimpleQuestion> questQueue = new Queue<ISimpleQuestion>(orderedQuests);
+            string key = ReorderedSectionKey(sectionData.Section);
+            List<Vocabulary.IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
+            IOrderedEnumerable<Vocabulary.IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
+            Queue<Vocabulary.IQuestion> questQueue = new Queue<Vocabulary.IQuestion>(orderedQuests);
 
-            foreach (var lesson in section.Lessons)
+            foreach (var lesson in sectionData.Lessons)
             {
                 int count = lesson.Questions.Count;
-                List<ISimpleQuestion> quests = new();
+                List<Vocabulary.IQuestion> quests = new();
 
                 for (int i = 0; i < count; i++)
                 {
                     quests.Add(questQueue.Dequeue());
                 }
 
-                var newLesson = new SimpleLessonData
+                var newLesson = new Vocabulary.LessonData
                 {
-                    Section = lesson.Section,
+                    SectionName = lesson.SectionName,
                     GenerateQuestMatchWordsData = true,
                     Questions = quests,
                 };
 
-                newSection.Lessons.Add(newLesson);
+                newSectionData.Lessons.Add(newLesson);
             }
 
-            _playerProfile.AddReorderSection(key, newSection);
+            _playerProfile.AddReorderSection(key, newSectionData);
 
             return;
 
-            int GetQuestMark(ISimpleQuestion quest)
+            int GetQuestMark(Vocabulary.IQuestion quest)
             {
-                if (quest is SimpleQuestSelectWord selectWord)
+                if (quest is Vocabulary.QuestSelectWord selectWord)
                 {
                     return GetMark(selectWord.CorrectWordFileName);
                 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Chang;
+using Chang.Vocabulary;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -12,12 +12,12 @@ namespace Project.Services.PagesContentProvider
         /// <summary>
         /// Preloading all content on Enter Pages state. Content from all pages.
         /// </summary>
-        UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> percents, CancellationToken ct);
+        UniTask PreloadPagesStateAsync(List<IQuestion> questions, Action<float, float> percents, CancellationToken ct);
 
         /// <summary>
         /// Get content on Enter Every Page. Content for current page.
         /// </summary>
-        UniTask GetContentAsync(ISimpleQuestion question, CancellationToken ct);
+        UniTask GetContentAsync(IQuestion question, CancellationToken ct);
 
         /// <summary>
         /// Get an asset from the cache by its key.

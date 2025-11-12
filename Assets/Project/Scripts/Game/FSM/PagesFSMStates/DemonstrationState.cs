@@ -10,6 +10,7 @@ using Project.Services.PagesContentProvider;
 using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
+using Chang.Vocabulary;
 
 namespace Chang.FSM
 {
@@ -73,11 +74,11 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
+            IQuestion question = Bus.CurrentLesson.currentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 
-            var path = _wordPathHelper.GetConfigPath(((SimpleQuestDemonstrationWord)question).CorrectWordFileName);
+            var path = _wordPathHelper.GetConfigPath(((QuestDemonstrationWord)question).CorrectWordFileName);
             var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
             if (!asset )
@@ -88,7 +89,7 @@ namespace Chang.FSM
             QuestDemonstrateWordData questionData = new QuestDemonstrateWordData(asset.PhraseData);
             _correctWord = questionData.CorrectWord;
             
-            string spritePath = _wordPathHelper.GetTexturePath(((SimpleQuestDemonstrationWord)question).CorrectWordFileName);
+            string spritePath = _wordPathHelper.GetTexturePath(((QuestDemonstrationWord)question).CorrectWordFileName);
             var sprite = _pagesContentProvider.GetCachedSprite(spritePath);
             
             _stateController.Init(_correctWord, sprite, OnToggleValueChanged, OnClickPlaySound);

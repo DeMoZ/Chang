@@ -14,7 +14,7 @@ namespace Chang
         [SerializeField] private RepetitionView repetitionScreen;
         [SerializeField] private ProfileView profileScreen;
         [SerializeField] private BookVocabularyView bookVocabularyScreen;
-        [SerializeField] private BookSentencesView bookSentencesScreen;
+        [SerializeField] private Sentences.BookSentencesView bookSentencesScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
 
         [Space, SerializeField] private PagesContainer pagesContainer;
@@ -65,7 +65,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<VocabularyController>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<SentencesRepetitionController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<SentencesController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<Sentences.SentencesController>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<GameOverlayController>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayResultController>().AsSingle();

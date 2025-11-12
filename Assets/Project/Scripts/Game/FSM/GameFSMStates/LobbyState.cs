@@ -69,8 +69,8 @@ namespace Chang.FSM
                 Converters = new List<JsonConverter> { new BookConverter() }
             };
 
-            Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(asset.Item.text, settings);
-            Bus.SimpleLessons = Bus.SimpleBookData.Sections
+            Bus.VocabularyBookData = JsonConvert.DeserializeObject<Vocabulary.VocabularyBookData>(asset.Item.text, settings);
+            Bus.SimpleLessons = Bus.VocabularyBookData.Sections
                 .SelectMany(section => section.Lessons)
                 .ToDictionary(lesson => lesson.FileName);
 

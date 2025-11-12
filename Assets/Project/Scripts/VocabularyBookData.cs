@@ -1,35 +1,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.Utilities;
+using UnityEngine.Serialization;
 
-namespace Chang
+namespace Chang.Vocabulary
 {
-    public class SimpleBookData
+    public class VocabularyBookData
     {
         public string FileName; // json field
-        public List<SimpleSection> Sections;
+        public List<SectionData> Sections;
         public Languages Language;
         
-        private Dictionary<string, SimpleSection> _sectionsDict;
-        public Dictionary<string, SimpleSection> SectionsDict => _sectionsDict ??= Sections.ToDictionary(s => s.Section);
+        private Dictionary<string, SectionData> _sectionsDict;
+        public Dictionary<string, SectionData> SectionsDict => _sectionsDict ??= Sections.ToDictionary(s => s.Section);
     }
 
-    public class SimpleSection
+    public class SectionData
     {
         public string Section;
-        public List<SimpleLessonData> Lessons;
+        public List<LessonData> Lessons;
     }
 
-    public class SimpleLessonData
+    public class LessonData
     {
         public string FileName; // json field
-        public string Section;
+        public string SectionName;
         public string Name;
         public bool GenerateQuestMatchWordsData;
-        public List<ISimpleQuestion> Questions;
+        public List<IQuestion> Questions;
     }
 
-    public interface ISimpleQuestion
+    public interface IQuestion
     {
         QuestionType QuestionType { get; }
         HashSet<string> GetConfigKeys();
@@ -38,7 +39,7 @@ namespace Chang
         HashSet<string> GetNeedDemonstrationKeys();
     }
 
-    public class SimpleQuestSelectWord : ISimpleQuestion
+    public class QuestSelectWord : IQuestion
     {
         public QuestionType QuestionType => QuestionType.SelectWord;
         public string CorrectWordFileName;
@@ -70,7 +71,7 @@ namespace Chang
         }
     }
 
-    public class SimpleQuestMatchWords : ISimpleQuestion
+    public class QuestMatchWords : IQuestion
     {
         public QuestionType QuestionType => QuestionType.MatchWords;
 
@@ -83,7 +84,7 @@ namespace Chang
         public HashSet<string> GetNeedDemonstrationKeys() => new(MatchWordsFileNames);
     }
 
-    public class SimpleQuestDemonstrationWord : ISimpleQuestion
+    public class QuestDemonstrationWord : IQuestion
     {
         public string CorrectWordFileName;
         public QuestionType QuestionType => QuestionType.DemonstrationWord;
