@@ -12,7 +12,7 @@ namespace Chang.FSM
     {
         public string Key { get; }
         public string Presentation { get; }
-        public QuestionType Type => QuestionType.SentenceSelectWord;
+        public QuestionType Type => QuestionType.SentenceSelectWords;
         public bool IsCorrect { get; }
         public object[] Info { get; }
 

@@ -16,7 +16,7 @@ namespace Chang
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
         private readonly MainUiView _view;
-        private readonly VocabularyController _vocabularyController;
+        private readonly Vocabulary.VocabularyController _vocabularyController;
         private readonly VocabularyRepetitionController _vocabularyRepetitionController;
         private readonly VocabularyRepetitionService _vocabularyRepetitionService;
         private readonly Sentences.SentencesController _sentencesController;
@@ -40,7 +40,7 @@ namespace Chang
             GameBus gameBus,
             MainScreenBus mainScreenBus,
             MainUiView view,
-            VocabularyController vocabularyController,
+            Vocabulary.VocabularyController vocabularyController,
             VocabularyRepetitionController vocabularyRepetitionController,
             VocabularyRepetitionService vocabularyRepetitionService,
             Sentences.SentencesController sentencesController,
@@ -61,17 +61,17 @@ namespace Chang
             _profileController = profileController;
             _profileService = profileService;
 
-            _mainScreenBus.OnWordsLessonClicked += OnWordsLessonClicked;
-            _mainScreenBus.OnWordsSectionRepeatClicked += OnWordsSectionRepeatClicked;
-            _mainScreenBus.OnWordsRepeatClicked += OnWordsGeneralRepeatClicked;
+            _mainScreenBus.OnWordsLessonClicked += OnVocabularyLessonClicked;
+            _mainScreenBus.OnWordsSectionRepeatClicked += OnVocabularySectionRepeatClicked;
+            _mainScreenBus.OnWordsRepeatClicked += OnGeneralVocabularyRepeatClicked;
             _cts = new CancellationTokenSource();
         }
 
         public void Dispose()
         {
-            _mainScreenBus.OnWordsLessonClicked -= OnWordsLessonClicked;
-            _mainScreenBus.OnWordsSectionRepeatClicked -= OnWordsSectionRepeatClicked;
-            _mainScreenBus.OnWordsRepeatClicked -= OnWordsGeneralRepeatClicked;
+            _mainScreenBus.OnWordsLessonClicked -= OnVocabularyLessonClicked;
+            _mainScreenBus.OnWordsSectionRepeatClicked -= OnVocabularySectionRepeatClicked;
+            _mainScreenBus.OnWordsRepeatClicked -= OnGeneralVocabularyRepeatClicked;
             _cts.Cancel();
             _cts.Dispose();
         }
@@ -105,6 +105,7 @@ namespace Chang
         {
             OnToggleSelectedAsync(isOn, tabType, _cts.Token).Forget();
         }
+
         private async UniTaskVoid OnToggleSelectedAsync(bool isOn, MainTabType tabType, CancellationToken ct)
         {
             if (_isLoading || !isOn)
@@ -115,14 +116,14 @@ namespace Chang
             _vocabularyRepetitionController.SetViewActive(tabType == MainTabType.Repetition);
             _profileController.SetViewActive(tabType == MainTabType.Profile);
             _currentTabType = tabType;
-            
+
             // todo chang show loading animation ?
             switch (tabType)
             {
                 case MainTabType.Vocabulary:
                     await _vocabularyController.SetAsync(ct);
                     break;
-                
+
                 case MainTabType.Sentences:
                     await _sentencesController.SetAsync(ct);
                     break;
@@ -139,12 +140,14 @@ namespace Chang
             }
         }
 
-        private void OnWordsLessonClicked(string sectionName, int lessonIndex)
+        // todo chang move into vocabulary controller
+        private void OnVocabularyLessonClicked(string sectionName, int lessonIndex)
         {
-            OnWordsLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
+            OnVocabularyLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
         }
 
-        private async UniTaskVoid OnWordsLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
+        // todo chang move into vocabulary controller
+        private async UniTaskVoid OnVocabularyLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
         {
             if (_isLoading)
                 return;
@@ -161,7 +164,7 @@ namespace Chang
             else
             {
                 key = $"{_profileService.ProfileData.LearnLanguage}Lesson{sectionName}_{lessonIndex}";
-                simpleLesson = _gameBus.SimpleLessons[key];
+                simpleLesson = _gameBus.VocabularyLessons[key];
             }
 
             Vocabulary.Lesson lesson = new Vocabulary.Lesson();
@@ -176,37 +179,42 @@ namespace Chang
             _onExitState?.Invoke();
         }
 
-        private void OnWordsSectionRepeatClicked(string section)
+        // todo chang move into vocabulary controller
+        private void OnVocabularySectionRepeatClicked(string section)
         {
-            OnWordsSectionRepeatClickedAsync(section, _cts.Token).Forget();
+            OnVocabularySectionRepeatClickedAsync(section, _cts.Token).Forget();
         }
 
-        private async UniTaskVoid OnWordsSectionRepeatClickedAsync(string section, CancellationToken ct)
+        // todo chang move into vocabulary controller
+        private async UniTaskVoid OnVocabularySectionRepeatClickedAsync(string section, CancellationToken ct)
         {
             if (_isLoading)
                 return;
 
             // todo chang show loading animation ?
             var repetitions = await _vocabularyRepetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
-            MakeRepetitionAsync(repetitions, _cts.Token).Forget();
+            MakeVocabularyRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
-        private void OnWordsGeneralRepeatClicked()
+        // todo chang move into vocabulary controller
+        private void OnGeneralVocabularyRepeatClicked()
         {
-            OnGeneralRepeatClickedAsync(_cts.Token).Forget();
+            OnGeneralVocabularyRepeatClickedAsync(_cts.Token).Forget();
         }
-        
-        private async UniTaskVoid OnGeneralRepeatClickedAsync(CancellationToken ct)
+
+        // todo chang move into vocabulary controller
+        private async UniTaskVoid OnGeneralVocabularyRepeatClickedAsync(CancellationToken ct)
         {
             if (_isLoading)
                 return;
 
             // todo chang show loading animation ?
             var repetitions = await _vocabularyRepetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
-            MakeRepetitionAsync(repetitions, _cts.Token).Forget();
+            MakeVocabularyRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
-        private async UniTaskVoid MakeRepetitionAsync(List<QuestLog> repetitions, CancellationToken ct)
+        // todo chang move into vocabulary controller
+        private async UniTaskVoid MakeVocabularyRepetitionAsync(List<QuestLog> repetitions, CancellationToken ct)
         {
             if (repetitions.Count < ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT)
             {

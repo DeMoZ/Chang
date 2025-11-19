@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using Chang.Profile;
 using Chang.Services;
+using Chang.GameBook;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
-using Chang.Vocabulary;
 
-namespace Chang.GameBook
+namespace Chang.Vocabulary
 {
     public class VocabularyController : IViewController
     {

@@ -14,7 +14,7 @@ namespace Chang
         SelectWord,
         MatchWords,
         DemonstrationDialogue,
-        SentenceSelectWord,
+        SentenceSelectWords,
         
         Result = 100,
     }
@@ -42,9 +42,9 @@ namespace Chang
     {
         None,
         Vocabulary,
+        Sentences,
         Repetition,
         Profile,
-        Sentences,
     }
 
     /// <summary>

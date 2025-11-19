@@ -16,7 +16,11 @@ namespace Chang.FSM
 {
     public class LobbyState : ResultStateBase<StateType, GameBus>
     {
-        private const string BookKey = "BookJson";
+        private const string VocabularyBookKey = "VocabularyBookJson";
+        private const string SentencesBookKey = "SentencesBookJson";
+        
+        private const string Language = "Thai"; // todo chang fix language
+        private string GetPath(string key) => $"Assets/Project/Resources_Bundled/{Language}/{key}.json";
 
         public override StateType Type => StateType.Lobby;
 
@@ -52,32 +56,9 @@ namespace Chang.FSM
             _loadingUiController.SimulateProgress(2f).Forget();
 
             await _profileService.LoadStoredData(_cts.Token);
-
-            // todo chang download additional addressables related to profile?
-
-            Debug.Log("LoadGameBookConfigAsync start");
-            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(BookKey, _cts.Token);
-
-            if (!asset.Item)
-            {
-                Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)}() asset is null, BookKey: {BookKey}");
-                return;
-            }
-
-            var settings = new JsonSerializerSettings
-            {
-                Converters = new List<JsonConverter> { new BookConverter() }
-            };
-
-            Bus.VocabularyBookData = JsonConvert.DeserializeObject<Vocabulary.VocabularyBookData>(asset.Item.text, settings);
-            Bus.SimpleLessons = Bus.VocabularyBookData.Sections
-                .SelectMany(section => section.Lessons)
-                .ToDictionary(lesson => lesson.FileName);
-
-            asset.Dispose();
-
-            Debug.Log("LoadGameBookConfigAsync end");
-
+            await LoadVocabularyBookAsync();
+            await LoadSentencesBookAsync();
+            
             _loadingUiController.SetPercents(1f);
             if (_loadingUiController != null)
             {
@@ -86,6 +67,58 @@ namespace Chang.FSM
             }
 
             _lobbyController.Enter();
+        }
+
+        private async UniTask LoadVocabularyBookAsync()
+        {
+            Debug.Log("LoadVocabularyBookAsync start");
+            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(VocabularyBookKey), _cts.Token);
+
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)} asset is null, BookKey: {GetPath(VocabularyBookKey)}");
+                return;
+            }
+
+            var settings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new Vocabulary.VocabularyBookConverter() }
+            };
+
+            Bus.VocabularyBookData = JsonConvert.DeserializeObject<Vocabulary.VocabularyBookData>(asset.Item.text, settings);
+            Bus.VocabularyLessons = Bus.VocabularyBookData.Sections
+                .SelectMany(section => section.Lessons)
+                .ToDictionary(lesson => lesson.FileName);
+            
+            asset.Dispose();
+
+            Debug.Log("LoadVocabularyBookAsync end");
+        }
+        
+        private async UniTask LoadSentencesBookAsync()
+        {
+            Debug.Log("LoadSentencesBookAsync start");
+            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(SentencesBookKey), _cts.Token);
+
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)}() asset is null, BookKey: {GetPath(SentencesBookKey)}");
+                return;
+            }
+
+            var settings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new Sentences.SentencesBookConverter() }
+            };
+
+            Bus.SentencesBookData = JsonConvert.DeserializeObject<Sentences.SentencesBookData>(asset.Item.text, settings);
+            // Bus.SentencesLessons = Bus.SentencesBookData.Sections
+            //     .SelectMany(section => section.Lessons)
+            //     .ToDictionary(lesson => lesson.FileName);
+            
+            asset.Dispose();
+
+            Debug.Log("LoadSentencesBookAsync end");
         }
 
         public override void Exit()

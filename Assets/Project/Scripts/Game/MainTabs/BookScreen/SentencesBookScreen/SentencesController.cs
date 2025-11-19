@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
-using Chang.Profile;
 using Chang.Services;
+using Chang.GameBook;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
@@ -20,7 +19,7 @@ namespace Chang.Sentences
         private Dictionary<string, LessonData> _lessons = new();
         private Dictionary<string, GameBook.SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
-        
+
         [Inject]
         public SentencesController(
             GameBus gameBus,
@@ -61,25 +60,25 @@ namespace Chang.Sentences
             _lessons.Clear();
             _view.Clear();
 
-            // for (var i = 0; i < _gameBus.SimpleBookData.Sections.Count; i++)
-            // {
-            //     Color baseColor = _view.GetNextColor(i);
-            //     SimpleSection simpleSection = _gameBus.SimpleBookData.Sections[i];
-            //
-            //     SectionBlock sectionBlock = _view.InstantiateSectionBlock();
-            //     sectionBlock.SetBaseColor(baseColor);
-            //     sectionBlock.SectionView.name = $"SectionBlock_{simpleSection.Section}";
-            //     _sectionBlocks.Add(simpleSection.Section, sectionBlock);
-            //
-            //     sectionBlock.SectionView.Init(simpleSection.Section,
-            //         () => OnSectionSortClick(simpleSection.Section),
-            //         () => OnSectionRepetitionClick(simpleSection.Section));
-            //
-            //     sectionBlock.SectionView.name = $"Section_{simpleSection.Section}";
-            //     sectionBlock.SectionView.SetBaseColor(baseColor);
-            //
-            //     await PopulateSectionAsync(simpleSection, sectionBlock, ct);
-            // }
+            for (var i = 0; i < _gameBus.SentencesBookData.Sections.Count; i++)
+            {
+                Color baseColor = _view.GetNextColor(i);
+                SectionData sectionData = _gameBus.SentencesBookData.Sections[i];
+
+                SectionBlock sectionBlock = _view.InstantiateSectionBlock();
+                sectionBlock.SetBaseColor(baseColor);
+                sectionBlock.SectionView.name = $"SectionBlock_{sectionData.Section}";
+                _sectionBlocks.Add(sectionData.Section, sectionBlock);
+
+                sectionBlock.SectionView.Init(sectionData.Section,
+                    () => OnSectionSortClick(sectionData.Section),
+                    () => OnSectionRepetitionClick(sectionData.Section));
+                
+                sectionBlock.SectionView.name = $"Section_{sectionData.Section}";
+                sectionBlock.SectionView.SetBaseColor(baseColor);
+                
+                await PopulateSectionAsync(sectionData, sectionBlock, ct);
+            }
 
             await UniTask.Yield();
 
@@ -134,9 +133,9 @@ namespace Chang.Sentences
             // PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
         }
 
-        private async UniTask PopulateSectionAsync(Section section, GameBook.SectionBlock sectionBlock, CancellationToken ct)
+        private async UniTask PopulateSectionAsync(SectionData sectionData, GameBook.SectionBlock sectionBlock, CancellationToken ct)
         {
-           await UniTask.Yield();
+            await UniTask.Yield();
             // List<QuestLog> repetitions = await _sentencesRepetitionService
             //     .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section, ct);
             //

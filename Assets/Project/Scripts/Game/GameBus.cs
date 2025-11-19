@@ -10,9 +10,9 @@ namespace Chang
         /// <summary>
         /// Runtime collection to get Lesson data by name.
         /// </summary>
-        public Dictionary<string, Vocabulary.LessonData> SimpleLessons { get; set; }
-        
+        public Dictionary<string, Vocabulary.LessonData> VocabularyLessons { get; set; }
         public Vocabulary.Lesson CurrentVocabularyLesson { get; set; }
+        
         public GameType GameType { get; set; }
     }
 }
