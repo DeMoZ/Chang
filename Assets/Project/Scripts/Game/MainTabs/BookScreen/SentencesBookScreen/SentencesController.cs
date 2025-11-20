@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Chang.Services;
 using Chang.GameBook;
+using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
@@ -14,10 +15,10 @@ namespace Chang.Sentences
         private readonly MainScreenBus _mainScreenBus;
         private readonly BookSentencesView _view;
         private readonly ProfileService _profileService;
-        private readonly SentencesRepetitionService _sentencesRepetitionService;
+        private readonly SentencesRepetitionService _repetitionService;
 
         private Dictionary<string, LessonData> _lessons = new();
-        private Dictionary<string, GameBook.SectionBlock> _sectionBlocks = new();
+        private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
 
         [Inject]
@@ -32,10 +33,8 @@ namespace Chang.Sentences
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
-            _sentencesRepetitionService = sentencesRepetitionService;
+            _repetitionService = sentencesRepetitionService;
 
-            // todo chang local cts should be initialized in enter state and disposed in exit state
-            // need to provide this methods first
             _cts = new CancellationTokenSource();
         }
 
@@ -73,10 +72,10 @@ namespace Chang.Sentences
                 sectionBlock.SectionView.Init(sectionData.Section,
                     () => OnSectionSortClick(sectionData.Section),
                     () => OnSectionRepetitionClick(sectionData.Section));
-                
+
                 sectionBlock.SectionView.name = $"Section_{sectionData.Section}";
                 sectionBlock.SectionView.SetBaseColor(baseColor);
-                
+
                 await PopulateSectionAsync(sectionData, sectionBlock, ct);
             }
 
@@ -133,15 +132,14 @@ namespace Chang.Sentences
             // PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
         }
 
-        private async UniTask PopulateSectionAsync(SectionData sectionData, GameBook.SectionBlock sectionBlock, CancellationToken ct)
+        private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
         {
-            await UniTask.Yield();
-            // List<QuestLog> repetitions = await _sentencesRepetitionService
-            //     .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section, ct);
-            //
-            // int repetitionsCount = repetitions.Count;
-            // string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
-            //
+            List<QuestLog> repetitions = await _repetitionService
+                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
+
+            int repetitionsCount = repetitions.Count;
+            string reorderedSectionKey = _profileService.ReorderedSectionKey(sectionData.Section);
+
             // sectionBlock.SectionView.SetSortToggle(
             //     repetitionsCount > 0 && _profileService.ReorderedSections.ContainsKey(reorderedSectionKey),
             //     repetitionsCount > 0);

@@ -17,7 +17,7 @@ namespace Chang.Vocabulary
         private readonly MainScreenBus _mainScreenBus;
         private readonly BookVocabularyView _view;
         private readonly ProfileService _profileService;
-        private readonly VocabularyRepetitionService _vocabularyRepetitionService;
+        private readonly VocabularyRepetitionService _repetitionService;
 
         private Dictionary<string, LessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
@@ -29,16 +29,14 @@ namespace Chang.Vocabulary
             MainScreenBus mainScreenBus,
             BookVocabularyView view,
             ProfileService profileService,
-            VocabularyRepetitionService vocabularyRepetitionService)
+            VocabularyRepetitionService repetitionService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
-            _vocabularyRepetitionService = vocabularyRepetitionService;
+            _repetitionService = repetitionService;
 
-            // todo chang local cts should be initialized in enter state and disposed in exit state
-            // need to provide this methods first
             _cts = new CancellationTokenSource();
         }
 
@@ -137,7 +135,7 @@ namespace Chang.Vocabulary
 
         private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
         {
-            List<QuestLog> repetitions = await _vocabularyRepetitionService
+            List<QuestLog> repetitions = await _repetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
 
             int repetitionsCount = repetitions.Count;

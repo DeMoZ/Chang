@@ -29,11 +29,6 @@ namespace Chang.Profile
         public ProgressData(DateTime utcTime, Dictionary<string, QuestLog> thaiQuestLogs, Dictionary<string, QuestLog> questions)
         {
             UtcTime = utcTime;
-            
-            // todo chang questions is Obsolete: Use thaiQuestLogs instead
-            // that is also will move into something like dictionary of dictionaries.
-            // also ProgressData will be used only for one language and will be loaded as one ProgressData per language
-            thaiQuestLogs ??= questions;
             ThaiQuestLogs = ValidateQuestions(thaiQuestLogs);
         }
 
