@@ -111,9 +111,9 @@ namespace Chang.Vocabulary
             Debug.Log($"OnSectionSortClick key: {key}");
             SectionData sectionData = _gameBus.VocabularyBookData.Sections.Find(s => s.Section == key);
 
-            if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(sectionData.Section), out _))
+            if (_profileService.ReorderedVocabularySections.TryGetValue(_profileService.ReorderedSectionKey(sectionData.Section), out _))
             {
-                _profileService.ReorderedSections.Remove(_profileService.ReorderedSectionKey(sectionData.Section));
+                _profileService.ReorderedVocabularySections.Remove(_profileService.ReorderedSectionKey(sectionData.Section));
             }
             else
             {
@@ -142,12 +142,12 @@ namespace Chang.Vocabulary
             string reorderedSectionKey = _profileService.ReorderedSectionKey(sectionData.Section);
 
             sectionBlock.SectionView.SetSortToggle(
-                repetitionsCount > 0 && _profileService.ReorderedSections.ContainsKey(reorderedSectionKey),
+                repetitionsCount > 0 && _profileService.ReorderedVocabularySections.ContainsKey(reorderedSectionKey),
                 repetitionsCount > 0);
 
             sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
 
-            if (_profileService.ReorderedSections.TryGetValue(reorderedSectionKey, out var reorderedSection))
+            if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey, out var reorderedSection))
             {
                 sectionData = reorderedSection;
             }

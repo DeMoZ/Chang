@@ -157,7 +157,7 @@ namespace Chang
 
             Vocabulary.LessonData simpleLesson;
             string key = _profileService.ReorderedSectionKey(sectionName);
-            if (_profileService.ReorderedSections.TryGetValue(key, out Vocabulary.SectionData section))
+            if (_profileService.ReorderedVocabularySections.TryGetValue(key, out Vocabulary.SectionData section))
             {
                 simpleLesson = section.Lessons[lessonIndex - 1];
             }

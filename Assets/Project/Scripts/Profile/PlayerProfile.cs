@@ -13,7 +13,8 @@ namespace Chang.Profile
         /// <summary>
         /// key Thai/Fruits, value section
         /// </summary>
-        public Dictionary<string, Vocabulary.SectionData> ReorderedSections { get; } = new();
+        public Dictionary<string, Vocabulary.SectionData> ReorderedVocabularySections { get; } = new();
+        public Dictionary<string, Sentences.SectionData> ReorderedSentencesSections { get; } = new();
 
         public ProgressData<VocabularyQuestLog> VocabularyProgress => VocabularyProgressDict[ProfileData.LearnLanguage];
         public ProgressData<SentencesQuestLog> SentencesProgress => SentencesProgressDict[ProfileData.LearnLanguage];
@@ -31,7 +32,7 @@ namespace Chang.Profile
 
         public void AddReorderSection(string key, Vocabulary.SectionData sectionData)
         {
-            ReorderedSections[key] = sectionData;
+            ReorderedVocabularySections[key] = sectionData;
         }
     }
 }

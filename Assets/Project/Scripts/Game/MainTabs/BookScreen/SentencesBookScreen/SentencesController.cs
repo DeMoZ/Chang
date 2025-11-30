@@ -140,41 +140,41 @@ namespace Chang.Sentences
             int repetitionsCount = repetitions.Count;
             string reorderedSectionKey = _profileService.ReorderedSectionKey(sectionData.Section);
 
-            // sectionBlock.SectionView.SetSortToggle(
-            //     repetitionsCount > 0 && _profileService.ReorderedSections.ContainsKey(reorderedSectionKey),
-            //     repetitionsCount > 0);
-            //
-            // sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
-            //
-            // if (_profileService.ReorderedSections.TryGetValue(reorderedSectionKey, out var reorderedSection))
-            // {
-            //     section = reorderedSection;
-            // }
-            //
-            // RectTransform row = null;
-            // int count = -1;
-            // for (int m = 0; m < section.Lessons.Count; m++)
-            // {
-            //     if (m / 6 > count)
-            //     {
-            //         count++;
-            //         row = _view.InstantiateRow(sectionBlock.Container);
-            //     }
-            //
-            //     string sectionName = section.Section;
-            //     int lessonIndex = m + 1;
-            //     string key = $"{section.Section}_{m + 1}";
-            //     _lessons[key] = section.Lessons[m];
-            //
-            //     GameBookItem lessonItem = m % 2 == 0
-            //         ? _view.InstantiateUpLesson(row)
-            //         : _view.InstantiateDownLesson(row);
-            //
-            //     lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
-            //     lessonItem.name = $"Item {key}";
-            //     var color = GetLessonColor(section.Lessons[m]);
-            //     lessonItem.SetColor(color);
-            // }
+            sectionBlock.SectionView.SetSortToggle(
+                repetitionsCount > 0 && _profileService.ReorderedSentencesSections.ContainsKey(reorderedSectionKey),
+                repetitionsCount > 0);
+            
+            sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
+            
+            if (_profileService.ReorderedSentencesSections.TryGetValue(reorderedSectionKey, out SectionData reorderedSection))
+            {
+                sectionData = reorderedSection;
+            }
+            
+            RectTransform row = null;
+            int count = -1;
+            for (int m = 0; m < sectionData.Lessons.Count; m++)
+            {
+                if (m / 6 > count)
+                {
+                    count++;
+                    row = _view.InstantiateRow(sectionBlock.Container);
+                }
+            
+                string sectionName = sectionData.Section;
+                int lessonIndex = m + 1;
+                string key = $"{sectionData.Section}_{m + 1}";
+                _lessons[key] = sectionData.Lessons[m];
+            
+                GameBookItem lessonItem = m % 2 == 0
+                    ? _view.InstantiateUpLesson(row)
+                    : _view.InstantiateDownLesson(row);
+            
+                lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
+                lessonItem.name = $"Item {key}";
+                var color = GetLessonColor(sectionData.Lessons[m]);
+                lessonItem.SetColor(color);
+            }
         }
 
         private void OnSectionRepetitionClick(string key)
@@ -193,14 +193,14 @@ namespace Chang.Sentences
 
         private void SaveScrollPosition()
         {
-            // _profileService.ProgressData.GameBookScrollPosition = _view.ScrollPosition;
-            // Debug.Log($"Load gamebook scroll position: {_profileService.ProgressData.GameBookScrollPosition}, scroll position: {_view.ScrollPosition}");
+            _profileService.SentencesProgress.ScrollPosition = _view.ScrollPosition;
+            Debug.Log($"Load gamebook scroll position: {_profileService.SentencesProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
 
         private void SetScrollPosition()
         {
-            // _view.ScrollPosition = _profileService.ProgressData.GameBookScrollPosition;
-            // Debug.Log($"Load gamebook scroll position: {_profileService.ProgressData.GameBookScrollPosition}, scroll position: {_view.ScrollPosition}");
+            _view.ScrollPosition = _profileService.SentencesProgress.ScrollPosition;
+            Debug.Log($"Load gamebook scroll position: {_profileService.SentencesProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
     }
 }
