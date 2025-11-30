@@ -14,12 +14,12 @@ namespace Chang.Services
         {
         }
 
-        public async Task<List<QuestLog>> GetSectionRepetitionAsync(int amount, string section, CancellationToken ct)
+        public async Task<List<SentencesQuestLog>> GetSectionRepetitionAsync(int amount, string section, CancellationToken ct)
         {
-            Languages language = ProfileService.ProfileData.LearnLanguage;
-            Dictionary<string, QuestLog> log = ProfileService.ProgressData.GetQuestLogs(language); // todo chang this should be the other log.
+            Dictionary<string, SentencesQuestLog> log = ProfileService.SentencesProgress.Log;
 
             await UniTask.Yield(ct);
+
             return log
                 .Select(q => q.Value)
                 .Where(q => string.Equals(q.Section, section))
@@ -28,10 +28,10 @@ namespace Chang.Services
                 .ToList();
         }
 
-        private float OrderByWeight(QuestLog questLog)
+        private float OrderByWeight(SentencesQuestLog vocabularyQuestLog)
         {
-            double timeWeight = (DateTime.UtcNow - questLog.UtcTime).TotalMinutes * TimeWeight;
-            double weight = questLog.Mark * MarkWeight + questLog.SuccessSequence * SequenceWeight + timeWeight;
+            double timeWeight = (DateTime.UtcNow - vocabularyQuestLog.UtcTime).TotalMinutes * TimeWeight;
+            double weight = vocabularyQuestLog.Mark * MarkWeight + vocabularyQuestLog.SuccessSequence * SequenceWeight + timeWeight;
             return (float)weight;
         }
     }

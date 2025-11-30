@@ -16,7 +16,8 @@ namespace Chang.Services
         private readonly IDataProvider _prefsDataProvider;
         private readonly IDataProvider _unityCloudDataProvider;
 
-        public ProgressData ProgressData => _playerProfile.ProgressData;
+        public ProgressData<VocabularyQuestLog> VocabularyProgress => _playerProfile.VocabularyProgress;
+        public ProgressData<SentencesQuestLog> SentencesProgress => _playerProfile.SentencesProgress;
         public ProfileData ProfileData => _playerProfile.ProfileData;
         public string PlayerId => _unityCloudDataProvider.PlayerId;
         public Dictionary<string, Vocabulary.SectionData> ReorderedSections => _playerProfile.ReorderedSections;
@@ -38,56 +39,72 @@ namespace Chang.Services
 
         public async UniTask LoadStoredData(CancellationToken ct)
         {
-            //var prefsProfileData = await _prefsDataProvider.LoadProfileDataAsync(_cts.Token);
-            //var prefsProgressData = await _prefsDataProvider.LoadProgressDataAsync(_cts.Token);
+            ProfileData unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(ct);
 
-            var unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(ct);
-            var unityProgressData = await _unityCloudDataProvider.LoadProgressDataAsync(ct);
+            Languages language = unityProfileData.LearnLanguage;
+
+            ProgressData<VocabularyQuestLog> vocabularyProgress = await _unityCloudDataProvider.LoadVocabularyProgressDataAsync(language, ct);
+            ProgressData<SentencesQuestLog> sentencesProgress = await _unityCloudDataProvider.LoadSentencesProgressDataAsync(language, ct);
 
             // todo chang merge data with prefs. But for now will use only cloud data
 
             _playerProfile.ProfileData = unityProfileData;
-            _playerProfile.ProgressData = unityProgressData;
+            _playerProfile.VocabularyProgressDict[language] = vocabularyProgress;
+            _playerProfile.SentencesProgressDict[language] = sentencesProgress;
         }
 
-        public async UniTask SaveProfileDataAsync()
+        public async UniTask SaveProfileDataAsync(CancellationToken ct)
         {
             _playerProfile.ProfileData.SetTime(DateTime.UtcNow);
 
-            await _prefsDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData);
-            await _unityCloudDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData);
-            await SaveIntoScriptableObject();
+            await _prefsDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData, ct);
+            await _unityCloudDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData, ct);
+            await SaveIntoScriptableObject(ct);
         }
 
-        // todo chang use ct (SuppressCancellationThrow())?
+        // todo chang depend on the logic need probably save progress for sentences or vocabulary one at a time
         public async UniTask SaveProgressAsync(CancellationToken ct)
         {
-            _playerProfile.ProgressData.SetTime(DateTime.UtcNow);
+            _playerProfile.VocabularyProgress.SetTime(DateTime.UtcNow);
 
-            await _prefsDataProvider.SaveProgressDataAsync(_playerProfile.ProgressData);
-            await _unityCloudDataProvider.SaveProgressDataAsync(_playerProfile.ProgressData);
-            await SaveIntoScriptableObject();
+            await _prefsDataProvider.SaveVocabularyProgressDataAsync(_playerProfile.ProfileData.LearnLanguage, _playerProfile.VocabularyProgress, ct);
+            await _prefsDataProvider.SaveSentencesProgressDataAsync(_playerProfile.ProfileData.LearnLanguage, _playerProfile.SentencesProgress, ct);
+            await _unityCloudDataProvider.SaveVocabularyProgressDataAsync(_playerProfile.ProfileData.LearnLanguage, _playerProfile.VocabularyProgress, ct);
+            await _unityCloudDataProvider.SaveSentencesProgressDataAsync(_playerProfile.ProfileData.LearnLanguage, _playerProfile.SentencesProgress, ct);
+            await SaveIntoScriptableObject(ct);
         }
 
-        public void AddLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
+        public async UniTask SaveVocabularyProgressAsync(CancellationToken ct)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async UniTask SaveSentencesProgressAsync(CancellationToken ct)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddVocabularyLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
         {
             Debug.LogWarning($"AddLog key: {key}, isCorrect {isCorrect}");
-            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
+            Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
+
             if (!logs.TryGetValue(key, out var questLog))
             {
-                questLog = new QuestLog(key, presentation, type);
+                questLog = new VocabularyQuestLog(key, presentation, type);
                 logs[key] = questLog;
             }
 
             var logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
-            _playerProfile.ProgressData.SetTime(logUnit.UtcTime);
+            _playerProfile.VocabularyProgress.SetTime(logUnit.UtcTime);
             questLog.SetTime(logUnit.UtcTime);
             questLog.AddLog(logUnit);
         }
 
-        public int GetMark(string key)
+        public int GetVocabularyMark(string key)
         {
-            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
+            Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
+
             if (logs.TryGetValue(key, out var questLog))
             {
                 return questLog.Mark;
@@ -96,10 +113,10 @@ namespace Chang.Services
             return 0;
         }
 
-        public bool TryGetLog(string key, out QuestLog questLog)
+        public bool TryGetVocabularyLog(string key, out VocabularyQuestLog vocabularyQuestLog)
         {
-            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
-            return logs.TryGetValue(key, out questLog);
+            Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
+            return logs.TryGetValue(key, out vocabularyQuestLog);
         }
 
         public void ReorderSection(Vocabulary.SectionData sectionData)
@@ -109,7 +126,7 @@ namespace Chang.Services
                 Section = sectionData.Section,
                 Lessons = new List<Vocabulary.LessonData>()
             };
-            
+
             string key = ReorderedSectionKey(sectionData.Section);
             List<Vocabulary.IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
             IOrderedEnumerable<Vocabulary.IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
@@ -143,7 +160,7 @@ namespace Chang.Services
             {
                 if (quest is Vocabulary.QuestSelectWord selectWord)
                 {
-                    return GetMark(selectWord.CorrectWordFileName);
+                    return GetVocabularyMark(selectWord.CorrectWordFileName);
                 }
 
                 throw new NotImplementedException($"Question type {quest.QuestionType} is not implemented");

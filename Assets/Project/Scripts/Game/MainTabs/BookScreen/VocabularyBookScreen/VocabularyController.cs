@@ -94,7 +94,7 @@ namespace Chang.Vocabulary
             {
                 if (question is Vocabulary.QuestSelectWord selectWord)
                 {
-                    sum += (float)_profileService.GetMark(selectWord.CorrectWordFileName) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
+                    sum += (float)_profileService.GetVocabularyMark(selectWord.CorrectWordFileName) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace Chang.Vocabulary
 
         private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
         {
-            List<QuestLog> repetitions = await _repetitionService
+            List<VocabularyQuestLog> repetitions = await _repetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
 
             int repetitionsCount = repetitions.Count;
@@ -194,14 +194,14 @@ namespace Chang.Vocabulary
 
         private void SaveScrollPosition()
         {
-            _profileService.ProgressData.GameBookScrollPosition = _view.ScrollPosition;
-            Debug.Log($"Load gamebook scroll position: {_profileService.ProgressData.GameBookScrollPosition}, scroll position: {_view.ScrollPosition}");
+            _profileService.VocabularyProgress.ScrollPosition = _view.ScrollPosition;
+            Debug.Log($"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
 
         private void SetScrollPosition()
         {
-            _view.ScrollPosition = _profileService.ProgressData.GameBookScrollPosition;
-            Debug.Log($"Load gamebook scroll position: {_profileService.ProgressData.GameBookScrollPosition}, scroll position: {_view.ScrollPosition}");
+            _view.ScrollPosition = _profileService.VocabularyProgress.ScrollPosition;
+            Debug.Log($"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
     }
 }

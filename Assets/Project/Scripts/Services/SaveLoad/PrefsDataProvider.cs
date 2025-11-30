@@ -14,46 +14,63 @@ namespace Chang.Services.DataProvider
         {
             Formatting = Formatting.Indented,
         };
+        
+        public void Dispose()
+        {
+        }
 
         public async UniTask<ProfileData> LoadProfileDataAsync(CancellationToken ct)
         {
-            var json = PlayerPrefs.GetString(DataProviderConstants.ProfileDataKey, "{}");
-            var data = JsonConvert.DeserializeObject<ProfileData>(json);
+            string json = PlayerPrefs.GetString(DataProviderConstants.ProfileDataKey, "{}");
+            ProfileData data = JsonConvert.DeserializeObject<ProfileData>(json);
 
-            await UniTask.Yield();
+            await UniTask.Yield(ct);
 
             return data;
         }
 
-        public async UniTask SaveProfileDataAsync(ProfileData data)
+        public async UniTask SaveProfileDataAsync(ProfileData data, CancellationToken ct)
         {
-            var json = JsonConvert.SerializeObject(data, _jSettings);
+            string json = JsonConvert.SerializeObject(data, _jSettings);
             PlayerPrefs.SetString(DataProviderConstants.ProfileDataKey, json);
 
-            await UniTask.Yield();
+            await UniTask.Yield(ct);
         }
 
-        public async UniTask<ProgressData> LoadProgressDataAsync(CancellationToken ct)
+        public async UniTask<ProgressData<VocabularyQuestLog>> LoadVocabularyProgressDataAsync(Languages language, CancellationToken ct)
         {
-            var json = PlayerPrefs.GetString(DataProviderConstants.ProgressDataKey, "{}");
-            var data = JsonConvert.DeserializeObject<ProgressData>(json);
+            string json = PlayerPrefs.GetString($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", "{}");
+            ProgressData<VocabularyQuestLog> data = JsonConvert.DeserializeObject<ProgressData<VocabularyQuestLog>>(json);
 
-            await UniTask.Yield();
+            await UniTask.Yield(ct);
 
             return data;
         }
 
-        public async UniTask SaveProgressDataAsync(ProgressData data)
+        public async UniTask<ProgressData<SentencesQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
         {
-            var json = JsonConvert.SerializeObject(data, _jSettings);
-            PlayerPrefs.SetString(DataProviderConstants.ProgressDataKey, json);
+            string json = PlayerPrefs.GetString($"{language}_{DataProviderConstants.SentencesProgressDataKey}", "{}");
+            ProgressData<SentencesQuestLog> data = JsonConvert.DeserializeObject<ProgressData<SentencesQuestLog>>(json);
 
-            await UniTask.Yield();
+            await UniTask.Yield(ct);
+
+            return data;
         }
-
-        public void Dispose()
+        
+        public async UniTask SaveVocabularyProgressDataAsync(Languages language, ProgressData<VocabularyQuestLog> data, CancellationToken ct)
         {
-            // TODO release managed resources here
+            string json = JsonConvert.SerializeObject(data, _jSettings);
+            PlayerPrefs.SetString($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", json);
+
+            await UniTask.Yield(ct);
+        }
+        
+        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentencesQuestLog> data, CancellationToken ct)
+        {
+            string json = JsonConvert.SerializeObject(data, _jSettings);
+            PlayerPrefs.SetString($"{language}_{DataProviderConstants.SentencesProgressDataKey}", json);
+
+            await UniTask.Yield(ct);
         }
     }
 }

@@ -214,7 +214,7 @@ namespace Chang
         }
 
         // todo chang move into vocabulary controller
-        private async UniTaskVoid MakeVocabularyRepetitionAsync(List<QuestLog> repetitions, CancellationToken ct)
+        private async UniTaskVoid MakeVocabularyRepetitionAsync(List<VocabularyQuestLog> repetitions, CancellationToken ct)
         {
             if (repetitions.Count < ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT)
             {

@@ -1,3 +1,4 @@
+using System.Threading;
 using Chang.Services.DataProvider;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
@@ -7,7 +8,7 @@ namespace Chang.Services
     public partial class ProfileService
     {
         private const string AssetPath = "Assets/Project/EditorCheckSaveLoad.asset";
-        
+
         private IDataProvider _scriptableObjectDataProvider;
 
         private IDataProvider ScriptableObjectDataProvider
@@ -21,14 +22,17 @@ namespace Chang.Services
             }
         }
 
-        private async UniTask SaveIntoScriptableObject()
+        private async UniTask SaveIntoScriptableObject(CancellationToken ct)
         {
             if (ScriptableObjectDataProvider == null)
+            {
                 return;
+            }
 
-            await ScriptableObjectDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData);
-            await ScriptableObjectDataProvider.SaveProgressDataAsync(_playerProfile.ProgressData);
-            
+            await ScriptableObjectDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData, ct);
+            await ScriptableObjectDataProvider.SaveVocabularyProgressDataAsync(_playerProfile.ProfileData.LearnLanguage, _playerProfile.VocabularyProgress, ct);
+            await ScriptableObjectDataProvider.SaveSentencesProgressDataAsync(_playerProfile.ProfileData.LearnLanguage, _playerProfile.SentencesProgress, ct);
+
 #if UNITY_EDITOR
             EditorUtility.SetDirty(_scriptableObjectDataProvider as ScriptableObjectDataProviderEditor);
             AssetDatabase.SaveAssets();

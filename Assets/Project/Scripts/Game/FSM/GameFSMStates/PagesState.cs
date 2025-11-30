@@ -154,7 +154,7 @@ namespace Chang.FSM
             var answer = string.Join(" / ", _pagesBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
             var needIncrement = !(bool)_pagesBus.QuestionResult.Info[1];
-            _profileService.AddLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect,
+            _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect,
                 needIncrement);
 
             if (!isCorrect)
@@ -183,7 +183,7 @@ namespace Chang.FSM
 
             foreach (SelectWordResult result in matchWordsStateResult.Results)
             {
-                _profileService.AddLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect, false);
+                _profileService.AddVocabularyLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect, false);
                 _pagesBus.LessonLog.Add(result);
             }
 
@@ -290,7 +290,7 @@ namespace Chang.FSM
 
         private bool IsNeedDemonstration(string fileName)
         {
-            bool logExists = _profileService.TryGetLog(fileName, out var questLog);
+            bool logExists = _profileService.TryGetVocabularyLog(fileName, out var questLog);
 
             if (!logExists)
             {

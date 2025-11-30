@@ -110,7 +110,7 @@ namespace Chang.FSM
             foreach (var word in words)
             {
                 string key = $"{_profileService.ProfileData.LearnLanguage}/{word.LogKey}";
-                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetMark(key)));
+                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetVocabularyMark(key)));
             }
 
             _leftWords = new List<WordData>(words);

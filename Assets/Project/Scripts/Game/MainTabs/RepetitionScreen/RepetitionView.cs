@@ -17,7 +17,7 @@ namespace Chang
         [SerializeField] private Button repeatBtn;
         private Action _onRepeatClick;
 
-        public void Set(List<QuestLog> sortedList)
+        public void Set(List<VocabularyQuestLog> sortedList)
         {
             foreach (var questLog in sortedList)
             {

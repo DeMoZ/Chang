@@ -16,6 +16,7 @@ namespace Chang
 
         private PopupController<ChangeNamePopupModel> _changeNameController;
         private LoadingUiController _loadingUiController;
+        private CancellationTokenSource _cts = new();
 
         [Inject]
         public ProfileController(
@@ -68,17 +69,17 @@ namespace Chang
 
         private void OnChangeNameSubmit()
         {
-            OnChangeNameSubmitAsync().Forget();
+            OnChangeNameSubmitAsync(_cts.Token).Forget();
         }
 
-        private async UniTaskVoid OnChangeNameSubmitAsync()
+        private async UniTaskVoid OnChangeNameSubmitAsync(CancellationToken ct)
         {
             _profileService.ProfileData.Name = _changeNameController.Model.NameInput.Value;
 
             try
             {
                 _loadingUiController = _popupManager.ShowLoadingUi(new LoadingUiModel(LoadingElements.Animation));
-                await _profileService.SaveProfileDataAsync();
+                await _profileService.SaveProfileDataAsync(ct);
 
                 if (_changeNameController != null)
                 {

@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
+using Unity.Services.CloudSave.Models;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Services.DataProvider
@@ -13,7 +14,7 @@ namespace Chang.Services.DataProvider
     public class UnityCloudDataProvider : IDataProvider
     {
         private readonly ErrorHandler _errorHandler;
-        
+
         public string PlayerId => AuthenticationService.Instance.PlayerId;
 
         private readonly JsonSerializerSettings _jSettings = new()
@@ -26,9 +27,13 @@ namespace Chang.Services.DataProvider
             _errorHandler = errorHandler;
         }
 
+        public void Dispose()
+        {
+        }
+
         private bool CheckSession()
         {
-            var isAuthenticated = AuthenticationService.Instance.IsSignedIn;
+            bool isAuthenticated = AuthenticationService.Instance.IsSignedIn;
             if (!isAuthenticated)
             {
                 Debug.LogError("User is not authenticated.");
@@ -37,55 +42,86 @@ namespace Chang.Services.DataProvider
             return isAuthenticated;
         }
 
-        public async UniTask SaveProfileDataAsync(ProfileData data)
+        public async UniTask SaveProfileDataAsync(ProfileData data, CancellationToken ct)
         {
-            await SaveAsync(DataProviderConstants.ProfileDataKey, data);
+            await SaveAsync(DataProviderConstants.ProgressDataKey, data, ct);
         }
 
-        public async UniTask SaveProgressDataAsync(ProgressData data)
+        public async UniTask<ProgressData<VocabularyQuestLog>> LoadVocabularyProgressDataAsync(Languages language, CancellationToken ct)
         {
-            await SaveAsync(DataProviderConstants.ProgressDataKey, data);
-        }
-
-        public async UniTask<ProgressData> LoadProgressDataAsync(CancellationToken ct)
-        {
-            var isOk = CheckSession();
+            bool isOk = CheckSession();
             if (!isOk)
                 return null; // todo chang should be exception or callback to start authorization
 
-            var result = await LoadDataAsync<ProgressData>(DataProviderConstants.ProgressDataKey).AttachExternalCancellation(ct);
-            result ??= new ProgressData();
+            ProgressData<VocabularyQuestLog> result = await LoadDataAsync<ProgressData<VocabularyQuestLog>>($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", ct);
+            // result ??= new ProgressData<VocabularyQuestLog>(); // todo chang  uncomment 
+            {
+                // todo chang remove block
+                result ??= await TempMockVocabularyProgressWithOldProgress(ct);
+            }
 
             return result;
         }
 
+        public async UniTask<ProgressData<SentencesQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
+        {
+            bool isOk = CheckSession();
+            if (!isOk)
+            {
+                return null; // todo chang should be exception or callback to start authorization
+            }
+
+            ProgressData<SentencesQuestLog> result = await LoadDataAsync<ProgressData<SentencesQuestLog>>($"{language}_{DataProviderConstants.SentencesProgressDataKey}", ct);
+            result ??= new ProgressData<SentencesQuestLog>();
+
+            return result;
+        }
+
+        public async UniTask SaveVocabularyProgressDataAsync(Languages language, ProgressData<VocabularyQuestLog> data, CancellationToken ct)
+        {
+            await SaveAsync($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", data, ct);
+        }
+
+        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentencesQuestLog> data, CancellationToken ct)
+        {
+            await SaveAsync($"{language}_{DataProviderConstants.SentencesProgressDataKey}", data, ct);
+        }
+
         public async UniTask<ProfileData> LoadProfileDataAsync(CancellationToken ct)
         {
-            var isOk = CheckSession();
+            bool isOk = CheckSession();
             if (!isOk)
+            {
                 return null;
+            }
 
-            var profileData = await LoadDataAsync<ProfileData>(DataProviderConstants.ProfileDataKey).AttachExternalCancellation(ct);
+            ProfileData profileData = await LoadDataAsync<ProfileData>(DataProviderConstants.ProfileDataKey, ct);
             if (profileData == null)
             {
                 profileData = new ProfileData();
-                await SaveProfileDataAsync(profileData);
+                await SaveProfileDataAsync(profileData, ct);
             }
 
             return profileData;
         }
 
-        private async UniTask SaveAsync<T>(string key, T data)
+        private async UniTask SaveAsync<T>(string key, T data, CancellationToken ct)
         {
-            var isOk = CheckSession();
+            bool isOk = CheckSession();
             if (!isOk)
+            {
                 return;
+            }
 
-            var dataDict = new Dictionary<string, object> { { key, data } };
+            Dictionary<string, object> dataDict = new Dictionary<string, object> { { key, data } };
 
             try
             {
-                await CloudSaveService.Instance.Data.Player.SaveAsync(dataDict);
+                await CloudSaveService.Instance.Data.Player
+                    .SaveAsync(dataDict)
+                    .AsUniTask()
+                    .AttachExternalCancellation(ct);
+
                 Debug.Log($"{key} saved.");
             }
             catch (Exception e)
@@ -95,20 +131,24 @@ namespace Chang.Services.DataProvider
             }
         }
 
-        private async UniTask<T> LoadDataAsync<T>(string key) where T : class
+        private async UniTask<T> LoadDataAsync<T>(string key, CancellationToken ct) where T : class
         {
             try
             {
-                var savedData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { key });
-                var rawJson = JsonConvert.SerializeObject(savedData);
+                Dictionary<string, Item> savedData = await CloudSaveService.Instance.Data.Player
+                    .LoadAsync(new HashSet<string> { key })
+                    .AsUniTask()
+                    .AttachExternalCancellation(ct);
+
+                string rawJson = JsonConvert.SerializeObject(savedData);
                 Debug.Log($"Loaded raw data for key: {key}:\n{rawJson}");
 
                 if (savedData.TryGetValue(key, out var value))
                 {
-                    var jsonString = JsonConvert.SerializeObject(value.Value, _jSettings);
+                    string jsonString = JsonConvert.SerializeObject(value.Value, _jSettings);
                     Debug.Log($"Extract type: {typeof(T).Name}, for key: {key}:\n{jsonString}");
 
-                    var deserializedObject = JsonConvert.DeserializeObject<T>(jsonString);
+                    T deserializedObject = JsonConvert.DeserializeObject<T>(jsonString);
                     return deserializedObject;
                 }
 
@@ -134,8 +174,29 @@ namespace Chang.Services.DataProvider
             _errorHandler.HandleError(e, "Failed to save data");
         }
 
-        public void Dispose()
+        // todo chang remove when all users will have new data
+        private async UniTask<ProgressData<VocabularyQuestLog>> TempMockVocabularyProgressWithOldProgress(CancellationToken ct)
         {
+            OldProgressData oldResult = await LoadOldProgressDataAsync(ct);
+            oldResult ??= new OldProgressData();
+
+            ProgressData<VocabularyQuestLog> result = new ProgressData<VocabularyQuestLog>(oldResult.UtcTime, oldResult.Log);
+            return result;
+        }
+
+        // todo chang remove when all users will have new data
+        private async UniTask<OldProgressData> LoadOldProgressDataAsync(CancellationToken ct)
+        {
+            var isOk = CheckSession();
+            if (!isOk)
+            {
+                return null; // todo chang should be exception or callback to start authorization
+            }
+
+            OldProgressData result = await LoadDataAsync<OldProgressData>(DataProviderConstants.ProgressDataKey, ct);
+            result ??= new OldProgressData();
+
+            return result;
         }
     }
 }

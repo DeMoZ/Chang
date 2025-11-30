@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 namespace Chang.Profile
 {
     [Serializable]
-    public class QuestLog
+    public class VocabularyQuestLog : IQuestLog
     {
-        private readonly (int min, int max) SuccesSequeseRange = (0, 10);
+        private readonly (int min, int max) _successSequenceRange = (0, 10);
 
         public Languages Language { get; set; }
         public string Section { get; set; }
@@ -33,7 +33,7 @@ namespace Chang.Profile
         /// </summary>
         public DateTime UtcTime { get; set; }
 
-        public QuestLog(string path, string presentation, QuestionType type)
+        public VocabularyQuestLog(string path, string presentation, QuestionType type)
         {
             FileName = path;
             Presentation = presentation;
@@ -49,7 +49,7 @@ namespace Chang.Profile
         }
 
         [JsonConstructor]
-        public QuestLog(
+        public VocabularyQuestLog(
             string fileName,
             string presentation,
             QuestionType type,
@@ -90,7 +90,7 @@ namespace Chang.Profile
 
             Mark = Math.Clamp(Mark + (unit.IsCorrect 
                 ? increment : ProjectConstants.MARK_DICREMENT), ProjectConstants.MARK_MIN, ProjectConstants.MARK_MAX);
-            SuccessSequence = unit.IsCorrect ? Math.Clamp(SuccessSequence + 1, SuccesSequeseRange.min, SuccesSequeseRange.max) : 0;
+            SuccessSequence = unit.IsCorrect ? Math.Clamp(SuccessSequence + 1, _successSequenceRange.min, _successSequenceRange.max) : 0;
         }
     }
 }

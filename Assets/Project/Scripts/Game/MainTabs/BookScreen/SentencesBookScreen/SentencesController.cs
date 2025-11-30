@@ -134,7 +134,7 @@ namespace Chang.Sentences
 
         private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
         {
-            List<QuestLog> repetitions = await _repetitionService
+            List<SentencesQuestLog> repetitions = await _repetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
 
             int repetitionsCount = repetitions.Count;

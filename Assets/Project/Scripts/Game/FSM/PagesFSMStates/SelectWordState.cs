@@ -95,13 +95,13 @@ namespace Chang.FSM
             _mixWords.Shuffle();
 
             string key = $"{_profileService.ProfileData.LearnLanguage}/{_correctWord.Word.LogKey}"; // todo chang use section lang/section/word
-            int mark = _profileService.GetMark(key);
+            int mark = _profileService.GetVocabularyMark(key);
             bool isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
             _correctWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
 
             foreach (var mixWord in _mixWords)
             {
-                mark = _profileService.GetMark(mixWord.LogKey);
+                mark = _profileService.GetVocabularyMark(mixWord.LogKey);
                 mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
             }
 

@@ -1,77 +1,60 @@
 using System;
 using System.Collections.Generic;
+using DMZ.DebugSystem;
 using Newtonsoft.Json;
 using UnityEngine;
-using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Profile
 {
-    [Serializable]
-    public class ProgressData
+    public class ProgressData<T> where T : IQuestLog
     {
         /// <summary>
-        /// On any write SaveTime updated with current time. Used for profile synchronisation 
+        /// On any write SaveTime updated with current time. Used for profile synchronization 
         /// </summary>
         [field: SerializeField]
         public DateTime UtcTime { get; private set; }
 
-        public Dictionary<string, QuestLog> ThaiQuestLogs { get; private set; }
+        [JsonProperty("ThaiQuestLogs")]
+        public Dictionary<string, T> Log { get; private set; }
         
-        #region "May be move to ProfileData"
-        /// <summary>
-        /// Position for scroll in GameBook screen
-        /// </summary>
         [field: SerializeField]
-        public float GameBookScrollPosition { get; set; } = 1f;
-        #endregion
+        public float ScrollPosition { get; set; } = 1f;
         
         [JsonConstructor]
-        public ProgressData(DateTime utcTime, Dictionary<string, QuestLog> thaiQuestLogs, Dictionary<string, QuestLog> questions)
+        public ProgressData(DateTime utcTime, Dictionary<string, T> log)
         {
             UtcTime = utcTime;
-            ThaiQuestLogs = ValidateQuestions(thaiQuestLogs);
+            Log = Validate(log);
         }
-
+        
         public ProgressData()
         {
             UtcTime = DateTime.UtcNow;
-            ThaiQuestLogs = new Dictionary<string, QuestLog>();
+            Log = new Dictionary<string, T>();
         }
 
+        
         public void SetTime(DateTime utcTime)
         {
             UtcTime = utcTime;
         }
-
-        public Dictionary<string, QuestLog> GetQuestLogs(Languages language)
-        {
-            switch (language)
-            {
-                case Languages.Thai:
-                    return ThaiQuestLogs;
-                
-                default:
-                    Debug.LogWarning($"No QuestLog for Language: {language}");
-                    return new Dictionary<string, QuestLog>();
-            }
-        }
         
-        private Dictionary<string, QuestLog> ValidateQuestions(Dictionary<string, QuestLog> questLogs)
+        private Dictionary<string, T> Validate(Dictionary<string, T> log)
         {
-            Dictionary<string, QuestLog> result = new();
-            questLogs ??= new Dictionary<string, QuestLog>();
+            Dictionary<string, T> result = new();
+            log ??= new Dictionary<string, T>();
 
-            foreach (var pair in questLogs)
+            foreach (var pair in log)
             {
                 if (pair.Value.QuestionType == QuestionType.None)
                 {
-                    Debug.LogWarning($"ValidateQuestion: QuestionType is None for {pair.Key}");
+                    DMZLogger.LogWarning($"ValidateQuestion: QuestionType is None for {pair.Key}");
                     continue;
                 }
 
                 if (string.IsNullOrEmpty(pair.Value.Section))
                 {
-                    Debug.LogWarning($"ValidateQuestion: Section is null for {pair.Key}");
+                    DMZLogger.LogWarning($"ValidateQuestion: Section is null for {pair.Key}");
                     continue;
                 }
 

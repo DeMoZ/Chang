@@ -13,10 +13,10 @@ namespace Chang.Services
         {
         }
 
-        public async UniTask<List<QuestLog>> GetSectionRepetitionAsync(int amount, string section, CancellationToken ct)
+        public async UniTask<List<VocabularyQuestLog>> GetSectionRepetitionAsync(int amount, string section, CancellationToken ct)
         {
             Languages language = ProfileService.ProfileData.LearnLanguage;
-            Dictionary<string, QuestLog> log = ProfileService.ProgressData.GetQuestLogs(language);
+            Dictionary<string, VocabularyQuestLog> log = ProfileService.VocabularyProgress.Log;
 
             // todo chang issues with thread pool in web build. How to make sorting and filtering on main thread faster ?
             // return await UniTask.RunOnThreadPool(() =>
@@ -43,11 +43,11 @@ namespace Chang.Services
                 .ToList();
         }
 
-        public async UniTask<List<QuestLog>> GetGeneralRepetitionAsync(int amount, CancellationToken ct)
+        public async UniTask<List<VocabularyQuestLog>> GetGeneralRepetitionAsync(int amount, CancellationToken ct)
         {
             Languages language = ProfileService.ProfileData.LearnLanguage;
-            Dictionary<string, QuestLog> log = ProfileService.ProgressData.GetQuestLogs(language);
-            
+            Dictionary<string, VocabularyQuestLog> log = ProfileService.VocabularyProgress.Log;
+
             // todo chang issues with thread pool in web build. How to make sorting and filtering on main thread faster ?
             // return await UniTask.RunOnThreadPool(() =>
             // {
@@ -63,7 +63,7 @@ namespace Chang.Services
             //     progressList.Shuffle();
             //     return progressList;
             // }, cancellationToken: ct);
-            
+
             await UniTask.Yield(ct);
             return log
                 .Select(q => q.Value)
@@ -72,10 +72,10 @@ namespace Chang.Services
                 .ToList();
         }
 
-        private float OrderByWeight(QuestLog questLog)
+        private float OrderByWeight(VocabularyQuestLog vocabularyQuestLog)
         {
-            double timeWeight = (DateTime.UtcNow - questLog.UtcTime).TotalMinutes * TimeWeight;
-            double weight = questLog.Mark * MarkWeight + questLog.SuccessSequence * SequenceWeight + timeWeight;
+            double timeWeight = (DateTime.UtcNow - vocabularyQuestLog.UtcTime).TotalMinutes * TimeWeight;
+            double weight = vocabularyQuestLog.Mark * MarkWeight + vocabularyQuestLog.SuccessSequence * SequenceWeight + timeWeight;
             return (float)weight;
         }
     }
