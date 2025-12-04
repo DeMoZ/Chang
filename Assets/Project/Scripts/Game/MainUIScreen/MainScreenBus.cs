@@ -5,9 +5,7 @@ namespace Chang
 {
     public class MainScreenBus : IDisposable
     {
-        public Action<string, int> OnLessonClicked;
-        public Action<string> OnSectionRepeatClicked;
-        public Action OnRepeatClicked;
+        public Action OnRepeatClicked; // todo chang this should be removed after Repetition changes
         public Action OnLogOutClicked;
 
         public bool IsLoading;

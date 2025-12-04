@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -7,6 +6,8 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
+    // todo chang this class shoud be changed to move repetition logic into VocabularyController
+    // espeshially for the button click handling
     public class VocabularyRepetitionController : IViewController
     {
         private const int ShowLogLimitAmount = 30;

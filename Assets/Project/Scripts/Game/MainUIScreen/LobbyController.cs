@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Zenject;
 using Chang.Services;
 using Chang.Vocabulary;
+using Chang.Sentences;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
@@ -12,9 +13,9 @@ namespace Chang
     {
         private readonly MainScreenBus _mainScreenBus;
         private readonly MainUiView _view;
-        private readonly Vocabulary.VocabularyController _vocabularyController;
+        private readonly VocabularyController _vocabularyController;
+        private readonly SentencesController _sentencesController;
         private readonly VocabularyRepetitionController _vocabularyRepetitionController;
-        private readonly Sentences.SentencesController _sentencesController;
         private readonly SentencesRepetitionController _sentencesRepetitionController;
         private readonly ProfileController _profileController;
 
@@ -32,10 +33,10 @@ namespace Chang
         public LobbyController(
             MainScreenBus mainScreenBus,
             MainUiView view,
-            Vocabulary.VocabularyController vocabularyController,
+            VocabularyController vocabularyController,
             VocabularyRepetitionController vocabularyRepetitionController,
             VocabularyRepetitionService vocabularyRepetitionService,
-            Sentences.SentencesController sentencesController,
+            SentencesController sentencesController,
             SentencesRepetitionController sentencesRepetitionController,
             SentencesRepetitionService sentencesRepetitionService,
             ProfileController profileController)
@@ -49,9 +50,6 @@ namespace Chang
             _profileController = profileController;
 
             _cts = new CancellationTokenSource();
-
-            _mainScreenBus.OnLessonClicked += OnLessonClicked;
-            _mainScreenBus.OnSectionRepeatClicked += OnSectionRepeatClicked;
             _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClicked;
         }
 
@@ -59,9 +57,6 @@ namespace Chang
         {
             _cts.Cancel();
             _cts.Dispose();
-
-            _mainScreenBus.OnLessonClicked -= OnLessonClicked;
-            _mainScreenBus.OnSectionRepeatClicked -= OnSectionRepeatClicked;
             _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClicked;
         }
 
@@ -118,29 +113,18 @@ namespace Chang
                     break;
 
                 case MainTabType.Repetition:
-                    _currentController = null;
+                    //_currentController = null;// todo chang uncomment
                     await _vocabularyRepetitionController.SetAsync(ct);
                     break;
 
                 case MainTabType.Profile:
-                    _currentController = null;
+                    //_currentController = null;// todo chang uncomment
                     await _profileController.SetAsync(ct);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tabType), tabType, null);
             }
         }
-
-        private void OnLessonClicked(string sectionName, int lessonIndex)
-        {
-            _currentController?.OnLessonClicked( sectionName,  lessonIndex);
-        }
-
-        private void OnSectionRepeatClicked(string section)
-        {
-            _currentController?.OnSectionRepeatClicked(section);
-        }
-
         private void OnGeneralRepeatClicked()
         {
             _currentController?.OnGeneralRepeatClicked();

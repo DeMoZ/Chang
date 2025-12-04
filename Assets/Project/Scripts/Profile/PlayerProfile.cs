@@ -7,13 +7,14 @@ namespace Chang.Profile
     {
         public readonly Dictionary<Languages, ProgressData<VocabularyQuestLog>> VocabularyProgressDict = new();
         public readonly Dictionary<Languages, ProgressData<SentencesQuestLog>> SentencesProgressDict = new();
-        
+
         public ProfileData ProfileData;
 
         /// <summary>
         /// key Thai/Fruits, value section
         /// </summary>
         public Dictionary<string, Vocabulary.SectionData> ReorderedVocabularySections { get; } = new();
+
         public Dictionary<string, Sentences.SectionData> ReorderedSentencesSections { get; } = new();
 
         public ProgressData<VocabularyQuestLog> VocabularyProgress => VocabularyProgressDict[ProfileData.LearnLanguage];

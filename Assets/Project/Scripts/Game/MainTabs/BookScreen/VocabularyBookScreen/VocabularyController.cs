@@ -185,14 +185,14 @@ namespace Chang.Vocabulary
         {
             Debug.Log($"OnSectionRepetitionClick key: {key}");
             SaveScrollPosition();
-            _mainScreenBus.OnSectionRepeatClicked?.Invoke(key);
+            OnSectionRepeatClickedAsync(key, _cts.Token).Forget();
         }
 
         private void OnLessonClick(string sectionName, int lessonIndex)
         {
             Debug.Log($"Clicked on item {sectionName}_{lessonIndex}");
             SaveScrollPosition();
-            _mainScreenBus.OnLessonClicked?.Invoke(sectionName, lessonIndex);
+            OnLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
         }
 
         private void SaveScrollPosition()
@@ -206,12 +206,7 @@ namespace Chang.Vocabulary
             _view.ScrollPosition = _profileService.VocabularyProgress.ScrollPosition;
             Debug.Log($"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
-
-        public void OnLessonClicked(string sectionName, int lessonIndex)
-        {
-            OnLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
-        }
-
+        
         private async UniTaskVoid OnLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
         {
             if (_mainScreenBus.IsLoading)
@@ -248,12 +243,7 @@ namespace Chang.Vocabulary
             _onLobbyExitState?.Invoke();
         }
 
-        public void OnSectionRepeatClicked(string section)
-        {
-            OnVocabularySectionRepeatClickedAsync(section, _cts.Token).Forget();
-        }
-
-        private async UniTaskVoid OnVocabularySectionRepeatClickedAsync(string section, CancellationToken ct)
+        private async UniTaskVoid OnSectionRepeatClickedAsync(string section, CancellationToken ct)
         {
             if (_mainScreenBus.IsLoading)
                 return;

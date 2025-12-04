@@ -201,14 +201,14 @@ namespace Chang.Sentences
         {
             Debug.Log($"OnSectionRepetitionClick key: {key}");
             SaveScrollPosition();
-            _mainScreenBus.OnSectionRepeatClicked?.Invoke(key);
+            OnSectionRepeatClickedAsync(key, _cts.Token).Forget();
         }
 
         private void OnLessonClick(string sectionName, int lessonIndex)
         {
             Debug.Log($"Clicked on item {sectionName}_{lessonIndex}");
             SaveScrollPosition();
-            _mainScreenBus.OnLessonClicked?.Invoke(sectionName, lessonIndex);
+            OnLessonClicked(sectionName, lessonIndex);
         }
 
         private void SaveScrollPosition()
@@ -221,6 +221,14 @@ namespace Chang.Sentences
         {
             _view.ScrollPosition = _profileService.SentencesProgress.ScrollPosition;
             Debug.Log($"Load gamebook scroll position: {_profileService.SentencesProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
+        }
+        
+        private async UniTaskVoid OnSectionRepeatClickedAsync(string section, CancellationToken ct)
+        {
+            if (_mainScreenBus.IsLoading)
+                return;
+
+            throw new NotImplementedException();
         }
     }
 }
