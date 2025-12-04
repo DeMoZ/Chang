@@ -5,10 +5,12 @@ namespace Chang
 {
     public class MainScreenBus : IDisposable
     {
-        public Action<string, int> OnWordsLessonClicked;
-        public Action<string> OnWordsSectionRepeatClicked;
-        public Action OnWordsRepeatClicked;
+        public Action<string, int> OnLessonClicked;
+        public Action<string> OnSectionRepeatClicked;
+        public Action OnRepeatClicked;
         public Action OnLogOutClicked;
+
+        public bool IsLoading;
 
         [Inject]
         public MainScreenBus()

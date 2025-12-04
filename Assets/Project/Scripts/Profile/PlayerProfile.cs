@@ -30,9 +30,14 @@ namespace Chang.Profile
         {
         }
 
-        public void AddReorderSection(string key, Vocabulary.SectionData sectionData)
+        public void AddReorderVocabularySection(string key, Vocabulary.SectionData sectionData)
         {
             ReorderedVocabularySections[key] = sectionData;
+        }
+
+        public void AddReorderSentencesSection(string key, Sentences.SectionData sectionData)
+        {
+            ReorderedSentencesSections[key] = sectionData;
         }
     }
 }

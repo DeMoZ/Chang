@@ -106,7 +106,7 @@ namespace Chang.Services
         {
             Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
 
-            if (logs.TryGetValue(key, out var questLog))
+            if (logs.TryGetValue(key, out VocabularyQuestLog questLog))
             {
                 return questLog.Mark;
             }
@@ -114,13 +114,25 @@ namespace Chang.Services
             return 0;
         }
 
+        public float GetSentencesMark(string key)
+        {
+            Dictionary<string, SentencesQuestLog> logs = _playerProfile.SentencesProgress.Log;
+
+            if (logs.TryGetValue(key, out SentencesQuestLog questLog))
+            {
+                return questLog.Mark;
+            }
+
+            return 0;
+        }
+        
         public bool TryGetVocabularyLog(string key, out VocabularyQuestLog vocabularyQuestLog)
         {
             Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
             return logs.TryGetValue(key, out vocabularyQuestLog);
         }
 
-        public void ReorderSection(Vocabulary.SectionData sectionData)
+        public void ReorderVocabularySection(Vocabulary.SectionData sectionData)
         {
             Vocabulary.SectionData newSectionData = new Vocabulary.SectionData
             {
@@ -153,7 +165,7 @@ namespace Chang.Services
                 newSectionData.Lessons.Add(newLesson);
             }
 
-            _playerProfile.AddReorderSection(key, newSectionData);
+            _playerProfile.AddReorderVocabularySection(key, newSectionData);
 
             return;
 
@@ -162,6 +174,55 @@ namespace Chang.Services
                 if (quest is Vocabulary.QuestSelectWord selectWord)
                 {
                     return GetVocabularyMark(selectWord.CorrectWordFileName);
+                }
+
+                throw new NotImplementedException($"Question type {quest.QuestionType} is not implemented");
+            }
+        }
+
+        public void ReorderSentencesSection(Sentences.SectionData sectionData)
+        {
+            Sentences.SectionData newSectionData = new Sentences.SectionData
+            {
+                Section = sectionData.Section,
+                Lessons = new List<Sentences.LessonData>()
+            };
+
+            string key = ReorderedSectionKey(sectionData.Section);
+            List<Sentences.IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
+            IOrderedEnumerable<Sentences.IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
+            Queue<Sentences.IQuestion> questQueue = new Queue<Sentences.IQuestion>(orderedQuests);
+
+            foreach (var lesson in sectionData.Lessons)
+            {
+                int count = lesson.Questions.Count;
+                List<Sentences.IQuestion> quests = new();
+
+                for (int i = 0; i < count; i++)
+                {
+                    quests.Add(questQueue.Dequeue());
+                }
+
+                var newLesson = new Sentences.LessonData
+                {
+                    SectionName = lesson.SectionName,
+                    Questions = quests,
+                };
+
+                newSectionData.Lessons.Add(newLesson);
+            }
+
+            _playerProfile.AddReorderSentencesSection(key, newSectionData);
+
+            return;
+
+            int GetQuestMark(Sentences.IQuestion quest)
+            {
+                if (quest is Sentences.SentenceSelectWords selectWord)
+                {
+                    // return GetVocabularyMark(selectWord.CorrectWordFileName);
+                    // todo chang implement sentences mark
+                    return 1;
                 }
 
                 throw new NotImplementedException($"Question type {quest.QuestionType} is not implemented");

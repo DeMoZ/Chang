@@ -35,7 +35,7 @@ namespace Chang
 
         public void Init()
         {
-            _view.Init(_mainScreenBus.OnWordsRepeatClicked);
+            _view.Init(_mainScreenBus.OnRepeatClicked);
         }
 
         public async UniTask SetAsync(CancellationToken ct)

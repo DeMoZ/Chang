@@ -1,15 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Chang.Services;
 using Chang.GameBook;
 using Chang.Profile;
+using Chang.Vocabulary;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Sentences
 {
-    public class SentencesController : IViewController
+    public class SentencesController : IViewController, IBookController
     {
         private readonly GameBus _gameBus;
         private readonly MainScreenBus _mainScreenBus;
@@ -20,6 +23,7 @@ namespace Chang.Sentences
         private Dictionary<string, LessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
+        private Action _onLobbyExitState;
 
         [Inject]
         public SentencesController(
@@ -38,8 +42,9 @@ namespace Chang.Sentences
             _cts = new CancellationTokenSource();
         }
 
-        public void Init()
+        public void Init(Action onLobbyExitState)
         {
+            _onLobbyExitState = onLobbyExitState;
         }
 
         public void Dispose()
@@ -84,52 +89,67 @@ namespace Chang.Sentences
             SetScrollPosition();
         }
 
+        public void OnLessonClicked(string sectionName, int lessonIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnSectionRepeatClicked(string section)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnGeneralRepeatClicked()
+        {
+            throw new NotImplementedException();
+        }
+        
         private Color GetLessonColor(LessonData lessonData)
         {
-            return new Color();
-            // float sum = 0;
-            //
-            // foreach (ISimpleQuestion question in lessonData.Questions)
-            // {
-            //     if (question is SimpleQuestSelectWord selectWord)
-            //     {
-            //         sum += (float)_profileService.GetMark(selectWord.CorrectWordFileName) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
-            //     }
-            //     else
-            //     {
-            //         throw new NotImplementedException($"Question type {question.QuestionType} is not implemented");
-            //     }
-            // }
-            //
-            // // Debug.Log($"GetLessonColor for {lessonData.Section}, {lessonData.Name} sum: {sum}");
-            // return _view.GetLessonColor(sum);
+            float sum = 0;
+            
+            foreach (IQuestion question in lessonData.Questions)
+            {
+                if (question is SentenceSelectWords selectWord)
+                {
+                    // throw new NotImplementedException();
+                    // sum += (float)_profileService.GetSentencesMark(selectWord.CorrectWordFileName) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
+                }
+                else
+                {
+                    throw new NotImplementedException($"Question type {question.QuestionType} is not implemented");
+                }
+            }
+            
+            // Debug.Log($"GetLessonColor for {lessonData.Section}, {lessonData.Name} sum: {sum}");
+            return _view.GetLessonColor(sum);
         }
 
         private void OnSectionSortClick(string key)
         {
-            // Debug.Log($"OnSectionSortClick key: {key}");
-            // Section section = _gameBus.SimpleSentencesBookData.Sections.Find(s => s.SectionName == key);
-            //
-            // if (_profileService.ReorderedSections.TryGetValue(_profileService.ReorderedSectionKey(section.SectionName), out _))
-            // {
-            //     _profileService.ReorderedSections.Remove(_profileService.ReorderedSectionKey(section.SectionName));
-            // }
-            // else
-            // {
-            //     _profileService.ReorderSection(section);
-            // }
-            //
-            // SectionBlock sectionBlock = _sectionBlocks[key];
-            //
-            // foreach (Transform child in sectionBlock.Container)
-            // {
-            //     if (!child.name.Contains("Section"))
-            //     {
-            //         UnityEngine.Object.Destroy(child.gameObject);
-            //     }
-            // }
-            //
-            // PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
+            Debug.Log($"OnSectionSortClick key: {key}");
+            SectionData sectionData = _gameBus.SentencesBookData.Sections.Find(s => s.Section == key);
+
+            if (_profileService.ReorderedVocabularySections.TryGetValue(_profileService.ReorderedSectionKey(sectionData.Section), out _))
+            {
+                _profileService.ReorderedVocabularySections.Remove(_profileService.ReorderedSectionKey(sectionData.Section));
+            }
+            else
+            {
+                _profileService.ReorderSentencesSection(sectionData);
+            }
+
+            SectionBlock sectionBlock = _sectionBlocks[key];
+
+            foreach (Transform child in sectionBlock.Container)
+            {
+                if (!child.name.Contains("Section"))
+                {
+                    UnityEngine.Object.Destroy(child.gameObject);
+                }
+            }
+
+            PopulateSectionAsync(sectionData, sectionBlock, _cts.Token).Forget();
         }
 
         private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
@@ -181,14 +201,14 @@ namespace Chang.Sentences
         {
             Debug.Log($"OnSectionRepetitionClick key: {key}");
             SaveScrollPosition();
-            _mainScreenBus.OnWordsSectionRepeatClicked?.Invoke(key);
+            _mainScreenBus.OnSectionRepeatClicked?.Invoke(key);
         }
 
         private void OnLessonClick(string sectionName, int lessonIndex)
         {
             Debug.Log($"Clicked on item {sectionName}_{lessonIndex}");
             SaveScrollPosition();
-            _mainScreenBus.OnWordsLessonClicked?.Invoke(sectionName, lessonIndex);
+            _mainScreenBus.OnLessonClicked?.Invoke(sectionName, lessonIndex);
         }
 
         private void SaveScrollPosition()
