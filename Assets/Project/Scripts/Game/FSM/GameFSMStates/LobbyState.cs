@@ -16,13 +16,12 @@ namespace Chang.FSM
 {
     public class LobbyState : ResultStateBase<StateType, GameBus>
     {
-        private const string VocabularyBookKey = "VocabularyBookJson";
-        private const string SentencesBookKey = "SentencesBookJson";
-        
-        private const string Language = "Thai"; // todo chang fix language
-        private string GetPath(string key) => $"Assets/Project/Resources_Bundled/{Language}/{key}.json";
+        private const string VocabularyBookKey = "VocabularyBook";
+        private const string SentencesBookKey = "SentencesBook";
 
         public override StateType Type => StateType.Lobby;
+        private Languages Language => _profileService.ProfileData.LearnLanguage;
+        private string GetPath(string key) => $"Assets/Project/Resources_Bundled/{Language}/{key}.json";
 
         [Inject] private readonly LobbyController _lobbyController;
         [Inject] private readonly AddressablesAssetManager _assetManager;
@@ -56,9 +55,15 @@ namespace Chang.FSM
             _loadingUiController.SimulateProgress(2f).Forget();
 
             await _profileService.LoadStoredData(_cts.Token);
-            await LoadVocabularyBookAsync();
-            await LoadSentencesBookAsync();
-            
+
+            List<UniTask> loads = new()
+            {
+                LoadVocabularyBookAsync(_cts.Token),
+                LoadSentencesBookAsync(_cts.Token)
+            };
+
+            await UniTask.WhenAll(loads);
+
             _loadingUiController.SetPercents(1f);
             if (_loadingUiController != null)
             {
@@ -69,14 +74,15 @@ namespace Chang.FSM
             _lobbyController.Enter();
         }
 
-        private async UniTask LoadVocabularyBookAsync()
+        private async UniTask LoadVocabularyBookAsync(CancellationToken ct)
         {
-            Debug.Log("LoadVocabularyBookAsync start");
-            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(VocabularyBookKey), _cts.Token);
+            string methodName = nameof(LoadVocabularyBookAsync);
+            Debug.Log($"[{methodName}] Start");
+            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(VocabularyBookKey), ct);
 
             if (!asset.Item)
             {
-                Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)} asset is null, BookKey: {GetPath(VocabularyBookKey)}");
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {GetPath(VocabularyBookKey)}");
                 return;
             }
 
@@ -89,20 +95,21 @@ namespace Chang.FSM
             Bus.VocabularyLessons = Bus.VocabularyBookData.Sections
                 .SelectMany(section => section.Lessons)
                 .ToDictionary(lesson => lesson.FileName);
-            
+
             asset.Dispose();
 
-            Debug.Log("LoadVocabularyBookAsync end");
+            Debug.Log($"[{methodName}] End");
         }
-        
-        private async UniTask LoadSentencesBookAsync()
+
+        private async UniTask LoadSentencesBookAsync(CancellationToken ct)
         {
-            Debug.Log("LoadSentencesBookAsync start");
-            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(SentencesBookKey), _cts.Token);
+            string methodName = nameof(LoadSentencesBookAsync);
+            Debug.Log($"[{methodName}] Start");
+            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(SentencesBookKey), ct);
 
             if (!asset.Item)
             {
-                Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)}() asset is null, BookKey: {GetPath(SentencesBookKey)}");
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {GetPath(SentencesBookKey)}");
                 return;
             }
 
@@ -112,13 +119,13 @@ namespace Chang.FSM
             };
 
             Bus.SentencesBookData = JsonConvert.DeserializeObject<Sentences.SentencesBookData>(asset.Item.text, settings);
-            // Bus.SentencesLessons = Bus.SentencesBookData.Sections
-            //     .SelectMany(section => section.Lessons)
-            //     .ToDictionary(lesson => lesson.FileName);
-            
+            Bus.SentencesLessons = Bus.SentencesBookData.Sections
+                .SelectMany(section => section.Lessons)
+                .ToDictionary(lesson => lesson.FileName);
+
             asset.Dispose();
 
-            Debug.Log("LoadSentencesBookAsync end");
+            Debug.Log($"[{methodName}] End");
         }
 
         public override void Exit()

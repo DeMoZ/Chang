@@ -6,22 +6,21 @@ namespace Chang.Vocabulary
     /// <summary>
     /// Stores the data for the current selected or generated lesson 
     /// </summary>
-    public class Lesson : IDisposable
+    public class Lesson : ILesson, IDisposable
     {
         /// <summary>
         /// selected name. Used to find config with the same name
         /// </summary>
-        public string FileName = string.Empty;
-        public bool GenerateQuestMatchWordsData;
-        public bool IsGeneratedMathWordsQuestPlayed;
-        
-        public Vocabulary.IQuestion currentQuestion { get; private set; }
-        public List<Vocabulary.IQuestion> SimpleQuestions { get; private set; }
-        public Queue<Vocabulary.IQuestion> SimpleQuestionQueue { get; private set; }
-        
+        public string FileName { get; set; } = string.Empty;
+
+        public IQuestion currentQuestion { get; private set; }
+        public List<IQuestion> SimpleQuestions { get; private set; }
+        public Queue<IQuestion> SimpleQuestionQueue { get; private set; }
+        public bool IsGeneratedMathWordsQuestPlayed { get; set; }
+
         public void Dispose()
         {
-            FileName = null;
+            FileName = string.Empty;
             currentQuestion = null;
             SimpleQuestionQueue.Clear();
         }
@@ -31,28 +30,28 @@ namespace Chang.Vocabulary
             currentQuestion = SimpleQuestionQueue.Dequeue();
         }
 
-        public Vocabulary.IQuestion PeekNextQuestion()
+        public IQuestion PeekNextQuestion()
         {
             return SimpleQuestionQueue.Peek();
         }
-        
+
         /// <summary>
         /// Add quest to the beginning of the queue (example: add demonstration screen)
         /// </summary> 
-        public void InsertNextQuest(Vocabulary.IQuestion quest)
+        public void InsertNextQuest(IQuestion quest)
         {
-            var tempList = new List<Vocabulary.IQuestion>(SimpleQuestionQueue);
+            var tempList = new List<IQuestion>(SimpleQuestionQueue);
             tempList.Insert(0, quest);
-            SimpleQuestionQueue = new Queue<Vocabulary.IQuestion>(tempList);
+            SimpleQuestionQueue = new Queue<IQuestion>(tempList);
         }
 
-        public void SetSimpleQuestions(List<Vocabulary.IQuestion> questions)
+        public void SetSimpleQuestions(List<IQuestion> questions)
         {
             SimpleQuestions = questions;
-            SimpleQuestionQueue = new Queue<Vocabulary.IQuestion>(questions);
+            SimpleQuestionQueue = new Queue<IQuestion>(questions);
         }
-        
-        public void AddSimpleQuestion(Vocabulary.IQuestion question)
+
+        public void AddSimpleQuestion(IQuestion question)
         {
             SimpleQuestions.Add(question);
             SimpleQuestionQueue.Enqueue(question);

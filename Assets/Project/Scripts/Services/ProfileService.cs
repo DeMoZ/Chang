@@ -141,14 +141,14 @@ namespace Chang.Services
             };
 
             string key = ReorderedSectionKey(sectionData.Section);
-            List<Vocabulary.IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
-            IOrderedEnumerable<Vocabulary.IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
-            Queue<Vocabulary.IQuestion> questQueue = new Queue<Vocabulary.IQuestion>(orderedQuests);
+            List<IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
+            IOrderedEnumerable<IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
+            Queue<IQuestion> questQueue = new Queue<IQuestion>(orderedQuests);
 
             foreach (var lesson in sectionData.Lessons)
             {
                 int count = lesson.Questions.Count;
-                List<Vocabulary.IQuestion> quests = new();
+                List<IQuestion> quests = new();
 
                 for (int i = 0; i < count; i++)
                 {
@@ -169,7 +169,7 @@ namespace Chang.Services
 
             return;
 
-            int GetQuestMark(Vocabulary.IQuestion quest)
+            int GetQuestMark(IQuestion quest)
             {
                 if (quest is Vocabulary.QuestSelectWord selectWord)
                 {
@@ -189,14 +189,14 @@ namespace Chang.Services
             };
 
             string key = ReorderedSectionKey(sectionData.Section);
-            List<Sentences.IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
-            IOrderedEnumerable<Sentences.IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
-            Queue<Sentences.IQuestion> questQueue = new Queue<Sentences.IQuestion>(orderedQuests);
+            List<IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
+            IOrderedEnumerable<IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
+            Queue<IQuestion> questQueue = new Queue<IQuestion>(orderedQuests);
 
             foreach (var lesson in sectionData.Lessons)
             {
                 int count = lesson.Questions.Count;
-                List<Sentences.IQuestion> quests = new();
+                List<IQuestion> quests = new();
 
                 for (int i = 0; i < count; i++)
                 {
@@ -216,7 +216,7 @@ namespace Chang.Services
 
             return;
 
-            int GetQuestMark(Sentences.IQuestion quest)
+            int GetQuestMark(IQuestion quest)
             {
                 if (quest is Sentences.SentenceSelectWords selectWord)
                 {

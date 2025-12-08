@@ -1,4 +1,4 @@
-namespace Chang.Vocabulary
+namespace Chang.GameBook
 {
     public interface IBookController
     {

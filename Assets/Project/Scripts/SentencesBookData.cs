@@ -26,14 +26,6 @@ namespace Chang.Sentences
         public List<IQuestion> Questions;
     }
 
-    public interface IQuestion
-    {
-        QuestionType QuestionType { get; }
-        HashSet<string> GetConfigKeys();
-        HashSet<string> GetSoundKeys();
-        HashSet<string> GetImageKeys();
-    }
-
     public class SentenceSelectWords : IQuestion
     {
         private HashSet<string> _keys;
@@ -46,6 +38,10 @@ namespace Chang.Sentences
         public HashSet<string> GetConfigKeys() => Keys;
         public HashSet<string> GetSoundKeys() => Keys;
         public HashSet<string> GetImageKeys() => Keys;
+        public HashSet<string> GetNeedDemonstrationKeys()
+        {
+            throw new System.NotImplementedException();
+        }
 
         public HashSet<string> Keys => _keys ??= GetWords();
 

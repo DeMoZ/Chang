@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Zenject;
+using Chang.GameBook;
 using Chang.Services;
 using Chang.Vocabulary;
 using Chang.Sentences;
@@ -125,6 +126,7 @@ namespace Chang
                     throw new ArgumentOutOfRangeException(nameof(tabType), tabType, null);
             }
         }
+
         private void OnGeneralRepeatClicked()
         {
             _currentController?.OnGeneralRepeatClicked();

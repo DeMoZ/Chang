@@ -29,15 +29,6 @@ namespace Chang.Vocabulary
         public List<IQuestion> Questions;
     }
 
-    public interface IQuestion
-    {
-        QuestionType QuestionType { get; }
-        HashSet<string> GetConfigKeys();
-        HashSet<string> GetSoundKeys();
-        HashSet<string> GetImageKeys();
-        HashSet<string> GetNeedDemonstrationKeys();
-    }
-
     public class QuestSelectWord : IQuestion
     {
         public QuestionType QuestionType => QuestionType.SelectWord;

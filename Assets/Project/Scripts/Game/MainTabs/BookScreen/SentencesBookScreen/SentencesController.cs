@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Chang.Services;
 using Chang.GameBook;
 using Chang.Profile;
-using Chang.Vocabulary;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
@@ -64,7 +64,7 @@ namespace Chang.Sentences
             _lessons.Clear();
             _view.Clear();
 
-            for (var i = 0; i < _gameBus.SentencesBookData.Sections.Count; i++)
+            for (int i = 0; i < _gameBus.SentencesBookData.Sections.Count; i++)
             {
                 Color baseColor = _view.GetNextColor(i);
                 SectionData sectionData = _gameBus.SentencesBookData.Sections[i];
@@ -89,25 +89,15 @@ namespace Chang.Sentences
             SetScrollPosition();
         }
 
-        public void OnLessonClicked(string sectionName, int lessonIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnSectionRepeatClicked(string section)
-        {
-            throw new NotImplementedException();
-        }
-
         public void OnGeneralRepeatClicked()
         {
             throw new NotImplementedException();
         }
-        
+
         private Color GetLessonColor(LessonData lessonData)
         {
             float sum = 0;
-            
+
             foreach (IQuestion question in lessonData.Questions)
             {
                 if (question is SentenceSelectWords selectWord)
@@ -120,7 +110,7 @@ namespace Chang.Sentences
                     throw new NotImplementedException($"Question type {question.QuestionType} is not implemented");
                 }
             }
-            
+
             // Debug.Log($"GetLessonColor for {lessonData.Section}, {lessonData.Name} sum: {sum}");
             return _view.GetLessonColor(sum);
         }
@@ -163,14 +153,14 @@ namespace Chang.Sentences
             sectionBlock.SectionView.SetSortToggle(
                 repetitionsCount > 0 && _profileService.ReorderedSentencesSections.ContainsKey(reorderedSectionKey),
                 repetitionsCount > 0);
-            
+
             sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
-            
+
             if (_profileService.ReorderedSentencesSections.TryGetValue(reorderedSectionKey, out SectionData reorderedSection))
             {
                 sectionData = reorderedSection;
             }
-            
+
             RectTransform row = null;
             int count = -1;
             for (int m = 0; m < sectionData.Lessons.Count; m++)
@@ -180,19 +170,19 @@ namespace Chang.Sentences
                     count++;
                     row = _view.InstantiateRow(sectionBlock.Container);
                 }
-            
+
                 string sectionName = sectionData.Section;
                 int lessonIndex = m + 1;
                 string key = $"{sectionData.Section}_{m + 1}";
                 _lessons[key] = sectionData.Lessons[m];
-            
+
                 GameBookItem lessonItem = m % 2 == 0
                     ? _view.InstantiateUpLesson(row)
                     : _view.InstantiateDownLesson(row);
-            
+
                 lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
                 lessonItem.name = $"Item {key}";
-                var color = GetLessonColor(sectionData.Lessons[m]);
+                Color color = GetLessonColor(sectionData.Lessons[m]);
                 lessonItem.SetColor(color);
             }
         }
@@ -208,27 +198,125 @@ namespace Chang.Sentences
         {
             Debug.Log($"Clicked on item {sectionName}_{lessonIndex}");
             SaveScrollPosition();
-            OnLessonClicked(sectionName, lessonIndex);
+            OnLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
         }
 
         private void SaveScrollPosition()
         {
-            _profileService.SentencesProgress.ScrollPosition = _view.ScrollPosition;
-            Debug.Log($"Load gamebook scroll position: {_profileService.SentencesProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
+            _profileService.VocabularyProgress.ScrollPosition = _view.ScrollPosition;
+            Debug.Log($"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
 
         private void SetScrollPosition()
         {
-            _view.ScrollPosition = _profileService.SentencesProgress.ScrollPosition;
-            Debug.Log($"Load gamebook scroll position: {_profileService.SentencesProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
+            _view.ScrollPosition = _profileService.VocabularyProgress.ScrollPosition;
+            Debug.Log($"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
-        
+
+        private async UniTaskVoid OnLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
+        {
+            if (_mainScreenBus.IsLoading)
+                return;
+
+            _mainScreenBus.IsLoading = true;
+            await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
+
+            {
+                LessonData simpleLesson;
+                string key = _profileService.ReorderedSectionKey(sectionName);
+
+                if (_profileService.ReorderedSentencesSections.TryGetValue(key, out SectionData section))
+                {
+                    simpleLesson = section.Lessons[lessonIndex - 1];
+                }
+                else
+                {
+                    key = $"{_profileService.ProfileData.LearnLanguage}Lesson{sectionName}_{lessonIndex}";
+                    simpleLesson = _gameBus.SentencesLessons[key];
+                }
+
+                Lesson lesson = new Lesson();
+                lesson.FileName = simpleLesson.FileName;
+                lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
+
+                _gameBus.CurrentSentencesLesson = lesson;
+            }
+
+            _mainScreenBus.IsLoading = false;
+
+            _gameBus.GameType = GameType.Learn;
+            _onLobbyExitState?.Invoke();
+        }
+
         private async UniTaskVoid OnSectionRepeatClickedAsync(string section, CancellationToken ct)
         {
             if (_mainScreenBus.IsLoading)
                 return;
 
             throw new NotImplementedException();
+            // todo chang show loading animation ?
+            // var repetitions = await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
+            // MakeRepetitionAsync(repetitions, _cts.Token).Forget();
+        }
+
+        private async UniTaskVoid OnGeneralRepeatClickedAsync(CancellationToken ct)
+        {
+            if (_mainScreenBus.IsLoading)
+                return;
+            throw new NotImplementedException();
+            // todo chang show loading animation ?
+            // var repetitions = await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
+            // MakeRepetitionAsync(repetitions, _cts.Token).Forget();
+        }
+
+        private async UniTaskVoid MakeRepetitionAsync(List<VocabularyQuestLog> repetitions, CancellationToken ct)
+        {
+            throw new NotImplementedException();
+            if (repetitions.Count < ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT)
+            {
+                Debug.LogWarning("Not enough logs for general repetition");
+                return;
+            }
+
+            _mainScreenBus.IsLoading = true;
+            await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
+
+            List<IQuestion> questions = new List<IQuestion>();
+
+            foreach (VocabularyQuestLog questLog in repetitions)
+            {
+                // switch (questLog.QuestionType)
+                // {
+                //     case QuestionType.SelectWord:
+                //         var simpleQuest = new QuestSelectWord();
+                //         simpleQuest.CorrectWordFileName = questLog.FileName;
+                //         var words = repetitions
+                //             .Where(r => r.QuestionType == QuestionType.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
+                //             .ToList();
+                //
+                //         words.Shuffle();
+                //
+                //         simpleQuest.MixWordsFileNames = words.Take(ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE)
+                //             .Select(w => w.FileName)
+                //             .ToList();
+                //
+                //         questions.Add(simpleQuest);
+                //         break;
+                //
+                //     default:
+                //         throw new NotImplementedException($"Not implemented simple quest generation for type: {questLog.QuestionType}");
+                // }
+            }
+
+            // var lesson = new Lesson();
+            // lesson.GenerateQuestMatchWordsData = true;
+            // lesson.SetSimpleQuestions(questions);
+            //
+            // _gameBus.CurrentVocabularyLesson = lesson;
+            // _mainScreenBus.IsLoading = false;
+            //
+            // _gameBus.GameType = GameType.Repetition;
+            _onLobbyExitState?.Invoke();
         }
     }
 }

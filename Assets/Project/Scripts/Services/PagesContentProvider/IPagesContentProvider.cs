@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Chang.Vocabulary;
+using Chang;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 

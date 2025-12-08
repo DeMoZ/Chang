@@ -206,7 +206,7 @@ namespace Chang.FSM
                 return;
             }
 
-            Vocabulary.Lesson lesson = _pagesBus.CurrentLesson;
+            ILesson lesson = _pagesBus.CurrentLesson;
 
             // Add generated match words quest at the end of the lesson
             if (lesson.SimpleQuestionQueue.Count == 0)
@@ -225,7 +225,7 @@ namespace Chang.FSM
                 return;
             }
 
-            Vocabulary.IQuestion nextQuestion = lesson.PeekNextQuestion();
+            IQuestion nextQuestion = lesson.PeekNextQuestion();
             QuestionType nextQuestionType = nextQuestion.QuestionType;
 
             // If demonstration word is required
@@ -258,12 +258,12 @@ namespace Chang.FSM
             _pagesBus.OnHintUsed.SetSilent(false);
         }
 
-        private bool TryGenerateQuestMatchWordsData(Vocabulary.Lesson lesson, out Vocabulary.QuestMatchWords matchWordsQuest)
+        private bool TryGenerateQuestMatchWordsData(ILesson lesson, out Vocabulary.QuestMatchWords matchWordsQuest)
         {
             matchWordsQuest = new Vocabulary.QuestMatchWords();
             HashSet<string> matchWords = new();
 
-            if (!lesson.GenerateQuestMatchWordsData || lesson.IsGeneratedMathWordsQuestPlayed)
+            if (lesson.IsGeneratedMathWordsQuestPlayed)
             {
                 return false;
             }

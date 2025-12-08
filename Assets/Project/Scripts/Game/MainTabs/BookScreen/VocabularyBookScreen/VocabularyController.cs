@@ -64,7 +64,7 @@ namespace Chang.Vocabulary
             _lessons.Clear();
             _view.Clear();
 
-            for (var i = 0; i < _gameBus.VocabularyBookData.Sections.Count; i++)
+            for (int i = 0; i < _gameBus.VocabularyBookData.Sections.Count; i++)
             {
                 Color baseColor = _view.GetNextColor(i);
                 SectionData sectionData = _gameBus.VocabularyBookData.Sections[i];
@@ -88,7 +88,12 @@ namespace Chang.Vocabulary
 
             SetScrollPosition();
         }
-
+        
+        public void OnGeneralRepeatClicked()
+        {
+            OnGeneralRepeatClickedAsync(_cts.Token).Forget();
+        }
+        
         private Color GetLessonColor(LessonData lessonData)
         {
             float sum = 0;
@@ -150,7 +155,7 @@ namespace Chang.Vocabulary
 
             sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
 
-            if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey, out var reorderedSection))
+            if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey, out SectionData reorderedSection))
             {
                 sectionData = reorderedSection;
             }
@@ -176,7 +181,7 @@ namespace Chang.Vocabulary
 
                 lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
                 lessonItem.name = $"Item {key}";
-                var color = GetLessonColor(sectionData.Lessons[m]);
+                Color color = GetLessonColor(sectionData.Lessons[m]);
                 lessonItem.SetColor(color);
             }
         }
@@ -231,7 +236,6 @@ namespace Chang.Vocabulary
 
                 Lesson lesson = new Lesson();
                 lesson.FileName = simpleLesson.FileName;
-                lesson.GenerateQuestMatchWordsData = simpleLesson.GenerateQuestMatchWordsData;
                 lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
 
                 _gameBus.CurrentVocabularyLesson = lesson;
@@ -249,13 +253,8 @@ namespace Chang.Vocabulary
                 return;
 
             // todo chang show loading animation ?
-            var repetitions = await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
+            List<VocabularyQuestLog> repetitions = await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
-        }
-
-        public void OnGeneralRepeatClicked()
-        {
-            OnGeneralRepeatClickedAsync(_cts.Token).Forget();
         }
 
         private async UniTaskVoid OnGeneralRepeatClickedAsync(CancellationToken ct)
@@ -264,7 +263,7 @@ namespace Chang.Vocabulary
                 return;
 
             // todo chang show loading animation ?
-            var repetitions = await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
+            List<VocabularyQuestLog> repetitions = await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
@@ -279,16 +278,16 @@ namespace Chang.Vocabulary
             _mainScreenBus.IsLoading = true;
             await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
 
-            var questions = new List<IQuestion>();
+            List<IQuestion> questions = new List<IQuestion>();
 
-            foreach (var questLog in repetitions)
+            foreach (VocabularyQuestLog questLog in repetitions)
             {
                 switch (questLog.QuestionType)
                 {
                     case QuestionType.SelectWord:
-                        var simpleQuest = new QuestSelectWord();
+                        QuestSelectWord simpleQuest = new QuestSelectWord();
                         simpleQuest.CorrectWordFileName = questLog.FileName;
-                        var words = repetitions
+                        List<VocabularyQuestLog> words = repetitions
                             .Where(r => r.QuestionType == QuestionType.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
                             .ToList();
 
@@ -306,8 +305,7 @@ namespace Chang.Vocabulary
                 }
             }
 
-            var lesson = new Lesson();
-            lesson.GenerateQuestMatchWordsData = true;
+            Lesson lesson = new Lesson();
             lesson.SetSimpleQuestions(questions);
 
             _gameBus.CurrentVocabularyLesson = lesson;
