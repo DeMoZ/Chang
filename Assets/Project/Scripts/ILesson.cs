@@ -5,6 +5,7 @@ namespace Chang
     public interface ILesson
     {
         string FileName { get; }
+        IQuestion CurrentQuestion { get; }
         bool IsGeneratedMathWordsQuestPlayed { get; set; }
         List<IQuestion> SimpleQuestions { get; }
         Queue<IQuestion> SimpleQuestionQueue { get; }
@@ -13,5 +14,6 @@ namespace Chang
         void AddSimpleQuestion(IQuestion question);
         void InsertNextQuest(IQuestion demonstration);
         void DequeueAndSetSipmlQuestion();
+        void EnqueueCurrentQuestion();
     }
 }

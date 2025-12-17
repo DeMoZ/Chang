@@ -12,8 +12,7 @@ namespace Chang.Vocabulary
         /// selected name. Used to find config with the same name
         /// </summary>
         public string FileName { get; set; } = string.Empty;
-
-        public IQuestion currentQuestion { get; private set; }
+        public IQuestion CurrentQuestion { get; private set; }
         public List<IQuestion> SimpleQuestions { get; private set; }
         public Queue<IQuestion> SimpleQuestionQueue { get; private set; }
         public bool IsGeneratedMathWordsQuestPlayed { get; set; }
@@ -21,13 +20,13 @@ namespace Chang.Vocabulary
         public void Dispose()
         {
             FileName = string.Empty;
-            currentQuestion = null;
+            CurrentQuestion = null;
             SimpleQuestionQueue.Clear();
         }
 
         public void DequeueAndSetSipmlQuestion()
         {
-            currentQuestion = SimpleQuestionQueue.Dequeue();
+            CurrentQuestion = SimpleQuestionQueue.Dequeue();
         }
 
         public IQuestion PeekNextQuestion()
@@ -59,7 +58,7 @@ namespace Chang.Vocabulary
 
         public void EnqueueCurrentQuestion()
         {
-            SimpleQuestionQueue.Enqueue(currentQuestion);
+            SimpleQuestionQueue.Enqueue(CurrentQuestion);
         }
     }
 }

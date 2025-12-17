@@ -74,7 +74,8 @@ namespace Chang.FSM
 
             _pagesBus = new PagesBus
             {
-                CurrentLesson = Bus.CurrentVocabularyLesson,
+                // CurrentLesson = Bus.CurrentVocabularyLesson,
+                CurrentLesson = Bus.CurrentLesson,
                 GameType = Bus.GameType,
             };
 
@@ -106,7 +107,7 @@ namespace Chang.FSM
 
         private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
         {
-            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentVocabularyLesson.SimpleQuestions, progress, ct);
+            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentLesson.SimpleQuestions, progress, ct);
         }
 
         private void ExitToLobby()
@@ -130,7 +131,7 @@ namespace Chang.FSM
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
             await UniTask.Yield(ct);
-            
+
             switch (_pagesFsm.CurrentStateType)
             {
                 case QuestionType.DemonstrationWord:

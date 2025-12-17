@@ -238,7 +238,8 @@ namespace Chang.Vocabulary
                 lesson.FileName = simpleLesson.FileName;
                 lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
 
-                _gameBus.CurrentVocabularyLesson = lesson;
+                // _gameBus.CurrentVocabularyLesson = lesson;
+                _gameBus.CurrentLesson = lesson;
             }
 
             _mainScreenBus.IsLoading = false;
@@ -308,7 +309,8 @@ namespace Chang.Vocabulary
             Lesson lesson = new Lesson();
             lesson.SetSimpleQuestions(questions);
 
-            _gameBus.CurrentVocabularyLesson = lesson;
+            // _gameBus.CurrentVocabularyLesson = lesson;
+            _gameBus.CurrentLesson = lesson;
             _mainScreenBus.IsLoading = false;
 
             _gameBus.GameType = GameType.Repetition;

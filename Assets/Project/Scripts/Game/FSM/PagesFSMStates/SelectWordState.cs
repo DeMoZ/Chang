@@ -82,7 +82,7 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            IQuestion question = Bus.CurrentLesson.currentQuestion;
+            IQuestion question = Bus.CurrentLesson.CurrentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 

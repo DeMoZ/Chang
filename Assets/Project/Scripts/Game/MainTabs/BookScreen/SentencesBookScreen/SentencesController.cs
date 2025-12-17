@@ -239,7 +239,8 @@ namespace Chang.Sentences
                 lesson.FileName = simpleLesson.FileName;
                 lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
 
-                _gameBus.CurrentSentencesLesson = lesson;
+                // _gameBus.CurrentSentencesLesson = lesson;
+                _gameBus.CurrentLesson = lesson;
             }
 
             _mainScreenBus.IsLoading = false;

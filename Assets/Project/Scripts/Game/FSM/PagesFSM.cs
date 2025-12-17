@@ -47,6 +47,7 @@ namespace Chang.FSM
             var demonstrationWordState = new DemonstrationState(_pagesBus, _pagesContentProvider, OnStateResult);
             var selectWordState = new SelectWordState(_pagesBus, _pagesContentProvider, OnStateResult);
             var matchWordsState = new MatchWordsState(_pagesBus, _pagesContentProvider, OnStateResult);
+            var sentencesSelectWordsState = new SentenceSelectWordState(_pagesBus, _pagesContentProvider, OnStateResult);
 
             _diContainer.Inject(playResultState);
             _diContainer.Inject(demonstrationWordState);
@@ -59,6 +60,7 @@ namespace Chang.FSM
                 { QuestionType.DemonstrationWord, demonstrationWordState },
                 { QuestionType.SelectWord, selectWordState },
                 { QuestionType.MatchWords, matchWordsState },
+                { QuestionType.SentenceSelectWords, sentencesSelectWordsState },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));

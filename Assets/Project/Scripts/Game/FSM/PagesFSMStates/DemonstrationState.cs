@@ -47,8 +47,8 @@ namespace Chang.FSM
 
         public override QuestionType Type => QuestionType.DemonstrationWord;
 
-        public DemonstrationState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus,
-            onStateResult)
+        public DemonstrationState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult)
+            : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
         }
@@ -74,24 +74,24 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            IQuestion question = Bus.CurrentLesson.currentQuestion;
+            IQuestion question = Bus.CurrentLesson.CurrentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 
             var path = _wordPathHelper.GetConfigPath(((QuestDemonstrationWord)question).CorrectWordFileName);
             var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
-            if (!asset )
+            if (!asset)
             {
                 return;
             }
-            
+
             QuestDemonstrateWordData questionData = new QuestDemonstrateWordData(asset.PhraseData);
             _correctWord = questionData.CorrectWord;
-            
+
             string spritePath = _wordPathHelper.GetTexturePath(((QuestDemonstrationWord)question).CorrectWordFileName);
             var sprite = _pagesContentProvider.GetCachedSprite(spritePath);
-            
+
             _stateController.Init(_correctWord, sprite, OnToggleValueChanged, OnClickPlaySound);
             _stateController.SetViewActive(true);
 

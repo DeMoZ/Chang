@@ -4,6 +4,7 @@ using Chang.Resources;
 using Chang.Services;
 using DMZ.FSM;
 using Popup;
+using Project.Services.PagesContentProvider;
 using Zenject;
 
 namespace Chang.FSM
@@ -34,6 +35,8 @@ namespace Chang.FSM
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly PopupManager _popupManager;
+     
+        private readonly IPagesContentProvider _pagesContentProvider;
         
         private List<WordConfig> _correctWordsConfig; // todo chang which to use
         private List<WordData> _correctWordsData; // todo chang which to use
@@ -41,10 +44,9 @@ namespace Chang.FSM
         private List<PhraseData> correctSequence; // compare the result with this
         private List<PhraseData> sequence;          // show question with this. It has some empty items to fill in with mixed words
         
-        public SentenceSelectWordState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public SentenceSelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus, onStateResult)
         {
-            
-            
+            _pagesContentProvider = pagesContentProvider;
         }
     }
 }

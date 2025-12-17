@@ -9,7 +9,7 @@ namespace Chang.Vocabulary
         public string FileName; // json field
         public List<SectionData> Sections;
         public Languages Language;
-        
+
         private Dictionary<string, SectionData> _sectionsDict;
         public Dictionary<string, SectionData> SectionsDict => _sectionsDict ??= Sections.ToDictionary(s => s.Section);
     }
@@ -49,7 +49,7 @@ namespace Chang.Vocabulary
             keys.AddRange(MixWordsFileNames);
             return keys;
         }
-        
+
         public HashSet<string> GetImageKeys()
         {
             return new HashSet<string> { CorrectWordFileName };

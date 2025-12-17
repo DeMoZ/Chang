@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Chang.Resources;
+using Chang.Sentences;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
@@ -20,7 +21,7 @@ namespace Chang.FSM
         private const string SentencesBookKey = "SentencesBook";
 
         public override StateType Type => StateType.Lobby;
-        private Languages Language => _profileService.ProfileData.LearnLanguage;
+        private Languages Language => _profileService.LearnLanguage;
         private string GetPath(string key) => $"Assets/Project/Resources_Bundled/{Language}/{key}.json";
 
         [Inject] private readonly LobbyController _lobbyController;
@@ -113,12 +114,24 @@ namespace Chang.FSM
                 return;
             }
 
-            var settings = new JsonSerializerSettings
+            JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 Converters = new List<JsonConverter> { new Sentences.SentencesBookConverter() }
             };
 
             Bus.SentencesBookData = JsonConvert.DeserializeObject<Sentences.SentencesBookData>(asset.Item.text, settings);
+
+            // populate fileNames (keys)
+            // ThaiLessonFirstTest_1
+            foreach (SectionData sectionData in Bus.SentencesBookData.Sections)
+            {
+                for (int i = 0; i < sectionData.Lessons.Count; i++)
+                {
+                    var lesson = sectionData.Lessons[i];
+                    lesson.FileName = $"{Language}Lesson{sectionData.Section}_{i + 1}";
+                }
+            }
+
             Bus.SentencesLessons = Bus.SentencesBookData.Sections
                 .SelectMany(section => section.Lessons)
                 .ToDictionary(lesson => lesson.FileName);

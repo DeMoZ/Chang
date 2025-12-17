@@ -22,8 +22,9 @@ namespace Chang.Services
         public string PlayerId => _unityCloudDataProvider.PlayerId;
         public Dictionary<string, Vocabulary.SectionData> ReorderedVocabularySections => _playerProfile.ReorderedVocabularySections;
         public Dictionary<string, Sentences.SectionData> ReorderedSentencesSections => _playerProfile.ReorderedSentencesSections;
-        public string ReorderedSectionKey(string section) => $"{_playerProfile.ProfileData.LearnLanguage}/{section}";
-
+        public Languages LearnLanguage => _playerProfile.ProfileData.LearnLanguage;
+        public string ReorderedSectionKey(string section) => $"{LearnLanguage}/{section}";
+        
         [Inject]
         public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler)
         {

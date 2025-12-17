@@ -20,9 +20,9 @@ namespace Chang.Sentences
 
     public class LessonData
     {
-        public string FileName; // json field
+        public string FileName; // json field used as a dictioanary key
         public string SectionName;
-        public string Name;
+        // public string Name;
         public List<IQuestion> Questions;
     }
 
@@ -38,9 +38,10 @@ namespace Chang.Sentences
         public HashSet<string> GetConfigKeys() => Keys;
         public HashSet<string> GetSoundKeys() => Keys;
         public HashSet<string> GetImageKeys() => Keys;
+
         public HashSet<string> GetNeedDemonstrationKeys()
         {
-            throw new System.NotImplementedException();
+            return new HashSet<string>(CompareWordsFileNames);
         }
 
         public HashSet<string> Keys => _keys ??= GetWords();
@@ -48,7 +49,7 @@ namespace Chang.Sentences
         private HashSet<string> GetWords()
         {
             HashSet<string> newList = new HashSet<string>(CompareWordsFileNames);
-            newList.UnionWith(DisplayWordsFileNames);
+            newList.UnionWith(MixWordsFileNames);
             return newList;
         }
     }

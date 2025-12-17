@@ -13,7 +13,7 @@ namespace Chang.Sentences
         /// </summary>
         public string FileName { get; set; } = string.Empty;
 
-        public IQuestion currentQuestion { get; private set; }
+        public IQuestion CurrentQuestion { get; private set; }
         public List<IQuestion> SimpleQuestions { get; private set; }
         public Queue<IQuestion> SimpleQuestionQueue { get; private set; }
         public bool IsGeneratedMathWordsQuestPlayed { get; set; }
@@ -21,13 +21,13 @@ namespace Chang.Sentences
         public void Dispose()
         {
             FileName = null;
-            currentQuestion = null;
+            CurrentQuestion = null;
             SimpleQuestionQueue.Clear();
         }
 
         public void DequeueAndSetSipmlQuestion()
         {
-            currentQuestion = SimpleQuestionQueue.Dequeue();
+            CurrentQuestion = SimpleQuestionQueue.Dequeue();
         }
 
         public IQuestion PeekNextQuestion()
@@ -59,7 +59,7 @@ namespace Chang.Sentences
 
         public void EnqueueCurrentQuestion()
         {
-            SimpleQuestionQueue.Enqueue(currentQuestion);
+            SimpleQuestionQueue.Enqueue(CurrentQuestion);
         }
     }
 }

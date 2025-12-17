@@ -14,8 +14,9 @@ namespace Chang
 
         public Dictionary<string, Sentences.LessonData> SentencesLessons { get; set; }
 
-        public Vocabulary.Lesson CurrentVocabularyLesson { get; set; }
-        public Sentences.Lesson CurrentSentencesLesson { get; set; }
+        // public Vocabulary.Lesson CurrentVocabularyLesson { get; set; }
+        // public Sentences.Lesson CurrentSentencesLesson { get; set; }
+        public ILesson CurrentLesson { get; set; }
 
         public GameType GameType { get; set; }
     }
