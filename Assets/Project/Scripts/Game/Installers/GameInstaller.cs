@@ -5,6 +5,7 @@ using Chang.UI;
 using Chang.GameBook;
 using Chang.Resources;
 using Chang.Services;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
@@ -24,6 +25,7 @@ namespace Chang
         [SerializeField] private DemonstrationWordView demonstrationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;
+        [SerializeField] private SentenceSelectWordView sentenceSelectWordScreen;
 
         [Space, SerializeField] private AudioSource pagesAudioSource;
 
@@ -50,11 +52,13 @@ namespace Chang
             Container.BindInstance(gameOverlayScreen).AsSingle();
             Container.BindInstance(pagesContainer).AsSingle();
             Container.BindInstance(playResultScreen).AsSingle();
+            Container.BindInstance(profileScreen).AsSingle();
+            
             Container.BindInstance(demonstrationScreen).AsSingle();
             Container.BindInstance(matchWordScreen).AsSingle();
             Container.BindInstance(selectWordScreen).AsSingle();
-            Container.BindInstance(profileScreen).AsSingle();
-
+            Container.BindInstance(sentenceSelectWordScreen).AsSingle();
+            
             #endregion
 
             #region Controllers
@@ -72,6 +76,7 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SentenceSelectWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileController>().AsSingle();
             Container.BindInterfacesAndSelfTo<PagesSoundController>().AsSingle();
 

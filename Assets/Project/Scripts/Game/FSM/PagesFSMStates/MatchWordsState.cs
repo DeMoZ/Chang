@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using Chang.Resources;
 using Chang.Services;
-using Chang.Vocabulary;
 using Cysharp.Threading.Tasks;
 using Popup;
 using Project.Services.PagesContentProvider;
@@ -43,14 +42,13 @@ namespace Chang.FSM
         private List<WordData> _leftWords;
         private List<WordData> _rightWords;
         private CancellationTokenSource _cts;
-
-        public override QuestionType Type => QuestionType.MatchWords;
-
         private int _correctCount;
         private MatchWordsStateResult _result;
 
-        public MatchWordsState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus,
-            onStateResult)
+        public override QuestionType Type => QuestionType.MatchWords;
+
+        public MatchWordsState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult)
+            : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
         }
@@ -85,6 +83,7 @@ namespace Chang.FSM
 
             QuestMatchWordsData questionData = new QuestMatchWordsData(new List<PhraseData>());
             string path = string.Empty;
+            
             foreach (var fileName in question.GetConfigKeys())
             {
                 path = _wordPathHelper.GetConfigPath(fileName);

@@ -1730,6 +1730,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 880694335921776109, guid: d31ec834bd204427c9faebdd2b142426, type: 3}
   m_PrefabInstance: {fileID: 1666344025}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1666344027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 248128598462695237, guid: d31ec834bd204427c9faebdd2b142426, type: 3}
+  m_PrefabInstance: {fileID: 1666344025}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80fc7031280694bf098ebf70121eeabc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.SentenceSelectWordView
 --- !u!1 &1720160716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1786,6 +1797,7 @@ MonoBehaviour:
   demonstrationScreen: {fileID: 2026967169}
   matchWordScreen: {fileID: 5470678961595677867}
   selectWordScreen: {fileID: 1840725779}
+  sentenceSelectWordScreen: {fileID: 1666344027}
   pagesAudioSource: {fileID: 1553694338}
 --- !u!114 &1720160719
 MonoBehaviour:

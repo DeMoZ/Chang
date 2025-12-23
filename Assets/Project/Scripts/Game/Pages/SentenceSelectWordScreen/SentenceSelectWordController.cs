@@ -41,5 +41,9 @@ namespace Chang
         {
             _view.ShowHint();
         }
+
+        public void Clear()
+        {
+        }
     }
 }

@@ -94,7 +94,7 @@ namespace Chang.FSM
             _mixWords.AddRange(questionData.MixWords);
             _mixWords.Shuffle();
 
-            string key = $"{_profileService.ProfileData.LearnLanguage}/{_correctWord.Word.LogKey}"; // todo chang use section lang/section/word
+            string key = $"{_profileService.LearnLanguage}/{_correctWord.Word.LogKey}"; // todo chang use section lang/section/word
             int mark = _profileService.GetVocabularyMark(key);
             bool isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
             _correctWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
