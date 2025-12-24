@@ -29,12 +29,12 @@ namespace Chang.Resources
 
             return NormalizePath(path);
         }
-        
+
         public string GetNativeSoundKey(string key, Languages language)
         {
             // key = Thai/Words/Fruits/Coconut
             string[] keyParts = key.Split('/');
-            keyParts[0] = language.ToString(); 
+            keyParts[0] = language.ToString();
             return string.Join("/", keyParts);
         }
 
@@ -42,6 +42,11 @@ namespace Chang.Resources
         {
             // key = Thai/Words/Fruits/Coconut
             // result Assets/Project/Resources_Bundled/Thai/ImageWords/Fruits/Coconut.png
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return string.Empty;
+            }
+
             string[] keyParts = key.Split('/');
             string path = Path.Combine(
                 AssetPaths.Addressables.Root,

@@ -31,9 +31,10 @@ namespace Chang.Sentences
         private HashSet<string> _keys;
         public QuestionType QuestionType => QuestionType.SentenceSelectWords;
 
-        public List<string> CompareWordsFileNames; // compare result with these words
-        public List<string> DisplayWordsFileNames; // show these words to put words into
-        public List<string> MixWordsFileNames; // mix words to choose from
+        public string ImageFileName;
+        public List<string> CompareWordsFileNames;
+        public List<string> DisplayWordsFileNames;
+        public List<string> MixWordsFileNames;
 
         public HashSet<string> GetConfigKeys() => Keys;
         public HashSet<string> GetSoundKeys() => Keys;

@@ -8,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
 using Project.Services.PagesContentProvider;
+using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -82,27 +83,64 @@ namespace Chang.FSM
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 
-            QuestSentenceSelectWordData questionData = GetQuestionData((Sentences.SentenceSelectWords)question);
-            string path = string.Empty;
+            QuestSentenceSelectWordData questionData = GetQuestionData(question);
+            bool isQuestInTranslation = false; // todo chang
+            string spritePath = _wordPathHelper.GetTexturePath(((SentenceSelectWords)question).ImageFileName);
+            Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
             
+            _stateController.Init(
+                isQuestInTranslation,
+                questionData.CompareSequence,
+                questionData.DisplaySiquence,
+                questionData.MixWords,
+                sprite,
+                OnToggleValueChanged,
+                () =>
+                {
+                    /*OnClickPlaySound(!isQuestInTranslation)*/
+                });
 
-            // _stateController.Init(isQuestInTranslation, _correctWord, sprite, _mixWords, OnToggleValueChanged, () => OnClickPlaySound(!isQuestInTranslation));
             _stateController.SetViewActive(true);
 
             // OnClickPlaySound(!isQuestInTranslation);
         }
 
-        private QuestSentenceSelectWordData GetQuestionData(SentenceSelectWords sentence)
+        private QuestSentenceSelectWordData GetQuestionData(IQuestion question)
         {
-            // string path = _wordPathHelper.GetConfigPath(sentence.DisplayWordsFileNames);
-            // var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
-            //
-            return new QuestSentenceSelectWordData
+            SentenceSelectWords sentenceSelectWords = (SentenceSelectWords)question;
+
+            if (sentenceSelectWords == null)
             {
-                // CorrectSequence = _pagesContentProvider.GetPhrasesDataList(sentence.CompareWordsFileNames),
-                // SequenceWithHoles = _pagesContentProvider.GetPhrasesDataList(sentence.DisplayWordsFileNames),
-                // MixWords = _pagesContentProvider.GetPhrasesDataList(sentence.MixWordsFileNames)
+                Debug.LogError("SentenceSelectWords is null");
+                return null;
+            }
+            
+            var data =  new QuestSentenceSelectWordData
+            {
+                CompareSequence = GetPhrasesDataList(sentenceSelectWords.CompareWordsFileNames),
+                DisplaySiquence = GetPhrasesDataList(sentenceSelectWords.DisplayWordsFileNames),
+                MixWords = GetPhrasesDataList(sentenceSelectWords.MixWordsFileNames)
             };
+
+            return data;
+            
+            List<PhraseData> GetPhrasesDataList(List<string> fileNames)
+            {
+                List<PhraseData> phrasesData = new List<PhraseData>();
+                
+                foreach (var fileName in fileNames)
+                {
+                    string path = _wordPathHelper.GetConfigPath(fileName);
+                    var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
+
+                    if (asset)
+                    {
+                        phrasesData.Add(asset.PhraseData);
+                    }
+                }
+
+                return phrasesData;
+            }
         }
 
         private void OnClickPlaySound(bool isLearnLanguage)
@@ -120,10 +158,29 @@ namespace Chang.FSM
             //     _pagesSoundController.PlaySound(asset);
             // }
         }
-        
+
         private void OnHint(bool isHintUsed)
         {
             _stateController.ShowHint();
+        }
+        
+        private void OnToggleValueChanged(int index, bool isOn)
+        {
+            // _gameOverlayController.EnableCheckButton(isOn);
+            // Debug.Log($"toggle: {index}; isOn: {isOn}");
+            // var isCorrect = _mixWords[index].Key == _correctWord.Key;
+            // object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
+            //
+            // string path = Path.Combine(
+            //     _profileService.ProfileData.LearnLanguage.ToString(),
+            //     AssetPaths.Addressables.Words,
+            //     _correctWord.Word.Section,
+            //     _correctWord.Word.Key);
+            //
+            // var result = new SelectWordResult(
+            //     _wordPathHelper.NormalizePath(path),
+            //     _correctWord.Word.LearnWord, isCorrect, info);
+            // Bus.QuestionResult = result;
         }
     }
 }

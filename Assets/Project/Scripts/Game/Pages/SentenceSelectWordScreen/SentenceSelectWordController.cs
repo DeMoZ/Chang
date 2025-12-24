@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Chang
 {
-    public class SentenceSelectWordController: IViewController
+    public class SentenceSelectWordController : IViewController
     {
         private readonly SentenceSelectWordView _view;
 
@@ -22,14 +22,14 @@ namespace Chang
         }
 
         public void Init(bool isQuestInTranslation,
-            List<PhraseData> correctSequence,
-            List<PhraseData> sequence,
-            Sprite sprite,
+            List<PhraseData> compareSequence,
+            List<PhraseData> displaySiquence,
             List<PhraseData> mixWords,
+            Sprite sprite,
             Action<int, bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
-            _view.Init(isQuestInTranslation, sequence, sprite, mixWords, onToggleValueChanged, onClickPlaySound);
+            _view.Init(isQuestInTranslation, displaySiquence, mixWords, sprite, onToggleValueChanged, onClickPlaySound);
         }
 
         public void SetViewActive(bool active)

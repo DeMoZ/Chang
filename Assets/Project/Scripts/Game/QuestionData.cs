@@ -46,16 +46,9 @@ namespace Chang
     
     public class QuestSentenceSelectWordData : QuestDataBase
     {
-        public List<PhraseData> CorrectSequence;
-        public List<PhraseData> SequenceWithHoles;
+        public List<PhraseData> CompareSequence;
+        public List<PhraseData> DisplaySiquence;
         public List<PhraseData> MixWords;
         public override QuestionType QuestionType => QuestionType.SentenceSelectWords;
-        
-        // public QuestSentenceSelectWordData(List<PhraseData> correctSequence, List<PhraseData> sequenceWithHoles, List<PhraseData> mixWords)
-        // {
-        //     CorrectSequence = correctSequence;
-        //     SequenceWithHoles = sequenceWithHoles;
-        //     MixWords = mixWords;
-        // }
     }
 }
