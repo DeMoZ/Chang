@@ -82,12 +82,13 @@ namespace Chang.FSM
             IQuestion question = Bus.CurrentLesson.CurrentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
-
+            await _pagesContentProvider.CacheContentAsync(AssetPaths.Addressables.EmptyWordPlaceHolderPath, ct);
+            
             QuestSentenceSelectWordData questionData = GetQuestionData(question);
             bool isQuestInTranslation = false; // todo chang
             string spritePath = _wordPathHelper.GetTexturePath(((SentenceSelectWords)question).ImageFileName);
             Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
-            
+
             _stateController.Init(
                 isQuestInTranslation,
                 questionData.CompareSequence,
@@ -114,8 +115,8 @@ namespace Chang.FSM
                 Debug.LogError("SentenceSelectWords is null");
                 return null;
             }
-            
-            var data =  new QuestSentenceSelectWordData
+
+            var data = new QuestSentenceSelectWordData
             {
                 CompareSequence = GetPhrasesDataList(sentenceSelectWords.CompareWordsFileNames),
                 DisplaySiquence = GetPhrasesDataList(sentenceSelectWords.DisplayWordsFileNames),
@@ -123,15 +124,20 @@ namespace Chang.FSM
             };
 
             return data;
-            
+
             List<PhraseData> GetPhrasesDataList(List<string> fileNames)
             {
                 List<PhraseData> phrasesData = new List<PhraseData>();
-                
+
                 foreach (var fileName in fileNames)
                 {
-                    string path = _wordPathHelper.GetConfigPath(fileName);
-                    var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
+                    string path = string.Empty;
+
+                    path = string.IsNullOrEmpty(fileName)
+                        ? AssetPaths.Addressables.EmptyWordPlaceHolderPath
+                        : _wordPathHelper.GetConfigPath(fileName);
+                    
+                    PhraseConfig asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
                     if (asset)
                     {
@@ -163,7 +169,7 @@ namespace Chang.FSM
         {
             _stateController.ShowHint();
         }
-        
+
         private void OnToggleValueChanged(int index, bool isOn)
         {
             // _gameOverlayController.EnableCheckButton(isOn);

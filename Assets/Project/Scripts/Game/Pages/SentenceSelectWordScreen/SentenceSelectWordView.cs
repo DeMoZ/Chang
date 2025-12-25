@@ -25,6 +25,8 @@ namespace Chang.UI
         {
             Clear();
             
+            _questionImage.sprite = onToggleValueChanged;
+            
             for (var i = 0; i < displaySequence.Count; i++)
             {
                 var displayWord = Instantiate(_displayWordPrefab, _displaySequenceContent);

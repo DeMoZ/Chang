@@ -74,6 +74,11 @@ namespace Project.Services.PagesContentProvider
             await Preload(keys, progress, ct);
         }
 
+        public UniTask CacheContentAsync(string emptyWordPlaceHolderPath, CancellationToken ct)
+        {
+            throw new NotImplementedException();
+        }
+
         public async UniTask GetContentAsync(IQuestion nextQuestion, CancellationToken ct)
         {
             var loadingModel = new LoadingUiModel(LoadingElements.Animation);

@@ -122,6 +122,24 @@ namespace Project.Services.PagesContentProvider
             Merge(Content, configs);
         }
 
+        public async UniTask CacheContentAsync(string path, CancellationToken ct)
+        {
+            if (Content.TryGetValue(path, out var configAsset))
+            {
+                if (configAsset != null)
+                {
+                    return;
+                }
+            }
+            
+            DisposableAsset<PhraseConfig> asset = await _assetManager.LoadAssetAsync<PhraseConfig>(path, ct);
+
+            if (asset.Item != null)
+            {
+                Content[path] = asset;
+            }
+        }
+        
         public async UniTask GetContentAsync(IQuestion nextQuestion, CancellationToken ct)
         {
             LoadingUiModel loadingModel = new(LoadingElements.Animation);

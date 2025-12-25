@@ -25,6 +25,9 @@ namespace Chang.Resources
             public static string Words = "Words/";
             public static string SoundWords = "SoundWords/";
             public static string ImageWords = "ImageWords/";
+            
+            public static string EmptyWordPlaceHolder = "EmptyWordPlaceHolder.asset";
+            public static string EmptyWordPlaceHolderPath = Root + "EmptyWordPlaceHolder.asset";
         }
 
         public static class Resources

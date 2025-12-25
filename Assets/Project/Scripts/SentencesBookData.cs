@@ -32,6 +32,7 @@ namespace Chang.Sentences
         public QuestionType QuestionType => QuestionType.SentenceSelectWords;
 
         public string ImageFileName;
+        public string SoundFileName;
         public List<string> CompareWordsFileNames;
         public List<string> DisplayWordsFileNames;
         public List<string> MixWordsFileNames;

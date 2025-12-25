@@ -15,6 +15,11 @@ namespace Project.Services.PagesContentProvider
         UniTask PreloadPagesStateAsync(List<IQuestion> questions, Action<float, float> percents, CancellationToken ct);
 
         /// <summary>
+        /// Cache individual content by path
+        /// </summary>
+        UniTask CacheContentAsync(string emptyWordPlaceHolderPath, CancellationToken ct);
+        
+        /// <summary>
         /// Get content on Enter Every Page. Content for current page.
         /// </summary>
         UniTask GetContentAsync(IQuestion question, CancellationToken ct);
