@@ -10,12 +10,14 @@ namespace Chang
         public Languages Language { get; private set; } = Languages.Thai;
         public WordData Word { get; private set; }
         public bool ShowPhonetics { get; private set; }
+        public bool IsPlaceHolder { get; private set; }
         public string LogKey => $"{Language}/{Word.LogKey}";
         
-        public PhraseData(string key, WordData word)
+        public PhraseData(string key, WordData word, bool isPlaceHolder = false)
         {
             Key = key;
             Word = word;
+            IsPlaceHolder = isPlaceHolder;
         }
 
         public void SetPhonetics(bool showPhonetics)
