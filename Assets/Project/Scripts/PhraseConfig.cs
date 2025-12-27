@@ -11,8 +11,9 @@ namespace Chang
         [field: SerializeField] public Languages Language { get; set; } = Languages.English;
         [field: SerializeField] public string Section { get; set; } = string.Empty;
         [field: SerializeField] public WordConfig Word { get; set; }
+        [field: SerializeField] public bool IsPlaceHolder { get; set; } = false;
 
-        public PhraseData PhraseData => new(Key, Word.WordData);
+        public PhraseData PhraseData => new(Key, Word.WordData, IsPlaceHolder);
     }
 
     [Serializable]

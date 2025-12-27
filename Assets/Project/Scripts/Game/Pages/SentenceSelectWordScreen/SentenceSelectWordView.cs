@@ -35,6 +35,7 @@ namespace Chang.UI
                 var word = !isQuestInTranslation ? displaySequence[i].Word.Translation : displaySequence[i].Word.LearnWord;
                 displayWord.Set(word, displaySequence[i].Word.Phonetic, null,
                     isOn => onClickPlaySound(index, isOn));
+                displayWord.SetActive(!displaySequence[i].IsPlaceHolder);
             }
             
             for (var i = 0; i < mixWords.Count; i++)
