@@ -13,49 +13,31 @@ namespace Chang.UI
         [SerializeField] private Transform _mixSequenceContent;
         [SerializeField] private CToggle _displayWordPrefab;
         [SerializeField] private CToggle _mixWordPrefab;
-        
+        [SerializeField] private ToggleGroup _displayTogglesGroup;
+        [SerializeField] private ToggleGroup _mixTogglesGroup;
+
         [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.SentenceSelectWords;
 
+        private Action<int, int> OnToggleValueChanged;
+
         public void Init(bool isQuestInTranslation,
-            List<PhraseData> displaySequence,
-            List<PhraseData> mixWords,
-            Sprite onToggleValueChanged,
-            Action<int, bool> onClickPlaySound,
-            Action action)
+            List<SequencePhraseData> displaySequence,
+            List<SequencePhraseData> mixWords,
+            Sprite sprite,
+            Action<int, int> onToggleValueChanged,
+            Action onClickPlaySound)
         {
-            Clear();
-            
-            _questionImage.sprite = onToggleValueChanged;
-            
-            for (var i = 0; i < displaySequence.Count; i++)
-            {
-                var displayWord = Instantiate(_displayWordPrefab, _displaySequenceContent);
-                var index = i;
-
-                var word = !isQuestInTranslation ? displaySequence[i].Word.Translation : displaySequence[i].Word.LearnWord;
-                displayWord.Set(word, displaySequence[i].Word.Phonetic, null,
-                    isOn => onClickPlaySound(index, isOn));
-            }
-            
-            for (var i = 0; i < mixWords.Count; i++)
-            {
-                var mixWord = Instantiate(_mixWordPrefab, _mixSequenceContent);
-                var index = i;
-
-                var word = !isQuestInTranslation ? mixWords[i].Word.Translation : mixWords[i].Word.LearnWord;
-                mixWord.Set(word, mixWords[i].Word.Phonetic, null,
-                    isOn => onClickPlaySound(index, isOn));
-            }
+            Clear(_displaySequenceContent);
+            Clear(_mixSequenceContent);
+            _questionImage.sprite = sprite;
+            OnToggleValueChanged = onToggleValueChanged;
+            UpdateDisplaySequence(displaySequence);
+            UpdateMixSequence(mixWords);
         }
 
-        private void Clear()
+        private void Clear(Transform parent)
         {
-            foreach (Transform child in _displaySequenceContent)
-            {
-                Destroy(child.gameObject);
-            }
-
-            foreach (Transform child in _mixSequenceContent)
+            foreach (Transform child in parent)
             {
                 Destroy(child.gameObject);
             }
@@ -64,6 +46,37 @@ namespace Chang.UI
         public void ShowHint()
         {
             throw new NotImplementedException();
+        }
+
+        public void UpdateDisplaySequence(List<SequencePhraseData> sequence)
+        {
+            Clear(_displaySequenceContent);
+
+            for (var i = 0; i < sequence.Count; i++)
+            {
+                CToggle displayWord = Instantiate(_displayWordPrefab, _displaySequenceContent);
+
+                string word = sequence[i].Word.LearnWord;
+                int index = i;
+                displayWord.Set(word, sequence[i].Word.Phonetic, null, isOn => OnToggleValueChanged(index, -1));
+                displayWord.SetGroup(_displayTogglesGroup);
+                displayWord.SetInteractable(sequence[i].IsInteractable);
+                displayWord.SetActive(sequence[i].IsInteractable);
+            }
+        }
+
+        public void UpdateMixSequence(List<SequencePhraseData> sequence)
+        {
+            Clear(_mixSequenceContent);
+
+            for (var i = 0; i < sequence.Count; i++)
+            {
+                CToggle mixWord = Instantiate(_mixWordPrefab, _mixSequenceContent);
+                string word = sequence[i].Word.LearnWord;
+                int index = i;
+                mixWord.Set(word, sequence[i].Word.Phonetic, null, isOn => OnToggleValueChanged(-1, index));
+                mixWord.SetGroup(_mixTogglesGroup);
+            }
         }
     }
 }

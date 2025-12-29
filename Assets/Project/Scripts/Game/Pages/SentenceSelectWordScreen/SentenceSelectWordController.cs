@@ -22,14 +22,13 @@ namespace Chang
         }
 
         public void Init(bool isQuestInTranslation,
-            List<PhraseData> compareSequence,
-            List<PhraseData> displaySiquence,
-            List<PhraseData> mixWords,
+            List<SequencePhraseData> displaySequence,
+            List<SequencePhraseData> mixWords,
             Sprite sprite,
-            Action<int, bool> onToggleValueChanged,
+            Action<int, int> onToggleValueChanged,
             Action onClickPlaySound)
         {
-            _view.Init(isQuestInTranslation, displaySiquence, mixWords, sprite, onToggleValueChanged, onClickPlaySound);
+            _view.Init(isQuestInTranslation, displaySequence, mixWords, sprite, onToggleValueChanged, onClickPlaySound);
         }
 
         public void SetViewActive(bool active)
@@ -44,6 +43,16 @@ namespace Chang
 
         public void Clear()
         {
+        }
+
+        public void UpdateDisplaySequence(List<SequencePhraseData> sequence)
+        {
+            _view.UpdateDisplaySequence(sequence);
+        }
+
+        public void UpdateMixSequence(List<SequencePhraseData> sequence)
+        {
+            _view.UpdateMixSequence(sequence);
         }
     }
 }

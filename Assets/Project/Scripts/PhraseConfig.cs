@@ -12,7 +12,7 @@ namespace Chang
         [field: SerializeField] public string Section { get; set; } = string.Empty;
         [field: SerializeField] public WordConfig Word { get; set; }
 
-        public PhraseData PhraseData => new(Key, Word.WordData);
+        public PhraseData PhraseData => new(Key, Word.WordData, Language);
     }
 
     [Serializable]

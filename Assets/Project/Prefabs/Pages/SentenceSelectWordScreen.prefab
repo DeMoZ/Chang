@@ -56,6 +56,8 @@ MonoBehaviour:
   _mixSequenceContent: {fileID: 9151193652246694218}
   _displayWordPrefab: {fileID: 9003635399135504009, guid: e5238d3dffe59427488fcfae519b98f0, type: 3}
   _mixWordPrefab: {fileID: 9003635399135504009, guid: e5238d3dffe59427488fcfae519b98f0, type: 3}
+  _displayTogglesGroup: {fileID: 2611947595727989008}
+  _mixTogglesGroup: {fileID: 6708654212134913126}
 --- !u!1 &3738338419514267928
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,6 +135,7 @@ GameObject:
   - component: {fileID: 9106916385693396352}
   - component: {fileID: 5320023292886814294}
   - component: {fileID: 6908500135088101722}
+  - component: {fileID: 2611947595727989008}
   m_Layer: 5
   m_Name: DisplayContent
   m_TagString: Untagged
@@ -240,6 +243,19 @@ MonoBehaviour:
   m_ChildAlignment: 0
   _horizontalSpacing: 0.9
   _verticalSpacing: 0
+--- !u!114 &2611947595727989008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4111538287027249884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ToggleGroup
+  m_AllowSwitchOff: 1
 --- !u!1 &5352084801500917221
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,6 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9151193652246694218}
   - component: {fileID: 6147871966601691738}
+  - component: {fileID: 6708654212134913126}
   m_Layer: 5
   m_Name: MixContent
   m_TagString: Untagged
@@ -299,6 +316,19 @@ MonoBehaviour:
   m_ChildAlignment: 0
   _horizontalSpacing: 60
   _verticalSpacing: 29.48
+--- !u!114 &6708654212134913126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5352084801500917221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ToggleGroup
+  m_AllowSwitchOff: 1
 --- !u!1 &6226377495383175998
 GameObject:
   m_ObjectHideFlags: 0

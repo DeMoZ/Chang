@@ -33,7 +33,7 @@ namespace Chang.GameBook
             sortSectionToggle.SetIsOnWithoutNotify(isOn);
             sortSectionToggle.interactable = isInteractable;
             
-            Debug.Log($"SetSortToggle, isOn: {isOn}, interactable: {isInteractable}");
+            // Debug.Log($"SetSortToggle, isOn: {isOn}, interactable: {isInteractable}");
         }
         
         public void SetInteractableRepeatButton(bool isOn)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Chang.Resources;
 using Chang.Sentences;
@@ -49,6 +50,7 @@ namespace Chang.FSM
         private List<PhraseData> correctSequence; // compare the result with this
         private List<PhraseData> sequence; // show question with this. It has some empty items to fill in with mixed words
         private SentenceSelectWordResult _result;
+        private QuestSentenceSelectWordData _questionData;
 
         public override QuestionType Type => QuestionType.SentenceSelectWords;
 
@@ -74,6 +76,7 @@ namespace Chang.FSM
             _stateController.SetViewActive(false);
             _pagesContentProvider.ClearCache();
             _stateController.Clear();
+            _questionData.Dispose();
             _result = null;
         }
 
@@ -83,17 +86,16 @@ namespace Chang.FSM
 
             await _pagesContentProvider.GetContentAsync(question, ct);
             await _pagesContentProvider.CacheContentAsync(AssetPaths.Addressables.EmptyWordPlaceHolderPath, ct);
-            
-            QuestSentenceSelectWordData questionData = GetQuestionData(question);
+
+            _questionData = GetQuestionData(question);
             bool isQuestInTranslation = false; // todo chang
             string spritePath = _wordPathHelper.GetTexturePath(((SentenceSelectWords)question).ImageFileName);
             Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
 
             _stateController.Init(
                 isQuestInTranslation,
-                questionData.CompareSequence,
-                questionData.DisplaySiquence,
-                questionData.MixWords,
+                _questionData.DisplaySequence,
+                _questionData.MixWords,
                 sprite,
                 OnToggleValueChanged,
                 () =>
@@ -119,15 +121,18 @@ namespace Chang.FSM
             var data = new QuestSentenceSelectWordData
             {
                 CompareSequence = GetPhrasesDataList(sentenceSelectWords.CompareWordsFileNames),
-                DisplaySiquence = GetPhrasesDataList(sentenceSelectWords.DisplayWordsFileNames),
+                DisplaySequence = GetPhrasesDataList(sentenceSelectWords.DisplayWordsFileNames),
                 MixWords = GetPhrasesDataList(sentenceSelectWords.MixWordsFileNames)
             };
 
+            data.DisplaySequence.Where(pData => pData.IsPlaceHolder).ToList().ForEach(pData => pData.SetInteractable(true));
+            data.MixWords.ForEach(pData => pData.SetInteractable(true));
+
             return data;
 
-            List<PhraseData> GetPhrasesDataList(List<string> fileNames)
+            List<SequencePhraseData> GetPhrasesDataList(List<string> fileNames)
             {
-                List<PhraseData> phrasesData = new List<PhraseData>();
+                List<SequencePhraseData> phrasesDataList = new List<SequencePhraseData>();
 
                 foreach (var fileName in fileNames)
                 {
@@ -136,16 +141,18 @@ namespace Chang.FSM
                     path = string.IsNullOrEmpty(fileName)
                         ? AssetPaths.Addressables.EmptyWordPlaceHolderPath
                         : _wordPathHelper.GetConfigPath(fileName);
-                    
+
                     PhraseConfig asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
                     if (asset)
                     {
-                        phrasesData.Add(asset.PhraseData);
+                        SequencePhraseData phraseData = new SequencePhraseData(asset.PhraseData);
+                        phraseData.SetIsPlaceHolder(string.IsNullOrEmpty(fileName));
+                        phrasesDataList.Add(phraseData);
                     }
                 }
 
-                return phrasesData;
+                return phrasesDataList;
             }
         }
 
@@ -170,10 +177,51 @@ namespace Chang.FSM
             _stateController.ShowHint();
         }
 
-        private void OnToggleValueChanged(int index, bool isOn)
+        private void OnToggleValueChanged(int displayIndex, int mixIndex)
         {
+            Debug.Log($"displayIndex: {displayIndex}; mixIndex: {mixIndex}");
+
+            if (displayIndex > -1) // display word clicked
+            {
+                if (!_questionData.DisplaySequence[displayIndex].IsPlaceHolder)
+                {
+                    _questionData.MixWords.Add(_questionData.DisplaySequence[displayIndex]);
+                    _questionData.DisplaySequence[displayIndex] = _questionData.PlaceHolderPool.Dequeue();
+                    _stateController.UpdateDisplaySequence(_questionData.DisplaySequence);
+                    _stateController.UpdateMixSequence(_questionData.MixWords);
+                }
+                else
+                {
+                    _questionData.DisplaySequence[displayIndex].SetHighlighted(!_questionData.DisplaySequence[displayIndex].IsHighlighted);
+                }
+            }
+
+            if (mixIndex > -1) // mix word checked
+            {
+                SequencePhraseData placeToMove = _questionData.DisplaySequence.FirstOrDefault(h => h.IsHighlighted);
+
+                if (placeToMove == null)
+                {
+                    placeToMove = _questionData.DisplaySequence.FirstOrDefault(h => h.IsPlaceHolder);
+                }
+
+                if (placeToMove == null)
+                {
+                    Debug.LogWarning("No place to move the word to.");
+                    return;
+                }
+
+                int index = _questionData.DisplaySequence.IndexOf(placeToMove);
+                _questionData.PlaceHolderPool.Enqueue(_questionData.DisplaySequence[index]);
+                _questionData.DisplaySequence[index] = _questionData.MixWords[mixIndex];
+                _questionData.MixWords.RemoveAt(mixIndex);
+
+                _stateController.UpdateDisplaySequence(_questionData.DisplaySequence);
+                _stateController.UpdateMixSequence(_questionData.MixWords);
+            }
+
+
             // _gameOverlayController.EnableCheckButton(isOn);
-            // Debug.Log($"toggle: {index}; isOn: {isOn}");
             // var isCorrect = _mixWords[index].Key == _correctWord.Key;
             // object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
             //

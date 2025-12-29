@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -44,11 +45,20 @@ namespace Chang
         }
     }
     
-    public class QuestSentenceSelectWordData : QuestDataBase
+    public class QuestSentenceSelectWordData : QuestDataBase, IDisposable
     {
-        public List<PhraseData> CompareSequence;
-        public List<PhraseData> DisplaySiquence;
-        public List<PhraseData> MixWords;
+        public List<SequencePhraseData> CompareSequence = new List<SequencePhraseData>();
+        public List<SequencePhraseData> DisplaySequence = new List<SequencePhraseData>();
+        public List<SequencePhraseData> MixWords = new List<SequencePhraseData>();
+        public Queue<SequencePhraseData> PlaceHolderPool = new Queue<SequencePhraseData>();
         public override QuestionType QuestionType => QuestionType.SentenceSelectWords;
+
+        public void Dispose()
+        {
+            CompareSequence.Clear();
+            DisplaySequence.Clear();
+            MixWords.Clear();
+            PlaceHolderPool.Clear();
+        }
     }
 }

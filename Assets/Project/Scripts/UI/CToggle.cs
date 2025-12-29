@@ -8,6 +8,7 @@ namespace Chang.UI
     public class CToggle : MonoBehaviour
     {
         [SerializeField] private Toggle _toggle;
+        [SerializeField] private Image _checkMark;
         [SerializeField] private Image _incorrect;
         [SerializeField] private Image _correct;
         [SerializeField] private Image _inactive;
@@ -15,7 +16,7 @@ namespace Chang.UI
         [SerializeField] private TMP_Text _phonetics;
 
         private Action<bool> _onValueChanged;
-        
+
         public bool IsOn
         {
             get { return _toggle.isOn; }
@@ -25,19 +26,17 @@ namespace Chang.UI
         private void Awake()
         {
             _toggle.onValueChanged.AddListener(OnToggleValueChanged);
-            _inactive.gameObject.SetActive(false);
-            _correct.gameObject.SetActive(false);
-            _incorrect.gameObject.SetActive(false);
         }
 
         public void Set(string word, string phonetic, ToggleGroup toggleGroup, Action<bool> onValueChanged)
         {
+            Reset();
             _word.text = word;
             _phonetics.text = phonetic;
             _onValueChanged = onValueChanged;
             _toggle.group = toggleGroup;
         }
-        
+
         public void Set(string word, string phonetic, Action<bool> onValueChanged)
         {
             _word.text = word;
@@ -49,7 +48,7 @@ namespace Chang.UI
         {
             _toggle.group = toggleGroup;
         }
-        
+
         public void EnablePhonetics(bool enable)
         {
             _phonetics.gameObject.SetActive(enable);
@@ -59,20 +58,10 @@ namespace Chang.UI
         {
             _toggle.interactable = interactable;
         }
-        
+
         public void SetActive(bool active)
         {
             _inactive.gameObject.SetActive(!active);
-        }
-        
-        private void OnToggleValueChanged(bool isOn)
-        {
-            _onValueChanged?.Invoke(isOn);
-        }
-        
-        private void OnDestroy()
-        {
-            _toggle.onValueChanged.RemoveAllListeners();
         }
 
         public void SetCorrect(bool isCorrect)
@@ -80,9 +69,27 @@ namespace Chang.UI
             _correct.gameObject.SetActive(isCorrect);
             _incorrect.gameObject.SetActive(!isCorrect);
         }
-        
+
         public void SetNormal()
         {
+            _correct.gameObject.SetActive(false);
+            _incorrect.gameObject.SetActive(false);
+        }
+
+        private void OnToggleValueChanged(bool isOn)
+        {
+            _onValueChanged?.Invoke(isOn);
+        }
+
+        private void OnDestroy()
+        {
+            _toggle.onValueChanged.RemoveAllListeners();
+        }
+
+        private void Reset()
+        {
+            _checkMark.gameObject.SetActive(true);
+            _inactive.gameObject.SetActive(false);
             _correct.gameObject.SetActive(false);
             _incorrect.gameObject.SetActive(false);
         }
