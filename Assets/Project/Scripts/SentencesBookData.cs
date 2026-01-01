@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Text;
 
 namespace Chang.Sentences
 {
     public class SentencesBookData
     {
-        // public string FileName; // json field
+        // public string FileName; // JSON field
         public List<SectionData> Sections;
         // public Languages Language;
         //
@@ -20,15 +21,23 @@ namespace Chang.Sentences
 
     public class LessonData
     {
-        public string FileName; // json field used as a dictioanary key
+        public string FileName; // JSON field used as a dictioanary key
         public string SectionName;
         // public string Name;
         public List<IQuestion> Questions;
     }
 
-    public class SentenceSelectWords : IQuestion
+    public interface ISentenceQuestion : IQuestion
+    {
+        // "Coconut.Mango.Banana.Watermelon" to keep in the log and find the quest in the book data
+        string LogKey { get; }
+    }
+    
+    public class SentenceSelectWords : ISentenceQuestion
     {
         private HashSet<string> _keys;
+        private string _logKey;
+        
         public QuestionType QuestionType => QuestionType.SentenceSelectWords;
 
         public string ImageFileName;
@@ -36,23 +45,37 @@ namespace Chang.Sentences
         public List<string> CompareWordsFileNames;
         public List<string> DisplayWordsFileNames;
         public List<string> MixWordsFileNames;
-
+        
+        private HashSet<string> Keys => _keys ??= GetWords();
+        
         public HashSet<string> GetConfigKeys() => Keys;
         public HashSet<string> GetSoundKeys() => Keys;
         public HashSet<string> GetImageKeys() => Keys;
+        
+        public string LogKey => _logKey ??= GetLogKey();
 
         public HashSet<string> GetNeedDemonstrationKeys()
         {
             return new HashSet<string>(CompareWordsFileNames);
         }
-
-        public HashSet<string> Keys => _keys ??= GetWords();
-
+        
         private HashSet<string> GetWords()
         {
             HashSet<string> newList = new HashSet<string>(CompareWordsFileNames);
             newList.UnionWith(MixWordsFileNames);
             return newList;
+        }
+        
+        private string GetLogKey()
+        {
+            StringBuilder logKey = new();
+            foreach (string key in CompareWordsFileNames)
+            {
+                string[] split = key.Split('/');
+                logKey.AppendJoin('.',  split[^1]);
+            }
+                            
+            return logKey.ToString();
         }
     }
 }

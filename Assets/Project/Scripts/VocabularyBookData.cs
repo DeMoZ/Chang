@@ -22,7 +22,7 @@ namespace Chang.Vocabulary
 
     public class LessonData
     {
-        public string FileName; // json field
+        public string FileName; // JSON field
         public string SectionName;
         public string Name;
         public bool GenerateQuestMatchWordsData;
@@ -34,7 +34,7 @@ namespace Chang.Vocabulary
         public QuestionType QuestionType => QuestionType.SelectWord;
         public string CorrectWordFileName;
         public List<string> MixWordsFileNames;
-        public string FileName; // json field
+        public string FileName; // JSON field
 
         public HashSet<string> GetConfigKeys()
         {

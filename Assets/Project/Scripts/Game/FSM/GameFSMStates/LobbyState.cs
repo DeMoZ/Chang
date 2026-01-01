@@ -122,13 +122,13 @@ namespace Chang.FSM
             Bus.SentencesBookData = JsonConvert.DeserializeObject<Sentences.SentencesBookData>(asset.Item.text, settings);
 
             // populate fileNames (keys)
-            // ThaiLessonFirstTest_1
+            // Thai.Lesson.First.Test.1
             foreach (SectionData sectionData in Bus.SentencesBookData.Sections)
             {
                 for (int i = 0; i < sectionData.Lessons.Count; i++)
                 {
-                    var lesson = sectionData.Lessons[i];
-                    lesson.FileName = $"{Language}Lesson{sectionData.Section}_{i + 1}";
+                    LessonData lesson = sectionData.Lessons[i];
+                    lesson.FileName = ProjectSharedLogic.SENTENCE_LESSON_KEY(Language.ToString(), sectionData.Section, i + 1);
                 }
             }
 

@@ -76,6 +76,8 @@ namespace Chang.UI
                 int index = i;
                 mixWord.Set(word, sequence[i].Word.Phonetic, null, isOn => OnToggleValueChanged(-1, index));
                 mixWord.SetGroup(_mixTogglesGroup);
+                mixWord.SetInteractable(sequence[i].IsInteractable);
+                mixWord.SetActive(sequence[i].IsInteractable);
             }
         }
     }

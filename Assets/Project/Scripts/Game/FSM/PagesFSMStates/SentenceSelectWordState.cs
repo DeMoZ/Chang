@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using Chang.Resources;
@@ -44,13 +45,10 @@ namespace Chang.FSM
 
         private readonly IPagesContentProvider _pagesContentProvider;
 
-        private List<WordConfig> _correctWordsConfig; // todo chang which to use
-        private List<WordData> _correctWordsData; // todo chang which to use
         private CancellationTokenSource _cts;
-        private List<PhraseData> correctSequence; // compare the result with this
-        private List<PhraseData> sequence; // show question with this. It has some empty items to fill in with mixed words
         private SentenceSelectWordResult _result;
         private QuestSentenceSelectWordData _questionData;
+        private SentenceSelectWords _sentenceQuestion;
 
         public override QuestionType Type => QuestionType.SentenceSelectWords;
 
@@ -83,13 +81,20 @@ namespace Chang.FSM
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
             IQuestion question = Bus.CurrentLesson.CurrentQuestion;
+            _sentenceQuestion = question as SentenceSelectWords;
+
+            if (_sentenceQuestion == null)
+            {
+                throw new Exception("SentenceSelectWords is not a SentenceSelectWords"); // todo chang implement exit state
+                return;
+            }
 
             await _pagesContentProvider.GetContentAsync(question, ct);
             await _pagesContentProvider.CacheContentAsync(AssetPaths.Addressables.EmptyWordPlaceHolderPath, ct);
 
-            _questionData = GetQuestionData(question);
+            _questionData = GetQuestionData(_sentenceQuestion);
             bool isQuestInTranslation = false; // todo chang
-            string spritePath = _wordPathHelper.GetTexturePath(((SentenceSelectWords)question).ImageFileName);
+            string spritePath = _wordPathHelper.GetTexturePath(_sentenceQuestion.ImageFileName);
             Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
 
             _stateController.Init(
@@ -108,21 +113,13 @@ namespace Chang.FSM
             // OnClickPlaySound(!isQuestInTranslation);
         }
 
-        private QuestSentenceSelectWordData GetQuestionData(IQuestion question)
+        private QuestSentenceSelectWordData GetQuestionData(SentenceSelectWords sentenceQuestion)
         {
-            SentenceSelectWords sentenceSelectWords = (SentenceSelectWords)question;
-
-            if (sentenceSelectWords == null)
-            {
-                Debug.LogError("SentenceSelectWords is null");
-                return null;
-            }
-
             var data = new QuestSentenceSelectWordData
             {
-                CompareSequence = GetPhrasesDataList(sentenceSelectWords.CompareWordsFileNames),
-                DisplaySequence = GetPhrasesDataList(sentenceSelectWords.DisplayWordsFileNames),
-                MixWords = GetPhrasesDataList(sentenceSelectWords.MixWordsFileNames)
+                CompareSequence = GetPhrasesDataList(sentenceQuestion.CompareWordsFileNames),
+                DisplaySequence = GetPhrasesDataList(sentenceQuestion.DisplayWordsFileNames),
+                MixWords = GetPhrasesDataList(sentenceQuestion.MixWordsFileNames)
             };
 
             data.DisplaySequence.Where(pData => pData.IsPlaceHolder).ToList().ForEach(pData => pData.SetInteractable(true));
@@ -196,13 +193,15 @@ namespace Chang.FSM
                 }
             }
 
+            SequencePhraseData placeToMove;
+
             if (mixIndex > -1) // mix word checked
             {
-                SequencePhraseData placeToMove = _questionData.DisplaySequence.FirstOrDefault(h => h.IsHighlighted);
+                placeToMove = _questionData.DisplaySequence.FirstOrDefault(pData => pData.IsHighlighted);
 
                 if (placeToMove == null)
                 {
-                    placeToMove = _questionData.DisplaySequence.FirstOrDefault(h => h.IsPlaceHolder);
+                    placeToMove = _questionData.DisplaySequence.FirstOrDefault(pData => pData.IsPlaceHolder);
                 }
 
                 if (placeToMove == null)
@@ -215,11 +214,37 @@ namespace Chang.FSM
                 _questionData.PlaceHolderPool.Enqueue(_questionData.DisplaySequence[index]);
                 _questionData.DisplaySequence[index] = _questionData.MixWords[mixIndex];
                 _questionData.MixWords.RemoveAt(mixIndex);
-
                 _stateController.UpdateDisplaySequence(_questionData.DisplaySequence);
                 _stateController.UpdateMixSequence(_questionData.MixWords);
             }
 
+            placeToMove = _questionData.DisplaySequence.FirstOrDefault(pData => pData.IsPlaceHolder);
+
+            foreach (var pData in _questionData.MixWords)
+            {
+                pData.SetInteractable(placeToMove != null);
+            }
+
+            _stateController.UpdateMixSequence(_questionData.MixWords);
+            _gameOverlayController.EnableCheckButton(placeToMove == null);
+
+            if (placeToMove == null) // no more placeholders
+            {
+                string compare = string.Join("", _questionData.CompareSequence.Select(pData => pData.Word.LearnWord));
+                string display = string.Join("", _questionData.DisplaySequence.Select(pData => pData.Word.LearnWord));
+                bool isCorrect = string.Equals(compare, display);
+                object[] info = { display, Bus.OnHintUsed.Value };
+
+                string questKey = _sentenceQuestion.LogKey;
+                
+                var result = new SentenceSelectWordResult(
+                    _sentenceQuestion.LogKey,
+                    display,
+                    isCorrect,
+                    info);
+
+                Bus.QuestionResult = result;
+            }
 
             // _gameOverlayController.EnableCheckButton(isOn);
             // var isCorrect = _mixWords[index].Key == _correctWord.Key;

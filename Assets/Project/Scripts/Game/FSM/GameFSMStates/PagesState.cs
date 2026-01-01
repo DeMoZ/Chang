@@ -141,6 +141,9 @@ namespace Chang.FSM
                 case QuestionType.MatchWords:
                     OnCheckMatchWordsAsync(ct).Forget();
                     break;
+                case QuestionType.SentenceSelectWords:
+                    OnCheckSentenceSelectWordsAsync(ct).Forget();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException($"simple question not handled {_pagesFsm.CurrentStateType}");
             }
@@ -190,6 +193,13 @@ namespace Chang.FSM
 
             await _profileService.SaveProgressAsync(ct);
             OnContinueAsync(ct).Forget();
+        }
+
+        private async UniTaskVoid OnCheckSentenceSelectWordsAsync(CancellationToken ct)
+        {
+            Debug.Log($"{nameof(OnCheckSentenceSelectWordsAsync)}");
+            OnContinueAsync(ct).Forget();
+            throw  new NotImplementedException();
         }
 
         private void OnContinue()

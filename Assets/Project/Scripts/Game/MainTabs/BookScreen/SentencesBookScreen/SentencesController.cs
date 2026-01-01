@@ -231,7 +231,7 @@ namespace Chang.Sentences
                 }
                 else
                 {
-                    key = $"{_profileService.ProfileData.LearnLanguage}Lesson{sectionName}_{lessonIndex}";
+                    key = ProjectSharedLogic.SENTENCE_LESSON_KEY(_profileService.LearnLanguage.ToString(), sectionName, lessonIndex);
                     simpleLesson = _gameBus.SentencesLessons[key];
                 }
 
