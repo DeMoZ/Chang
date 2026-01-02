@@ -7,7 +7,6 @@ namespace Chang
 {
     public class PagesBus : IDisposable
     {
-        // public Vocabulary.Lesson CurrentLesson { get; set; }
         public ILesson CurrentLesson { get; set; }
         public IQuestionResult QuestionResult { get; set; }
         public List<IQuestionResult> LessonLog { get; } = new();

@@ -19,8 +19,8 @@ namespace Chang.UI
 
         public bool IsOn
         {
-            get { return _toggle.isOn; }
-            set { _toggle.isOn = value; }
+            get => _toggle.isOn;
+            set => _toggle.isOn = value;
         }
 
         private void Awake()

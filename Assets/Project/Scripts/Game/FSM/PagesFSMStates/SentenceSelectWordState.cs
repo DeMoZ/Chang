@@ -234,8 +234,6 @@ namespace Chang.FSM
                 string display = string.Join("", _questionData.DisplaySequence.Select(pData => pData.Word.LearnWord));
                 bool isCorrect = string.Equals(compare, display);
                 object[] info = { display, Bus.OnHintUsed.Value };
-
-                string questKey = _sentenceQuestion.LogKey;
                 
                 var result = new SentenceSelectWordResult(
                     _sentenceQuestion.LogKey,
@@ -245,21 +243,6 @@ namespace Chang.FSM
 
                 Bus.QuestionResult = result;
             }
-
-            // _gameOverlayController.EnableCheckButton(isOn);
-            // var isCorrect = _mixWords[index].Key == _correctWord.Key;
-            // object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
-            //
-            // string path = Path.Combine(
-            //     _profileService.ProfileData.LearnLanguage.ToString(),
-            //     AssetPaths.Addressables.Words,
-            //     _correctWord.Word.Section,
-            //     _correctWord.Word.Key);
-            //
-            // var result = new SelectWordResult(
-            //     _wordPathHelper.NormalizePath(path),
-            //     _correctWord.Word.LearnWord, isCorrect, info);
-            // Bus.QuestionResult = result;
         }
     }
 }

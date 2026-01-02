@@ -35,5 +35,4 @@ public static class ProjectConstants
 public static class ProjectSharedLogic
 {
     public static string SENTENCE_LESSON_KEY(string learnLanguage, string sectionName, int index) => $"{learnLanguage}.{sectionName}.{index}";
-    // public static string SENTENCE_QUESTION_KEY(string learnLanguage, string sequence) => $"{learnLanguage}.{sequence}";
 }

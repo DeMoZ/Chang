@@ -16,18 +16,18 @@ namespace Chang.Resources
             public const string Lesson = "Lesson";
 
             public const string Book = "Book";
-            public static string Sound = "Sound";
+            public const string Sound = "Sound";
         }
 
         public static class Addressables
         {
             public const string Root = "Assets/Project/Resources_Bundled/";
-            public static string Words = "Words/";
-            public static string SoundWords = "SoundWords/";
-            public static string ImageWords = "ImageWords/";
+            public const string Words = "Words/";
+            public const string SoundWords = "SoundWords/";
+            public const string ImageWords = "ImageWords/";
             
-            public static string EmptyWordPlaceHolder = "EmptyWordPlaceHolder.asset";
-            public static string EmptyWordPlaceHolderPath = Root + "EmptyWordPlaceHolder.asset";
+            public const string EmptyWordPlaceHolder = "EmptyWordPlaceHolder.asset";
+            public const string EmptyWordPlaceHolderPath = Root + "EmptyWordPlaceHolder.asset";
         }
 
         public static class Resources
