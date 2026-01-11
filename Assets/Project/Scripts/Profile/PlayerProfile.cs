@@ -6,7 +6,7 @@ namespace Chang.Profile
     public class PlayerProfile : IDisposable
     {
         public readonly Dictionary<Languages, ProgressData<VocabularyQuestLog>> VocabularyProgressDict = new();
-        public readonly Dictionary<Languages, ProgressData<SentencesQuestLog>> SentencesProgressDict = new();
+        public readonly Dictionary<Languages, ProgressData<SentenceQuestLog>> SentencesProgressDict = new();
 
         public ProfileData ProfileData;
 
@@ -18,7 +18,7 @@ namespace Chang.Profile
         public Dictionary<string, Sentences.SectionData> ReorderedSentencesSections { get; } = new();
 
         public ProgressData<VocabularyQuestLog> VocabularyProgress => VocabularyProgressDict[ProfileData.LearnLanguage];
-        public ProgressData<SentencesQuestLog> SentencesProgress => SentencesProgressDict[ProfileData.LearnLanguage];
+        public ProgressData<SentenceQuestLog> SentencesProgress => SentencesProgressDict[ProfileData.LearnLanguage];
 
         public void Dispose()
         {

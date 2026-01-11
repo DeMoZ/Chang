@@ -14,9 +14,9 @@ namespace Chang.Services
         {
         }
 
-        public async Task<List<SentencesQuestLog>> GetSectionRepetitionAsync(int amount, string section, CancellationToken ct)
+        public async Task<List<SentenceQuestLog>> GetSectionRepetitionAsync(int amount, string section, CancellationToken ct)
         {
-            Dictionary<string, SentencesQuestLog> log = ProfileService.SentencesProgress.Log;
+            Dictionary<string, SentenceQuestLog> log = ProfileService.SentencesProgress.Log;
 
             await UniTask.Yield(ct);
 
@@ -28,7 +28,7 @@ namespace Chang.Services
                 .ToList();
         }
 
-        private float OrderByWeight(SentencesQuestLog vocabularyQuestLog)
+        private float OrderByWeight(SentenceQuestLog vocabularyQuestLog)
         {
             double timeWeight = (DateTime.UtcNow - vocabularyQuestLog.UtcTime).TotalMinutes * TimeWeight;
             double weight = vocabularyQuestLog.Mark * MarkWeight + vocabularyQuestLog.SuccessSequence * SequenceWeight + timeWeight;

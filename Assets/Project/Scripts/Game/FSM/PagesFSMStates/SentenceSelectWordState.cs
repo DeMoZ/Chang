@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using Chang.Resources;
@@ -16,7 +15,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class SentenceSelectWordResult : IQuestionResult
+    public class SentenceSelectWordStateResult : IQuestionResult
     {
         public string Key { get; }
         public string Presentation { get; }
@@ -24,7 +23,7 @@ namespace Chang.FSM
         public bool IsCorrect { get; }
         public object[] Info { get; }
 
-        public SentenceSelectWordResult(string key, string presentation, bool isCorrect, params object[] info)
+        public SentenceSelectWordStateResult(string key, string presentation, bool isCorrect, params object[] info)
         {
             Key = key;
             Presentation = presentation;
@@ -46,7 +45,7 @@ namespace Chang.FSM
         private readonly IPagesContentProvider _pagesContentProvider;
 
         private CancellationTokenSource _cts;
-        private SentenceSelectWordResult _result;
+        private SentenceSelectWordStateResult _stateResult;
         private QuestSentenceSelectWordData _questionData;
         private SentenceSelectWords _sentenceQuestion;
 
@@ -75,7 +74,7 @@ namespace Chang.FSM
             _pagesContentProvider.ClearCache();
             _stateController.Clear();
             _questionData.Dispose();
-            _result = null;
+            _stateResult = null;
         }
 
         private async UniTask StateBodyAsync(CancellationToken ct)
@@ -233,9 +232,24 @@ namespace Chang.FSM
                 string compare = string.Join("", _questionData.CompareSequence.Select(pData => pData.Word.LearnWord));
                 string display = string.Join("", _questionData.DisplaySequence.Select(pData => pData.Word.LearnWord));
                 bool isCorrect = string.Equals(compare, display);
-                object[] info = { display, Bus.OnHintUsed.Value };
                 
-                var result = new SentenceSelectWordResult(
+                List<SelectWordResult> inCorrectWords = new();
+
+                for (int i = 0; i > _questionData.DisplaySequence.Count; i++)
+                {
+                    WordData compareWord = _questionData.CompareSequence[i].Word;
+                    WordData displayWord = _questionData.DisplaySequence[i].Word;
+
+                    if (!string.Equals(compareWord.LogKey, displayWord.LogKey))
+                    {
+                        inCorrectWords.Add(new SelectWordResult(compareWord.LogKey, compareWord.LearnWord, false));
+                        inCorrectWords.Add(new SelectWordResult(displayWord.LogKey, displayWord.LearnWord, false));
+                    }
+                }
+                
+                object[] info = { compare, Bus.OnHintUsed.Value, inCorrectWords };
+                
+                var result = new SentenceSelectWordStateResult(
                     _sentenceQuestion.LogKey,
                     display,
                     isCorrect,

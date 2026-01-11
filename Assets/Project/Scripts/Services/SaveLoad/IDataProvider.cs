@@ -11,9 +11,9 @@ namespace Chang.Services.DataProvider
         UniTask SaveProfileDataAsync(ProfileData data, CancellationToken ct);
         
         UniTask<ProgressData<VocabularyQuestLog>> LoadVocabularyProgressDataAsync(Languages language, CancellationToken ct);
-        UniTask<ProgressData<SentencesQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct);
+        UniTask<ProgressData<SentenceQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct);
         UniTask SaveVocabularyProgressDataAsync(Languages language, ProgressData<VocabularyQuestLog> data, CancellationToken ct);
-        UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentencesQuestLog> data, CancellationToken ct);
+        UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentenceQuestLog> data, CancellationToken ct);
         
         string PlayerId { get; }
     }

@@ -63,7 +63,7 @@ namespace Chang.Services.DataProvider
             return result;
         }
 
-        public async UniTask<ProgressData<SentencesQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
+        public async UniTask<ProgressData<SentenceQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
         {
             bool isOk = CheckSession();
             if (!isOk)
@@ -71,8 +71,8 @@ namespace Chang.Services.DataProvider
                 return null; // todo chang should be exception or callback to start authorization
             }
 
-            ProgressData<SentencesQuestLog> result = await LoadDataAsync<ProgressData<SentencesQuestLog>>($"{language}_{DataProviderConstants.SentencesProgressDataKey}", ct);
-            result ??= new ProgressData<SentencesQuestLog>();
+            ProgressData<SentenceQuestLog> result = await LoadDataAsync<ProgressData<SentenceQuestLog>>($"{language}_{DataProviderConstants.SentencesProgressDataKey}", ct);
+            result ??= new ProgressData<SentenceQuestLog>();
 
             return result;
         }
@@ -82,7 +82,7 @@ namespace Chang.Services.DataProvider
             await SaveAsync($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", data, ct);
         }
 
-        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentencesQuestLog> data, CancellationToken ct)
+        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentenceQuestLog> data, CancellationToken ct)
         {
             await SaveAsync($"{language}_{DataProviderConstants.SentencesProgressDataKey}", data, ct);
         }

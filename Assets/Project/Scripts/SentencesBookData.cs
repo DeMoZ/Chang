@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Chang.Sentences
 {
@@ -22,7 +22,9 @@ namespace Chang.Sentences
     public class LessonData
     {
         public string FileName; // JSON field used as a dictioanary key
+
         public string SectionName;
+
         // public string Name;
         public List<IQuestion> Questions;
     }
@@ -31,13 +33,15 @@ namespace Chang.Sentences
     {
         // "Coconut.Mango.Banana.Watermelon" to keep in the log and find the quest in the book data
         string LogKey { get; }
+        Languages Language { get; set; }
+        string Section { get; set; }
     }
-    
+
     public class SentenceSelectWords : ISentenceQuestion
     {
         private HashSet<string> _keys;
         private string _logKey;
-        
+
         public QuestionType QuestionType => QuestionType.SentenceSelectWords;
 
         public string ImageFileName;
@@ -45,37 +49,35 @@ namespace Chang.Sentences
         public List<string> CompareWordsFileNames;
         public List<string> DisplayWordsFileNames;
         public List<string> MixWordsFileNames;
-        
+
         private HashSet<string> Keys => _keys ??= GetWords();
-        
+
         public HashSet<string> GetConfigKeys() => Keys;
         public HashSet<string> GetSoundKeys() => Keys;
         public HashSet<string> GetImageKeys() => Keys;
-        
+
         public string LogKey => _logKey ??= GetLogKey();
+
+        public Languages Language { get; set; }
+        public string Section { get; set; }
 
         public HashSet<string> GetNeedDemonstrationKeys()
         {
             return new HashSet<string>(CompareWordsFileNames);
         }
-        
+
         private HashSet<string> GetWords()
         {
             HashSet<string> newList = new HashSet<string>(CompareWordsFileNames);
             newList.UnionWith(MixWordsFileNames);
             return newList;
         }
-        
+
         private string GetLogKey()
         {
-            StringBuilder logKey = new();
-            foreach (string key in CompareWordsFileNames)
-            {
-                string[] split = key.Split('/');
-                logKey.AppendJoin('.',  split[^1]);
-            }
-                            
-            return logKey.ToString();
+            List<string> words = CompareWordsFileNames.Select(key => key.Split('/')).Select(split => split[^1]).ToList();
+            string logKey = ProjectSharedLogic.SENTENCE_QUESTION_KEY(Language.ToString(), Section, words);
+            return logKey;
         }
     }
 }

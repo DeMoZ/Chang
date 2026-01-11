@@ -47,10 +47,10 @@ namespace Chang.Services.DataProvider
             return data;
         }
 
-        public async UniTask<ProgressData<SentencesQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
+        public async UniTask<ProgressData<SentenceQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
         {
             string json = PlayerPrefs.GetString($"{language}_{DataProviderConstants.SentencesProgressDataKey}", "{}");
-            ProgressData<SentencesQuestLog> data = JsonConvert.DeserializeObject<ProgressData<SentencesQuestLog>>(json);
+            ProgressData<SentenceQuestLog> data = JsonConvert.DeserializeObject<ProgressData<SentenceQuestLog>>(json);
 
             await UniTask.Yield(ct);
 
@@ -65,7 +65,7 @@ namespace Chang.Services.DataProvider
             await UniTask.Yield(ct);
         }
         
-        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentencesQuestLog> data, CancellationToken ct)
+        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentenceQuestLog> data, CancellationToken ct)
         {
             string json = JsonConvert.SerializeObject(data, _jSettings);
             PlayerPrefs.SetString($"{language}_{DataProviderConstants.SentencesProgressDataKey}", json);

@@ -181,11 +181,11 @@ namespace Chang.FSM
         {
             Debug.Log($"{nameof(OnCheckMatchWordsAsync)}");
 
-            var matchWordsStateResult = _pagesBus.QuestionResult as MatchWordsStateResult;
-            if (matchWordsStateResult == null)
+            MatchWordsStateResult stateResult = _pagesBus.QuestionResult as MatchWordsStateResult;
+            if (stateResult == null)
                 throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
 
-            foreach (SelectWordResult result in matchWordsStateResult.Results)
+            foreach (SelectWordResult result in stateResult.Results)
             {
                 _profileService.AddVocabularyLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect, false);
                 _pagesBus.LessonLog.Add(result);
@@ -198,8 +198,41 @@ namespace Chang.FSM
         private async UniTaskVoid OnCheckSentenceSelectWordsAsync(CancellationToken ct)
         {
             Debug.Log($"{nameof(OnCheckSentenceSelectWordsAsync)}");
-            OnContinueAsync(ct).Forget();
-            throw  new NotImplementedException();
+
+            var isCorrect = _pagesBus.QuestionResult.IsCorrect;
+            var isCorrectColor = isCorrect ? "Yellow" : "Red";
+            var answer = string.Join(" / ", _pagesBus.QuestionResult.Info);
+            Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
+
+            SentenceSelectWordStateResult stateResult = _pagesBus.QuestionResult as SentenceSelectWordStateResult;
+            if (stateResult == null)
+                throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
+
+            if (stateResult.Info[2] is List<SelectWordResult> vocabularyResults)
+            {
+                foreach (SelectWordResult vocabularyResult in vocabularyResults)
+                {
+                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation, QuestionType.SelectWord, vocabularyResult.IsCorrect, false);
+                    _pagesBus.LessonLog.Add(vocabularyResult);
+                }
+            }
+
+            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, QuestionType.SentenceSelectWords, stateResult.IsCorrect, false);
+
+            if (!isCorrect)
+            {
+                _pagesBus.CurrentLesson.EnqueueCurrentQuestion();
+            }
+
+            var info = new ContinueButtonInfo();
+            info.IsCorrect = isCorrect;
+            info.InfoText = (string)_pagesBus.QuestionResult.Info[0];
+
+            _pagesBus.LessonLog.Add(stateResult);
+
+            _gameOverlayController.SetContinueButtonInfo(info);
+            _gameOverlayController.EnableContinueButton(true);
+            await _profileService.SaveProgressAsync(ct);
         }
 
         private void OnContinue()

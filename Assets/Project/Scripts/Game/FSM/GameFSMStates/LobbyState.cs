@@ -129,6 +129,19 @@ namespace Chang.FSM
                 {
                     LessonData lesson = sectionData.Lessons[i];
                     lesson.FileName = ProjectSharedLogic.SENTENCE_LESSON_KEY(Language.ToString(), sectionData.Section, i + 1);
+
+                    foreach (var question in lesson.Questions)
+                    {
+                        if (question is ISentenceQuestion sentenceQuestion)
+                        {
+                            sentenceQuestion.Language = Language;
+                            sentenceQuestion.Section = sectionData.Section;
+                        }
+                        else
+                        {
+                            throw new Exception($"[{methodName}] Unknown question type in SentencesBookData: {question.GetType()}");
+                        }
+                    }
                 }
             }
 

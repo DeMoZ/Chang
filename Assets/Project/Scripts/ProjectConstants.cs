@@ -31,8 +31,3 @@ public static class ProjectConstants
     public const int SECTION_REPETITION_AMOUNT = 10;
     public const int GENERAL_REPETITION_AMOUNT = 10;
 }
-
-public static class ProjectSharedLogic
-{
-    public static string SENTENCE_LESSON_KEY(string learnLanguage, string sectionName, int index) => $"{learnLanguage}.{sectionName}.{index}";
-}

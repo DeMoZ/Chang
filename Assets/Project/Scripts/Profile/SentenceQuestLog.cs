@@ -5,13 +5,13 @@ using Newtonsoft.Json;
 namespace Chang.Profile
 {
     [Serializable]
-    public class SentencesQuestLog : IQuestLog
+    public class SentenceQuestLog : IQuestLog
     {
         private readonly (int min, int max) _successSequenceRange = (0, 10);
 
         public Languages Language { get; set; }
         public string Section { get; set; }
-        public string FileName { get; set; }
+        public string FileName { get; set; } // key: "Thai/Market/By_This_Watermelon" is not the file name but log key
         public string Presentation { get; set; }
         public QuestionType QuestionType { get; set; }
         public Queue<LogUnit> Log { get; set; }
@@ -33,15 +33,15 @@ namespace Chang.Profile
         /// </summary>
         public DateTime UtcTime { get; set; }
 
-        public SentencesQuestLog(string path, string presentation, QuestionType type)
+        public SentenceQuestLog(string key, string presentation, QuestionType type)
         {
-            FileName = path;
+            FileName = key;
             Presentation = presentation;
             QuestionType = type;
 
-            string[] parts = path.Split('/');
+            string[] parts = key.Split('/');
             Language = parts[0].ToEnum<Languages>();
-            Section = parts[2];
+            Section = parts[1];
 
             Mark = ProjectConstants.DEFAULT_MARK;
             SuccessSequence = ProjectConstants.DEFAULT_SUCCESS;
@@ -49,7 +49,7 @@ namespace Chang.Profile
         }
 
         [JsonConstructor]
-        public SentencesQuestLog(
+        public SentenceQuestLog(
             string fileName,
             string presentation,
             QuestionType type,

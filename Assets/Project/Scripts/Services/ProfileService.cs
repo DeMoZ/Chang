@@ -17,7 +17,7 @@ namespace Chang.Services
         private readonly IDataProvider _unityCloudDataProvider;
 
         public ProgressData<VocabularyQuestLog> VocabularyProgress => _playerProfile.VocabularyProgress;
-        public ProgressData<SentencesQuestLog> SentencesProgress => _playerProfile.SentencesProgress;
+        public ProgressData<SentenceQuestLog> SentencesProgress => _playerProfile.SentencesProgress;
         public ProfileData ProfileData => _playerProfile.ProfileData;
         public string PlayerId => _unityCloudDataProvider.PlayerId;
         public Dictionary<string, Vocabulary.SectionData> ReorderedVocabularySections => _playerProfile.ReorderedVocabularySections;
@@ -46,7 +46,7 @@ namespace Chang.Services
             Languages language = unityProfileData.LearnLanguage;
 
             ProgressData<VocabularyQuestLog> vocabularyProgress = await _unityCloudDataProvider.LoadVocabularyProgressDataAsync(language, ct);
-            ProgressData<SentencesQuestLog> sentencesProgress = await _unityCloudDataProvider.LoadSentencesProgressDataAsync(language, ct);
+            ProgressData<SentenceQuestLog> sentencesProgress = await _unityCloudDataProvider.LoadSentencesProgressDataAsync(language, ct);
 
             // todo chang merge data with prefs. But for now will use only cloud data
 
@@ -88,17 +88,34 @@ namespace Chang.Services
 
         public void AddVocabularyLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
         {
-            Debug.LogWarning($"AddLog key: {key}, isCorrect {isCorrect}");
+            Debug.Log($"Add vocabulary Log key: {key}, isCorrect {isCorrect}");
             Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
 
-            if (!logs.TryGetValue(key, out var questLog))
+            if (!logs.TryGetValue(key, out VocabularyQuestLog questLog))
             {
                 questLog = new VocabularyQuestLog(key, presentation, type);
                 logs[key] = questLog;
             }
 
-            var logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
+            LogUnit logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
             _playerProfile.VocabularyProgress.SetTime(logUnit.UtcTime);
+            questLog.SetTime(logUnit.UtcTime);
+            questLog.AddLog(logUnit);
+        }
+
+        public void AddSentenceLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
+        {
+            Debug.Log($"Add sentence Log key: {key}, isCorrect {isCorrect}");
+            Dictionary<string, SentenceQuestLog> logs = _playerProfile.SentencesProgress.Log;
+
+            if (!logs.TryGetValue(key, out SentenceQuestLog questLog))
+            {
+                questLog = new SentenceQuestLog(key, presentation, type);
+                logs[key] = questLog;
+            }
+            
+            LogUnit logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
+            _playerProfile.SentencesProgress.SetTime(logUnit.UtcTime);
             questLog.SetTime(logUnit.UtcTime);
             questLog.AddLog(logUnit);
         }
@@ -117,9 +134,9 @@ namespace Chang.Services
 
         public float GetSentencesMark(string key)
         {
-            Dictionary<string, SentencesQuestLog> logs = _playerProfile.SentencesProgress.Log;
+            Dictionary<string, SentenceQuestLog> logs = _playerProfile.SentencesProgress.Log;
 
-            if (logs.TryGetValue(key, out SentencesQuestLog questLog))
+            if (logs.TryGetValue(key, out SentenceQuestLog questLog))
             {
                 return questLog.Mark;
             }

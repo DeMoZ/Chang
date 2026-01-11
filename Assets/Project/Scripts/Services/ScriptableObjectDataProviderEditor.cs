@@ -21,7 +21,7 @@ namespace Chang.Services.DataProvider
 
         public ProfileData ProfileData;
         public SerializableVariantProgressData<VocabularyQuestLog> VocabularyProgressData;
-        public SerializableVariantProgressData<SentencesQuestLog> SentencesProgressData;
+        public SerializableVariantProgressData<SentenceQuestLog> SentencesProgressData;
 
         public void Dispose()
         {
@@ -37,7 +37,7 @@ namespace Chang.Services.DataProvider
             throw new NotImplementedException();
         }
 
-        public UniTask<ProgressData<SentencesQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
+        public UniTask<ProgressData<SentenceQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
@@ -69,19 +69,19 @@ namespace Chang.Services.DataProvider
             Debug.Log($"{nameof(SaveVocabularyProgressDataAsync)} Saved {data}");
         }
 
-        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentencesQuestLog> data, CancellationToken ct)
+        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentenceQuestLog> data, CancellationToken ct)
         {
-            SentencesProgressData = data as SerializableVariantProgressData<SentencesQuestLog>;
+            SentencesProgressData = data as SerializableVariantProgressData<SentenceQuestLog>;
 
             if (SentencesProgressData != null)
             {
                 SentencesProgressData.SerializedUtcTime = SentencesProgressData.UtcTime.ToString();
 
-                SentencesProgressData.SerializedQuestions = new List<(string, SentencesQuestLog)>();
-                Dictionary<string, SentencesQuestLog> logs = data.Log;
+                SentencesProgressData.SerializedQuestions = new List<(string, SentenceQuestLog)>();
+                Dictionary<string, SentenceQuestLog> logs = data.Log;
                 foreach (var pair in logs)
                 {
-                    SentencesProgressData.SerializedQuestions.Add(new ValueTuple<string, SentencesQuestLog>(pair.Key, pair.Value));
+                    SentencesProgressData.SerializedQuestions.Add(new ValueTuple<string, SentenceQuestLog>(pair.Key, pair.Value));
                 }
             }
 
