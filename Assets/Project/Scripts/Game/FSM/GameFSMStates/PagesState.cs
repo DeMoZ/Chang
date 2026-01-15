@@ -183,7 +183,9 @@ namespace Chang.FSM
 
             MatchWordsStateResult stateResult = _pagesBus.QuestionResult as MatchWordsStateResult;
             if (stateResult == null)
+            {
                 throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
+            }
 
             foreach (SelectWordResult result in stateResult.Results)
             {
@@ -206,27 +208,33 @@ namespace Chang.FSM
 
             SentenceSelectWordStateResult stateResult = _pagesBus.QuestionResult as SentenceSelectWordStateResult;
             if (stateResult == null)
+            {
                 throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
+            }
 
+            bool needIncrement = !(bool)_pagesBus.QuestionResult.Info[1]; // whether hint was used
+            
             if (stateResult.Info[2] is List<SelectWordResult> vocabularyResults)
             {
                 foreach (SelectWordResult vocabularyResult in vocabularyResults)
                 {
-                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation, QuestionType.SelectWord, vocabularyResult.IsCorrect, false);
+                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation, QuestionType.SelectWord, vocabularyResult.IsCorrect, needIncrement);
                     _pagesBus.LessonLog.Add(vocabularyResult);
                 }
             }
-
-            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, QuestionType.SentenceSelectWords, stateResult.IsCorrect, false);
+            
+            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, QuestionType.SentenceSelectWords, stateResult.IsCorrect, needIncrement);
 
             if (!isCorrect)
             {
                 _pagesBus.CurrentLesson.EnqueueCurrentQuestion();
             }
 
-            var info = new ContinueButtonInfo();
-            info.IsCorrect = isCorrect;
-            info.InfoText = (string)_pagesBus.QuestionResult.Info[0];
+            ContinueButtonInfo info = new ()
+            {
+                IsCorrect = isCorrect,
+                InfoText = (string)_pagesBus.QuestionResult.Info[0]
+            };
 
             _pagesBus.LessonLog.Add(stateResult);
 
