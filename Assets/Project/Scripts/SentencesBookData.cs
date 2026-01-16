@@ -44,6 +44,7 @@ namespace Chang.Sentences
 
         public QuestionType QuestionType => QuestionType.SentenceSelectWords;
 
+        public string DefaultTranslation;
         public string ImageFileName;
         public string SoundFileName;
         public List<string> CompareWordsFileNames;
@@ -57,6 +58,7 @@ namespace Chang.Sentences
         public HashSet<string> GetImageKeys() => Keys;
 
         public string LogKey => _logKey ??= GetLogKey();
+        public string LocalizationKey => GetLocalizationKey();
 
         public Languages Language { get; set; }
         public string Section { get; set; }
@@ -77,6 +79,13 @@ namespace Chang.Sentences
         {
             List<string> words = CompareWordsFileNames.Select(key => key.Split('/')).Select(split => split[^1]).ToList();
             string logKey = ProjectSharedLogic.SENTENCE_QUESTION_KEY(Language.ToString(), Section, words);
+            return logKey;
+        }
+
+        private string GetLocalizationKey()
+        {
+            List<string> words = CompareWordsFileNames.Select(key => key.Split('/')).Select(split => split[^1]).ToList();
+            string logKey = ProjectSharedLogic.SENTENCE_QUESTION_LOCALIZATION_KEY(Language.ToString(), Section, words);
             return logKey;
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ namespace Chang.UI
     public class SentenceSelectWordView : CScreen
     {
         [SerializeField] private Image _questionImage;
+        [SerializeField] private TMP_Text _translation;
         [SerializeField] private Transform _displaySequenceContent;
         [SerializeField] private Transform _mixSequenceContent;
         [SerializeField] private CToggle _displayWordPrefab;
@@ -23,12 +25,14 @@ namespace Chang.UI
         public void Init(bool isQuestInTranslation,
             List<SequencePhraseData> displaySequence,
             List<SequencePhraseData> mixWords,
+            string translation,
             Sprite sprite,
             Action<int, int> onToggleValueChanged,
             Action onClickPlaySound)
         {
             Clear(_displaySequenceContent);
             Clear(_mixSequenceContent);
+            _translation.SetText(translation);
             _questionImage.sprite = sprite;
             OnToggleValueChanged = onToggleValueChanged;
             UpdateDisplaySequence(displaySequence);

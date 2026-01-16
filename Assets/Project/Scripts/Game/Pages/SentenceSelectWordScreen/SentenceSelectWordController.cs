@@ -24,11 +24,12 @@ namespace Chang
         public void Init(bool isQuestInTranslation,
             List<SequencePhraseData> displaySequence,
             List<SequencePhraseData> mixWords,
+            string translation,
             Sprite sprite,
             Action<int, int> onToggleValueChanged,
             Action onClickPlaySound)
         {
-            _view.Init(isQuestInTranslation, displaySequence, mixWords, sprite, onToggleValueChanged, onClickPlaySound);
+            _view.Init(isQuestInTranslation, displaySequence, mixWords, translation, sprite, onToggleValueChanged, onClickPlaySound);
         }
 
         public void SetViewActive(bool active)

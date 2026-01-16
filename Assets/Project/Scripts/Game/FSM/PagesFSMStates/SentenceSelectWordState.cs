@@ -93,6 +93,12 @@ namespace Chang.FSM
 
             _questionData = GetQuestionData(_sentenceQuestion);
             bool isQuestInTranslation = false; // todo chang
+
+            if (!TryGetLocalization(_sentenceQuestion.LocalizationKey, out string translation))
+            {
+                translation = _sentenceQuestion.DefaultTranslation;
+            }
+            
             string spritePath = _wordPathHelper.GetTexturePath(_sentenceQuestion.ImageFileName);
             Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
 
@@ -100,6 +106,7 @@ namespace Chang.FSM
                 isQuestInTranslation,
                 _questionData.DisplaySequence,
                 _questionData.MixWords,
+                translation,
                 sprite,
                 OnToggleValueChanged,
                 () =>
@@ -110,6 +117,22 @@ namespace Chang.FSM
             _stateController.SetViewActive(true);
 
             // OnClickPlaySound(!isQuestInTranslation);
+        }
+
+        // todo chang implement localization
+        private bool TryGetLocalization(string sentenceQuestionLocalizationKey, out string translation)
+        {
+            // try
+            // {
+            //     translation = localization.Get(sentenceQuestionLocalizationKey);
+            // }
+            // catch
+            // {
+            translation = string.Empty;
+            return false;
+            // }
+            //
+            // return true;
         }
 
         private QuestSentenceSelectWordData GetQuestionData(SentenceSelectWords sentenceQuestion)
