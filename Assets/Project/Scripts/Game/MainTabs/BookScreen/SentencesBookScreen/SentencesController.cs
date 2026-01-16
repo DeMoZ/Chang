@@ -102,8 +102,7 @@ namespace Chang.Sentences
             {
                 if (question is SentenceSelectWords selectWord)
                 {
-                    // throw new NotImplementedException();
-                    // sum += (float)_profileService.GetSentencesMark(selectWord.CorrectWordFileName) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
+                    sum += _profileService.GetSentencesMark(selectWord.LogKey) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
                 }
                 else
                 {
@@ -111,7 +110,6 @@ namespace Chang.Sentences
                 }
             }
 
-            // Debug.Log($"GetLessonColor for {lessonData.Section}, {lessonData.Name} sum: {sum}");
             return _view.GetLessonColor(sum);
         }
 
