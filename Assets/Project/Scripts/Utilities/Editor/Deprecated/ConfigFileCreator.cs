@@ -4,12 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Chang.Resources;
-using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 
-namespace Chang.Utilities
+namespace Chang.Utilities.Depricated
 {
     public static class ConfigFileCreator
     {

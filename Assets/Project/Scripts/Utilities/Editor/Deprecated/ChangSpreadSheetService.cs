@@ -9,8 +9,7 @@ using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
 using UnityEngine;
 
-
-namespace Chang.Utilities
+namespace Chang.Utilities.Depricated
 {
     public class ChangSpreadSheetService : IDisposable
     {
@@ -34,7 +33,7 @@ namespace Chang.Utilities
                 await InitService();
             }
             
-            string IdsFullPath = Path.Combine(Application.dataPath, VocabularyUtilitiesConstants.RelativePath, IdFileName);
+            string IdsFullPath = Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, IdFileName);
             await using var idsStream = new FileStream(IdsFullPath, FileMode.Open, FileAccess.Read);
             var idsString = await new StreamReader(idsStream).ReadToEndAsync();
             var idsData = JsonUtility.FromJson<IdsData>(idsString);
@@ -72,9 +71,9 @@ namespace Chang.Utilities
             UserCredential credentialTask;
             try
             {
-                string secretFullPath = Path.Combine(Application.dataPath, VocabularyUtilitiesConstants.RelativePath,
-                    VocabularyUtilitiesConstants.SecretFileName);
-                string tokenFullPath = Path.Combine(Application.dataPath, VocabularyUtilitiesConstants.RelativePath, TokenFileName);
+                // string secretFullPath = Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, UtilitiesConstants.SecretFileName);
+                string secretFullPath = Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, "Deprecated");
+                string tokenFullPath = Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, TokenFileName);
 
                 // Load credentials from file
                 await using var stream = new FileStream(secretFullPath, FileMode.Open, FileAccess.Read);

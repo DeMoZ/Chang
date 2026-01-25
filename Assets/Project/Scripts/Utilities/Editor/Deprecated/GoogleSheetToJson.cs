@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Google.Apis.Sheets.v4.Data;
 using UnityEngine;
 
-namespace Chang.Utilities
+namespace Chang.Utilities.Depricated
 {
     public class GoogleSheetToJson
     {

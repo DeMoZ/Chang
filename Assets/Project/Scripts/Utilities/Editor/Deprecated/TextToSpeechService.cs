@@ -6,6 +6,7 @@ using Google.Cloud.TextToSpeech.V1;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
+using Chang.Utilities.Depricated;
 
 public class Voice
 {
@@ -140,7 +141,7 @@ public class TextToSpeechService : IDisposable
     {
         try
         {
-            string apiFullPath = Path.Combine(Application.dataPath, VocabularyUtilitiesConstants.RelativePath, ApiFileName);
+            string apiFullPath = Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, ApiFileName);
             await using var idsStream = new FileStream(apiFullPath, FileMode.Open, FileAccess.Read);
             var apiString = await new StreamReader(idsStream).ReadToEndAsync();
             _apiData = JsonUtility.FromJson<IpiData>(apiString);

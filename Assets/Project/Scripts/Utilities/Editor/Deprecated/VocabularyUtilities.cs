@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Chang.Utilities
+namespace Chang.Utilities.Depricated
 {
     public class VocabularyUtilities
     {
@@ -12,7 +12,7 @@ namespace Chang.Utilities
         /// <summary>
         /// Reads Google book from Google Sheet and creates Json files for each sheet.
         ///</summary>
-        [MenuItem("Chang/Utilities/Create Create Sheets Jsons", false, 0)]
+        [MenuItem("Chang/Utilities/Depricated/Create Create Sheets Jsons", false, 0)]
         public static async void ReadGoogleBookAsync()
         {
             var gSheetsToJson = new GoogleSheetToJson();
