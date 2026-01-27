@@ -60,15 +60,8 @@ namespace Chang.Utilities.GoogleSheets
 
         public async UniTask<Book> Get()
         {
-            string range = "VOCABULARY!C2:C11";
-
-            // SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, range);
-            //
-            // ValueRange response = request.Execute();
-            // IList<IList<object>> values = response.Values;
-
             SpreadSheetInfoProvider provider = new SpreadSheetInfoProvider(SpreadSheetIdFileName, JsonCredentialsPath);
-            BookInfo book = await provider.GetBookAsync();
+            SpreadSheetInfo spreadSheet = await provider.GetBookAsync();
 
 //             foreach (var sheet in sheets)
 //             {

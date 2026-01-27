@@ -37,14 +37,16 @@ namespace Chang.Utilities.GoogleSheets
         /// <summary>
         ///  Compare book info cache with Google Sheets and update if necessary.
         /// </summary>
-        public async UniTask<BookInfo> GetBookAsync()
+        public async UniTask<SpreadSheetInfo> GetBookAsync()
         {
+            string methodName = nameof(GetBookAsync);
+            Debug.Log($"[{methodName}] Start. SpreadSheet provided: {Path}");
             string spreadsheetId = await GetSpreadSheetIdAsync(_spreadSheetIdFileName);
             GoogleCredential credential = await GetCredentialsAsync(_jsonCredentialsFileName);
 
             if (string.IsNullOrEmpty(spreadsheetId) || credential == null)
             {
-                Debug.LogError($"Spreadsheet Id {spreadsheetId} or credential was not loaded from json files.");
+                Debug.LogError($"[{methodName}] Spreadsheet Id {spreadsheetId} or credential was not loaded from json files.");
                 return null;
             }
 
@@ -56,58 +58,52 @@ namespace Chang.Utilities.GoogleSheets
 
             if (!AssetDatabase.AssetPathExists(Path))
             {
-                Debug.Log($"BookInfo asset not found at path: {Path}");
+                Debug.Log($"B[{methodName}] ookInfo asset not found at path: {Path}");
                 BookInfo newBookInfo = ScriptableObject.CreateInstance<BookInfo>();
                 AssetDatabase.CreateAsset(newBookInfo, Path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                Debug.Log($"Created new BookInfo asset at path: {Path}");
+                Debug.Log($"[{methodName}] Created new BookInfo asset at path: {Path}");
             }
 
             BookInfo bookInfo = AssetDatabase.LoadAssetAtPath<BookInfo>(Path);
             if (bookInfo == null)
             {
-                Debug.LogError("Failed to load BookInfo asset.");
+                Debug.LogError($"[{methodName}] Failed to load BookInfo asset.");
                 return null;
             }
-
-            // Получаем информацию о всех листах в таблице
+            
             Spreadsheet spreadsheet = await Service.Spreadsheets.Get(spreadsheetId).ExecuteAsync();
             IList<Sheet> sheets = spreadsheet.Sheets;
-
-            SpreadSheetInfo book = bookInfo.SpreadsheetInfos.FirstOrDefault(s => s.Title == spreadsheet.Properties.Title);
-            // if dont have this book
-            if (book == null)
+            SpreadSheetInfo localBook = bookInfo.SpreadsheetInfos.FirstOrDefault(s => s.Title == spreadsheet.Properties.Title);
+            // if spreadsheet is not cached or sheet count changed, update all info
+            if (localBook == null || localBook.Sheets == null || localBook.Sheets.Count != sheets.Count)
             {
                 Languages language = await GetBookLanguageAsync(spreadsheetId);
                 List<SheetInfo> sheetInfos = await GetSheetsInfoAsync(spreadsheetId, sheets);
-                // just populate info with that book
-                var spreadSheetInfo = new SpreadSheetInfo
+
+                SpreadSheetInfo localBookSpreadSheetInfo = new SpreadSheetInfo
                 {
                     Title = spreadsheet.Properties.Title,
                     Language = language,
-                    Sheets = sheetInfos,
+                    Sheets = sheetInfos
                 };
-                bookInfo.SpreadsheetInfos.Add(spreadSheetInfo);
+                
+                bookInfo.SpreadsheetInfos.Add(localBookSpreadSheetInfo);
+                localBook = localBookSpreadSheetInfo;
+                
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                Debug.Log($"[{methodName}] Updated BookInfo asset at path: {Path}");
             }
-
-            // так же нужно проверить если книга есть, но возможно есть изменения на листах
-
-
-            // сравнить информацию с bookInfo и если есть хоть одно различие, надо полностью перечитать все листы
-            // foreach (Google.Apis.Sheets.v4.Data.Sheet sheet in sheets)
-            // {
-            //     var 
-            // }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            Debug.Log($"Updated BookInfo asset at path: {Path}");
-            return bookInfo;
+            
+            Debug.Log($"[{methodName}] Done! SpreadSheet provided: {Path}");
+            return localBook;
         }
 
         private async Task<Languages> GetBookLanguageAsync(string spreadsheetId)
         {
+            string methodName = nameof(GetBookLanguageAsync);
             string checkRange = "BookInfo!B1";
             SpreadsheetsResource.ValuesResource.GetRequest checkRequest = Service.Spreadsheets.Values.Get(spreadsheetId, checkRange);
             ValueRange checkResponse = await checkRequest.ExecuteAsync();
@@ -119,7 +115,7 @@ namespace Chang.Utilities.GoogleSheets
                 return language;
             }
 
-            Debug.LogError($"Error fetching spreadsheet language: {value}");
+            Debug.LogError($"[{methodName}] Error fetching spreadsheet language: {value}");
             return Languages.English;
         }
 
@@ -161,6 +157,7 @@ namespace Chang.Utilities.GoogleSheets
         
         private async UniTask<string> GetSpreadSheetIdAsync(string spreadSheetIdFileName)
         {
+            string methodName = nameof(GetSpreadSheetIdAsync);
             string spreadsheetId;
             string spreadSheetIdsPath = System.IO.Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, spreadSheetIdFileName);
 
@@ -173,7 +170,7 @@ namespace Chang.Utilities.GoogleSheets
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error loading spreadsheet ID: {e.Message}");
+                Debug.LogError($"[{methodName}] Error loading spreadsheet ID: {e.Message}");
                 throw;
             }
 
@@ -182,6 +179,7 @@ namespace Chang.Utilities.GoogleSheets
 
         private async UniTask<GoogleCredential> GetCredentialsAsync(string jsonCredentialsFileName)
         {
+            string methodName = nameof(GetCredentialsAsync);
             GoogleCredential credential;
             string idsFullPath = System.IO.Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, jsonCredentialsFileName);
 
@@ -192,7 +190,7 @@ namespace Chang.Utilities.GoogleSheets
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error loading credentials: {e.Message}");
+                Debug.LogError($"[{methodName}] Error loading credentials: {e.Message}");
                 throw;
             }
 
