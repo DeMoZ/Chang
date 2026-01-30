@@ -1,19 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Chang;
-using Chang.Utilities.GoogleSheets;
-using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using Chang.Core;
 using Debug = DMZ.DebugSystem.DMZLogger;
-
-// todo chang move it into appropriate folder
-public class VocabularyInfo : SerializedScriptableObject
-{
-    public Languages Language;
-    public List<VocabularySheetToJson.Word> Words;
-}
 
 namespace Chang.Utilities.GoogleSheets
 {
@@ -21,10 +11,10 @@ namespace Chang.Utilities.GoogleSheets
     public class SheetsToVocabulary : IReadSheets
     {
         private const Languages Language = Languages.Thai; // todo chang. for now only Thai. Implement selection later
-        
+
         private static int CountLetters = 0;
         private static string Path = $"Assets/Project/Configs/{Language}/Vocabulary.asset";
-        
+
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
         ///</summary>
@@ -46,12 +36,14 @@ namespace Chang.Utilities.GoogleSheets
                 Debug.LogError($"Error fetching Google Sheets data: {ex.Message}");
                 return;
             }
-            
+
             if (!AssetDatabase.AssetPathExists(Path))
             {
                 Debug.Log($"[{methodName}] BookInfo asset not found at path: {Path}");
-                // todo chang create directory if not exists
-                
+
+                string folderPath = System.IO.Path.GetDirectoryName(Path);
+                SpreadSheetUtilities.CreateFoldersRecursively(folderPath);
+
                 VocabularyInfo asset = ScriptableObject.CreateInstance<VocabularyInfo>();
                 AssetDatabase.CreateAsset(asset, Path);
                 AssetDatabase.SaveAssets();
@@ -64,10 +56,10 @@ namespace Chang.Utilities.GoogleSheets
             {
                 Debug.LogError($"[{methodName}] Failed to load BookInfo asset.");
             }
-            
+
             vocabularyInfo.Language = book.Language;
             vocabularyInfo.Words = book.Sheets.SelectMany(sheet => sheet.Word).ToList();
-            
+
             Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

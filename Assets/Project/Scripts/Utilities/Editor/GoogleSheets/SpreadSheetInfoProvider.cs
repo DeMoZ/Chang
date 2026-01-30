@@ -118,7 +118,7 @@ namespace Chang.Utilities.GoogleSheets
             ValueRange checkResponse = await checkRequest.ExecuteAsync();
             IList<IList<object>> checkValues = checkResponse.Values;
 
-            var value = SpreadSheetUtils.SafeGetValue(checkValues, 0, 0, true);
+            var value = SpreadSheetUtilities.SafeGetValue(checkValues, 0, 0, true);
             if (Enum.TryParse<Languages>(value, true, out var language))
             {
                 return language;
@@ -155,14 +155,14 @@ namespace Chang.Utilities.GoogleSheets
 
                 try
                 {
-                    var value = SpreadSheetUtils.SafeGetValue(checkValues, 0, 1);
+                    var value = SpreadSheetUtilities.SafeGetValue(checkValues, 0, 1);
                     if (Enum.TryParse<Languages>(value, true, out var language))
                     {
                         sheetInfo.Language = language;
                     }
 
-                    sheetInfo.Type = SpreadSheetUtils.SafeGetValue(checkValues, 1, 1);
-                    sheetInfo.Section = SpreadSheetUtils.SafeGetValue(checkValues, 2, 1);
+                    sheetInfo.Type = SpreadSheetUtilities.SafeGetValue(checkValues, 1, 1);
+                    sheetInfo.Section = SpreadSheetUtilities.SafeGetValue(checkValues, 2, 1);
                 }
                 catch (Exception e)
                 {

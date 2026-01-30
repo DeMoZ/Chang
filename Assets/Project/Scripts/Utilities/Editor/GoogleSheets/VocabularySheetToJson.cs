@@ -5,6 +5,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Debug = DMZ.DebugSystem.DMZLogger;
 using UnityEngine;
+using Word = Chang.Core.Word;
 
 namespace Chang.Utilities.GoogleSheets
 {
@@ -31,20 +32,6 @@ namespace Chang.Utilities.GoogleSheets
             public Languages Language;
             public QuestionType Type;
             public string Title;
-        }
-
-        // todo chang move it into separate file and keep in NOT EDITOR FOLDER
-        public class Word
-        {
-            public string PathKey;
-            public string PathImageKey;
-            public string PathSoundKey;
-            public string Key;
-
-            public string LearnWord;
-            public string Phonetics;
-            public string DefaultTranslation;
-            public string Description;
         }
 
         #endregion
@@ -90,7 +77,7 @@ namespace Chang.Utilities.GoogleSheets
                 {
                     Language = sheet.Language,
                     Type = type,
-                    Title = sheet.Title
+                    Title = sheet.Title,
                 };
 
                 string dataRange = $"{sheet.Title}!B6:I";
@@ -101,14 +88,17 @@ namespace Chang.Utilities.GoogleSheets
                 {
                     Word word = new()
                     {
-                        PathKey = SpreadSheetUtils.SafeGetValue(entity, 0),
-                        PathImageKey = SpreadSheetUtils.SafeGetValue(entity, 1),
-                        PathSoundKey = SpreadSheetUtils.SafeGetValue(entity, 2),
-                        Key = SpreadSheetUtils.SafeGetValue(entity, 3),
-                        LearnWord = SpreadSheetUtils.SafeGetValue(entity, 4),
-                        Phonetics = SpreadSheetUtils.SafeGetValue(entity, 5),
-                        DefaultTranslation = SpreadSheetUtils.SafeGetValue(entity, 6),
-                        Description = SpreadSheetUtils.SafeGetValue(entity, 7)
+                        Language = sheet.Language,
+                        Section = sheet.Section,
+                        
+                        PathKey = SpreadSheetUtilities.SafeGetValue(entity, 0),
+                        PathImageKey = SpreadSheetUtilities.SafeGetValue(entity, 1),
+                        PathSoundKey = SpreadSheetUtilities.SafeGetValue(entity, 2),
+                        Key = SpreadSheetUtilities.SafeGetValue(entity, 3),
+                        LearnWord = SpreadSheetUtilities.SafeGetValue(entity, 4),
+                        Phonetics = SpreadSheetUtilities.SafeGetValue(entity, 5),
+                        DefaultTranslation = SpreadSheetUtilities.SafeGetValue(entity, 6),
+                        Description = SpreadSheetUtilities.SafeGetValue(entity, 7)
                     };
 
                     words.Add(word);

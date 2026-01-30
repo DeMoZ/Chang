@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using DMZ.DebugSystem;
+using UnityEditor;
 
 namespace Chang.Utilities.GoogleSheets
 {
-    public class SpreadSheetUtils
+    public class SpreadSheetUtilities
     {
         public static string SafeGetValue(IList<object> collection, int index, bool notify = false)
         {
@@ -36,6 +37,26 @@ namespace Chang.Utilities.GoogleSheets
                 }
 
                 return string.Empty;
+            }
+        }
+        
+        public static void CreateFoldersRecursively(string path)
+        {
+            if (AssetDatabase.IsValidFolder(path))
+            {
+                return;
+            }
+
+            string parentPath = System.IO.Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(parentPath) && !AssetDatabase.IsValidFolder(parentPath))
+            {
+                CreateFoldersRecursively(parentPath);
+            }
+
+            string folderName = System.IO.Path.GetFileName(path);
+            if (!string.IsNullOrEmpty(folderName))
+            {
+                AssetDatabase.CreateFolder(parentPath, folderName);
             }
         }
     }
