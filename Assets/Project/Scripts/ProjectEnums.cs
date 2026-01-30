@@ -10,6 +10,11 @@ namespace Chang
     public enum QuestionType
     {
         None,
+        Vocabulary,
+        Sentences,
+        VocabularyBook,
+        SentenceBook,
+        
         DemonstrationWord,
         SelectWord,
         MatchWords,

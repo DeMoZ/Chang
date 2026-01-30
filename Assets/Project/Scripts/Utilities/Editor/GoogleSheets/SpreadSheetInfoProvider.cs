@@ -40,7 +40,7 @@ namespace Chang.Utilities.GoogleSheets
         public async UniTask InitAsync()
         {
             string methodName = nameof(InitAsync);
-            Debug.Log($"[{methodName}");
+            Debug.Log($"[{methodName}]");
 
             _spreadsheetId = await GetSpreadSheetIdAsync(_spreadSheetIdFileName);
             GoogleCredential credential = await GetCredentialsAsync(_jsonCredentialsFileName);
@@ -120,7 +120,7 @@ namespace Chang.Utilities.GoogleSheets
             ValueRange checkResponse = await checkRequest.ExecuteAsync();
             IList<IList<object>> checkValues = checkResponse.Values;
 
-            var value = checkValues[0][0].ToString();
+            var value = SpreadSheetUtils.SafeGetValue(checkValues, 0, 0, true);
             if (Enum.TryParse<Languages>(value, true, out var language))
             {
                 return language;
@@ -132,6 +132,8 @@ namespace Chang.Utilities.GoogleSheets
 
         public async UniTask<IList<IList<object>>> GetSheetDataAsync(string range)
         {
+            string methodName = nameof(GetSheetDataAsync);
+            Debug.Log($"[{methodName}] Request data range: {range}");
             SpreadsheetsResource.ValuesResource.GetRequest dataRequest = Service.Spreadsheets.Values.Get(_spreadsheetId, range);
             ValueRange dataResponse = await dataRequest.ExecuteAsync();
             IList<IList<object>> values = dataResponse.Values;
@@ -155,14 +157,14 @@ namespace Chang.Utilities.GoogleSheets
 
                 try
                 {
-                    var value = checkValues[0][1].ToString();
+                    var value = SpreadSheetUtils.SafeGetValue(checkValues, 0, 1);
                     if (Enum.TryParse<Languages>(value, true, out var language))
                     {
                         sheetInfo.Language = language;
                     }
 
-                    sheetInfo.Type = checkValues[1][1].ToString();
-                    sheetInfo.Section = checkValues[2][1].ToString();
+                    sheetInfo.Type = SpreadSheetUtils.SafeGetValue(checkValues, 1, 1);
+                    sheetInfo.Section = SpreadSheetUtils.SafeGetValue(checkValues, 2, 1);
                 }
                 catch (Exception e)
                 {
