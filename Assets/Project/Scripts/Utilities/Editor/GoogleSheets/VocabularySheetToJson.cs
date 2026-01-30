@@ -33,6 +33,7 @@ namespace Chang.Utilities.GoogleSheets
             public string Title;
         }
 
+        // todo chang move it into separate file and keep in NOT EDITOR FOLDER
         public class Word
         {
             public string PathKey;
@@ -70,7 +71,6 @@ namespace Chang.Utilities.GoogleSheets
 
             SpreadSheetInfo spreadSheet = await provider.GetBookAsync();
             List<SheetInfo> sheets = spreadSheet.Sheets.Where(s => s.Type == SheetType && s.Language == _language).ToList();
-            // List<SheetInfo> vocabularySheets = spreadSheet.Sheets.Where(sheetInfo => string.Equals(sheetInfo.Type, SheetType)).ToList();
 
             Book book = new()
             {
@@ -93,7 +93,7 @@ namespace Chang.Utilities.GoogleSheets
                     Title = sheet.Title
                 };
 
-                string dataRange = $"{sheet.Title}!B6:I"; // Get all the range from the sheet 
+                string dataRange = $"{sheet.Title}!B6:I";
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
                 List<Word> words = new List<Word>();
 

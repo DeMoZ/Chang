@@ -71,7 +71,6 @@ namespace Chang.Utilities.GoogleSheets
             if (_bookInfo == null)
             {
                 Debug.LogError($"[{methodName}] Failed to load BookInfo asset.");
-                return;
             }
         }
 
@@ -81,8 +80,7 @@ namespace Chang.Utilities.GoogleSheets
         public async UniTask<SpreadSheetInfo> GetBookAsync()
         {
             string methodName = nameof(GetBookAsync);
-            Debug.Log($"[{methodName}] Start. SpreadSheet provided: {Path}");
-
+            Debug.Log($"[{methodName}] Start. SpreadSheet for path: {Path}");
 
             Spreadsheet spreadsheet = await Service.Spreadsheets.Get(_spreadsheetId).ExecuteAsync();
             IList<Sheet> sheets = spreadsheet.Sheets;

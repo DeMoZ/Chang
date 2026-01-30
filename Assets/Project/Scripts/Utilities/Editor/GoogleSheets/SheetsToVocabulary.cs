@@ -1,6 +1,19 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Chang;
+using Chang.Utilities.GoogleSheets;
+using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
+
+// todo chang move it into appropriate folder
+public class VocabularyInfo : SerializedScriptableObject
+{
+    public Languages Language;
+    public List<VocabularySheetToJson.Word> Words;
+}
 
 namespace Chang.Utilities.GoogleSheets
 {
@@ -10,13 +23,17 @@ namespace Chang.Utilities.GoogleSheets
         private const Languages Language = Languages.Thai; // todo chang. for now only Thai. Implement selection later
         
         private static int CountLetters = 0;
-
+        private static string Path = $"Assets/Project/Configs/{Language}/Vocabulary.asset";
+        
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
         ///</summary>
         [MenuItem("Chang/Utilities/Create Vocabulary JSON", false, 0)]
         public static async void ReadAsync()
         {
+            string methodName = nameof(ReadAsync);
+            Debug.Log($"[{methodName}] Start. SpreadSheet provided: {Path}");
+
             VocabularySheetToJson gSheetsToJson = new(Language);
             VocabularySheetToJson.Book book;
 
@@ -29,33 +46,28 @@ namespace Chang.Utilities.GoogleSheets
                 Debug.LogError($"Error fetching Google Sheets data: {ex.Message}");
                 return;
             }
-
-            foreach (var sheet in book.Sheets)
+            
+            if (!AssetDatabase.AssetPathExists(Path))
             {
-                //     if (sheet.Properties.Skip || sheet.Rows.Count == 0)
-                //     {
-                //         continue;
-                //     }
-                //
-                //     Debug.Log($"Sheet: {sheet.Title}");
-                //
-                //     // Validation - remove rows with empty value in any cell
-                //     sheet.Rows = sheet.Rows
-                //         .Where(row =>
-                //         {
-                //             if (string.IsNullOrEmpty(row.LearnWord) || string.IsNullOrEmpty(row.Phonetics) || string.IsNullOrEmpty(row.Meaning))
-                //             {
-                //                 Debug.LogWarning($"Sheet: {sheet.Title}, Empty value for {row.LearnWord} {row.Phonetics} {row.Meaning}");
-                //                 return false;
-                //             }
-                //
-                //             return true;
-                //         })
-                //         .ToList();
-                //
-                //     ConfigFileCreator.CreateSheetJson(sheet);
+                Debug.Log($"[{methodName}] BookInfo asset not found at path: {Path}");
+                // todo chang create directory if not exists
+                
+                VocabularyInfo asset = ScriptableObject.CreateInstance<VocabularyInfo>();
+                AssetDatabase.CreateAsset(asset, Path);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                Debug.Log($"[{methodName}] Created new BookInfo asset at path: {Path}");
             }
 
+            VocabularyInfo vocabularyInfo = AssetDatabase.LoadAssetAtPath<VocabularyInfo>(Path);
+            if (vocabularyInfo == null)
+            {
+                Debug.LogError($"[{methodName}] Failed to load BookInfo asset.");
+            }
+            
+            vocabularyInfo.Language = book.Language;
+            vocabularyInfo.Words = book.Sheets.SelectMany(sheet => sheet.Word).ToList();
+            
             Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
