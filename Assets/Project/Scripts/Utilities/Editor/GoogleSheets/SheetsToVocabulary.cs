@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using Chang.Core;
+using Cysharp.Threading.Tasks;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Utilities.GoogleSheets
@@ -12,20 +13,19 @@ namespace Chang.Utilities.GoogleSheets
     {
         private const Languages Language = Languages.Thai; // todo chang. for now only Thai. Implement selection later
 
-        private static int CountLetters = 0;
         private static string Path = $"Assets/Project/Configs/{Language}/Vocabulary.asset";
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
         ///</summary>
         [MenuItem("Chang/Utilities/Create Vocabulary JSON", false, 0)]
-        public static async void ReadAsync()
+        public static async UniTaskVoid ReadAsync()
         {
             string methodName = nameof(ReadAsync);
             Debug.Log($"[{methodName}] Start. SpreadSheet provided: {Path}");
 
-            VocabularySheetToJson gSheetsToJson = new(Language);
-            VocabularySheetToJson.Book book;
+            VocabularySheetsProcess gSheetsToJson = new(Language);
+            VocabularySheetsProcess.Book book;
 
             try
             {
@@ -60,25 +60,13 @@ namespace Chang.Utilities.GoogleSheets
             vocabularyInfo.Language = book.Language;
             vocabularyInfo.Words = book.Sheets.SelectMany(sheet => sheet.Word).ToList();
 
+            EditorUtility.SetDirty(vocabularyInfo);
             Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
     }
-
-    // get vocabulary book data from Google sheets (lessons)
-    public class SheetsToVocabularyBook : IReadSheets
-    {
-        /// <summary>
-        /// Reads Google book from Google Sheet and creates JSON files for each sheet.
-        ///</summary>
-        [MenuItem("Chang/Utilities/Create Vocabulary book JSON", false, 0)]
-        public async void ReadAsync()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
+    
     // get sentences data from Google sheets
     public class SheetsToSentences : IReadSheets
     {

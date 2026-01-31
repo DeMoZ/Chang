@@ -9,7 +9,7 @@ using Word = Chang.Core.Word;
 
 namespace Chang.Utilities.GoogleSheets
 {
-    public class VocabularySheetToJson
+    public class VocabularySheetsProcess
     {
         #region Subclasses
 
@@ -27,6 +27,7 @@ namespace Chang.Utilities.GoogleSheets
             public List<Word> Word;
         }
 
+        [Serializable]
         public class SheetProperties
         {
             public Languages Language;
@@ -36,7 +37,6 @@ namespace Chang.Utilities.GoogleSheets
 
         #endregion
 
-
         private const string JsonCredentials = "chang_gcloudconsole_credentials.json";
         private const string SheetType = "Vocabulary";
 
@@ -44,9 +44,8 @@ namespace Chang.Utilities.GoogleSheets
 
         private string SpreadSheetIdFileName => $"{_language}VocabularyAndSentences_ids.json";
         private string JsonCredentialsPath => Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, JsonCredentials);
-
-
-        public VocabularySheetToJson(Languages language)
+        
+        public VocabularySheetsProcess(Languages language)
         {
             _language = language;
         }
@@ -82,7 +81,7 @@ namespace Chang.Utilities.GoogleSheets
 
                 string dataRange = $"{sheet.Title}!B6:I";
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
-                List<Word> words = new List<Word>();
+                List<Word> words = new ();
 
                 foreach (IList<object> entity in data)
                 {
@@ -98,7 +97,7 @@ namespace Chang.Utilities.GoogleSheets
                         LearnWord = SpreadSheetUtilities.SafeGetValue(entity, 4),
                         Phonetics = SpreadSheetUtilities.SafeGetValue(entity, 5),
                         DefaultTranslation = SpreadSheetUtilities.SafeGetValue(entity, 6),
-                        Description = SpreadSheetUtilities.SafeGetValue(entity, 7)
+                        DefaultDescription = SpreadSheetUtilities.SafeGetValue(entity, 7)
                     };
 
                     words.Add(word);

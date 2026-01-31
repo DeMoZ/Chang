@@ -13,6 +13,6 @@ namespace Chang.Core
         public string LearnWord;
         public string Phonetics;
         public string DefaultTranslation;
-        public string Description;
+        public string DefaultDescription;
     }
 }

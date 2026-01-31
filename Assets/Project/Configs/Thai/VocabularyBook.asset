@@ -1,0 +1,3730 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47ca3c04a0394862854a7a0044fa32cb, type: 3}
+  m_Name: VocabularyBook
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.Core.VocabularyBookInfo
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: Sections
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Chang.Core.VocabularyBookSection,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 18
+    - Name: 
+      Entry: 7
+      Data: 1|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Fruits
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Fruits
+    - Name: SectionLessons
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 3|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Fruits
+    - Name: WordKeys
+      Entry: 7
+      Data: 4|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Fruit
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Watermelon
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Mango
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Pineapple
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Papaya
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 5|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Fruits
+    - Name: WordKeys
+      Entry: 7
+      Data: 6|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Guava
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Banana
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Orange
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Coconut
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Durian
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 7|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Food
+    - Name: SectionLessons
+      Entry: 7
+      Data: 8|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: 9|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: WordKeys
+      Entry: 7
+      Data: 10|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Fried_rice
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Noodle_soup
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Spicy_sour_soup
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Stir_fried_noodles_with_peanuts
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 11|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: WordKeys
+      Entry: 7
+      Data: 12|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Stir_fried_basil
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Meat
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Pork
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Beef
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 13|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: WordKeys
+      Entry: 7
+      Data: 14|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Chicken
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Fish
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Vegetable
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Tomato
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 15|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: WordKeys
+      Entry: 7
+      Data: 16|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Potato
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Chinese_kale
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Cabbage
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Seasoning
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 17|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: WordKeys
+      Entry: 7
+      Data: 18|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Chili
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Pepper
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Garlic
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Lime
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 19|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: WordKeys
+      Entry: 7
+      Data: 20|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Fried_rice
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Noodle_soup
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Spicy_sour_soup
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Stir_fried_noodles_with_peanuts
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 21|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: WordKeys
+      Entry: 7
+      Data: 22|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Stir_fried_basil
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Stir_fried_mixed_vegetables
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Green_curry
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Papaya_salad_Central_Thai_style_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 23|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Food
+    - Name: WordKeys
+      Entry: 7
+      Data: 24|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Fried_egg
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Omelette
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Food/Boiled_egg
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 25|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: HowToCook
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/HowToCook
+    - Name: SectionLessons
+      Entry: 7
+      Data: 26|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 27|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: HowToCook
+    - Name: WordKeys
+      Entry: 7
+      Data: 28|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Soft_boil
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Boil
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Spicy_sour_soup
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Spicy_sour_salad
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Stir_fry
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 29|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: HowToCook
+    - Name: WordKeys
+      Entry: 7
+      Data: 30|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Deep_fry
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Curry
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Grill
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Toast
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/HowToCook/Bake
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 31|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Months
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Months
+    - Name: SectionLessons
+      Entry: 7
+      Data: 32|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 33|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Months
+    - Name: WordKeys
+      Entry: 7
+      Data: 34|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/Month
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/January
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/February
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/March
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 35|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Months
+    - Name: WordKeys
+      Entry: 7
+      Data: 36|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/April
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/May
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/June
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/July
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/August
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 37|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Months
+    - Name: WordKeys
+      Entry: 7
+      Data: 38|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/September
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/October
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/November
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Months/December
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 39|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Beverages
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Beverages
+    - Name: SectionLessons
+      Entry: 7
+      Data: 40|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 7
+    - Name: 
+      Entry: 7
+      Data: 41|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Beverages
+    - Name: WordKeys
+      Entry: 7
+      Data: 42|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Coffee
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Tea
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Green_tea
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Thai_tea
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 43|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Beverages
+    - Name: WordKeys
+      Entry: 7
+      Data: 44|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Lemon_tea
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Cocoa
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Milk
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Hot
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 45|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Beverages
+    - Name: WordKeys
+      Entry: 7
+      Data: 46|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Cold_for_drink_with_ice
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Smoothie_Blend
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Water_Normal_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Not_cold_Room_temperature
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 47|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Beverages
+    - Name: WordKeys
+      Entry: 7
+      Data: 48|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Soda
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Red_wine
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/White_wine
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Beer
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 49|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Beverages
+    - Name: WordKeys
+      Entry: 7
+      Data: 50|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Liquor
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/_Juice
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Ice
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Bottle
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 51|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Beverages
+    - Name: WordKeys
+      Entry: 7
+      Data: 52|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Can
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Bucket
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Classifiers_for_small_items
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Glass_mug_cup
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 53|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Beverages
+    - Name: WordKeys
+      Entry: 7
+      Data: 54|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Small
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Medium
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Beverages/Big_Large
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 55|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Sweetnes
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Sweetnes
+    - Name: SectionLessons
+      Entry: 7
+      Data: 56|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 57|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Sweetnes
+    - Name: WordKeys
+      Entry: 7
+      Data: 58|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Sweet
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Standard_sweet
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Less_sweet
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Not_sweet
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Not_sweet_at_all
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 59|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Sweetnes
+    - Name: WordKeys
+      Entry: 7
+      Data: 60|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Extra_sweet_Add_more_sweet
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Add_put_in_with
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/No_added_not_put_without
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Sugar
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Sweetnes/Syrup
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 61|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: PointThings
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/PointThings
+    - Name: SectionLessons
+      Entry: 7
+      Data: 62|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 63|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: PointThings
+    - Name: WordKeys
+      Entry: 7
+      Data: 64|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/PointThings/This
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/PointThings/That
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/PointThings/Over_there
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 65|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: PointThings
+    - Name: WordKeys
+      Entry: 7
+      Data: 66|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/PointThings/This_one
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/PointThings/That_one
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/PointThings/That_one_over_there
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 67|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Fruits
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Fruits
+    - Name: SectionLessons
+      Entry: 7
+      Data: 68|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 69|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Fruits
+    - Name: WordKeys
+      Entry: 7
+      Data: 70|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Fruit
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Watermelon
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Mango
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Pineapple
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Papaya
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 71|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Fruits
+    - Name: WordKeys
+      Entry: 7
+      Data: 72|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Guava
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Banana
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Orange
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Coconut
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Durian
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 73|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Numbers
+    - Name: SectionLessons
+      Entry: 7
+      Data: 74|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: 75|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: WordKeys
+      Entry: 7
+      Data: 76|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/1
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/2
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/5
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 77|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: WordKeys
+      Entry: 7
+      Data: 78|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/6
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/7
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/7
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/8
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/9
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 79|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: WordKeys
+      Entry: 7
+      Data: 80|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/10
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/20
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/30
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/40
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/50
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 81|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: WordKeys
+      Entry: 7
+      Data: 82|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/60
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/70
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/80
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/90
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 83|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: WordKeys
+      Entry: 7
+      Data: 84|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/11
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/21
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/31
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/41
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/51
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 85|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: WordKeys
+      Entry: 7
+      Data: 86|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/61
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/71
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/81
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/91
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 87|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: WordKeys
+      Entry: 7
+      Data: 88|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/100
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/1,000
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/10,000
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 89|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: WordKeys
+      Entry: 7
+      Data: 90|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/100,000
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/1,000,000
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Numbers/10,000,000
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 91|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Greeting
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Greeting
+    - Name: SectionLessons
+      Entry: 7
+      Data: 92|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 7
+      Data: 93|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Greeting
+    - Name: WordKeys
+      Entry: 7
+      Data: 94|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Bye_Informal_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_am_leaving_I_have_to_go_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_went_I_went_to_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Where_did_you_go_Where_are_you_coming_from_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 95|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Greeting
+    - Name: WordKeys
+      Entry: 7
+      Data: 96|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/How_is_it_going_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Safe_travel
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Have_you_eaten_yet_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_have_eaten_already_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 97|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Greeting
+    - Name: WordKeys
+      Entry: 7
+      Data: 98|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Go_home_safely
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_am_about_to_go_home_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_will_go_I_am_going_to_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Where_are_you_going_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 99|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Greeting
+    - Name: WordKeys
+      Entry: 7
+      Data: 100|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Drive_safe
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/May_I_be_excused_Formal_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/See_you_again_See_you_later
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_m_not_so_good
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 101|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Greeting
+    - Name: WordKeys
+      Entry: 7
+      Data: 102|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_m_sick
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/So_so
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_am_good
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/How_are_you_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 103|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Greeting
+    - Name: WordKeys
+      Entry: 7
+      Data: 104|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Good_bye_Formal_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Hi
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/Not_yet
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Greeting/I_haven_t_eaten_yet
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 105|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Colors
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Colors
+    - Name: SectionLessons
+      Entry: 7
+      Data: 106|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 7
+      Data: 107|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Colors
+    - Name: WordKeys
+      Entry: 7
+      Data: 108|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Color
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/White
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Black
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Grey
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 109|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Colors
+    - Name: WordKeys
+      Entry: 7
+      Data: 110|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Blue
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Dark_blue
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Red
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Green
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 111|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Colors
+    - Name: WordKeys
+      Entry: 7
+      Data: 112|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Yellow
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Pink
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Purple
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Brown
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 113|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Colors
+    - Name: WordKeys
+      Entry: 7
+      Data: 114|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Orange
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Light
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Colors/Dark
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 115|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Clothes
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Clothes
+    - Name: SectionLessons
+      Entry: 7
+      Data: 116|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 117|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Clothes
+    - Name: WordKeys
+      Entry: 7
+      Data: 118|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Clothes
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Top_clothes_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Pants
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Skirt
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 119|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Clothes
+    - Name: WordKeys
+      Entry: 7
+      Data: 120|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Dress
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/T_Shirt
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Shirt
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Polo_shirt
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 121|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Clothes
+    - Name: WordKeys
+      Entry: 7
+      Data: 122|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Sweater
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Short_pants
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Trousers
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Clothes/Jeans
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 123|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Shopping
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Shopping
+    - Name: SectionLessons
+      Entry: 7
+      Data: 124|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: 125|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Shopping
+    - Name: WordKeys
+      Entry: 7
+      Data: 126|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Size
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Brand
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/I_ll_take_I_want_to_buy_order
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Wear
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 127|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Shopping
+    - Name: WordKeys
+      Entry: 7
+      Data: 128|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/May_I_Asking_permissions
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Try_Try_on
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Look_see
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Can_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 129|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Shopping
+    - Name: WordKeys
+      Entry: 7
+      Data: 130|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Can
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Cannot
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Beautiful
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Fit_perfect
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 131|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Shopping
+    - Name: WordKeys
+      Entry: 7
+      Data: 132|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Big
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Small
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Too_much
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Change_to
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 133|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Shopping
+    - Name: WordKeys
+      Entry: 7
+      Data: 134|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/A_classifier_for_clothes
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Lower
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Shopping/Pay
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 135|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/FamilyAndPeople
+    - Name: SectionLessons
+      Entry: 7
+      Data: 136|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: 137|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: WordKeys
+      Entry: 7
+      Data: 138|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Friend
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Colleague
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Neighbor
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Friend_at_from_place
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 139|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: WordKeys
+      Entry: 7
+      Data: 140|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/People_at_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Girlfriend_Boyfriend
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Husband
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Wife
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 141|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: WordKeys
+      Entry: 7
+      Data: 142|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Chief
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Boss
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Younger_sibling
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Younger_brother
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 143|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: WordKeys
+      Entry: 7
+      Data: 144|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Younger_sister
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Older_sibling
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Older_brother
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Older_sister
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 145|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: WordKeys
+      Entry: 7
+      Data: 146|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Dad
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Mom
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Kid_of_someone
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Son
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 147|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: WordKeys
+      Entry: 7
+      Data: 148|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Daughter
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Grandpa_Mom_side_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Grandpa_Dad_side_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Grandma_Mom_side_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 149|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: WordKeys
+      Entry: 7
+      Data: 150|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Grandma_Dad_side_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Grand_children
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Younger_brother_Sister_of_dad
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Younger_brother_Sister_of_Mom
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 151|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: FamilyAndPeople
+    - Name: WordKeys
+      Entry: 7
+      Data: 152|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Older_brother_of_mom_dad
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/Older_sister_of_mom_dad
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/In_law_for_male_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/FamilyAndPeople/In_law_for_female_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 153|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Introduce
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Introduce
+    - Name: SectionLessons
+      Entry: 7
+      Data: 154|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 155|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Introduce
+    - Name: WordKeys
+      Entry: 7
+      Data: 156|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/Hello
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/Name
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/What_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/To_be_People_Person_from_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 157|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Introduce
+    - Name: WordKeys
+      Entry: 7
+      Data: 158|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/Come_from
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/Where
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/What_about_
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/Nice_to_meet_you
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/_Me_you_too_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 159|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Introduce
+    - Name: WordKeys
+      Entry: 7
+      Data: 160|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/male_yes
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/female_yes
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/A_polite_particle
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Introduce/Country
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 161|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Ocupation
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Ocupation
+    - Name: SectionLessons
+      Entry: 7
+      Data: 162|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 163|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Ocupation
+    - Name: WordKeys
+      Entry: 7
+      Data: 164|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Ocupation/Doctor
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Ocupation/Masseuse
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Ocupation/Dentist
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Ocupation/Teacher
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 165|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Ocupation
+    - Name: WordKeys
+      Entry: 7
+      Data: 166|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Ocupation/Police
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Ocupation/Security_guard
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Ocupation/Maid_Housewife
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Ocupation/Pharmacist
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 167|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Places
+    - Name: SectionLessons
+      Entry: 7
+      Data: 168|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 13
+    - Name: 
+      Entry: 7
+      Data: 169|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 170|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/House
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Restroom
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Kitchen
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Bedroom
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 171|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 172|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Living_room
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/School
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Hotel
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/_Shop
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 173|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 174|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Restaurant
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Coffee_shop
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Book_store
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Bakery_shop
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 175|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 176|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Barber
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Hair_salon
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Massage_shop
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Nail_salon
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 177|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 178|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Photo_shop
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Tailor_shop
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Pharmacy
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Grocery_store
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 179|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 180|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Company
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Workplace
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Shopping_mall
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Market
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 181|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 182|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Hospital
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Dental_clinic
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Immigration
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Airport
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 183|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 184|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Transportation_stand_Queue
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Motorcycle_stand
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Minitruck_stand
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Van_stand
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 185|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 186|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Taxi_stand
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Station
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Train_station
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Sky_train_station
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 187|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 188|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Police_station
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Post_office
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Embassy
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Bank
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 189|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 190|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Gas_station
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Garage
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Stadium
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Sport_court_field
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 191|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 192|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Swimming_pool
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/University
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Bus_stop
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Temple
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 193|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Places
+    - Name: WordKeys
+      Entry: 7
+      Data: 194|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/Church
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/The_sea_the_beach
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Places/The_beach_dry_area_
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 195|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: TitleKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Prepositions
+    - Name: SectionLessons
+      Entry: 7
+      Data: 196|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: 197|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: WordKeys
+      Entry: 7
+      Data: 198|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Alley
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Area_near_row
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Arrive
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/At_at_exact_area
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 199|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: WordKeys
+      Entry: 7
+      Data: 200|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Behind_After
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Beside
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Between
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Come_across_find_see
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 201|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: WordKeys
+      Entry: 7
+      Data: 202|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Drive
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/End_of
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Go_straight
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/In
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 203|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: WordKeys
+      Entry: 7
+      Data: 204|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/In_front_of
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Keep_at_some_side
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/_Keep_continue
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Leave_from
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 205|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: WordKeys
+      Entry: 7
+      Data: 206|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Left_side
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Make_a_U_turn
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Near
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Next_to
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 207|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: WordKeys
+      Entry: 7
+      Data: 208|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/On
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Once_When
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Opposite
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Pass
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 209|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: WordKeys
+      Entry: 7
+      Data: 210|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Right_side
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Road
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/See
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Turn
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Under
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 211|Chang.Core.SectionLesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Prepositions
+    - Name: WordKeys
+      Entry: 7
+      Data: 212|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Until
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Walk
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Way
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/Which
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Prepositions/With
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  Language: 6
