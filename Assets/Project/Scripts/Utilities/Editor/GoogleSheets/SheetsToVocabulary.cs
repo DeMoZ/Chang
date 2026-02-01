@@ -58,7 +58,7 @@ namespace Chang.Utilities.GoogleSheets
             }
 
             vocabularyInfo.Language = book.Language;
-            vocabularyInfo.Words = book.Sheets.SelectMany(sheet => sheet.Word).ToList();
+            vocabularyInfo.Words = book.Sheets.SelectMany(sheet => sheet.Words).ToList();
 
             EditorUtility.SetDirty(vocabularyInfo);
             Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");

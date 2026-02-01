@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Chang.Core;
 using Cysharp.Threading.Tasks;
-using Debug = DMZ.DebugSystem.DMZLogger;
+using DMZ.DebugSystem;
 using UnityEngine;
-using Word = Chang.Core.Word;
 
 namespace Chang.Utilities.GoogleSheets
 {
-    public class VocabularySheetsProcess
+    public class SentencesSheetsProcess
     {
         #region Subclasses
 
@@ -24,20 +24,20 @@ namespace Chang.Utilities.GoogleSheets
         public class Sheet
         {
             public SheetProperties Properties;
-            public List<Word> Words;
+            public List<Sentence> Sentences;
         }
         
         #endregion
 
         private const string JsonCredentials = "chang_gcloudconsole_credentials.json";
-        private const string SheetType = "Vocabulary";
+        private const string SheetType = "Sentences";
 
         private readonly Languages _language;
 
         private string SpreadSheetIdFileName => $"{_language}VocabularyAndSentences_ids.json";
         private string JsonCredentialsPath => Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, JsonCredentials);
         
-        public VocabularySheetsProcess(Languages language)
+        public SentencesSheetsProcess(Languages language)
         {
             _language = language;
         }
@@ -58,10 +58,10 @@ namespace Chang.Utilities.GoogleSheets
 
             foreach (var sheet in sheets)
             {
-                Debug.Log($"Sheet: {sheet.Title}, type: {sheet.Type}, language: {sheet.Language}");
+                DMZLogger.Log($"Sheet: {sheet.Title}, type: {sheet.Type}, language: {sheet.Language}");
                 if (!Enum.TryParse(sheet.Type, true, out QuestionType type))
                 {
-                    Debug.LogError($"Sheet type is not recognised {sheet.Type}");
+                    DMZLogger.LogError($"Sheet type is not recognised {sheet.Type}");
                 }
 
                 SheetProperties properties = new SheetProperties
@@ -71,34 +71,34 @@ namespace Chang.Utilities.GoogleSheets
                     Title = sheet.Title,
                 };
 
-                string dataRange = $"{sheet.Title}!B6:I";
+                string dataRange = $"{sheet.Title}!C5:O";
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
-                List<Word> words = new ();
+                List<Sentence> sentences = new ();
 
                 foreach (IList<object> entity in data)
                 {
-                    Word word = new()
+                    Sentence sentence = new()
                     {
                         Language = sheet.Language,
                         Section = sheet.Section,
                         
-                        PathKey = SpreadSheetUtilities.SafeGetValue(entity, 0),
-                        PathImageKey = SpreadSheetUtilities.SafeGetValue(entity, 1),
-                        PathSoundKey = SpreadSheetUtilities.SafeGetValue(entity, 2),
-                        Key = SpreadSheetUtilities.SafeGetValue(entity, 3),
-                        LearnWord = SpreadSheetUtilities.SafeGetValue(entity, 4),
-                        Phonetics = SpreadSheetUtilities.SafeGetValue(entity, 5),
-                        DefaultTranslation = SpreadSheetUtilities.SafeGetValue(entity, 6),
-                        DefaultDescription = SpreadSheetUtilities.SafeGetValue(entity, 7)
+                        // PathKey = SpreadSheetUtilities.SafeGetValue(entity, 0),
+                        // PathImageKey = SpreadSheetUtilities.SafeGetValue(entity, 1),
+                        // PathSoundKey = SpreadSheetUtilities.SafeGetValue(entity, 2),
+                        // Key = SpreadSheetUtilities.SafeGetValue(entity, 3),
+                        // LearnWord = SpreadSheetUtilities.SafeGetValue(entity, 4),
+                        // Phonetics = SpreadSheetUtilities.SafeGetValue(entity, 5),
+                        // DefaultTranslation = SpreadSheetUtilities.SafeGetValue(entity, 6),
+                        // DefaultDescription = SpreadSheetUtilities.SafeGetValue(entity, 7)
                     };
 
-                    words.Add(word);
+                    sentences.Add(sentence);
                 }
 
                 book.Sheets.Add(new Sheet
                 {
                     Properties = properties,
-                    Words = words
+                    Sentences = sentences
                 });
             }
 
