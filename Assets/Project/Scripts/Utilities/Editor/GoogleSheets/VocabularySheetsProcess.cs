@@ -26,15 +26,7 @@ namespace Chang.Utilities.GoogleSheets
             public SheetProperties Properties;
             public List<Word> Word;
         }
-
-        [Serializable]
-        public class SheetProperties
-        {
-            public Languages Language;
-            public QuestionType Type;
-            public string Title;
-        }
-
+        
         #endregion
 
         private const string JsonCredentials = "chang_gcloudconsole_credentials.json";

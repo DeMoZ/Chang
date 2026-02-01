@@ -8,24 +8,24 @@ using UnityEngine;
 
 namespace Chang.Utilities.GoogleSheets
 {
-    // get vocabulary book data from Google sheets (lessons)
-    public class SheetsToVocabularyBook : IReadSheets
+    // get sentences book data from Google sheets (lessons)
+    public class SheetsToSentencesBook : IReadSheets
     {
         private const Languages Language = Languages.Thai; // todo chang. for now only Thai. Implement selection later
 
-        private static string Path = $"Assets/Project/Configs/{Language}/VocabularyBook.asset";
-        
+        private static string Path = $"Assets/Project/Configs/{Language}/SentencesBook.asset";
+
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
         ///</summary>
-        [MenuItem("Chang/Utilities/Create Vocabulary book JSON", false, 1)]
+        [MenuItem("Chang/Utilities/ Create Sentences Book JSON", false, 3)]
         public static async UniTaskVoid ReadAsync()
         {
             string methodName = nameof(ReadAsync);
             DMZLogger.Log($"[{methodName}] Start. SpreadSheet provided: {Path}");
 
-            VocabularyBookSheetsProcess gSheetsToJson = new(Language);
-            VocabularyBookSheetsProcess.Book book;
+            SentencesBookSheetsProcess gSheetsToJson = new(Language);
+            SentencesBookSheetsProcess.Book book;
 
             try
             {
@@ -44,14 +44,14 @@ namespace Chang.Utilities.GoogleSheets
                 string folderPath = System.IO.Path.GetDirectoryName(Path);
                 SpreadSheetUtilities.CreateFoldersRecursively(folderPath);
 
-                VocabularyBookInfo asset = ScriptableObject.CreateInstance<VocabularyBookInfo>();
+                SentencesBookInfo asset = ScriptableObject.CreateInstance<SentencesBookInfo>();
                 AssetDatabase.CreateAsset(asset, Path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 DMZLogger.Log($"[{methodName}] Created new BookInfo asset at path: {Path}");
             }
 
-            VocabularyBookInfo vocabularyBookInfo = AssetDatabase.LoadAssetAtPath<VocabularyBookInfo>(Path);
+            SentencesBookInfo vocabularyBookInfo = AssetDatabase.LoadAssetAtPath<SentencesBookInfo>(Path);
             if (vocabularyBookInfo == null)
             {
                 DMZLogger.LogError($"[{methodName}] Failed to load BookInfo asset.");
@@ -63,7 +63,6 @@ namespace Chang.Utilities.GoogleSheets
             EditorUtility.SetDirty(vocabularyBookInfo);
             DMZLogger.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
+            AssetDatabase.Refresh();        }
     }
 }

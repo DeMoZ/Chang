@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Chang.Utilities.GoogleSheets
 {
-    public class VocabularyBookSheetsProcess
+    public class SentencesBookSheetsProcess
     {
         #region Subclasses
 
@@ -23,13 +23,13 @@ namespace Chang.Utilities.GoogleSheets
         public class Sheet
         {
             public SheetProperties Properties;
-            public List<VocabularyBookSection> Sections;
+            public List<SentencesBookSection> Sections;
         }
 
         #endregion
 
         private const string JsonCredentials = "chang_gcloudconsole_credentials.json";
-        private const string SheetType = "VocabularyBook";
+        private const string SheetType = "SentencesBook";
         private const string SectionWord = "Section";
 
         private readonly Languages _language;
@@ -37,12 +37,12 @@ namespace Chang.Utilities.GoogleSheets
         private string SpreadSheetIdFileName => $"{_language}VocabularyAndSentences_ids.json";
         private string JsonCredentialsPath => Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, JsonCredentials);
 
-        public VocabularyBookSheetsProcess(Languages language)
+        public SentencesBookSheetsProcess(Languages language)
         {
             _language = language;
         }
 
-public async UniTask<Book> Get()
+        public async UniTask<Book> Get()
         {
             SpreadSheetInfoProvider provider = new SpreadSheetInfoProvider(SpreadSheetIdFileName, JsonCredentialsPath);
             await provider.InitAsync();
@@ -73,14 +73,14 @@ public async UniTask<Book> Get()
                         Type = type,
                         Title = sheetInfo.Title,
                     },
-                    Sections = new List<VocabularyBookSection>()
+                    Sections = new List<SentencesBookSection>()
                 };
                 book.Sheets.Add(currentSheet);
         
                 string dataRange = $"{sheetInfo.Title}!A4:C";
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
         
-                VocabularyBookSection currentSection = null;
+                SentencesBookSection currentSection = null;
                 SectionLesson currentLesson = null;
         
                 foreach (var row in data)
@@ -92,7 +92,7 @@ public async UniTask<Book> Get()
                     // start a new section
                     if (string.Equals(colA, SectionWord, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        currentSection = new VocabularyBookSection
+                        currentSection = new SentencesBookSection
                         {
                             Language = sheetInfo.Language,
                             Section = colB,

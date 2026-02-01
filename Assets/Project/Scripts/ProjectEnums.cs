@@ -13,7 +13,7 @@ namespace Chang
         Vocabulary,
         Sentences,
         VocabularyBook,
-        SentenceBook,
+        SentencesBook,
         
         DemonstrationWord,
         SelectWord,

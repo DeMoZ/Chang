@@ -25,11 +25,4 @@ namespace Chang.Core
         // Section	Food	
         //         Lesson1	Thai/Vocabulary/Food/Fried_rice
     }
-
-    public class SectionLesson
-    {
-        public Languages Language;
-        public string Section; 
-        public List<string> WordKeys;
-    }
 }

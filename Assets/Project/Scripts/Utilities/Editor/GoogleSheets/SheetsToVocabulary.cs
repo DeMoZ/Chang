@@ -66,22 +66,4 @@ namespace Chang.Utilities.GoogleSheets
             AssetDatabase.Refresh();
         }
     }
-    
-    // get sentences data from Google sheets
-    public class SheetsToSentences : IReadSheets
-    {
-        public void ReadAsync()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    // get sentences book data from Google sheets (lessons)
-    public class SheetsToSentencesBook : IReadSheets
-    {
-        public void ReadAsync()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }
