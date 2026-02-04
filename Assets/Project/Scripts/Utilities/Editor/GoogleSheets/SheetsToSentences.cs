@@ -51,16 +51,16 @@ namespace Chang.Utilities.GoogleSheets
                 DMZLogger.Log($"[{methodName}] Created new BookInfo asset at path: {Path}");
             }
 
-            SentencesInfo vocabularyInfo = AssetDatabase.LoadAssetAtPath<SentencesInfo>(Path);
-            if (vocabularyInfo == null)
+            SentencesInfo sentenceInfo = AssetDatabase.LoadAssetAtPath<SentencesInfo>(Path);
+            if (sentenceInfo == null)
             {
                 DMZLogger.LogError($"[{methodName}] Failed to load BookInfo asset.");
             }
 
-            vocabularyInfo.Language = book.Language;
-            // vocabularyInfo.Sentences = book.Sheets.SelectMany(sheet => sheet.Sentences).ToList(); // todo chang uncomment and implement when ready
+            sentenceInfo.Language = book.Language;
+            sentenceInfo.Sentences = book.Sheets.SelectMany(sheet => sheet.Sentences).ToList();
 
-            EditorUtility.SetDirty(vocabularyInfo);
+            EditorUtility.SetDirty(sentenceInfo);
             DMZLogger.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

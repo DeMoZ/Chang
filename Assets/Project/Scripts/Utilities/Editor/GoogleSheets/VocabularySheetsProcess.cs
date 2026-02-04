@@ -82,9 +82,9 @@ namespace Chang.Utilities.GoogleSheets
                         Language = sheet.Language,
                         Section = sheet.Section,
                         
-                        PathKey = SpreadSheetUtilities.SafeGetValue(entity, 0),
-                        PathImageKey = SpreadSheetUtilities.SafeGetValue(entity, 1),
-                        PathSoundKey = SpreadSheetUtilities.SafeGetValue(entity, 2),
+                        WordKey = SpreadSheetUtilities.SafeGetValue(entity, 0),
+                        ImageKey = SpreadSheetUtilities.SafeGetValue(entity, 1),
+                        SoundKey = SpreadSheetUtilities.SafeGetValue(entity, 2),
                         Key = SpreadSheetUtilities.SafeGetValue(entity, 3),
                         LearnWord = SpreadSheetUtilities.SafeGetValue(entity, 4),
                         Phonetics = SpreadSheetUtilities.SafeGetValue(entity, 5),

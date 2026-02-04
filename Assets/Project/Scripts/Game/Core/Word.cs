@@ -5,10 +5,10 @@ namespace Chang.Core
         public Languages Language;
         public string Section;
             
-        public string PathKey;
-        public string PathImageKey;
-        public string PathSoundKey;
-        public string Key;
+        public string WordKey;      // Thai/Vocabulary/Food/Fried_rice
+        public string ImageKey;     // Thai/Vocabulary/Food/Fried_rice
+        public string SoundKey;     // Thai/Vocabulary/Food/Fried_rice
+        public string Key;          // Fried_rice
 
         public string LearnWord;
         public string Phonetics;

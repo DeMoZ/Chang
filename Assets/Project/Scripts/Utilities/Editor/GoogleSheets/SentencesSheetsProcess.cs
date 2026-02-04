@@ -74,24 +74,28 @@ namespace Chang.Utilities.GoogleSheets
                 string dataRange = $"{sheet.Title}!C5:O";
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
                 List<Sentence> sentences = new ();
-
-                foreach (IList<object> entity in data)
+                
+                const int chunkSize = 9;
+                for (int i = 0; i < data.Count; i += chunkSize)
                 {
-                    Sentence sentence = new()
+                    if (data.Count < i + chunkSize)
                     {
-                        Language = sheet.Language,
+                        break;
+                    }
+                    
+                    List<IList<object>> chunk = data.Skip(i).Take(chunkSize).ToList();
+
+                    Sentence sentence = new Sentence
+                    {
+                        Language = properties.Language,
                         Section = sheet.Section,
                         
-                        // PathKey = SpreadSheetUtilities.SafeGetValue(entity, 0),
-                        // PathImageKey = SpreadSheetUtilities.SafeGetValue(entity, 1),
-                        // PathSoundKey = SpreadSheetUtilities.SafeGetValue(entity, 2),
-                        // Key = SpreadSheetUtilities.SafeGetValue(entity, 3),
-                        // LearnWord = SpreadSheetUtilities.SafeGetValue(entity, 4),
-                        // Phonetics = SpreadSheetUtilities.SafeGetValue(entity, 5),
-                        // DefaultTranslation = SpreadSheetUtilities.SafeGetValue(entity, 6),
-                        // DefaultDescription = SpreadSheetUtilities.SafeGetValue(entity, 7)
+                        Key = SpreadSheetUtilities.SafeGetValue(chunk,0,0) ,
+                        SentenceKey =  SpreadSheetUtilities.SafeGetValue(chunk,1,0),
+                        ImageKey =  SpreadSheetUtilities.SafeGetValue(chunk,2,0),
+                        SoundKey =  SpreadSheetUtilities.SafeGetValue(chunk,3,0),
+                        
                     };
-
                     sentences.Add(sentence);
                 }
 
