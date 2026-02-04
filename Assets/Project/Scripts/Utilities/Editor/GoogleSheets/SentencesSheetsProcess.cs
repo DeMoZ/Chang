@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using Chang.Core;
 using Cysharp.Threading.Tasks;
-using DMZ.DebugSystem;
 using UnityEngine;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Utilities.GoogleSheets
 {
@@ -26,17 +26,18 @@ namespace Chang.Utilities.GoogleSheets
             public SheetProperties Properties;
             public List<Sentence> Sentences;
         }
-        
+
         #endregion
 
         private const string JsonCredentials = "chang_gcloudconsole_credentials.json";
         private const string SheetType = "Sentences";
+        private const int ChunkSize = 8;
 
         private readonly Languages _language;
 
         private string SpreadSheetIdFileName => $"{_language}VocabularyAndSentences_ids.json";
         private string JsonCredentialsPath => Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, JsonCredentials);
-        
+
         public SentencesSheetsProcess(Languages language)
         {
             _language = language;
@@ -58,10 +59,10 @@ namespace Chang.Utilities.GoogleSheets
 
             foreach (var sheet in sheets)
             {
-                DMZLogger.Log($"Sheet: {sheet.Title}, type: {sheet.Type}, language: {sheet.Language}");
+                Debug.Log($"Sheet: {sheet.Title}, type: {sheet.Type}, language: {sheet.Language}");
                 if (!Enum.TryParse(sheet.Type, true, out QuestionType type))
                 {
-                    DMZLogger.LogError($"Sheet type is not recognised {sheet.Type}");
+                    Debug.LogError($"Sheet type is not recognised {sheet.Type}");
                 }
 
                 SheetProperties properties = new SheetProperties
@@ -73,29 +74,49 @@ namespace Chang.Utilities.GoogleSheets
 
                 string dataRange = $"{sheet.Title}!C5:O";
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
-                List<Sentence> sentences = new ();
-                
-                const int chunkSize = 9;
-                for (int i = 0; i < data.Count; i += chunkSize)
+                List<Sentence> sentences = new();
+
+                for (int i = 0; i < data.Count; i += ChunkSize)
                 {
-                    if (data.Count < i + chunkSize)
+                    if (data.Count < i + ChunkSize)
                     {
                         break;
                     }
-                    
-                    List<IList<object>> chunk = data.Skip(i).Take(chunkSize).ToList();
+
+                    List<IList<object>> chunk = data.Skip(i).Take(ChunkSize).ToList();
+
+                    var sentenceWords = new List<SentenceWord>();
+                    for (int j = 0; j < ChunkSize; j++)
+                    {
+                        string wordKey = SpreadSheetUtilities.SafeGetValue(chunk, 7, j);
+
+                        if (string.IsNullOrEmpty(wordKey))
+                        {
+                            break;
+                        }
+
+                        SentenceWord sentenceWord = new SentenceWord
+                        {
+                            WordKey = wordKey
+                        };
+
+                        sentenceWord.SetModifiers(SpreadSheetUtilities.SafeGetValue(chunk, 5, j));
+                        sentenceWords.Add(sentenceWord);
+                    }
 
                     Sentence sentence = new Sentence
                     {
                         Language = properties.Language,
                         Section = sheet.Section,
-                        
-                        Key = SpreadSheetUtilities.SafeGetValue(chunk,0,0) ,
-                        SentenceKey =  SpreadSheetUtilities.SafeGetValue(chunk,1,0),
-                        ImageKey =  SpreadSheetUtilities.SafeGetValue(chunk,2,0),
-                        SoundKey =  SpreadSheetUtilities.SafeGetValue(chunk,3,0),
-                        
+
+                        Key = SpreadSheetUtilities.SafeGetValue(chunk, 0, 0),
+                        SentenceKey = SpreadSheetUtilities.SafeGetValue(chunk, 1, 0),
+                        ImageKey = SpreadSheetUtilities.SafeGetValue(chunk, 2, 0),
+                        SoundKey = SpreadSheetUtilities.SafeGetValue(chunk, 3, 0),
+                        DefaultTranslation = SpreadSheetUtilities.SafeGetValue(chunk, 4, 0),
+                        SentenceWords = sentenceWords
                     };
+
                     sentences.Add(sentence);
                 }
 

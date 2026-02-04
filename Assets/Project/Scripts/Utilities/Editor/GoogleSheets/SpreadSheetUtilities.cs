@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using DMZ.DebugSystem;
 using UnityEditor;
+using Debug =  DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Utilities.GoogleSheets
 {
@@ -13,7 +13,7 @@ namespace Chang.Utilities.GoogleSheets
             {
                 if (notify)
                 {
-                    DMZLogger.LogWarning($"Index [{index}] is out of range for the collection. Collection size is {collection.Count}.");
+                    Debug.LogWarning($"Index [{index}] is out of range for the collection. Collection size is {collection.Count}.");
                 }
 
                 return string.Empty;
@@ -33,7 +33,7 @@ namespace Chang.Utilities.GoogleSheets
             {
                 if (notify)
                 {
-                    DMZLogger.LogWarning($"Indexes [{index1},{index2}] is not valid for collection.\n{e}");
+                    Debug.LogWarning($"Indexes [{index1},{index2}] is not valid for collection.\n{e}");
                 }
 
                 return string.Empty;

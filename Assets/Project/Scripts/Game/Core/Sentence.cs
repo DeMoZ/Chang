@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Chang.Core
 {
@@ -13,11 +15,7 @@ namespace Chang.Core
         public string SoundKey;     // Thai/Sentences/Market/Do_not_add_sugar         
 
         public string DefaultTranslation;
-
-        // public string CompareWordsTranslation;
-        //public List<string> CompareWordsKeys;
-
-        public List<SentenceWord> SentenceWord;
+        public List<SentenceWord> SentenceWords;
     }
 
     /// <summary>
@@ -25,12 +23,40 @@ namespace Chang.Core
     /// </summary>
     public class SentenceWord
     {
-        // Modifiers
-        public bool Variant;
-        public bool Dynamic;
-        public bool Gender;
+        [Flags]
+        public enum Modifier // V-Variant D-Dynamic G-Gender
+        {
+            None,
+            Variant = 1 << 0,
+            Dynamic = 1 << 1,
+            Gender = 1 << 2
+        }
 
+        public Modifier Modifiers;
         public string WordKey;
+
+        public void SetModifiers(string value)
+        {
+            Modifiers = Modifier.None;
+            
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            if (value.Contains('V'))
+            {
+                Modifiers |= Modifier.Variant;
+            }
+            if (value.Contains('D'))
+            {
+                Modifiers |= Modifier.Dynamic;
+            }
+            if (value.Contains('G'))
+            {
+                Modifiers |= Modifier.Gender;
+            }
+        }
     }
 
     // Key	            Do_not_add_sugar
