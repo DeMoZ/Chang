@@ -7,7 +7,7 @@ namespace Chang
     [CreateAssetMenu(menuName = "Chang/Question Config", fileName = "QuestionConfig")]
     public class QuestionConfig : ScriptableObject
     {
-        [field: SerializeField] public QuestionType QuestionType { get; private set; }
+        [field: SerializeField] public ChangTypes QuestionType { get; private set; }
         [field: SerializeField, ReadOnly] public string Info { get; private set; } = string.Empty;
         [field: SerializeField] public Languages Language { get; private set; }
         [field: SerializeField] public string Section { get; private set; } = string.Empty;
@@ -22,7 +22,7 @@ namespace Chang
             Info = Question == null ? string.Empty : Question.EditorInfo();
         }
 
-        public void SetQuestionType(QuestionType type)
+        public void SetQuestionType(ChangTypes type)
         {
             QuestionType = type;
         }

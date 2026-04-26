@@ -13,7 +13,7 @@ namespace Chang.Profile
         public string Section { get; set; }
         public string FileName { get; set; }
         public string Presentation { get; set; }
-        public QuestionType QuestionType { get; set; }
+        public ChangTypes QuestionType { get; set; }
         public Queue<LogUnit> Log { get; set; }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Chang.Profile
         /// </summary>
         public DateTime UtcTime { get; set; }
 
-        public VocabularyQuestLog(string path, string presentation, QuestionType type)
+        public VocabularyQuestLog(string path, string presentation, ChangTypes type)
         {
             FileName = path;
             Presentation = presentation;
@@ -52,7 +52,7 @@ namespace Chang.Profile
         public VocabularyQuestLog(
             string fileName,
             string presentation,
-            QuestionType type,
+            ChangTypes type,
             Languages language,
             string section,
             int mark,

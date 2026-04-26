@@ -53,13 +53,5 @@ namespace Chang.FSM
         {
             Debug.Log($"New game stateType {stateType}");
         }
-        
-        // todo Chang need to implement tests
-        //await _resourcesManager.Init();
-        // #if DEVELOPMENT
-        //             var tests = new Tests(_resourcesManager);
-        //             await tests.Run();
-        //             tests.Dispose();
-        // #endif
     }
 }

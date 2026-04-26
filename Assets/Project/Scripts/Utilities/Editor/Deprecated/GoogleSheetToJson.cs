@@ -93,9 +93,9 @@ namespace Chang.Utilities.Depricated
             return book;
         }
 
-        private QuestionType GetQuestionType(string type)
+        private ChangTypes GetQuestionType(string type)
         {
-            return Enum.TryParse(type, out QuestionType questionType) ? questionType : QuestionType.None;
+            return Enum.TryParse(type, out ChangTypes questionType) ? questionType : ChangTypes.None;
         }
     }
 
@@ -118,7 +118,7 @@ namespace Chang.Utilities.Depricated
     {
         public bool Skip;
         public Languages Language;
-        public QuestionType Type;
+        public ChangTypes Type;
         public string Name;
     }
 

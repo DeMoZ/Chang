@@ -11,7 +11,7 @@ namespace Chang.UI
         [SerializeField] private ResultItem _itemPrefab;
         [SerializeField] private Button _continuteBtn;
 
-        [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.Result;
+        [ShowInInspector, ReadOnly] public override ChangTypes ScreenType { get; } = ChangTypes.Result;
 
         public void AddItem(string word, string mark = null, bool? isUp = null)
         {

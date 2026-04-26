@@ -59,7 +59,7 @@ namespace Chang.Utilities.GoogleSheets
             foreach (var sheet in sheets)
             {
                 Debug.Log($"Sheet: {sheet.Title}, type: {sheet.Type}, language: {sheet.Language}");
-                if (!Enum.TryParse(sheet.Type, true, out QuestionType type))
+                if (!Enum.TryParse(sheet.Type, true, out ChangTypes type))
                 {
                     Debug.LogError($"Sheet type is not recognised {sheet.Type}");
                 }

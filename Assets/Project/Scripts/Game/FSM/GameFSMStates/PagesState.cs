@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using Chang.Resources;
 using Chang.Services;
+using Chang.Core;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
@@ -74,8 +75,7 @@ namespace Chang.FSM
 
             _pagesBus = new PagesBus
             {
-                // CurrentLesson = Bus.CurrentVocabularyLesson,
-                CurrentLesson = Bus.CurrentLesson,
+                LessonProvider = Bus.LessonProvider,
                 GameType = Bus.GameType,
             };
 
@@ -107,7 +107,7 @@ namespace Chang.FSM
 
         private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
         {
-            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentLesson.SimpleQuestions, progress, ct);
+            await _pagesContentProvider.PreloadPagesStateAsync(Bus.LessonProvider.Questions, progress, ct);
         }
 
         private void ExitToLobby()
@@ -134,18 +134,18 @@ namespace Chang.FSM
 
             switch (_pagesFsm.CurrentStateType)
             {
-                case QuestionType.DemonstrationWord:
-                case QuestionType.SelectWord:
+                case ChangTypes.DemonstrationWord:
+                case ChangTypes.SelectWord:
                     OnCheckSelectWordAsync(ct).Forget();
                     break;
-                case QuestionType.MatchWords:
+                case ChangTypes.MatchWords:
                     OnCheckMatchWordsAsync(ct).Forget();
                     break;
-                case QuestionType.SentenceSelectWords:
+                case ChangTypes.SentenceSelectWords:
                     OnCheckSentenceSelectWordsAsync(ct).Forget();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException($"simple question not handled {_pagesFsm.CurrentStateType}");
+                   throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -158,12 +158,12 @@ namespace Chang.FSM
             var answer = string.Join(" / ", _pagesBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
             var needIncrement = !(bool)_pagesBus.QuestionResult.Info[1];
-            _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect,
+            _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation, ChangTypes.SelectWord, isCorrect,
                 needIncrement);
 
             if (!isCorrect)
             {
-                _pagesBus.CurrentLesson.EnqueueCurrentQuestion();
+                _pagesBus.LessonProvider.EnqueueCurrentQuestion();
             }
 
             var info = new ContinueButtonInfo();
@@ -189,7 +189,7 @@ namespace Chang.FSM
 
             foreach (SelectWordResult result in stateResult.Results)
             {
-                _profileService.AddVocabularyLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect, false);
+                _profileService.AddVocabularyLog(result.Key, result.Presentation, ChangTypes.SelectWord, result.IsCorrect, false);
                 _pagesBus.LessonLog.Add(result);
             }
 
@@ -218,16 +218,16 @@ namespace Chang.FSM
             {
                 foreach (SelectWordResult vocabularyResult in vocabularyResults)
                 {
-                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation, QuestionType.SelectWord, vocabularyResult.IsCorrect, needIncrement);
+                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation, ChangTypes.SelectWord, vocabularyResult.IsCorrect, needIncrement);
                     _pagesBus.LessonLog.Add(vocabularyResult);
                 }
             }
             
-            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, QuestionType.SentenceSelectWords, stateResult.IsCorrect, needIncrement);
+            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, ChangTypes.SentenceSelectWords, stateResult.IsCorrect, needIncrement);
 
             if (!isCorrect)
             {
-                _pagesBus.CurrentLesson.EnqueueCurrentQuestion();
+                _pagesBus.LessonProvider.EnqueueCurrentQuestion();
             }
 
             ContinueButtonInfo info = new ()
@@ -252,81 +252,82 @@ namespace Chang.FSM
         {
             await UniTask.Yield(ct);
 
-            if (_pagesFsm.CurrentStateType == QuestionType.Result)
+            if (_pagesFsm.CurrentStateType == ChangTypes.Result)
             {
                 ExitToLobby();
                 return;
             }
 
-            ILesson lesson = _pagesBus.CurrentLesson;
+            // todo chang i need Lesson to store data and lesson to play
+            ILessonProvider lessonProvider = _pagesBus.LessonProvider;
 
             // Add generated match words quest at the end of the lesson
-            if (lesson.SimpleQuestionQueue.Count == 0)
+            if (lessonProvider.QuestionQueue.Count == 0)
             {
-                if (TryGenerateQuestMatchWordsData(lesson, out var matchWordsQuest))
+                if (TryGenerateQuestMatchWordsData(lessonProvider, out var matchWordsQuest))
                 {
-                    lesson.AddSimpleQuestion(matchWordsQuest);
-                    lesson.IsGeneratedMathWordsQuestPlayed = true;
+                    lessonProvider.AddQuestion(matchWordsQuest);
+                    lessonProvider.IsGeneratedMathWordsQuestPlayed = true;
                 }
             }
 
             // If the lesson has finished
-            if (lesson.SimpleQuestionQueue.Count == 0)
+            if (lessonProvider.QuestionQueue.Count == 0)
             {
-                SwitchState(QuestionType.Result);
+                SwitchState(ChangTypes.Result);
                 return;
             }
 
-            IQuestion nextQuestion = lesson.PeekNextQuestion();
-            QuestionType nextQuestionType = nextQuestion.QuestionType;
+            IQuestion nextQuestion = lessonProvider.PeekNextQuestion();
+            ChangTypes nextQuestionType = nextQuestion.Type;
 
             // If demonstration word is required
-            if (nextQuestion.QuestionType != QuestionType.DemonstrationWord)
+            if (nextQuestion.Type != ChangTypes.DemonstrationWord)
             {
-                HashSet<string> keys = nextQuestion.GetNeedDemonstrationKeys();
+                HashSet<string> keys = nextQuestion.GetNeedDemonstrationKeys;
 
                 foreach (var fileName in keys)
                 {
                     if (IsNeedDemonstration(fileName))
                     {
-                        var demonstration = new Vocabulary.QuestDemonstrationWord
-                        {
-                            CorrectWordFileName = fileName
-                        };
-                        lesson.InsertNextQuest(demonstration);
-                        nextQuestionType = QuestionType.DemonstrationWord;
+                        // var demonstration = new Vocabulary.QuestDemonstrationWord
+                        // {
+                        //     CorrectWordFileName = fileName
+                        // };
+                        // lesson.InsertNextQuest(demonstration);
+                        nextQuestionType = ChangTypes.DemonstrationWord;
                         break;
                     }
                 }
             }
 
-            lesson.DequeueAndSetSipmlQuestion();
+            lessonProvider.DequeueAndSetSipmlQuestion();
             SwitchState(nextQuestionType);
         }
 
-        private void SwitchState(QuestionType questionType)
+        private void SwitchState(ChangTypes questionType)
         {
             _pagesFsm.SwitchState(questionType);
             _pagesBus.OnHintUsed.SetSilent(false);
         }
 
-        private bool TryGenerateQuestMatchWordsData(ILesson lesson, out Vocabulary.QuestMatchWords matchWordsQuest)
+        private bool TryGenerateQuestMatchWordsData(ILessonProvider lessonProvider, out QuestMatchWords questMatchWords)
         {
-            matchWordsQuest = new Vocabulary.QuestMatchWords();
+            questMatchWords = new QuestMatchWords();
             HashSet<string> matchWords = new();
 
-            if (lesson.IsGeneratedMathWordsQuestPlayed)
+            if (lessonProvider.IsGeneratedMathWordsQuestPlayed)
             {
                 return false;
             }
 
-            var selectWordQuests = lesson.SimpleQuestions.OfType<Vocabulary.QuestSelectWord>().ToList();
-            matchWords.AddRange(selectWordQuests.Select(q => q.CorrectWordFileName));
-            matchWords.AddRange(selectWordQuests.SelectMany(q => q.MixWordsFileNames));
+            HashSet<string> selectWordQuests = lessonProvider.Keys.ToHashSet();
+            matchWords.AddRange(selectWordQuests);
 
             if (matchWords.Count < 2)
             {
-                Debug.LogWarning($"matchWords not generated for lesson FileName: {lesson.FileName}, count select words {matchWords.Count}");
+                string lessonPath = string.Join("/", new List<string>{lessonProvider.Language.ToString(), "Vocabulary", lessonProvider.Section});
+                Debug.LogWarning($"matchWords not generated for lesson : {lessonPath}, count select words {matchWords.Count}");
                 return false;
             }
 
@@ -335,7 +336,7 @@ namespace Chang.FSM
                 : matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE).ToHashSet();
 
             matchWords.Shuffle();
-            matchWordsQuest.MatchWordsFileNames = matchWords.ToList();
+            questMatchWords.MatchWordsKeys = matchWords;
 
             return true;
         }

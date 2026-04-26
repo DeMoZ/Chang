@@ -1,13 +1,16 @@
-using System;
 using System.Collections.Generic;
 
-namespace Chang.Vocabulary
+namespace Chang.Core
 {
     /// <summary>
-    /// Stores the data for the current selected or generated lesson 
+    /// Book contanis lessons that determined by sections in Google Sheets page.
     /// </summary>
-    public class Lesson : ILesson, IDisposable
+    public class Lesson
     {
+        public Languages Language;
+        public string Section; 
+        public List<string> Keys;
+        
         /// <summary>
         /// selected name. Used to find config with the same name
         /// </summary>

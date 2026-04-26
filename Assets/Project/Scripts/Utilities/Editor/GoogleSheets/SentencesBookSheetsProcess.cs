@@ -59,7 +59,7 @@ namespace Chang.Utilities.GoogleSheets
             foreach (var sheetInfo in sheetsInfo)
             {
                 Debug.Log($"Sheet: {sheetInfo.Title}, type: {sheetInfo.Type}, language: {sheetInfo.Language}");
-                if (!Enum.TryParse(sheetInfo.Type, true, out QuestionType type))
+                if (!Enum.TryParse(sheetInfo.Type, true, out ChangTypes type))
                 {
                     Debug.LogError($"Sheet type is not recognised {sheetInfo.Type}");
                     continue;
@@ -81,7 +81,7 @@ namespace Chang.Utilities.GoogleSheets
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
         
                 SentencesBookSection currentSection = null;
-                SectionLesson currentLesson = null;
+                Lesson currentLesson = null;
         
                 foreach (var row in data)
                 {
@@ -96,8 +96,8 @@ namespace Chang.Utilities.GoogleSheets
                         {
                             Language = sheetInfo.Language,
                             Section = colB,
-                            TitleKey = $"{sheetInfo.Language}/{sheetInfo.Type}/{colB}",
-                            SectionLessons = new List<SectionLesson>()
+                            SectionKey = $"{sheetInfo.Language}/{sheetInfo.Type}/{colB}",
+                            SectionLessons = new List<Lesson>()
                         };
                         currentSheet.Sections.Add(currentSection);
                         currentLesson = null; // Reset current lesson when a new section starts
@@ -109,7 +109,7 @@ namespace Chang.Utilities.GoogleSheets
                     // start a new lesson
                     if (!string.IsNullOrEmpty(colB))
                     {
-                        currentLesson = new SectionLesson
+                        currentLesson = new Lesson
                         {
                             Language = sheetInfo.Language,
                             Section = currentSection.Section,
@@ -123,7 +123,7 @@ namespace Chang.Utilities.GoogleSheets
                     {
                         if (currentLesson == null)
                         {
-                            currentLesson = new SectionLesson { Keys = new List<string>() };
+                            currentLesson = new Lesson { Keys = new List<string>() };
                             currentSection.SectionLessons.Add(currentLesson);
                         }
                         currentLesson.Keys.Add(colC);

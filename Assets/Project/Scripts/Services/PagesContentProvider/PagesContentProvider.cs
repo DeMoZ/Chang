@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Chang;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -13,7 +14,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Debug = DMZ.DebugSystem.DMZLogger;
-using Chang.Vocabulary;
 
 namespace Project.Services.PagesContentProvider
 {
@@ -64,19 +64,19 @@ namespace Project.Services.PagesContentProvider
 
             HashSet<string> imageKeys = new();
             HashSet<string> soundKeys = new();
-            HashSet<string> configKeys = new();
+            HashSet<string> wordKeys = new();
 
             HashSet<string> totalKeys = new();
             foreach (IQuestion quest in questions)
             {
-                imageKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetTexturePath(k)));
-                configKeys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
-                soundKeys = GetSoundKeys(quest.GetSoundKeys().Select(k => k).ToHashSet()).ToHashSet();
+                imageKeys.AddRange(quest.GetSoundKeys.Select(k => _wordPathHelper.GetTexturePath(k)));
+                wordKeys.AddRange(quest.GetWordsKeys.Select(k => _wordPathHelper.GetConfigPath(k)));
+                soundKeys = GetSoundKeys(quest.GetSoundKeys.Select(k => k).ToHashSet()).ToHashSet();
             }
 
             totalKeys.UnionWith(imageKeys);
             totalKeys.UnionWith(soundKeys);
-            totalKeys.UnionWith(configKeys);
+            totalKeys.UnionWith(wordKeys);
 
             long totalToLoad = await GetDownloadSize(totalKeys, ct);
 
@@ -88,7 +88,7 @@ namespace Project.Services.PagesContentProvider
 
             Dictionary<string, IDisposableAsset> images = new();
             Dictionary<string, IDisposableAsset> sounds = new();
-            Dictionary<string, IDisposableAsset> configs = new();
+            Dictionary<string, IDisposableAsset> words = new();
 
             long currentToLoad = 0;
             long downloadSize = 0;
@@ -109,17 +109,17 @@ namespace Project.Services.PagesContentProvider
                     bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
             }
 
-            downloadSize = await GetDownloadSize(configKeys, ct);
+            downloadSize = await GetDownloadSize(wordKeys, ct);
             if (downloadSize > 0)
             {
                 currentToLoad += downloadSize;
-                configs = await Preload<PhraseConfig>(configKeys,
+                words = await Preload<PhraseConfig>(wordKeys,
                     bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
             }
 
             Merge(Content, images);
             Merge(Content, sounds);
-            Merge(Content, configs);
+            Merge(Content, words);
         }
 
         public async UniTask CacheContentAsync(string path, CancellationToken ct)
@@ -145,9 +145,9 @@ namespace Project.Services.PagesContentProvider
             LoadingUiModel loadingModel = new(LoadingElements.Animation);
             LoadingUiController loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
 
-            HashSet<string> configKeys = nextQuestion.GetConfigKeys();
-            HashSet<string> imageKeys = nextQuestion.GetImageKeys();
-            HashSet<string> soundKeys = GetSoundKeys(nextQuestion.GetSoundKeys().Select(k => k).ToHashSet()).ToHashSet();
+            HashSet<string> configKeys = nextQuestion.GetWordsKeys;
+            HashSet<string> imageKeys = nextQuestion.GetImageKeys;
+            HashSet<string> soundKeys = GetSoundKeys(nextQuestion.GetSoundKeys.Select(k => k).ToHashSet()).ToHashSet();
 
             foreach (string key in configKeys)
             {

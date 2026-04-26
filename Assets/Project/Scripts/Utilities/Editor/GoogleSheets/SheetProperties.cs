@@ -6,7 +6,7 @@ namespace Chang.Utilities.GoogleSheets
     public class SheetProperties
     {
         public Languages Language;
-        public QuestionType Type;
+        public ChangTypes Type;
         public string Title;
     }
 }

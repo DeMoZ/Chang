@@ -16,7 +16,7 @@ namespace Chang.UI
         [SerializeField] private ToggleGroup _toggleGroup;
         [SerializeField] private PlayStopButton _playStopBtn;
 
-        [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.SelectWord;
+        [ShowInInspector, ReadOnly] public override ChangTypes ScreenType { get; } = ChangTypes.SelectWord;
 
         private readonly List<CToggle> _mixWordToggles = new();
         

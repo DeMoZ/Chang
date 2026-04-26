@@ -10,7 +10,7 @@ namespace Chang
 {
     public abstract class QuestBase
     {
-        public QuestionType QuestionType { get; protected set; }
+        public ChangTypes QuestionType { get; protected set; }
 
         public string EditorInfo()
         {
@@ -26,7 +26,7 @@ namespace Chang
     {
         public QuestSelectWord()
         {
-            QuestionType = QuestionType.SelectWord;
+            QuestionType = ChangTypes.SelectWord;
         }
 
         [InlineEditor(Expanded = true)] public PhraseConfig CorrectWord;
@@ -51,7 +51,7 @@ namespace Chang
     {
         public QuestMatchWords()
         {
-            QuestionType = QuestionType.MatchWords;
+            QuestionType = ChangTypes.MatchWords;
         }
 
         public List<PhraseConfig> MatchWords;

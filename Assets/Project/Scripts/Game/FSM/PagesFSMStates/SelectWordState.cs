@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -11,7 +12,6 @@ using Popup;
 using Project.Services.PagesContentProvider;
 using UnityEngine;
 using Zenject;
-using Chang.Vocabulary;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
@@ -20,7 +20,7 @@ namespace Chang.FSM
     {
         public string Key { get; }
         public string Presentation { get; }
-        public QuestionType Type => QuestionType.SelectWord;
+        public ChangTypes Type => ChangTypes.SelectWord;
         public bool IsCorrect { get; }
         public object[] Info { get; }
 
@@ -33,7 +33,7 @@ namespace Chang.FSM
         }
     }
 
-    public class SelectWordState : ResultStateBase<QuestionType, PagesBus>
+    public class SelectWordState : ResultStateBase<ChangTypes, PagesBus>
     {
         private readonly IPagesContentProvider _pagesContentProvider;
 
@@ -49,9 +49,9 @@ namespace Chang.FSM
         private PhraseData _correctWord;
         private CancellationTokenSource _cts;
 
-        public override QuestionType Type => QuestionType.SelectWord;
+        public override ChangTypes Type => ChangTypes.SelectWord;
 
-        public SelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public SelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<ChangTypes> onStateResult) : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
         }
@@ -82,7 +82,7 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            IQuestion question = Bus.CurrentLesson.CurrentQuestion;
+            IQuestion question = Bus.LessonProvider.CurrentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 

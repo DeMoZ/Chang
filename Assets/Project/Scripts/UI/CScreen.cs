@@ -5,7 +5,7 @@ namespace Chang.UI
 {
     public abstract class CScreen : MonoBehaviour
     {
-        [ShowInInspector, ReadOnly] public virtual QuestionType ScreenType { get; }
+        [ShowInInspector, ReadOnly] public virtual ChangTypes ScreenType { get; }
 
         protected PagesSoundController PagesSoundController { get; private set; }
 

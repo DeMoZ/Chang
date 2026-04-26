@@ -46,7 +46,7 @@ namespace Chang.Profile
 
             foreach (var pair in log)
             {
-                if (pair.Value.QuestionType == QuestionType.None)
+                if (pair.Value.QuestionType == ChangTypes.None)
                 {
                     DMZLogger.LogWarning($"ValidateQuestion: QuestionType is None for {pair.Key}");
                     continue;

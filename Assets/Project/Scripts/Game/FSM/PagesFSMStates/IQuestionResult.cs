@@ -5,7 +5,7 @@ namespace Chang.FSM
         public string Key { get; }
         public string Presentation { get; }
         public bool IsCorrect { get; }
-        public QuestionType Type { get; }
+        public ChangTypes Type { get; }
         object[] Info { get; }
     }
 }

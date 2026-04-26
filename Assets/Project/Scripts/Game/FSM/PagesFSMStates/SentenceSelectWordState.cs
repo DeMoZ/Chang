@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Sentences;
 using Chang.Services;
@@ -19,7 +20,7 @@ namespace Chang.FSM
     {
         public string Key { get; }
         public string Presentation { get; }
-        public QuestionType Type => QuestionType.SentenceSelectWords;
+        public ChangTypes Type => ChangTypes.SentenceSelectWords;
         public bool IsCorrect { get; }
         public object[] Info { get; }
 
@@ -32,7 +33,7 @@ namespace Chang.FSM
         }
     }
 
-    public class SentenceSelectWordState : ResultStateBase<QuestionType, PagesBus>
+    public class SentenceSelectWordState : ResultStateBase<ChangTypes, PagesBus>
     {
         [Inject] private readonly SentenceSelectWordController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
@@ -49,9 +50,9 @@ namespace Chang.FSM
         private QuestSentenceSelectWordData _questionData;
         private SentenceSelectWords _sentenceQuestion;
 
-        public override QuestionType Type => QuestionType.SentenceSelectWords;
+        public override ChangTypes Type => ChangTypes.SentenceSelectWords;
 
-        public SentenceSelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public SentenceSelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<ChangTypes> onStateResult) : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
         }
@@ -79,7 +80,7 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            IQuestion question = Bus.CurrentLesson.CurrentQuestion;
+            IQuestion question = Bus.LessonProvider.CurrentQuestion;
             _sentenceQuestion = question as SentenceSelectWords;
 
             if (_sentenceQuestion == null)

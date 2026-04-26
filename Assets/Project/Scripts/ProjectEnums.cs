@@ -7,7 +7,7 @@ namespace Chang
         Female,
     }
 
-    public enum QuestionType
+    public enum ChangTypes
     {
         None,
         Vocabulary,

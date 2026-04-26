@@ -6,9 +6,9 @@ namespace Chang.Core
     {
         public Languages Language;
         public string Section;    // will use it as default translation
-        public string TitleKey; // Thai/Fruits
+        public string SectionKey; // Thai/SentencesBook/Fruits
         public string DefaultTranslation => Section;
-        public List<SectionLesson> SectionLessons;
+        public List<Lesson> SectionLessons;
         
         // Section	Fruits	
         //         Lesson1	Thai/Sentences/Market/I_want_to_buy_fruit

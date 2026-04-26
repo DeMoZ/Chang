@@ -18,7 +18,7 @@ namespace Chang.FSM
         }
     }
 
-    public class PlayResultState : ResultStateBase<QuestionType, PagesBus>
+    public class PlayResultState : ResultStateBase<ChangTypes, PagesBus>
     {
         [Inject] private readonly PlayResultController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
@@ -26,9 +26,9 @@ namespace Chang.FSM
         private List<PhraseData> _mixWords;
         private PhraseData _correctWord;
 
-        public override QuestionType Type => QuestionType.Result;
+        public override ChangTypes Type => ChangTypes.Result;
 
-        public PlayResultState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public PlayResultState(PagesBus bus, Action<ChangTypes> onStateResult) : base(bus, onStateResult)
         {
         }
 

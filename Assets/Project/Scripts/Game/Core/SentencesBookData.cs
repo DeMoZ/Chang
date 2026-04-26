@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace Chang.Core
 {
-    public class SentencesBookInfo : SerializedScriptableObject
+    public class SentencesBookData : SerializedScriptableObject
     {
         public Languages Language;
         public List<SentencesBookSection> Sections;

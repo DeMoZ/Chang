@@ -18,7 +18,7 @@ namespace Chang.UI
         [SerializeField] private ToggleGroup _displayTogglesGroup;
         [SerializeField] private ToggleGroup _mixTogglesGroup;
 
-        [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.SentenceSelectWords;
+        [ShowInInspector, ReadOnly] public override ChangTypes ScreenType { get; } = ChangTypes.SentenceSelectWords;
 
         private Action<int, int> OnToggleValueChanged;
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Profile;
 using Chang.Services;
 using Chang.GameBook;
@@ -239,7 +240,7 @@ namespace Chang.Vocabulary
                 lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
 
                 // _gameBus.CurrentVocabularyLesson = lesson;
-                _gameBus.CurrentLesson = lesson;
+                _gameBus.LessonProvider = lesson;
             }
 
             _mainScreenBus.IsLoading = false;
@@ -285,11 +286,11 @@ namespace Chang.Vocabulary
             {
                 switch (questLog.QuestionType)
                 {
-                    case QuestionType.SelectWord:
+                    case ChangTypes.SelectWord:
                         QuestSelectWord simpleQuest = new QuestSelectWord();
                         simpleQuest.CorrectWordFileName = questLog.FileName;
                         List<VocabularyQuestLog> words = repetitions
-                            .Where(r => r.QuestionType == QuestionType.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
+                            .Where(r => r.QuestionType == ChangTypes.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
                             .ToList();
 
                         words.Shuffle();
@@ -310,7 +311,7 @@ namespace Chang.Vocabulary
             lesson.SetSimpleQuestions(questions);
 
             // _gameBus.CurrentVocabularyLesson = lesson;
-            _gameBus.CurrentLesson = lesson;
+            _gameBus.LessonProvider = lesson;
             _mainScreenBus.IsLoading = false;
 
             _gameBus.GameType = GameType.Repetition;

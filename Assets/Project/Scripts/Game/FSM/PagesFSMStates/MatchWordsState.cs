@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -23,11 +24,11 @@ namespace Chang.FSM
 
         public string Key { get; } = string.Empty;
         public string Presentation { get; } = string.Empty;
-        public QuestionType Type => QuestionType.MatchWords;
+        public ChangTypes Type => ChangTypes.MatchWords;
         public bool IsCorrect => true;
     }
 
-    public class MatchWordsState : ResultStateBase<QuestionType, PagesBus>
+    public class MatchWordsState : ResultStateBase<ChangTypes, PagesBus>
     {
         private readonly IPagesContentProvider _pagesContentProvider;
 
@@ -45,9 +46,9 @@ namespace Chang.FSM
         private int _correctCount;
         private MatchWordsStateResult _result;
 
-        public override QuestionType Type => QuestionType.MatchWords;
+        public override ChangTypes Type => ChangTypes.MatchWords;
 
-        public MatchWordsState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult)
+        public MatchWordsState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<ChangTypes> onStateResult)
             : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
@@ -77,14 +78,14 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            IQuestion question = Bus.CurrentLesson.CurrentQuestion;
+            IQuestion question = Bus.LessonProvider.CurrentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 
             QuestMatchWordsData questionData = new QuestMatchWordsData(new List<PhraseData>());
             string path = string.Empty;
             
-            foreach (var fileName in question.GetConfigKeys())
+            foreach (var fileName in question.GetWordsKeys)
             {
                 path = _wordPathHelper.GetConfigPath(fileName);
                 var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);

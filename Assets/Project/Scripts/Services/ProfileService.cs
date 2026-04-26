@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Profile;
 using Chang.Services.DataProvider;
 using Cysharp.Threading.Tasks;
@@ -86,7 +87,7 @@ namespace Chang.Services
             throw new NotImplementedException();
         }
 
-        public void AddVocabularyLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
+        public void AddVocabularyLog(string key, string presentation, ChangTypes type, bool isCorrect, bool needIncrement = true)
         {
             Debug.Log($"Add vocabulary Log key: {key}, isCorrect {isCorrect}");
             Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
@@ -103,7 +104,7 @@ namespace Chang.Services
             questLog.AddLog(logUnit);
         }
 
-        public void AddSentenceLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
+        public void AddSentenceLog(string key, string presentation, ChangTypes type, bool isCorrect, bool needIncrement = true)
         {
             Debug.Log($"Add sentence Log key: {key}, isCorrect {isCorrect}");
             Dictionary<string, SentenceQuestLog> logs = _playerProfile.SentencesProgress.Log;
@@ -198,12 +199,12 @@ namespace Chang.Services
             }
         }
 
-        public void ReorderSentencesSection(Sentences.SectionData sectionData)
+        public void ReorderSentencesSection(Sentences.Deprecated.SectionData sectionData)
         {
-            Sentences.SectionData newSectionData = new Sentences.SectionData
+            Sentences.Deprecated.SectionData newSectionData = new Sentences.Deprecated.SectionData
             {
                 Section = sectionData.Section,
-                Lessons = new List<Sentences.LessonData>()
+                Lessons = new List<Sentences.Deprecated.LessonData>()
             };
 
             string key = ReorderedSectionKey(sectionData.Section);
@@ -221,7 +222,7 @@ namespace Chang.Services
                     quests.Add(questQueue.Dequeue());
                 }
 
-                var newLesson = new Sentences.LessonData
+                var newLesson = new Sentences.Deprecated.LessonData
                 {
                     SectionName = lesson.SectionName,
                     Questions = quests,
@@ -236,7 +237,7 @@ namespace Chang.Services
 
             int GetQuestMark(IQuestion quest)
             {
-                if (quest is Sentences.SentenceSelectWords selectWord)
+                if (quest is Sentences.Deprecated.SentenceSelectWords selectWord)
                 {
                     // return GetVocabularyMark(selectWord.CorrectWordFileName);
                     // todo chang implement sentences mark

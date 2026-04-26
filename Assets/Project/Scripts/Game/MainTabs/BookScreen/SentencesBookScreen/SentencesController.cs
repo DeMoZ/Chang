@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Services;
 using Chang.GameBook;
 using Chang.Profile;
@@ -20,7 +21,7 @@ namespace Chang.Sentences
         private readonly ProfileService _profileService;
         private readonly SentencesRepetitionService _repetitionService;
 
-        private Dictionary<string, LessonData> _lessons = new();
+        private Dictionary<string, Deprecated.LessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
         private Action _onLobbyExitState;
@@ -238,7 +239,7 @@ namespace Chang.Sentences
                 lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
 
                 // _gameBus.CurrentSentencesLesson = lesson;
-                _gameBus.CurrentLesson = lesson;
+                _gameBus.LessonProvider = lesson;
             }
 
             _mainScreenBus.IsLoading = false;

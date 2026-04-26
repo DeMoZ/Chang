@@ -44,23 +44,23 @@ namespace Chang.Utilities.GoogleSheets
                 string folderPath = System.IO.Path.GetDirectoryName(Path);
                 SpreadSheetUtilities.CreateFoldersRecursively(folderPath);
 
-                VocabularyBookInfo asset = ScriptableObject.CreateInstance<VocabularyBookInfo>();
+                VocabularyBookData asset = ScriptableObject.CreateInstance<VocabularyBookData>();
                 AssetDatabase.CreateAsset(asset, Path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 DMZLogger.Log($"[{methodName}] Created new BookInfo asset at path: {Path}");
             }
 
-            VocabularyBookInfo vocabularyBookInfo = AssetDatabase.LoadAssetAtPath<VocabularyBookInfo>(Path);
-            if (vocabularyBookInfo == null)
+            VocabularyBookData vocabularyBookData = AssetDatabase.LoadAssetAtPath<VocabularyBookData>(Path);
+            if (vocabularyBookData == null)
             {
                 DMZLogger.LogError($"[{methodName}] Failed to load BookInfo asset.");
             }
 
-            vocabularyBookInfo.Language = book.Language;
-            vocabularyBookInfo.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
+            vocabularyBookData.Language = book.Language;
+            vocabularyBookData.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
 
-            EditorUtility.SetDirty(vocabularyBookInfo);
+            EditorUtility.SetDirty(vocabularyBookData);
             DMZLogger.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

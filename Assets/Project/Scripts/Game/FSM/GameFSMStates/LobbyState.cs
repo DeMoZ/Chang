@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
-using Chang.Sentences;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
-using Newtonsoft.Json;
 using Popup;
-using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -22,7 +19,7 @@ namespace Chang.FSM
 
         public override StateType Type => StateType.Lobby;
         private Languages Language => _profileService.LearnLanguage;
-        private string GetPath(string key) => $"Assets/Project/Resources_Bundled/{Language}/{key}.json";
+        private string GetPath(string key) => $"Assets/Project/Resources_Bundled/{Language}/{key}.asset";
 
         [Inject] private readonly LobbyController _lobbyController;
         [Inject] private readonly AddressablesAssetManager _assetManager;
@@ -79,7 +76,7 @@ namespace Chang.FSM
         {
             string methodName = nameof(LoadVocabularyBookAsync);
             Debug.Log($"[{methodName}] Start");
-            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(VocabularyBookKey), ct);
+            DisposableAsset<VocabularyBookData> asset = await _assetManager.LoadAssetAsync<VocabularyBookData>(GetPath(VocabularyBookKey), ct);
 
             if (!asset.Item)
             {
@@ -87,15 +84,9 @@ namespace Chang.FSM
                 return;
             }
 
-            var settings = new JsonSerializerSettings
-            {
-                Converters = new List<JsonConverter> { new Vocabulary.VocabularyBookConverter() }
-            };
-
-            Bus.VocabularyBookData = JsonConvert.DeserializeObject<Vocabulary.VocabularyBookData>(asset.Item.text, settings);
-            Bus.VocabularyLessons = Bus.VocabularyBookData.Sections
-                .SelectMany(section => section.Lessons)
-                .ToDictionary(lesson => lesson.FileName);
+            Bus.VocabularyBookData = asset.Item;
+            // Bus.VocabularySections = Bus.VocabularyBookData.Sections
+            //     .ToDictionary(section => section.SectionKey, section => section);
 
             asset.Dispose();
 
@@ -105,51 +96,51 @@ namespace Chang.FSM
         private async UniTask LoadSentencesBookAsync(CancellationToken ct)
         {
             string methodName = nameof(LoadSentencesBookAsync);
-            Debug.Log($"[{methodName}] Start");
-            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(SentencesBookKey), ct);
-
-            if (!asset.Item)
-            {
-                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {GetPath(SentencesBookKey)}");
-                return;
-            }
-
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                Converters = new List<JsonConverter> { new Sentences.SentencesBookConverter() }
-            };
-
-            Bus.SentencesBookData = JsonConvert.DeserializeObject<Sentences.SentencesBookData>(asset.Item.text, settings);
-
-            // populate fileNames (keys)
-            // Thai.Lesson.First.Test.1
-            foreach (SectionData sectionData in Bus.SentencesBookData.Sections)
-            {
-                for (int i = 0; i < sectionData.Lessons.Count; i++)
-                {
-                    LessonData lesson = sectionData.Lessons[i];
-                    lesson.FileName = ProjectSharedLogic.SENTENCE_LESSON_KEY(Language.ToString(), sectionData.Section, i + 1);
-
-                    foreach (var question in lesson.Questions)
-                    {
-                        if (question is ISentenceQuestion sentenceQuestion)
-                        {
-                            sentenceQuestion.Language = Language;
-                            sentenceQuestion.Section = sectionData.Section;
-                        }
-                        else
-                        {
-                            throw new Exception($"[{methodName}] Unknown question type in SentencesBookData: {question.GetType()}");
-                        }
-                    }
-                }
-            }
-
-            Bus.SentencesLessons = Bus.SentencesBookData.Sections
-                .SelectMany(section => section.Lessons)
-                .ToDictionary(lesson => lesson.FileName);
-
-            asset.Dispose();
+            // Debug.Log($"[{methodName}] Start");
+            // DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(SentencesBookKey), ct);
+            //
+            // if (!asset.Item)
+            // {
+            //     Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {GetPath(SentencesBookKey)}");
+            //     return;
+            // }
+            //
+            // JsonSerializerSettings settings = new JsonSerializerSettings
+            // {
+            //     Converters = new List<JsonConverter> { new Sentences.SentencesBookConverter() }
+            // };
+            //
+            // Bus.SentencesBookData = JsonConvert.DeserializeObject<Sentences.SentencesBookData>(asset.Item.text, settings);
+            //
+            // // populate fileNames (keys)
+            // // Thai.Lesson.First.Test.1
+            // foreach (SectionData sectionData in Bus.SentencesBookData.Sections)
+            // {
+            //     for (int i = 0; i < sectionData.Lessons.Count; i++)
+            //     {
+            //         LessonData lesson = sectionData.Lessons[i];
+            //         lesson.FileName = ProjectSharedLogic.SENTENCE_LESSON_KEY(Language.ToString(), sectionData.Section, i + 1);
+            //
+            //         foreach (var question in lesson.Questions)
+            //         {
+            //             if (question is ISentenceQuestion sentenceQuestion)
+            //             {
+            //                 sentenceQuestion.Language = Language;
+            //                 sentenceQuestion.Section = sectionData.Section;
+            //             }
+            //             else
+            //             {
+            //                 throw new Exception($"[{methodName}] Unknown question type in SentencesBookData: {question.GetType()}");
+            //             }
+            //         }
+            //     }
+            // }
+            //
+            // Bus.SentencesLessons = Bus.SentencesBookData.Sections
+            //     .SelectMany(section => section.Lessons)
+            //     .ToDictionary(lesson => lesson.FileName);
+            //
+            // asset.Dispose();
 
             Debug.Log($"[{methodName}] End");
         }

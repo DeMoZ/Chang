@@ -13,7 +13,7 @@ namespace Chang.Profile
         public string Section { get; set; }
         public string FileName { get; set; } // key: "Thai/Market/By_This_Watermelon" is not the file name but log key
         public string Presentation { get; set; }
-        public QuestionType QuestionType { get; set; }
+        public ChangTypes QuestionType { get; set; }
         public Queue<LogUnit> Log { get; set; }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Chang.Profile
         /// </summary>
         public DateTime UtcTime { get; set; }
 
-        public SentenceQuestLog(string key, string presentation, QuestionType type)
+        public SentenceQuestLog(string key, string presentation, ChangTypes type)
         {
             FileName = key;
             Presentation = presentation;
@@ -52,7 +52,7 @@ namespace Chang.Profile
         public SentenceQuestLog(
             string fileName,
             string presentation,
-            QuestionType type,
+            ChangTypes type,
             Languages language,
             string section,
             int mark,

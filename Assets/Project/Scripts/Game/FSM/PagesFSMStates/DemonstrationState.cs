@@ -1,8 +1,10 @@
 using System;
 using System.IO;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
+using Chang.Vocabulary.Deprecated;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
@@ -10,7 +12,6 @@ using Project.Services.PagesContentProvider;
 using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
-using Chang.Vocabulary;
 
 namespace Chang.FSM
 {
@@ -18,7 +19,7 @@ namespace Chang.FSM
     {
         public string Key { get; }
         public string Presentation { get; }
-        public QuestionType Type => QuestionType.DemonstrationWord;
+        public ChangTypes Type => ChangTypes.DemonstrationWord;
         public bool IsCorrect => true;
         public object[] Info { get; }
 
@@ -30,7 +31,7 @@ namespace Chang.FSM
         }
     }
 
-    public class DemonstrationState : ResultStateBase<QuestionType, PagesBus>
+    public class DemonstrationState : ResultStateBase<ChangTypes, PagesBus>
     {
         private readonly IPagesContentProvider _pagesContentProvider;
 
@@ -45,9 +46,9 @@ namespace Chang.FSM
         private PhraseData _correctWord;
         private CancellationTokenSource _cts;
 
-        public override QuestionType Type => QuestionType.DemonstrationWord;
+        public override ChangTypes Type => ChangTypes.DemonstrationWord;
 
-        public DemonstrationState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult)
+        public DemonstrationState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<ChangTypes> onStateResult)
             : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
@@ -74,7 +75,7 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            IQuestion question = Bus.CurrentLesson.CurrentQuestion;
+            IQuestion question = Bus.LessonProvider.CurrentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 

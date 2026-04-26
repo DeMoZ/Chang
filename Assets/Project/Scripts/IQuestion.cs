@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace Chang
+namespace Chang.Deprecated
 {
     public interface IQuestion
     {
-        QuestionType QuestionType { get; }
+        ChangTypes QuestionType { get; }
         HashSet<string> GetConfigKeys();
         HashSet<string> GetSoundKeys();
         HashSet<string> GetImageKeys();
