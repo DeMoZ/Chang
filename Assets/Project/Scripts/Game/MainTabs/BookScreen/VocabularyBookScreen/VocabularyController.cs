@@ -64,11 +64,12 @@ namespace Chang.Vocabulary
             _sectionBlocks.Clear();
             _lessons.Clear();
             _view.Clear();
+            
 
             for (int i = 0; i < _gameBus.VocabularyBookData.Sections.Count; i++)
             {
                 Color baseColor = _view.GetNextColor(i);
-                SectionData sectionData = _gameBus.VocabularyBookData.Sections[i];
+                VocabularyBookSection sectionData = _gameBus.VocabularyBookData.Sections[i];
 
                 SectionBlock sectionBlock = _view.InstantiateSectionBlock();
                 sectionBlock.SetBaseColor(baseColor);
@@ -82,9 +83,8 @@ namespace Chang.Vocabulary
                 sectionBlock.SectionView.name = $"Section_{sectionData.Section}";
                 sectionBlock.SectionView.SetBaseColor(baseColor);
 
-                await PopulateSectionAsync(sectionData, sectionBlock, ct);
+                // await PopulateSectionAsync(sectionData, sectionBlock, ct);
             }
-
             await UniTask.Yield();
 
             SetScrollPosition();
@@ -97,6 +97,8 @@ namespace Chang.Vocabulary
         
         private Color GetLessonColor(LessonData lessonData)
         {
+            throw new NotImplementedException();
+            /*
             float sum = 0;
 
             foreach (IQuestion question in lessonData.Questions)
@@ -113,10 +115,13 @@ namespace Chang.Vocabulary
 
             // Debug.Log($"GetLessonColor for {lessonData.Section}, {lessonData.Name} sum: {sum}");
             return _view.GetLessonColor(sum);
+            */
         }
 
         private void OnSectionSortClick(string key)
         {
+            throw new NotImplementedException();
+            /*
             Debug.Log($"OnSectionSortClick key: {key}");
             SectionData sectionData = _gameBus.VocabularyBookData.Sections.Find(s => s.Section == key);
 
@@ -140,10 +145,13 @@ namespace Chang.Vocabulary
             }
 
             PopulateSectionAsync(sectionData, sectionBlock, _cts.Token).Forget();
+            */
         }
 
         private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
         {
+            throw new NotImplementedException();
+            /*
             List<VocabularyQuestLog> repetitions = await _repetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
 
@@ -185,6 +193,7 @@ namespace Chang.Vocabulary
                 Color color = GetLessonColor(sectionData.Lessons[m]);
                 lessonItem.SetColor(color);
             }
+            */
         }
 
         private void OnSectionRepetitionClick(string key)
@@ -215,6 +224,8 @@ namespace Chang.Vocabulary
         
         private async UniTaskVoid OnLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
         {
+            throw new NotImplementedException();
+            /*
             if (_mainScreenBus.IsLoading)
                 return;
 
@@ -247,6 +258,7 @@ namespace Chang.Vocabulary
 
             _gameBus.GameType = GameType.Learn;
             _onLobbyExitState?.Invoke();
+            */
         }
 
         private async UniTaskVoid OnSectionRepeatClickedAsync(string section, CancellationToken ct)
@@ -271,6 +283,8 @@ namespace Chang.Vocabulary
 
         private async UniTaskVoid MakeRepetitionAsync(List<VocabularyQuestLog> repetitions, CancellationToken ct)
         {
+            throw new NotImplementedException();
+            /*
             if (repetitions.Count < ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT)
             {
                 Debug.LogWarning("Not enough logs for general repetition");
@@ -316,6 +330,7 @@ namespace Chang.Vocabulary
 
             _gameBus.GameType = GameType.Repetition;
             _onLobbyExitState?.Invoke();
+            */
         }
     }
 }

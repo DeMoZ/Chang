@@ -51,13 +51,15 @@ namespace Chang.FSM
             base.Enter();
 
             _cts = new CancellationTokenSource();
-            _pagesContentProvider = new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager, _profileService);
+            _pagesContentProvider =
+                new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager, _profileService);
             EnterAsync(_cts.Token).Forget();
         }
 
         private async UniTask EnterAsync(CancellationToken ct)
         {
-            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent | LoadingElements.Bytes);
+            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar |
+                                                  LoadingElements.Percent | LoadingElements.Bytes);
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
             loadingUiController.SetPercentsAndBytes(0, 0);
 
@@ -145,7 +147,7 @@ namespace Chang.FSM
                     OnCheckSentenceSelectWordsAsync(ct).Forget();
                     break;
                 default:
-                   throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -158,7 +160,8 @@ namespace Chang.FSM
             var answer = string.Join(" / ", _pagesBus.QuestionResult.Info);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
             var needIncrement = !(bool)_pagesBus.QuestionResult.Info[1];
-            _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation, ChangTypes.SelectWord, isCorrect,
+            _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation,
+                ChangTypes.SelectWord, isCorrect,
                 needIncrement);
 
             if (!isCorrect)
@@ -189,7 +192,8 @@ namespace Chang.FSM
 
             foreach (SelectWordResult result in stateResult.Results)
             {
-                _profileService.AddVocabularyLog(result.Key, result.Presentation, ChangTypes.SelectWord, result.IsCorrect, false);
+                _profileService.AddVocabularyLog(result.Key, result.Presentation, ChangTypes.SelectWord,
+                    result.IsCorrect, false);
                 _pagesBus.LessonLog.Add(result);
             }
 
@@ -213,24 +217,26 @@ namespace Chang.FSM
             }
 
             bool needIncrement = !(bool)_pagesBus.QuestionResult.Info[1]; // whether hint was used
-            
+
             if (stateResult.Info[2] is List<SelectWordResult> vocabularyResults)
             {
                 foreach (SelectWordResult vocabularyResult in vocabularyResults)
                 {
-                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation, ChangTypes.SelectWord, vocabularyResult.IsCorrect, needIncrement);
+                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation,
+                        ChangTypes.SelectWord, vocabularyResult.IsCorrect, needIncrement);
                     _pagesBus.LessonLog.Add(vocabularyResult);
                 }
             }
-            
-            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, ChangTypes.SentenceSelectWords, stateResult.IsCorrect, needIncrement);
+
+            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, ChangTypes.SentenceSelectWords,
+                stateResult.IsCorrect, needIncrement);
 
             if (!isCorrect)
             {
                 _pagesBus.LessonProvider.EnqueueCurrentQuestion();
             }
 
-            ContinueButtonInfo info = new ()
+            ContinueButtonInfo info = new()
             {
                 IsCorrect = isCorrect,
                 InfoText = (string)_pagesBus.QuestionResult.Info[0]
@@ -266,7 +272,9 @@ namespace Chang.FSM
             {
                 if (TryGenerateQuestMatchWordsData(lessonProvider, out var matchWordsQuest))
                 {
+                    /*
                     lessonProvider.AddQuestion(matchWordsQuest);
+                    */
                     lessonProvider.IsGeneratedMathWordsQuestPlayed = true;
                 }
             }
@@ -313,6 +321,7 @@ namespace Chang.FSM
 
         private bool TryGenerateQuestMatchWordsData(ILessonProvider lessonProvider, out QuestMatchWords questMatchWords)
         {
+            throw new NotImplementedException();
             questMatchWords = new QuestMatchWords();
             HashSet<string> matchWords = new();
 
@@ -321,6 +330,7 @@ namespace Chang.FSM
                 return false;
             }
 
+            /*
             HashSet<string> selectWordQuests = lessonProvider.Keys.ToHashSet();
             matchWords.AddRange(selectWordQuests);
 
@@ -337,7 +347,7 @@ namespace Chang.FSM
 
             matchWords.Shuffle();
             questMatchWords.MatchWordsKeys = matchWords;
-
+*/
             return true;
         }
 

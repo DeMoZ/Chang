@@ -4,7 +4,6 @@ using System.Threading;
 using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
-using Chang.Vocabulary.Deprecated;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
@@ -79,7 +78,8 @@ namespace Chang.FSM
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 
-            var path = _wordPathHelper.GetConfigPath(((QuestDemonstrationWord)question).CorrectWordFileName);
+            // var path = _wordPathHelper.GetConfigPath(((QuestDemonstrationWord)question).CorrectWordFileName);
+            string path = string.Empty;
             var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
             if (!asset)
@@ -90,7 +90,8 @@ namespace Chang.FSM
             QuestDemonstrateWordData questionData = new QuestDemonstrateWordData(asset.PhraseData);
             _correctWord = questionData.CorrectWord;
 
-            string spritePath = _wordPathHelper.GetTexturePath(((QuestDemonstrationWord)question).CorrectWordFileName);
+            // string spritePath = _wordPathHelper.GetTexturePath(((QuestDemonstrationWord)question).CorrectWordFileName);
+            string spritePath = string.Empty;
             var sprite = _pagesContentProvider.GetCachedSprite(spritePath);
 
             _stateController.Init(_correctWord, sprite, OnToggleValueChanged, OnClickPlaySound);

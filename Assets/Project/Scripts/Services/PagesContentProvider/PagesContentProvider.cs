@@ -70,7 +70,7 @@ namespace Project.Services.PagesContentProvider
             foreach (IQuestion quest in questions)
             {
                 imageKeys.AddRange(quest.GetSoundKeys.Select(k => _wordPathHelper.GetTexturePath(k)));
-                wordKeys.AddRange(quest.GetWordsKeys.Select(k => _wordPathHelper.GetConfigPath(k)));
+                // wordKeys.AddRange(quest.GetWordsKeys.Select(k => _wordPathHelper.GetConfigPath(k)));
                 soundKeys = GetSoundKeys(quest.GetSoundKeys.Select(k => k).ToHashSet()).ToHashSet();
             }
 
@@ -131,7 +131,7 @@ namespace Project.Services.PagesContentProvider
                     return;
                 }
             }
-            
+
             DisposableAsset<PhraseConfig> asset = await _assetManager.LoadAssetAsync<PhraseConfig>(path, ct);
 
             if (asset.Item != null)
@@ -139,7 +139,7 @@ namespace Project.Services.PagesContentProvider
                 Content[path] = asset;
             }
         }
-        
+
         public async UniTask GetContentAsync(IQuestion nextQuestion, CancellationToken ct)
         {
             LoadingUiModel loadingModel = new(LoadingElements.Animation);
@@ -151,8 +151,8 @@ namespace Project.Services.PagesContentProvider
 
             foreach (string key in configKeys)
             {
-                string path = _wordPathHelper.GetConfigPath(key);
-
+                // string path = _wordPathHelper.GetConfigPath(key);
+                string path = string.Empty;
                 if (Content.TryGetValue(path, out var configAsset))
                 {
                     if (configAsset != null)
@@ -348,8 +348,10 @@ namespace Project.Services.PagesContentProvider
 
         private IEnumerable<string> GetNativeSoundKeys(IEnumerable<string> soundKeys)
         {
-            return new List<string>(); // todo chang disable native sound for now. Delete row on native sounds assets ready
-            return soundKeys.Select(key => _wordPathHelper.GetNativeSoundKey(key, _profileService.ProfileData.NativeLanguage));
+            return
+                new List<string>(); // todo chang disable native sound for now. Delete row on native sounds assets ready
+            return soundKeys.Select(key =>
+                _wordPathHelper.GetNativeSoundKey(key, _profileService.ProfileData.NativeLanguage));
         }
     }
 }

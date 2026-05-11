@@ -153,6 +153,8 @@ namespace Chang.Services
 
         public void ReorderVocabularySection(Vocabulary.SectionData sectionData)
         {
+            throw new NotImplementedException();
+            /*
             Vocabulary.SectionData newSectionData = new Vocabulary.SectionData
             {
                 Section = sectionData.Section,
@@ -185,9 +187,9 @@ namespace Chang.Services
             }
 
             _playerProfile.AddReorderVocabularySection(key, newSectionData);
-
+*/
             return;
-
+/*
             int GetQuestMark(IQuestion quest)
             {
                 if (quest is Vocabulary.QuestSelectWord selectWord)
@@ -197,14 +199,17 @@ namespace Chang.Services
 
                 throw new NotImplementedException($"Question type {quest.QuestionType} is not implemented");
             }
+            */
         }
 
-        public void ReorderSentencesSection(Sentences.Deprecated.SectionData sectionData)
+        public void ReorderSentencesSection(Sentences.SectionData sectionData)
         {
-            Sentences.Deprecated.SectionData newSectionData = new Sentences.Deprecated.SectionData
+            throw new NotImplementedException();
+            /*
+            Sentences.SectionData newSectionData = new Sentences.SectionData
             {
                 Section = sectionData.Section,
-                Lessons = new List<Sentences.Deprecated.LessonData>()
+                Lessons = new List<Sentences.LessonData>()
             };
 
             string key = ReorderedSectionKey(sectionData.Section);
@@ -222,7 +227,7 @@ namespace Chang.Services
                     quests.Add(questQueue.Dequeue());
                 }
 
-                var newLesson = new Sentences.Deprecated.LessonData
+                var newLesson = new Sentences.LessonData
                 {
                     SectionName = lesson.SectionName,
                     Questions = quests,
@@ -237,7 +242,7 @@ namespace Chang.Services
 
             int GetQuestMark(IQuestion quest)
             {
-                if (quest is Sentences.Deprecated.SentenceSelectWords selectWord)
+                if (quest is Sentences.SentenceSelectWords selectWord)
                 {
                     // return GetVocabularyMark(selectWord.CorrectWordFileName);
                     // todo chang implement sentences mark
@@ -246,6 +251,7 @@ namespace Chang.Services
 
                 throw new NotImplementedException($"Question type {quest.QuestionType} is not implemented");
             }
+            */
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Sirenix.OdinInspector;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 /// <summary>
@@ -8,6 +7,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 /// </summary>
 namespace Chang
 {
+    [System.Serializable]
     public abstract class QuestBase
     {
         public ChangTypes QuestionType { get; protected set; }
@@ -22,6 +22,7 @@ namespace Chang
         protected abstract string GetEditorInfo();
     }
 
+    [System.Serializable]
     public class QuestSelectWord : QuestBase
     {
         public QuestSelectWord()
@@ -29,8 +30,10 @@ namespace Chang
             QuestionType = ChangTypes.SelectWord;
         }
 
-        [InlineEditor(Expanded = true)] public PhraseConfig CorrectWord;
+        public PhraseConfig CorrectWord;
         public List<PhraseConfig> MixWords;
+        public string CorrectWordFileName { get; set; }
+        public List<string> MixWordsFileNames { get; set; }
 
         public override QuestDataBase GetQuestData()
         {
@@ -47,6 +50,7 @@ namespace Chang
         }
     }
 
+    [System.Serializable]
     public class QuestMatchWords : QuestBase
     {
         public QuestMatchWords()

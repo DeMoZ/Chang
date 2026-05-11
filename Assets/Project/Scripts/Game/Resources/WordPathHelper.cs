@@ -4,16 +4,16 @@ namespace Chang.Resources
 {
     public class WordPathHelper
     {
-        public string GetConfigPath(string key)
-        {
-            // key = Thai/Words/Fruits/Coconut
-            // result Assets/Project/Resources_Bundled/Thai/Words/Fruits/Coconut.asset
-            string path = Path.Combine(
-                AssetPaths.Addressables.Root,
-                $"{key}.asset");
-
-            return NormalizePath(path);
-        }
+        // public string GetConfigPath(string key)
+        // {
+        //     // key = Thai/Words/Fruits/Coconut
+        //     // result Assets/Project/Resources_Bundled/Thai/Words/Fruits/Coconut.asset
+        //     string path = Path.Combine(
+        //         AssetPaths.Addressables.Root,
+        //         $"{key}.asset");
+        //
+        //     return NormalizePath(path);
+        // }
 
         public string GetSoundPath(string key)
         {

@@ -21,7 +21,7 @@ namespace Chang.Sentences
         private readonly ProfileService _profileService;
         private readonly SentencesRepetitionService _repetitionService;
 
-        private Dictionary<string, Deprecated.LessonData> _lessons = new();
+        private Dictionary<string, LessonData> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
         private Action _onLobbyExitState;
@@ -61,6 +61,8 @@ namespace Chang.Sentences
 
         public async UniTask SetAsync(CancellationToken ct)
         {
+            throw new System.NotImplementedException();
+            /*
             _sectionBlocks.Clear();
             _lessons.Clear();
             _view.Clear();
@@ -88,6 +90,7 @@ namespace Chang.Sentences
             await UniTask.Yield();
 
             SetScrollPosition();
+            */
         }
 
         public void OnGeneralRepeatClicked()
@@ -97,6 +100,8 @@ namespace Chang.Sentences
 
         private Color GetLessonColor(LessonData lessonData)
         {
+            throw new NotImplementedException();
+            /*
             float sum = 0;
 
             foreach (IQuestion question in lessonData.Questions)
@@ -107,15 +112,18 @@ namespace Chang.Sentences
                 }
                 else
                 {
-                    throw new NotImplementedException($"Question type {question.QuestionType} is not implemented");
+                    throw new NotImplementedException($"Question type {question.Type} is not implemented");
                 }
             }
 
             return _view.GetLessonColor(sum);
+            */
         }
 
         private void OnSectionSortClick(string key)
         {
+            throw new System.NotImplementedException();
+            /*
             Debug.Log($"OnSectionSortClick key: {key}");
             SectionData sectionData = _gameBus.SentencesBookData.Sections.Find(s => s.Section == key);
 
@@ -139,10 +147,13 @@ namespace Chang.Sentences
             }
 
             PopulateSectionAsync(sectionData, sectionBlock, _cts.Token).Forget();
+            */
         }
 
         private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
         {
+            throw new System.NotImplementedException();
+            /*
             List<SentenceQuestLog> repetitions = await _repetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
 
@@ -184,6 +195,7 @@ namespace Chang.Sentences
                 Color color = GetLessonColor(sectionData.Lessons[m]);
                 lessonItem.SetColor(color);
             }
+            */
         }
 
         private void OnSectionRepetitionClick(string key)
@@ -213,7 +225,7 @@ namespace Chang.Sentences
         }
 
         private async UniTaskVoid OnLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
-        {
+        {/*
             if (_mainScreenBus.IsLoading)
                 return;
 
@@ -246,6 +258,7 @@ namespace Chang.Sentences
 
             _gameBus.GameType = GameType.Learn;
             _onLobbyExitState?.Invoke();
+            */
         }
 
         private async UniTaskVoid OnSectionRepeatClickedAsync(string section, CancellationToken ct)

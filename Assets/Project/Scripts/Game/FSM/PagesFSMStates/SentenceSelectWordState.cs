@@ -158,9 +158,9 @@ namespace Chang.FSM
                 {
                     string path = string.Empty;
 
-                    path = string.IsNullOrEmpty(fileName)
-                        ? AssetPaths.Addressables.EmptyWordPlaceHolderPath
-                        : _wordPathHelper.GetConfigPath(fileName);
+                    // path = string.IsNullOrEmpty(fileName)
+                    //     ? AssetPaths.Addressables.EmptyWordPlaceHolderPath
+                    //     : _wordPathHelper.GetConfigPath(fileName);
 
                     PhraseConfig asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 

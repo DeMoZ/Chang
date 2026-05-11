@@ -23,4 +23,35 @@ namespace Chang.Core
         public HashSet<string> GetImageKeys => new();
         public HashSet<string> GetNeedDemonstrationKeys => new(MatchWordsKeys);
     }
+    
+    public class QuestSelectWord : IQuestion
+    {
+        public ChangTypes Type => ChangTypes.MatchWords;
+
+        public HashSet<string> MatchWordsKeys;
+
+        public HashSet<string> GetWordsKeys => new(MatchWordsKeys);
+        public HashSet<string> GetSoundKeys => new(MatchWordsKeys);
+        public HashSet<string> GetImageKeys => new();
+        public HashSet<string> GetNeedDemonstrationKeys => new(MatchWordsKeys);
+    }
+
+    public class SentenceSelectWords : IQuestion
+    {
+        public ChangTypes Type => ChangTypes.MatchWords;
+
+        public HashSet<string> MatchWordsKeys;
+
+        public HashSet<string> GetWordsKeys => new(MatchWordsKeys);
+        public HashSet<string> GetSoundKeys => new(MatchWordsKeys);
+        public HashSet<string> GetImageKeys => new();
+        public HashSet<string> GetNeedDemonstrationKeys => new(MatchWordsKeys);
+        public string LocalizationKey { get; set; }
+        public string DefaultTranslation { get; set; }
+        public string ImageFileName { get; set; }
+        public List<string> CompareWordsFileNames { get; set; }
+        public List<string> DisplayWordsFileNames { get; set; }
+        public List<string> MixWordsFileNames { get; set; }
+        public string LogKey { get; set; }
+    }
 }

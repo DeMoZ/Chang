@@ -87,7 +87,8 @@ namespace Chang.FSM
             
             foreach (var fileName in question.GetWordsKeys)
             {
-                path = _wordPathHelper.GetConfigPath(fileName);
+                // path = _wordPathHelper.GetConfigPath(fileName);
+                path = string.Empty;
                 var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
                 if (!asset)

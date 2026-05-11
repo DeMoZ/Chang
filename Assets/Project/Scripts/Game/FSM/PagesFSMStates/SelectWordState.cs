@@ -86,7 +86,7 @@ namespace Chang.FSM
 
             await _pagesContentProvider.GetContentAsync(question, ct);
 
-            QuestSelectWordData questionData = GetQuestionData((Vocabulary.QuestSelectWord)question);
+            QuestSelectWordData questionData = GetQuestionData((QuestSelectWord)question);
             _correctWord = questionData.CorrectWord;
             _mixWords ??= new List<PhraseData>();
             _mixWords.Clear();
@@ -105,7 +105,7 @@ namespace Chang.FSM
                 mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
             }
 
-            string spritePath = _wordPathHelper.GetTexturePath(((Vocabulary.QuestSelectWord)question).CorrectWordFileName);
+            string spritePath = _wordPathHelper.GetTexturePath(((QuestSelectWord)question).CorrectWordFileName);
             Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
 
             _stateController.Init(isQuestInTranslation, _correctWord, sprite, _mixWords, OnToggleValueChanged, () => OnClickPlaySound(!isQuestInTranslation));
@@ -114,9 +114,10 @@ namespace Chang.FSM
             OnClickPlaySound(!isQuestInTranslation);
         }
 
-        private QuestSelectWordData GetQuestionData(Vocabulary.QuestSelectWord selectWord)
+        private QuestSelectWordData GetQuestionData(QuestSelectWord selectWord)
         {
-            var path = _wordPathHelper.GetConfigPath(selectWord.CorrectWordFileName);
+            // var path = _wordPathHelper.GetConfigPath(selectWord.CorrectWordFileName);
+            string path = string.Empty;
             var config = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
             if (!config)
@@ -138,7 +139,8 @@ namespace Chang.FSM
             var mixWords = selectWord.MixWordsFileNames.Take(mixWordsAmount);
             foreach (var fileName in mixWords)
             {
-                path = _wordPathHelper.GetConfigPath(fileName);
+                // path = _wordPathHelper.GetConfigPath(fileName);
+                path = string.Empty;
                 var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
                 if (asset)

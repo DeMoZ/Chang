@@ -36,7 +36,7 @@ namespace Chang.Profile
             ReorderedVocabularySections[key] = sectionData;
         }
 
-        public void AddReorderSentencesSection(string key, Sentences.Deprecated.SectionData sectionData)
+        public void AddReorderSentencesSection(string key, Sentences.SectionData sectionData)
         {
             ReorderedSentencesSections[key] = sectionData;
         }
