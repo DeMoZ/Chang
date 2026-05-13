@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Chang.Core;
 
 namespace Chang.Profile
 {
@@ -13,7 +14,7 @@ namespace Chang.Profile
         /// <summary>
         /// key Thai/Fruits, value section
         /// </summary>
-        public Dictionary<string, Vocabulary.SectionData> ReorderedVocabularySections { get; } = new();
+        public Dictionary<string, VocabularyBookSection> ReorderedVocabularySections { get; } = new();
 
         public Dictionary<string, Sentences.SectionData> ReorderedSentencesSections { get; } = new();
 
@@ -31,7 +32,7 @@ namespace Chang.Profile
         {
         }
 
-        public void AddReorderVocabularySection(string key, Vocabulary.SectionData sectionData)
+        public void AddReorderVocabularySection(string key, VocabularyBookSection sectionData)
         {
             ReorderedVocabularySections[key] = sectionData;
         }

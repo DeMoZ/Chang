@@ -18,7 +18,7 @@ namespace Chang.Utilities.GoogleSheets
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
         ///</summary>
-        [MenuItem("Chang/Utilities/Create Sentences JSON", false, 2)]
+        [MenuItem("Chang/Utilities/Create Sentences config", false, 2)]
         public static async UniTaskVoid ReadAsync()
         {
             string methodName = nameof(ReadAsync);
@@ -61,7 +61,7 @@ namespace Chang.Utilities.GoogleSheets
             sentenceInfo.Sentences = book.Sheets.SelectMany(sheet => sheet.Sentences).ToList();
 
             EditorUtility.SetDirty(sentenceInfo);
-            Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");
+            Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done --- path: {Path}");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

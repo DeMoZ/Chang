@@ -21,7 +21,7 @@ namespace Chang.Vocabulary
         private readonly ProfileService _profileService;
         private readonly VocabularyRepetitionService _repetitionService;
 
-        private Dictionary<string, LessonData> _lessons = new();
+        private Dictionary<string, Lesson> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
         private Action _onLobbyExitState;
@@ -83,7 +83,7 @@ namespace Chang.Vocabulary
                 sectionBlock.SectionView.name = $"Section_{sectionData.Section}";
                 sectionBlock.SectionView.SetBaseColor(baseColor);
 
-                // await PopulateSectionAsync(sectionData, sectionBlock, ct);
+                await PopulateSectionAsync(sectionData, sectionBlock, ct);
             }
             await UniTask.Yield();
 
@@ -95,10 +95,8 @@ namespace Chang.Vocabulary
             OnGeneralRepeatClickedAsync(_cts.Token).Forget();
         }
         
-        private Color GetLessonColor(LessonData lessonData)
+        private Color GetLessonColor(Lesson lessonData)
         {
-            throw new NotImplementedException();
-            /*
             float sum = 0;
 
             foreach (IQuestion question in lessonData.Questions)
@@ -109,13 +107,12 @@ namespace Chang.Vocabulary
                 }
                 else
                 {
-                    throw new NotImplementedException($"Question type {question.QuestionType} is not implemented");
+                    throw new NotImplementedException($"Question type {question.Type} is not implemented");
                 }
             }
 
             // Debug.Log($"GetLessonColor for {lessonData.Section}, {lessonData.Name} sum: {sum}");
             return _view.GetLessonColor(sum);
-            */
         }
 
         private void OnSectionSortClick(string key)
@@ -148,10 +145,9 @@ namespace Chang.Vocabulary
             */
         }
 
-        private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
+        private async UniTask PopulateSectionAsync(VocabularyBookSection sectionData, SectionBlock sectionBlock, CancellationToken ct)
         {
-            throw new NotImplementedException();
-            /*
+            
             List<VocabularyQuestLog> repetitions = await _repetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
 
@@ -164,11 +160,11 @@ namespace Chang.Vocabulary
 
             sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
 
-            if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey, out SectionData reorderedSection))
+            if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey, out VocabularyBookSection reorderedSection))
             {
                 sectionData = reorderedSection;
             }
-
+            
             RectTransform row = null;
             int count = -1;
             for (int m = 0; m < sectionData.Lessons.Count; m++)
@@ -193,7 +189,6 @@ namespace Chang.Vocabulary
                 Color color = GetLessonColor(sectionData.Lessons[m]);
                 lessonItem.SetColor(color);
             }
-            */
         }
 
         private void OnSectionRepetitionClick(string key)

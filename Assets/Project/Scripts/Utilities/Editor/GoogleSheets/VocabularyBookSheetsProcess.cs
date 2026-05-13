@@ -97,7 +97,7 @@ public async UniTask<Book> Get()
                             Language = sheetInfo.Language,
                             Section = colB,
                             SectionKey = $"{sheetInfo.Language}/{sheetInfo.Type}/{colB}",
-                            SectionLessons = new List<Lesson>()
+                            Lessons = new List<Lesson>()
                         };
                         currentSheet.Sections.Add(currentSection);
                         currentLesson = null; // Reset current lesson when a new section starts
@@ -115,7 +115,7 @@ public async UniTask<Book> Get()
                             Section = currentSection.Section,
                             Keys = new List<string>()
                         };
-                        currentSection.SectionLessons.Add(currentLesson);
+                        currentSection.Lessons.Add(currentLesson);
                     }
         
                     // add word key to the current lesson
@@ -124,7 +124,7 @@ public async UniTask<Book> Get()
                         if (currentLesson == null)
                         {
                             currentLesson = new Lesson { Keys = new List<string>() };
-                            currentSection.SectionLessons.Add(currentLesson);
+                            currentSection.Lessons.Add(currentLesson);
                         }
                         currentLesson.Keys.Add(colC);
                     }

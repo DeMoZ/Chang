@@ -18,7 +18,7 @@ namespace Chang.Utilities.GoogleSheets
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
         ///</summary>
-        [MenuItem("Chang/Utilities/Create Vocabulary JSON", false, 0)]
+        [MenuItem("Chang/Utilities/Create Vocabulary config", false, 0)]
         public static async UniTaskVoid ReadAsync()
         {
             string methodName = nameof(ReadAsync);
@@ -61,7 +61,7 @@ namespace Chang.Utilities.GoogleSheets
             vocabularyInfo.Words = book.Sheets.SelectMany(sheet => sheet.Words).ToList();
 
             EditorUtility.SetDirty(vocabularyInfo);
-            Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done ---");
+            Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done --- path: {Path}");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

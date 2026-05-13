@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47ca3c04a0394862854a7a0044fa32cb, type: 3}
   m_Name: VocabularyBook
-  m_EditorClassIdentifier: Assembly-CSharp::Chang.Core.VocabularyBookInfo
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.Core.VocabularyBookData
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -27,7 +27,7 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 17
+      Data: 18
     - Name: 
       Entry: 7
       Data: 1|Chang.Core.VocabularyBookSection, Assembly-CSharp
@@ -38,9 +38,9 @@ MonoBehaviour:
       Entry: 1
       Data: Fruits
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Fruits
+    - Name: Lessons
       Entry: 7
       Data: 2|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
@@ -144,9 +144,9 @@ MonoBehaviour:
       Entry: 1
       Data: Food
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Food
+    - Name: Lessons
       Entry: 7
       Data: 8|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
@@ -457,9 +457,9 @@ MonoBehaviour:
       Entry: 1
       Data: HowToCook
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/HowToCook
+    - Name: Lessons
       Entry: 7
       Data: 26|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
@@ -563,9 +563,9 @@ MonoBehaviour:
       Entry: 1
       Data: Months
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Months
+    - Name: Lessons
       Entry: 7
       Data: 32|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
@@ -702,9 +702,9 @@ MonoBehaviour:
       Entry: 1
       Data: Beverages
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Beverages
+    - Name: Lessons
       Entry: 7
       Data: 40|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
@@ -979,9 +979,9 @@ MonoBehaviour:
       Entry: 1
       Data: Sweetnes
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Sweetnes
+    - Name: Lessons
       Entry: 7
       Data: 56|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
@@ -1085,9 +1085,9 @@ MonoBehaviour:
       Entry: 1
       Data: PointThings
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/PointThings
+    - Name: Lessons
       Entry: 7
       Data: 62|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
@@ -1177,17 +1177,17 @@ MonoBehaviour:
       Data: 6
     - Name: Section
       Entry: 1
-      Data: Numbers
+      Data: Fruits
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Fruits
+    - Name: Lessons
       Entry: 7
       Data: 68|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 2
     - Name: 
       Entry: 7
       Data: 69|Chang.Core.Lesson, Assembly-CSharp
@@ -1196,10 +1196,116 @@ MonoBehaviour:
       Data: 6
     - Name: Section
       Entry: 1
-      Data: Numbers
+      Data: Fruits
     - Name: Keys
       Entry: 7
       Data: 70|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Fruit
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Watermelon
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Mango
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Pineapple
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Papaya
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 71|Chang.Core.Lesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Fruits
+    - Name: Keys
+      Entry: 7
+      Data: 72|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Guava
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Banana
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Orange
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Coconut
+    - Name: 
+      Entry: 1
+      Data: Thai/Vocabulary/Fruits/Durian
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 73|Chang.Core.VocabularyBookSection, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: SectionKey
+      Entry: 1
+      Data: Thai/VocabularyBook/Numbers
+    - Name: Lessons
+      Entry: 7
+      Data: 74|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 8
+    - Name: 
+      Entry: 7
+      Data: 75|Chang.Core.Lesson, Assembly-CSharp
+    - Name: Language
+      Entry: 3
+      Data: 6
+    - Name: Section
+      Entry: 1
+      Data: Numbers
+    - Name: Keys
+      Entry: 7
+      Data: 76|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
@@ -1229,7 +1335,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 71|Chang.Core.Lesson, Assembly-CSharp
+      Data: 77|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1238,7 +1344,7 @@ MonoBehaviour:
       Data: Numbers
     - Name: Keys
       Entry: 7
-      Data: 72|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 78|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
@@ -1268,7 +1374,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 73|Chang.Core.Lesson, Assembly-CSharp
+      Data: 79|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1277,7 +1383,7 @@ MonoBehaviour:
       Data: Numbers
     - Name: Keys
       Entry: 7
-      Data: 74|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 80|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
@@ -1307,7 +1413,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 75|Chang.Core.Lesson, Assembly-CSharp
+      Data: 81|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1316,7 +1422,7 @@ MonoBehaviour:
       Data: Numbers
     - Name: Keys
       Entry: 7
-      Data: 76|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 82|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1343,7 +1449,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 77|Chang.Core.Lesson, Assembly-CSharp
+      Data: 83|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1352,7 +1458,7 @@ MonoBehaviour:
       Data: Numbers
     - Name: Keys
       Entry: 7
-      Data: 78|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 84|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
@@ -1382,7 +1488,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 79|Chang.Core.Lesson, Assembly-CSharp
+      Data: 85|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1391,7 +1497,7 @@ MonoBehaviour:
       Data: Numbers
     - Name: Keys
       Entry: 7
-      Data: 80|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 86|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1418,7 +1524,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 81|Chang.Core.Lesson, Assembly-CSharp
+      Data: 87|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1427,7 +1533,7 @@ MonoBehaviour:
       Data: Numbers
     - Name: Keys
       Entry: 7
-      Data: 82|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 88|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 3
@@ -1451,7 +1557,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 83|Chang.Core.Lesson, Assembly-CSharp
+      Data: 89|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1460,7 +1566,7 @@ MonoBehaviour:
       Data: Numbers
     - Name: Keys
       Entry: 7
-      Data: 84|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 90|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 3
@@ -1493,7 +1599,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 85|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 91|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1501,18 +1607,18 @@ MonoBehaviour:
       Entry: 1
       Data: Greeting
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Greeting
+    - Name: Lessons
       Entry: 7
-      Data: 86|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 92|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 6
     - Name: 
       Entry: 7
-      Data: 87|Chang.Core.Lesson, Assembly-CSharp
+      Data: 93|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1521,7 +1627,7 @@ MonoBehaviour:
       Data: Greeting
     - Name: Keys
       Entry: 7
-      Data: 88|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 94|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1548,7 +1654,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 89|Chang.Core.Lesson, Assembly-CSharp
+      Data: 95|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1557,7 +1663,7 @@ MonoBehaviour:
       Data: Greeting
     - Name: Keys
       Entry: 7
-      Data: 90|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 96|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1584,7 +1690,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 91|Chang.Core.Lesson, Assembly-CSharp
+      Data: 97|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1593,7 +1699,7 @@ MonoBehaviour:
       Data: Greeting
     - Name: Keys
       Entry: 7
-      Data: 92|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 98|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1620,7 +1726,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 93|Chang.Core.Lesson, Assembly-CSharp
+      Data: 99|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1629,7 +1735,7 @@ MonoBehaviour:
       Data: Greeting
     - Name: Keys
       Entry: 7
-      Data: 94|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 100|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1656,7 +1762,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 95|Chang.Core.Lesson, Assembly-CSharp
+      Data: 101|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1665,7 +1771,7 @@ MonoBehaviour:
       Data: Greeting
     - Name: Keys
       Entry: 7
-      Data: 96|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 102|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1692,7 +1798,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 97|Chang.Core.Lesson, Assembly-CSharp
+      Data: 103|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1701,7 +1807,7 @@ MonoBehaviour:
       Data: Greeting
     - Name: Keys
       Entry: 7
-      Data: 98|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 104|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1737,7 +1843,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 99|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 105|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1745,18 +1851,18 @@ MonoBehaviour:
       Entry: 1
       Data: Colors
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Colors
+    - Name: Lessons
       Entry: 7
-      Data: 100|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 106|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 4
     - Name: 
       Entry: 7
-      Data: 101|Chang.Core.Lesson, Assembly-CSharp
+      Data: 107|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1765,7 +1871,7 @@ MonoBehaviour:
       Data: Colors
     - Name: Keys
       Entry: 7
-      Data: 102|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 108|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1792,7 +1898,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 103|Chang.Core.Lesson, Assembly-CSharp
+      Data: 109|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1801,7 +1907,7 @@ MonoBehaviour:
       Data: Colors
     - Name: Keys
       Entry: 7
-      Data: 104|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 110|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1828,7 +1934,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 105|Chang.Core.Lesson, Assembly-CSharp
+      Data: 111|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1837,7 +1943,7 @@ MonoBehaviour:
       Data: Colors
     - Name: Keys
       Entry: 7
-      Data: 106|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 112|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1864,7 +1970,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 107|Chang.Core.Lesson, Assembly-CSharp
+      Data: 113|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1873,7 +1979,7 @@ MonoBehaviour:
       Data: Colors
     - Name: Keys
       Entry: 7
-      Data: 108|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 114|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 3
@@ -1906,7 +2012,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 109|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 115|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1914,18 +2020,18 @@ MonoBehaviour:
       Entry: 1
       Data: Clothes
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Clothes
+    - Name: Lessons
       Entry: 7
-      Data: 110|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 116|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 3
     - Name: 
       Entry: 7
-      Data: 111|Chang.Core.Lesson, Assembly-CSharp
+      Data: 117|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1934,7 +2040,7 @@ MonoBehaviour:
       Data: Clothes
     - Name: Keys
       Entry: 7
-      Data: 112|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 118|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1961,7 +2067,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 113|Chang.Core.Lesson, Assembly-CSharp
+      Data: 119|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1970,7 +2076,7 @@ MonoBehaviour:
       Data: Clothes
     - Name: Keys
       Entry: 7
-      Data: 114|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 120|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -1997,7 +2103,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 115|Chang.Core.Lesson, Assembly-CSharp
+      Data: 121|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2006,7 +2112,7 @@ MonoBehaviour:
       Data: Clothes
     - Name: Keys
       Entry: 7
-      Data: 116|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 122|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2042,7 +2148,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 117|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 123|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2050,18 +2156,18 @@ MonoBehaviour:
       Entry: 1
       Data: Shopping
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Shopping
+    - Name: Lessons
       Entry: 7
-      Data: 118|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 124|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 5
     - Name: 
       Entry: 7
-      Data: 119|Chang.Core.Lesson, Assembly-CSharp
+      Data: 125|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2070,7 +2176,7 @@ MonoBehaviour:
       Data: Shopping
     - Name: Keys
       Entry: 7
-      Data: 120|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 126|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2097,7 +2203,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 121|Chang.Core.Lesson, Assembly-CSharp
+      Data: 127|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2106,7 +2212,7 @@ MonoBehaviour:
       Data: Shopping
     - Name: Keys
       Entry: 7
-      Data: 122|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 128|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2133,7 +2239,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 123|Chang.Core.Lesson, Assembly-CSharp
+      Data: 129|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2142,7 +2248,7 @@ MonoBehaviour:
       Data: Shopping
     - Name: Keys
       Entry: 7
-      Data: 124|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 130|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2169,7 +2275,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 125|Chang.Core.Lesson, Assembly-CSharp
+      Data: 131|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2178,7 +2284,7 @@ MonoBehaviour:
       Data: Shopping
     - Name: Keys
       Entry: 7
-      Data: 126|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 132|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2205,7 +2311,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 127|Chang.Core.Lesson, Assembly-CSharp
+      Data: 133|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2214,7 +2320,7 @@ MonoBehaviour:
       Data: Shopping
     - Name: Keys
       Entry: 7
-      Data: 128|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 134|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 3
@@ -2247,7 +2353,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 129|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 135|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2255,18 +2361,18 @@ MonoBehaviour:
       Entry: 1
       Data: FamilyAndPeople
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/FamilyAndPeople
+    - Name: Lessons
       Entry: 7
-      Data: 130|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 136|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 8
     - Name: 
       Entry: 7
-      Data: 131|Chang.Core.Lesson, Assembly-CSharp
+      Data: 137|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2275,7 +2381,7 @@ MonoBehaviour:
       Data: FamilyAndPeople
     - Name: Keys
       Entry: 7
-      Data: 132|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 138|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2302,7 +2408,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 133|Chang.Core.Lesson, Assembly-CSharp
+      Data: 139|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2311,7 +2417,7 @@ MonoBehaviour:
       Data: FamilyAndPeople
     - Name: Keys
       Entry: 7
-      Data: 134|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 140|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2338,7 +2444,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 135|Chang.Core.Lesson, Assembly-CSharp
+      Data: 141|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2347,7 +2453,7 @@ MonoBehaviour:
       Data: FamilyAndPeople
     - Name: Keys
       Entry: 7
-      Data: 136|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 142|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2374,7 +2480,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 137|Chang.Core.Lesson, Assembly-CSharp
+      Data: 143|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2383,7 +2489,7 @@ MonoBehaviour:
       Data: FamilyAndPeople
     - Name: Keys
       Entry: 7
-      Data: 138|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 144|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2410,7 +2516,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 139|Chang.Core.Lesson, Assembly-CSharp
+      Data: 145|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2419,7 +2525,7 @@ MonoBehaviour:
       Data: FamilyAndPeople
     - Name: Keys
       Entry: 7
-      Data: 140|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 146|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2446,7 +2552,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 141|Chang.Core.Lesson, Assembly-CSharp
+      Data: 147|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2455,7 +2561,7 @@ MonoBehaviour:
       Data: FamilyAndPeople
     - Name: Keys
       Entry: 7
-      Data: 142|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 148|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2482,7 +2588,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 143|Chang.Core.Lesson, Assembly-CSharp
+      Data: 149|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2491,7 +2597,7 @@ MonoBehaviour:
       Data: FamilyAndPeople
     - Name: Keys
       Entry: 7
-      Data: 144|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 150|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2518,7 +2624,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 145|Chang.Core.Lesson, Assembly-CSharp
+      Data: 151|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2527,7 +2633,7 @@ MonoBehaviour:
       Data: FamilyAndPeople
     - Name: Keys
       Entry: 7
-      Data: 146|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 152|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2563,7 +2669,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 147|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 153|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2571,18 +2677,18 @@ MonoBehaviour:
       Entry: 1
       Data: Introduce
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Introduce
+    - Name: Lessons
       Entry: 7
-      Data: 148|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 154|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 3
     - Name: 
       Entry: 7
-      Data: 149|Chang.Core.Lesson, Assembly-CSharp
+      Data: 155|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2591,7 +2697,7 @@ MonoBehaviour:
       Data: Introduce
     - Name: Keys
       Entry: 7
-      Data: 150|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 156|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2618,7 +2724,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 151|Chang.Core.Lesson, Assembly-CSharp
+      Data: 157|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2627,7 +2733,7 @@ MonoBehaviour:
       Data: Introduce
     - Name: Keys
       Entry: 7
-      Data: 152|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 158|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
@@ -2657,7 +2763,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 153|Chang.Core.Lesson, Assembly-CSharp
+      Data: 159|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2666,7 +2772,7 @@ MonoBehaviour:
       Data: Introduce
     - Name: Keys
       Entry: 7
-      Data: 154|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 160|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2702,7 +2808,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 155|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 161|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2710,18 +2816,18 @@ MonoBehaviour:
       Entry: 1
       Data: Ocupation
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Ocupation
+    - Name: Lessons
       Entry: 7
-      Data: 156|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 162|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 157|Chang.Core.Lesson, Assembly-CSharp
+      Data: 163|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2730,7 +2836,7 @@ MonoBehaviour:
       Data: Ocupation
     - Name: Keys
       Entry: 7
-      Data: 158|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 164|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2757,7 +2863,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 159|Chang.Core.Lesson, Assembly-CSharp
+      Data: 165|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2766,7 +2872,7 @@ MonoBehaviour:
       Data: Ocupation
     - Name: Keys
       Entry: 7
-      Data: 160|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 166|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2802,7 +2908,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 161|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 167|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2810,18 +2916,18 @@ MonoBehaviour:
       Entry: 1
       Data: Places
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Places
+    - Name: Lessons
       Entry: 7
-      Data: 162|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 168|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 13
     - Name: 
       Entry: 7
-      Data: 163|Chang.Core.Lesson, Assembly-CSharp
+      Data: 169|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2830,7 +2936,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 164|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 170|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2857,7 +2963,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 165|Chang.Core.Lesson, Assembly-CSharp
+      Data: 171|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2866,7 +2972,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 166|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 172|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2893,7 +2999,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 167|Chang.Core.Lesson, Assembly-CSharp
+      Data: 173|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2902,7 +3008,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 168|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 174|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2929,7 +3035,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 169|Chang.Core.Lesson, Assembly-CSharp
+      Data: 175|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2938,7 +3044,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 170|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 176|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -2965,7 +3071,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 171|Chang.Core.Lesson, Assembly-CSharp
+      Data: 177|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2974,7 +3080,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 172|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 178|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3001,7 +3107,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 173|Chang.Core.Lesson, Assembly-CSharp
+      Data: 179|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3010,7 +3116,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 174|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 180|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3037,7 +3143,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 175|Chang.Core.Lesson, Assembly-CSharp
+      Data: 181|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3046,7 +3152,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 176|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 182|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3073,7 +3179,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 177|Chang.Core.Lesson, Assembly-CSharp
+      Data: 183|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3082,7 +3188,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 178|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 184|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3109,7 +3215,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 179|Chang.Core.Lesson, Assembly-CSharp
+      Data: 185|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3118,7 +3224,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 180|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 186|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3145,7 +3251,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 181|Chang.Core.Lesson, Assembly-CSharp
+      Data: 187|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3154,7 +3260,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 182|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 188|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3181,7 +3287,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 183|Chang.Core.Lesson, Assembly-CSharp
+      Data: 189|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3190,7 +3296,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 184|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 190|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3217,7 +3323,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 185|Chang.Core.Lesson, Assembly-CSharp
+      Data: 191|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3226,7 +3332,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 186|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 192|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3253,7 +3359,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 187|Chang.Core.Lesson, Assembly-CSharp
+      Data: 193|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3262,7 +3368,7 @@ MonoBehaviour:
       Data: Places
     - Name: Keys
       Entry: 7
-      Data: 188|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 194|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 3
@@ -3295,7 +3401,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 189|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 195|Chang.Core.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3303,18 +3409,18 @@ MonoBehaviour:
       Entry: 1
       Data: Prepositions
     - Name: SectionKey
-      Entry: 6
-      Data: 
-    - Name: SectionLessons
+      Entry: 1
+      Data: Thai/VocabularyBook/Prepositions
+    - Name: Lessons
       Entry: 7
-      Data: 190|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 196|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 8
     - Name: 
       Entry: 7
-      Data: 191|Chang.Core.Lesson, Assembly-CSharp
+      Data: 197|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3323,7 +3429,7 @@ MonoBehaviour:
       Data: Prepositions
     - Name: Keys
       Entry: 7
-      Data: 192|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 198|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3350,7 +3456,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 193|Chang.Core.Lesson, Assembly-CSharp
+      Data: 199|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3359,7 +3465,7 @@ MonoBehaviour:
       Data: Prepositions
     - Name: Keys
       Entry: 7
-      Data: 194|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 200|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3386,7 +3492,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 195|Chang.Core.Lesson, Assembly-CSharp
+      Data: 201|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3395,7 +3501,7 @@ MonoBehaviour:
       Data: Prepositions
     - Name: Keys
       Entry: 7
-      Data: 196|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 202|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3422,7 +3528,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 197|Chang.Core.Lesson, Assembly-CSharp
+      Data: 203|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3431,7 +3537,7 @@ MonoBehaviour:
       Data: Prepositions
     - Name: Keys
       Entry: 7
-      Data: 198|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 204|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3458,7 +3564,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 199|Chang.Core.Lesson, Assembly-CSharp
+      Data: 205|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3467,7 +3573,7 @@ MonoBehaviour:
       Data: Prepositions
     - Name: Keys
       Entry: 7
-      Data: 200|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 206|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3494,7 +3600,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 201|Chang.Core.Lesson, Assembly-CSharp
+      Data: 207|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3503,7 +3609,7 @@ MonoBehaviour:
       Data: Prepositions
     - Name: Keys
       Entry: 7
-      Data: 202|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 208|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -3530,7 +3636,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 203|Chang.Core.Lesson, Assembly-CSharp
+      Data: 209|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3539,7 +3645,7 @@ MonoBehaviour:
       Data: Prepositions
     - Name: Keys
       Entry: 7
-      Data: 204|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 210|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 5
@@ -3569,7 +3675,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 205|Chang.Core.Lesson, Assembly-CSharp
+      Data: 211|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3578,7 +3684,7 @@ MonoBehaviour:
       Data: Prepositions
     - Name: Keys
       Entry: 7
-      Data: 206|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 212|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 5

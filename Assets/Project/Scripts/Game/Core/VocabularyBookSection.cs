@@ -8,7 +8,7 @@ namespace Chang.Core
         public string Section;    // will use it as default translation
         public string SectionKey; // Thai/VocabularyBook/Fruits
         public string DefaultTranslation => Section;
-        public List<Lesson> SectionLessons;
+        public List<Lesson> Lessons;
         
         // Section	Fruits	
         //         Lesson1	Thai/Vocabulary/Fruits/Fruit

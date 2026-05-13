@@ -16,25 +16,25 @@ namespace Chang.Core
         /// </summary>
         public string FileName { get; set; } = string.Empty;
         public IQuestion CurrentQuestion { get; private set; }
-        public List<IQuestion> SimpleQuestions { get; private set; }
-        public Queue<IQuestion> SimpleQuestionQueue { get; private set; }
+        public List<IQuestion> Questions { get; private set; }
+        public Queue<IQuestion> QuestionQueue { get; private set; }
         public bool IsGeneratedMathWordsQuestPlayed { get; set; }
 
         public void Dispose()
         {
             FileName = string.Empty;
             CurrentQuestion = null;
-            SimpleQuestionQueue.Clear();
+            QuestionQueue.Clear();
         }
 
         public void DequeueAndSetSipmlQuestion()
         {
-            CurrentQuestion = SimpleQuestionQueue.Dequeue();
+            CurrentQuestion = QuestionQueue.Dequeue();
         }
 
         public IQuestion PeekNextQuestion()
         {
-            return SimpleQuestionQueue.Peek();
+            return QuestionQueue.Peek();
         }
 
         /// <summary>
@@ -42,26 +42,26 @@ namespace Chang.Core
         /// </summary> 
         public void InsertNextQuest(IQuestion quest)
         {
-            var tempList = new List<IQuestion>(SimpleQuestionQueue);
+            var tempList = new List<IQuestion>(QuestionQueue);
             tempList.Insert(0, quest);
-            SimpleQuestionQueue = new Queue<IQuestion>(tempList);
+            QuestionQueue = new Queue<IQuestion>(tempList);
         }
 
         public void SetSimpleQuestions(List<IQuestion> questions)
         {
-            SimpleQuestions = questions;
-            SimpleQuestionQueue = new Queue<IQuestion>(questions);
+            Questions = questions;
+            QuestionQueue = new Queue<IQuestion>(questions);
         }
 
         public void AddSimpleQuestion(IQuestion question)
         {
-            SimpleQuestions.Add(question);
-            SimpleQuestionQueue.Enqueue(question);
+            Questions.Add(question);
+            QuestionQueue.Enqueue(question);
         }
 
         public void EnqueueCurrentQuestion()
         {
-            SimpleQuestionQueue.Enqueue(CurrentQuestion);
+            QuestionQueue.Enqueue(CurrentQuestion);
         }
     }
 }
