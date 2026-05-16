@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Chang.Core;
-using Cysharp.Threading.Tasks;
 using DMZ.DebugSystem;
 using UnityEditor;
 using UnityEngine;
@@ -9,22 +9,20 @@ using UnityEngine;
 namespace Chang.Utilities.GoogleSheets
 {
     // get sentences book data from Google sheets (lessons)
-    public class SheetsToSentencesBook : IReadSheets
+    public class SheetsToSentencesBook
     {
-        private const Languages Language = Languages.Thai; // todo chang. for now only Thai. Implement selection later
-
-        private static string Path = $"Assets/Project/Configs/{Language}/SentencesBook.asset";
+        private static string Path(Languages language) => $"Assets/Project/Configs/{language}/SentencesBook.asset";
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
         ///</summary>
-        [MenuItem("Chang/Utilities/Create Sentences Book config", false, 3)]
-        public static async UniTaskVoid ReadAsync()
+        public static async Task ReadAsync(Languages language)
         {
             string methodName = nameof(ReadAsync);
-            DMZLogger.Log($"[{methodName}] Start. SpreadSheet provided: {Path}");
+            string path = Path(language);
+            DMZLogger.Log($"[{methodName}] Start. SpreadSheet provided: {path}");
 
-            SentencesBookSheetsProcess gSheetsToJson = new(Language);
+            SentencesBookSheetsProcess gSheetsToJson = new(language);
             SentencesBookSheetsProcess.Book book;
 
             try
@@ -37,21 +35,21 @@ namespace Chang.Utilities.GoogleSheets
                 return;
             }
 
-            if (!AssetDatabase.AssetPathExists(Path))
+            if (!AssetDatabase.AssetPathExists(path))
             {
-                DMZLogger.Log($"[{methodName}] BookInfo asset not found at path: {Path}");
+                DMZLogger.Log($"[{methodName}] BookInfo asset not found at path: {path}");
 
-                string folderPath = System.IO.Path.GetDirectoryName(Path);
+                string folderPath = System.IO.Path.GetDirectoryName(path);
                 SpreadSheetUtilities.CreateFoldersRecursively(folderPath);
 
                 SentencesBookData asset = ScriptableObject.CreateInstance<SentencesBookData>();
-                AssetDatabase.CreateAsset(asset, Path);
+                AssetDatabase.CreateAsset(asset, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                DMZLogger.Log($"[{methodName}] Created new BookInfo asset at path: {Path}");
+                DMZLogger.Log($"[{methodName}] Created new BookInfo asset at path: {path}");
             }
 
-            SentencesBookData vocabularyBookData = AssetDatabase.LoadAssetAtPath<SentencesBookData>(Path);
+            SentencesBookData vocabularyBookData = AssetDatabase.LoadAssetAtPath<SentencesBookData>(path);
             if (vocabularyBookData == null)
             {
                 DMZLogger.LogError($"[{methodName}] Failed to load BookInfo asset.");
@@ -61,8 +59,9 @@ namespace Chang.Utilities.GoogleSheets
             vocabularyBookData.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
 
             EditorUtility.SetDirty(vocabularyBookData);
-            DMZLogger.LogWarning($"[{nameof(ReadAsync)}] --- Done --- path: {Path}");
+            DMZLogger.LogWarning($"[{nameof(ReadAsync)}] --- Done --- path: {path}");
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();        }
+            AssetDatabase.Refresh();
+        }
     }
 }
