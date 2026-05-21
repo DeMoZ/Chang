@@ -59,7 +59,8 @@ namespace Chang.Utilities.GoogleSheets
             sentenceInfo.Sentences = book.Sheets.SelectMany(sheet => sheet.Sentences).ToList();
 
             EditorUtility.SetDirty(sentenceInfo);
-            Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done --- path: {path}");
+            UnityEngine.Debug.LogWarning(
+                $"[{nameof(SheetsToSentences)}][{nameof(ReadAsync)}] --- Done --- path: {path}", sentenceInfo);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

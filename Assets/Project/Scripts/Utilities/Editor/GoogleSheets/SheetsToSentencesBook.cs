@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Chang.Core;
-using DMZ.DebugSystem;
 using UnityEditor;
 using UnityEngine;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Utilities.GoogleSheets
 {
@@ -20,7 +20,7 @@ namespace Chang.Utilities.GoogleSheets
         {
             string methodName = nameof(ReadAsync);
             string path = Path(language);
-            DMZLogger.Log($"[{methodName}] Start. SpreadSheet provided: {path}");
+            Debug.Log($"[{methodName}] Start. SpreadSheet provided: {path}");
 
             SentencesBookSheetsProcess gSheetsToJson = new(language);
             SentencesBookSheetsProcess.Book book;
@@ -31,13 +31,13 @@ namespace Chang.Utilities.GoogleSheets
             }
             catch (Exception ex)
             {
-                DMZLogger.LogError($"Error fetching Google Sheets data: {ex.Message}");
+                Debug.LogError($"Error fetching Google Sheets data: {ex.Message}");
                 return;
             }
 
             if (!AssetDatabase.AssetPathExists(path))
             {
-                DMZLogger.Log($"[{methodName}] BookInfo asset not found at path: {path}");
+                Debug.Log($"[{methodName}] BookInfo asset not found at path: {path}");
 
                 string folderPath = System.IO.Path.GetDirectoryName(path);
                 SpreadSheetUtilities.CreateFoldersRecursively(folderPath);
@@ -46,20 +46,21 @@ namespace Chang.Utilities.GoogleSheets
                 AssetDatabase.CreateAsset(asset, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                DMZLogger.Log($"[{methodName}] Created new BookInfo asset at path: {path}");
+                Debug.Log($"[{methodName}] Created new BookInfo asset at path: {path}");
             }
 
-            SentencesBookData vocabularyBookData = AssetDatabase.LoadAssetAtPath<SentencesBookData>(path);
-            if (vocabularyBookData == null)
+            SentencesBookData sentencesBookData = AssetDatabase.LoadAssetAtPath<SentencesBookData>(path);
+            if (sentencesBookData == null)
             {
-                DMZLogger.LogError($"[{methodName}] Failed to load BookInfo asset.");
+                Debug.LogError($"[{methodName}] Failed to load BookInfo asset.");
             }
 
-            vocabularyBookData.Language = book.Language;
-            vocabularyBookData.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
+            sentencesBookData.Language = book.Language;
+            sentencesBookData.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
 
-            EditorUtility.SetDirty(vocabularyBookData);
-            DMZLogger.LogWarning($"[{nameof(ReadAsync)}] --- Done --- path: {path}");
+            EditorUtility.SetDirty(sentencesBookData);
+            UnityEngine.Debug.LogWarning(
+                $"[{nameof(SheetsToVocabulary)}][{nameof(ReadAsync)}] --- Done --- path: {path}", sentencesBookData);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

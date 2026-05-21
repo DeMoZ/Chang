@@ -59,7 +59,10 @@ namespace Chang.Utilities.GoogleSheets
             vocabularyBookData.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
 
             EditorUtility.SetDirty(vocabularyBookData);
-            Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done --- path: {path}");
+            UnityEngine.Debug.LogWarning(
+                $"[{nameof(SheetsToVocabularyBook)}][{nameof(ReadAsync)}] --- Done --- path: {path}",
+                vocabularyBookData);
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

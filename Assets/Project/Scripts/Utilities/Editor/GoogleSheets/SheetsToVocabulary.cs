@@ -11,7 +11,7 @@ namespace Chang.Utilities.GoogleSheets
     // get vocabulary data from Google sheets
     public class SheetsToVocabulary
     {
-        private static string Path (Languages language)=> $"Assets/Project/Configs/{language}/Vocabulary.asset";
+        private static string Path(Languages language) => $"Assets/Project/Configs/{language}/Vocabulary.asset";
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
@@ -59,7 +59,7 @@ namespace Chang.Utilities.GoogleSheets
             vocabularyInfo.Words = book.Sheets.SelectMany(sheet => sheet.Words).ToList();
 
             EditorUtility.SetDirty(vocabularyInfo);
-            Debug.LogWarning($"[{nameof(ReadAsync)}] --- Done --- path: {path}");
+            UnityEngine.Debug.LogWarning($"[{nameof(SheetsToVocabulary)}][{nameof(ReadAsync)}] --- Done --- path: {path}",vocabularyInfo);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

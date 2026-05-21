@@ -1,6 +1,4 @@
-using System;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -16,7 +14,8 @@ namespace Chang.Utilities.GoogleSheets
         [Button, Tooltip("Reads Google book from Google Sheet and creates Config files for each sheet.")]
         public void CreateVocabularyConfig()
         {
-            ProcessAll(ProcessSheetsToVocabulary, true);
+            // ProcessAll(ProcessSheetsToVocabulary, true);
+            _ = SheetsToVocabulary.ReadAsync(Language);
         }
 
         /// <summary>
@@ -25,7 +24,8 @@ namespace Chang.Utilities.GoogleSheets
         [Button, Tooltip("Reads Google book from Google Sheet and creates Config files for each sheet.")]
         public void CreateVocabularyBookConfig()
         {
-            ProcessAll(ProcessSheetsToVocabularyBook, true);
+            // ProcessAll(ProcessSheetsToVocabularyBook, true);
+            _ = SheetsToVocabularyBook.ReadAsync(Language);
         }
 
         /// <summary>
@@ -34,7 +34,8 @@ namespace Chang.Utilities.GoogleSheets
         [Button, Tooltip("Reads Google book from Google Sheet and creates Config files for each sheet.")]
         public void CreateSentencesConfig()
         {
-            ProcessAll(ProcessSheetsToSentences, true);
+            // ProcessAll(ProcessSheetsToSentences, true);
+            _ = SheetsToSentences.ReadAsync(Language);
         }
 
         /// <summary>
@@ -43,9 +44,11 @@ namespace Chang.Utilities.GoogleSheets
         [Button, Tooltip("Reads Google book from Google Sheet and creates Config files for each sheet.")]
         public void CreateSentencesBookConfig()
         {
-            ProcessAll(ProcessSheetsToSentencesBook, true);
+            // ProcessAll(ProcessSheetsToSentencesBook, true);
+            _ = SheetsToSentencesBook.ReadAsync(Language);
         }
 
+        /*
         private void ProcessAll(Action<Action<(string title, string info, float progress)>> action,
             bool withProgressBar)
         {
@@ -120,5 +123,6 @@ namespace Chang.Utilities.GoogleSheets
             AssetDatabase.SaveAssets();
             Debug.Log($"Finished {process}.");
         }
+        */
     }
 }

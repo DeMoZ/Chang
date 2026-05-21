@@ -1,5 +1,6 @@
 namespace Chang.Core
 {
+    [System.Serializable]
     public class Word
     {
         public Languages Language;

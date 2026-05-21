@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using Debug = DMZ.DebugSystem.DMZLogger;
 using UnityEngine;
 using Word = Chang.Core.Word;
@@ -42,7 +42,7 @@ namespace Chang.Utilities.GoogleSheets
             _language = language;
         }
 
-        public async UniTask<Book> Get()
+        public async Task<Book> Get()
         {
             SpreadSheetInfoProvider provider = new SpreadSheetInfoProvider(SpreadSheetIdFileName, JsonCredentialsPath);
             await provider.InitAsync();

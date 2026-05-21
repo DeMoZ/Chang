@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Chang.Core
 {
-    public class VocabularyInfo : SerializedScriptableObject
+    public class VocabularyInfo : ScriptableObject
     {
         public Languages Language;
         public List<Word> Words;

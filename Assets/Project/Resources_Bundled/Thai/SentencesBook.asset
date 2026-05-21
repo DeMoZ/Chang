@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e47fb8a63e74e108c32b9378479400f, type: 3}
   m_Name: SentencesBook
-  m_EditorClassIdentifier: Assembly-CSharp::Chang.Core.SentencesBookInfo
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.Core.SentencesBookData
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -37,19 +37,19 @@ MonoBehaviour:
     - Name: Section
       Entry: 1
       Data: Fruits
-    - Name: TitleKey
+    - Name: SectionKey
       Entry: 1
       Data: Thai/SentencesBook/Fruits
     - Name: SectionLessons
       Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[Chang.Core.SectionLesson, Assembly-CSharp]],
+      Data: 2|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 4
     - Name: 
       Entry: 7
-      Data: 3|Chang.Core.SectionLesson, Assembly-CSharp
+      Data: 3|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -85,7 +85,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 5|Chang.Core.SectionLesson, Assembly-CSharp
+      Data: 5|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -121,7 +121,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 7|Chang.Core.SectionLesson, Assembly-CSharp
+      Data: 7|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -157,7 +157,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 9|Chang.Core.SectionLesson, Assembly-CSharp
+      Data: 9|Chang.Core.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6

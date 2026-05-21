@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -37,7 +36,7 @@ namespace Chang.Utilities.GoogleSheets
             _jsonCredentialsFileName = jsonCredentialsFileName;
         }
 
-        public async UniTask InitAsync()
+        public async Task InitAsync()
         {
             string methodName = nameof(InitAsync);
             Debug.Log($"[{methodName}]");
@@ -47,7 +46,8 @@ namespace Chang.Utilities.GoogleSheets
 
             if (string.IsNullOrEmpty(_spreadsheetId) || credential == null)
             {
-                Debug.LogError($"[{methodName}] Spreadsheet Id {_spreadsheetId} or credential was not loaded from json files.");
+                Debug.LogError(
+                    $"[{methodName}] Spreadsheet Id {_spreadsheetId} or credential was not loaded from json files.");
                 return;
             }
 
@@ -77,14 +77,15 @@ namespace Chang.Utilities.GoogleSheets
         /// <summary>
         ///  Compare book info cache with Google Sheets and update if necessary.
         /// </summary>
-        public async UniTask<SpreadSheetInfo> GetBookAsync()
+        public async Task<SpreadSheetInfo> GetBookAsync()
         {
             string methodName = nameof(GetBookAsync);
             Debug.Log($"[{methodName}] Start. SpreadSheet for path: {Path}");
 
             Spreadsheet spreadsheet = await Service.Spreadsheets.Get(_spreadsheetId).ExecuteAsync();
             IList<Sheet> sheets = spreadsheet.Sheets;
-            SpreadSheetInfo localBook = _bookInfo.SpreadsheetInfos.FirstOrDefault(s => s.Title == spreadsheet.Properties.Title);
+            SpreadSheetInfo localBook =
+                _bookInfo.SpreadsheetInfos.FirstOrDefault(s => s.Title == spreadsheet.Properties.Title);
             // if spreadsheet is not cached or sheet count changed, update all info
             if (localBook == null || localBook.Sheets == null || localBook.Sheets.Count != sheets.Count)
             {
@@ -128,7 +129,7 @@ namespace Chang.Utilities.GoogleSheets
             return Languages.English;
         }
 
-        public async UniTask<IList<IList<object>>> GetSheetDataAsync(string range)
+        public async Task<IList<IList<object>>> GetSheetDataAsync(string range)
         {
             string methodName = nameof(GetSheetDataAsync);
             Debug.Log($"[{methodName}] Request data range: {range}");
@@ -139,7 +140,7 @@ namespace Chang.Utilities.GoogleSheets
             return values;
         }
 
-        private async UniTask<List<SheetInfo>> GetSheetsInfoAsync(IList<Sheet> sheets)
+        private async Task<List<SheetInfo>> GetSheetsInfoAsync(IList<Sheet> sheets)
         {
             List<SheetInfo> sheetsInfo = new();
 
@@ -175,7 +176,7 @@ namespace Chang.Utilities.GoogleSheets
             return sheetsInfo;
         }
 
-        private async UniTask<string> GetSpreadSheetIdAsync(string spreadSheetIdFileName)
+        private async Task<string> GetSpreadSheetIdAsync(string spreadSheetIdFileName)
         {
             string methodName = nameof(GetSpreadSheetIdAsync);
             string spreadsheetId;
@@ -197,7 +198,7 @@ namespace Chang.Utilities.GoogleSheets
             return spreadsheetId;
         }
 
-        private async UniTask<GoogleCredential> GetCredentialsAsync(string jsonCredentialsFileName)
+        private async Task<GoogleCredential> GetCredentialsAsync(string jsonCredentialsFileName)
         {
             string methodName = nameof(GetCredentialsAsync);
             GoogleCredential credential;
