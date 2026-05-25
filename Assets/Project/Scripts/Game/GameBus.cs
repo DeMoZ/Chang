@@ -15,7 +15,7 @@ namespace Chang
         // public Dictionary<string, VocabularyBookSection> VocabularySections = new Dictionary<string, VocabularyBookSection>();
 
         // public Dictionary<string, Sentences.Deprecated.LessonData> SentencesLessons { get; set; }
-        
+
         public ILessonProvider LessonProvider { get; set; }
 
         public GameType GameType { get; set; }

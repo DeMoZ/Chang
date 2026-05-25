@@ -14,7 +14,7 @@ namespace Chang.Core
         /// <summary>
         /// selected name. Used to find config with the same name
         /// </summary>
-        public string FileName { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty; // todo chang remove or what is this for as i dont use scriptable asset configs for lessons
         public IQuestion CurrentQuestion { get; private set; }
         public List<IQuestion> Questions { get; private set; }
         public Queue<IQuestion> QuestionQueue { get; private set; }
@@ -47,13 +47,13 @@ namespace Chang.Core
             QuestionQueue = new Queue<IQuestion>(tempList);
         }
 
-        public void SetSimpleQuestions(List<IQuestion> questions)
+        public void SetQuestions(List<IQuestion> questions)
         {
             Questions = questions;
             QuestionQueue = new Queue<IQuestion>(questions);
         }
 
-        public void AddSimpleQuestion(IQuestion question)
+        public void AddQuestion(IQuestion question)
         {
             Questions.Add(question);
             QuestionQueue.Enqueue(question);

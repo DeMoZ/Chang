@@ -64,7 +64,7 @@ namespace Chang.Vocabulary
             _sectionBlocks.Clear();
             _lessons.Clear();
             _view.Clear();
-            
+
 
             for (int i = 0; i < _gameBus.VocabularyBookData.Sections.Count; i++)
             {
@@ -85,25 +85,26 @@ namespace Chang.Vocabulary
 
                 await PopulateSectionAsync(sectionData, sectionBlock, ct);
             }
+
             await UniTask.Yield();
 
             SetScrollPosition();
         }
-        
+
         public void OnGeneralRepeatClicked()
         {
             OnGeneralRepeatClickedAsync(_cts.Token).Forget();
         }
-        
+
         private Color GetLessonColor(Lesson lessonData)
         {
             float sum = 0;
 
             foreach (IQuestion question in lessonData.Questions)
             {
-                if (question is QuestSelectWord selectWord)
+                if (question is Chang.Core.QuestSelectWord selectWord)
                 {
-                    sum += (float)_profileService.GetVocabularyMark(selectWord.CorrectWordFileName) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
+                    sum += (float)_profileService.GetVocabularyMark(selectWord.Key) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
                 }
                 else
                 {
@@ -145,9 +146,11 @@ namespace Chang.Vocabulary
             */
         }
 
-        private async UniTask PopulateSectionAsync(VocabularyBookSection sectionData, SectionBlock sectionBlock, CancellationToken ct)
+        private async UniTask PopulateSectionAsync(
+            VocabularyBookSection sectionData,
+            SectionBlock sectionBlock,
+            CancellationToken ct)
         {
-            
             List<VocabularyQuestLog> repetitions = await _repetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
 
@@ -164,7 +167,7 @@ namespace Chang.Vocabulary
             {
                 sectionData = reorderedSection;
             }
-            
+
             RectTransform row = null;
             int count = -1;
             for (int m = 0; m < sectionData.Lessons.Count; m++)
@@ -208,15 +211,17 @@ namespace Chang.Vocabulary
         private void SaveScrollPosition()
         {
             _profileService.VocabularyProgress.ScrollPosition = _view.ScrollPosition;
-            Debug.Log($"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
+            Debug.Log(
+                $"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
 
         private void SetScrollPosition()
         {
             _view.ScrollPosition = _profileService.VocabularyProgress.ScrollPosition;
-            Debug.Log($"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
+            Debug.Log(
+                $"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
-        
+
         private async UniTaskVoid OnLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
         {
             throw new NotImplementedException();
@@ -262,7 +267,9 @@ namespace Chang.Vocabulary
                 return;
 
             // todo chang show loading animation ?
-            List<VocabularyQuestLog> repetitions = await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
+            List<VocabularyQuestLog> repetitions =
+                await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section,
+                    ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 
@@ -272,7 +279,8 @@ namespace Chang.Vocabulary
                 return;
 
             // todo chang show loading animation ?
-            List<VocabularyQuestLog> repetitions = await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
+            List<VocabularyQuestLog> repetitions =
+                await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }
 

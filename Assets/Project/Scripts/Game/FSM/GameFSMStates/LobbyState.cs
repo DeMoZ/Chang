@@ -76,15 +76,17 @@ namespace Chang.FSM
         {
             string methodName = nameof(LoadVocabularyBookAsync);
             Debug.Log($"[{methodName}] Start");
-            DisposableAsset<VocabularyBookData> asset = await _assetManager.LoadAssetAsync<VocabularyBookData>(GetPath(VocabularyBookKey), ct);
+            DisposableAsset<VocabularyBookData> asset =
+                await _assetManager.LoadAssetAsync<VocabularyBookData>(GetPath(VocabularyBookKey), ct);
 
             if (!asset.Item)
             {
-                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {GetPath(VocabularyBookKey)}");
+                Debug.LogError(
+                    $"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {GetPath(VocabularyBookKey)}");
                 return;
             }
 
-            Bus.VocabularyBookData = asset.Item;
+            Bus.VocabularyBookData = new VocabularyBookData(asset.Item);
             // Bus.VocabularySections = Bus.VocabularyBookData.Sections
             //     .ToDictionary(section => section.SectionKey, section => section);
 
