@@ -1,18 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
-using Sirenix.OdinInspector;
 
 namespace Chang.Core
 {
-    public class VocabularyBookData : SerializedScriptableObject
+    public class VocabularyBook
     {
         public Languages Language;
         public List<VocabularyBookSection> Sections;
 
-        public VocabularyBookData(VocabularyBookData data)
+        public VocabularyBook(Languages language, List<VocabularyBookSection> sections)
         {
-            Language = data.Language;
-            Sections = data.Sections;
+            Language = language;
+            Sections = sections;
 
             PopulateQuestions();
         }

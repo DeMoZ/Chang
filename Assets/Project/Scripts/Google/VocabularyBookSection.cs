@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Chang.Core
+namespace Chang.GoogleSheets
 {
     public class VocabularyBookSection
     {

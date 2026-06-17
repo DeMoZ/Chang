@@ -76,22 +76,27 @@ namespace Chang.FSM
         {
             string methodName = nameof(LoadVocabularyBookAsync);
             Debug.Log($"[{methodName}] Start");
-            DisposableAsset<VocabularyBookData> asset =
-                await _assetManager.LoadAssetAsync<VocabularyBookData>(GetPath(VocabularyBookKey), ct);
+            DisposableAsset<GoogleSheets.VocabularyBook> asset = await _assetManager
+                .LoadAssetAsync<GoogleSheets.VocabularyBook>(GetPath(VocabularyBookKey), ct);
 
             if (!asset.Item)
             {
-                Debug.LogError(
-                    $"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {GetPath(VocabularyBookKey)}");
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: " +
+                               $"{GetPath(VocabularyBookKey)}");
                 return;
             }
 
-            Bus.VocabularyBookData = new VocabularyBookData(asset.Item);
-            // Bus.VocabularySections = Bus.VocabularyBookData.Sections
-            //     .ToDictionary(section => section.SectionKey, section => section);
+            if (asset.Item.Sections == null || asset.Item.Sections.Count == 0)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] no sections ins asset, BookKey: " +
+                               $"{GetPath(VocabularyBookKey)}");
+                return;
+            }
 
+            // todo chang GoogleSheets.VocabularyBook to Core.VocabularyBook
+            VocabularyBook book = GoogleSheetsToCore.GetVocabularyBook(asset.Item);
+            Bus.SetVocabularyBook(book);
             asset.Dispose();
-
             Debug.Log($"[{methodName}] End");
         }
 

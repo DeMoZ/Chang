@@ -9,7 +9,6 @@ using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
 using Project.Services.PagesContentProvider;
-using Sirenix.Utilities;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -74,10 +73,10 @@ namespace Chang.FSM
 
             _gameOverlayController.EnableReturnButton(true);
             _gameOverlayController.EnableHintButton(true);
-
+            
             _pagesBus = new PagesBus
             {
-                LessonProvider = Bus.LessonProvider,
+                Lesson = Bus.Lesson,
                 GameType = Bus.GameType,
             };
 
@@ -109,7 +108,7 @@ namespace Chang.FSM
 
         private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
         {
-            await _pagesContentProvider.PreloadPagesStateAsync(Bus.LessonProvider.Questions, progress, ct);
+            await _pagesContentProvider.PreloadPagesStateAsync(Bus.Lesson.Questions, progress, ct);
         }
 
         private void ExitToLobby()
@@ -166,7 +165,7 @@ namespace Chang.FSM
 
             if (!isCorrect)
             {
-                _pagesBus.LessonProvider.EnqueueCurrentQuestion();
+                _pagesBus.Lesson.EnqueueCurrentQuestion();
             }
 
             var info = new ContinueButtonInfo();
@@ -233,7 +232,7 @@ namespace Chang.FSM
 
             if (!isCorrect)
             {
-                _pagesBus.LessonProvider.EnqueueCurrentQuestion();
+                _pagesBus.Lesson.EnqueueCurrentQuestion();
             }
 
             ContinueButtonInfo info = new()
@@ -264,29 +263,27 @@ namespace Chang.FSM
                 return;
             }
 
-            // todo chang i need Lesson to store data and lesson to play
-            ILessonProvider lessonProvider = _pagesBus.LessonProvider;
+            Lesson lesson = _pagesBus.Lesson;
 
             // Add generated match words quest at the end of the lesson
-            if (lessonProvider.QuestionQueue.Count == 0)
+            if (lesson.QuestionQueue.Count == 0)
             {
-                if (TryGenerateQuestMatchWordsData(lessonProvider, out var matchWordsQuest))
+                if (TryGenerateQuestMatchWordsData(lesson, out var matchWordsQuest))
                 {
-                    /*
-                    lessonProvider.AddQuestion(matchWordsQuest);
-                    */
-                    lessonProvider.IsGeneratedMathWordsQuestPlayed = true;
+                    // todo chang add matchWordQuest
+                    // lessonProvider.AddQuestion(matchWordsQuest);
+                    lesson.IsGeneratedMathWordsQuestPlayed = true;
                 }
             }
 
             // If the lesson has finished
-            if (lessonProvider.QuestionQueue.Count == 0)
+            if (lesson.QuestionQueue.Count == 0)
             {
                 SwitchState(ChangTypes.Result);
                 return;
             }
 
-            IQuestion nextQuestion = lessonProvider.PeekNextQuestion();
+            IQuestion nextQuestion = lesson.PeekNextQuestion();
             ChangTypes nextQuestionType = nextQuestion.Type;
 
             // If demonstration word is required
@@ -296,20 +293,21 @@ namespace Chang.FSM
 
                 foreach (var fileName in keys)
                 {
-                    if (IsNeedDemonstration(fileName))
-                    {
-                        // var demonstration = new Vocabulary.QuestDemonstrationWord
-                        // {
-                        //     CorrectWordFileName = fileName
-                        // };
-                        // lesson.InsertNextQuest(demonstration);
-                        nextQuestionType = ChangTypes.DemonstrationWord;
-                        break;
-                    }
+                    // todo chang add demonstratioin
+                    // if (IsNeedDemonstration(fileName))
+                    // {
+                    //     var demonstration = new Vocabulary.QuestDemonstrationWord
+                    //     {
+                    //         CorrectWordFileName = fileName
+                    //     };
+                    //     lesson.InsertNextQuest(demonstration);
+                    //     nextQuestionType = ChangTypes.DemonstrationWord;
+                    //     break;
+                    // }
                 }
             }
 
-            lessonProvider.DequeueAndSetSipmlQuestion();
+            lesson.DequeueAndSetSipmlQuestion();
             SwitchState(nextQuestionType);
         }
 
@@ -319,13 +317,12 @@ namespace Chang.FSM
             _pagesBus.OnHintUsed.SetSilent(false);
         }
 
-        private bool TryGenerateQuestMatchWordsData(ILessonProvider lessonProvider, out QuestMatchWords questMatchWords)
+        private bool TryGenerateQuestMatchWordsData(Lesson lesson, out QuestMatchWords questMatchWords)
         {
-            throw new NotImplementedException();
             questMatchWords = new QuestMatchWords();
             HashSet<string> matchWords = new();
 
-            if (lessonProvider.IsGeneratedMathWordsQuestPlayed)
+            if (lesson.IsGeneratedMathWordsQuestPlayed)
             {
                 return false;
             }

@@ -1,26 +1,16 @@
-using System;
 using System.Collections.Generic;
 
-[Flags]
-public enum Modifier // V-Variant D-Dynamic G-Gender
-{
-    None,
-    Variant = 1 << 0,
-    Dynamic = 1 << 1,
-    Gender = 1 << 2
-}
-
-namespace Chang.Core
+namespace Chang.GoogleSheets
 {
     public class Sentence
     {
         public Languages Language;
         public string Section;
 
-        public string Key;          // Do_not_add_sugar
-        public string SentenceKey;  // Thai/Sentences/Market/Do_not_add_sugar      
-        public string ImageKey;     // Thai/Sentences/Market/Do_not_add_sugar         
-        public string SoundKey;     // Thai/Sentences/Market/Do_not_add_sugar         
+        public string Key; // Do_not_add_sugar
+        public string SentenceKey; // Thai/Sentences/Market/Do_not_add_sugar      
+        public string ImageKey; // Thai/Sentences/Market/Do_not_add_sugar         
+        public string SoundKey; // Thai/Sentences/Market/Do_not_add_sugar         
 
         public string DefaultTranslation;
         public List<SentenceWord> SentenceWords;
@@ -37,7 +27,7 @@ namespace Chang.Core
         public void SetModifiers(string value)
         {
             Modifiers = Modifier.None;
-            
+
             if (string.IsNullOrEmpty(value))
             {
                 return;
@@ -47,10 +37,12 @@ namespace Chang.Core
             {
                 Modifiers |= Modifier.Variant;
             }
+
             if (value.Contains('D'))
             {
                 Modifiers |= Modifier.Dynamic;
             }
+
             if (value.Contains('G'))
             {
                 Modifiers |= Modifier.Gender;

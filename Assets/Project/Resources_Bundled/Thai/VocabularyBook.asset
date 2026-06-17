@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47ca3c04a0394862854a7a0044fa32cb, type: 3}
+  m_Script: {fileID: 11500000, guid: a68c8fe176f143b5977ab1ac428cb3b6, type: 3}
   m_Name: VocabularyBook
-  m_EditorClassIdentifier: Assembly-CSharp::Chang.Core.VocabularyBookData
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.GoogleSheets.VocabularyBook
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -23,14 +23,14 @@ MonoBehaviour:
     SerializationNodes:
     - Name: Sections
       Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[Chang.Core.VocabularyBookSection,
+      Data: 0|System.Collections.Generic.List`1[[Chang.GoogleSheets.VocabularyBookSection,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 17
     - Name: 
       Entry: 7
-      Data: 1|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 1|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -42,14 +42,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Fruits
     - Name: Lessons
       Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 2|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 3|Chang.Core.Lesson, Assembly-CSharp
+      Data: 3|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -88,7 +88,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 5|Chang.Core.Lesson, Assembly-CSharp
+      Data: 5|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -136,7 +136,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 7|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 7|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -148,14 +148,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Food
     - Name: Lessons
       Entry: 7
-      Data: 8|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 8|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 8
     - Name: 
       Entry: 7
-      Data: 9|Chang.Core.Lesson, Assembly-CSharp
+      Data: 9|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -191,7 +191,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 11|Chang.Core.Lesson, Assembly-CSharp
+      Data: 11|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -227,7 +227,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 13|Chang.Core.Lesson, Assembly-CSharp
+      Data: 13|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -263,7 +263,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 15|Chang.Core.Lesson, Assembly-CSharp
+      Data: 15|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -299,7 +299,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 17|Chang.Core.Lesson, Assembly-CSharp
+      Data: 17|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -335,7 +335,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 19|Chang.Core.Lesson, Assembly-CSharp
+      Data: 19|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -371,7 +371,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 21|Chang.Core.Lesson, Assembly-CSharp
+      Data: 21|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -407,7 +407,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 23|Chang.Core.Lesson, Assembly-CSharp
+      Data: 23|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -449,7 +449,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 25|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 25|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -461,14 +461,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/HowToCook
     - Name: Lessons
       Entry: 7
-      Data: 26|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 26|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 27|Chang.Core.Lesson, Assembly-CSharp
+      Data: 27|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -507,7 +507,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 29|Chang.Core.Lesson, Assembly-CSharp
+      Data: 29|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -555,7 +555,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 31|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 31|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -567,14 +567,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Months
     - Name: Lessons
       Entry: 7
-      Data: 32|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 32|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 3
     - Name: 
       Entry: 7
-      Data: 33|Chang.Core.Lesson, Assembly-CSharp
+      Data: 33|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -610,7 +610,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 35|Chang.Core.Lesson, Assembly-CSharp
+      Data: 35|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -649,7 +649,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 37|Chang.Core.Lesson, Assembly-CSharp
+      Data: 37|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -694,7 +694,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 39|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 39|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -706,14 +706,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Beverages
     - Name: Lessons
       Entry: 7
-      Data: 40|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 40|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 7
     - Name: 
       Entry: 7
-      Data: 41|Chang.Core.Lesson, Assembly-CSharp
+      Data: 41|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -749,7 +749,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 43|Chang.Core.Lesson, Assembly-CSharp
+      Data: 43|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -785,7 +785,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 45|Chang.Core.Lesson, Assembly-CSharp
+      Data: 45|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -821,7 +821,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 47|Chang.Core.Lesson, Assembly-CSharp
+      Data: 47|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -857,7 +857,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 49|Chang.Core.Lesson, Assembly-CSharp
+      Data: 49|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -893,7 +893,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 51|Chang.Core.Lesson, Assembly-CSharp
+      Data: 51|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -929,7 +929,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 53|Chang.Core.Lesson, Assembly-CSharp
+      Data: 53|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -971,7 +971,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 55|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 55|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -983,14 +983,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Sweetnes
     - Name: Lessons
       Entry: 7
-      Data: 56|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 56|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 57|Chang.Core.Lesson, Assembly-CSharp
+      Data: 57|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1029,7 +1029,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 59|Chang.Core.Lesson, Assembly-CSharp
+      Data: 59|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1077,7 +1077,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 61|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 61|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1089,14 +1089,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/PointThings
     - Name: Lessons
       Entry: 7
-      Data: 62|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 62|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 63|Chang.Core.Lesson, Assembly-CSharp
+      Data: 63|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1129,7 +1129,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 65|Chang.Core.Lesson, Assembly-CSharp
+      Data: 65|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1171,7 +1171,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 67|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 67|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1183,14 +1183,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Numbers
     - Name: Lessons
       Entry: 7
-      Data: 68|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 68|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 8
     - Name: 
       Entry: 7
-      Data: 69|Chang.Core.Lesson, Assembly-CSharp
+      Data: 69|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1229,7 +1229,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 71|Chang.Core.Lesson, Assembly-CSharp
+      Data: 71|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1268,7 +1268,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 73|Chang.Core.Lesson, Assembly-CSharp
+      Data: 73|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1307,7 +1307,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 75|Chang.Core.Lesson, Assembly-CSharp
+      Data: 75|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1343,7 +1343,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 77|Chang.Core.Lesson, Assembly-CSharp
+      Data: 77|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1382,7 +1382,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 79|Chang.Core.Lesson, Assembly-CSharp
+      Data: 79|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1418,7 +1418,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 81|Chang.Core.Lesson, Assembly-CSharp
+      Data: 81|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1451,7 +1451,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 83|Chang.Core.Lesson, Assembly-CSharp
+      Data: 83|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1493,7 +1493,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 85|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 85|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1505,14 +1505,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Greeting
     - Name: Lessons
       Entry: 7
-      Data: 86|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 86|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 6
     - Name: 
       Entry: 7
-      Data: 87|Chang.Core.Lesson, Assembly-CSharp
+      Data: 87|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1548,7 +1548,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 89|Chang.Core.Lesson, Assembly-CSharp
+      Data: 89|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1584,7 +1584,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 91|Chang.Core.Lesson, Assembly-CSharp
+      Data: 91|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1620,7 +1620,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 93|Chang.Core.Lesson, Assembly-CSharp
+      Data: 93|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1656,7 +1656,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 95|Chang.Core.Lesson, Assembly-CSharp
+      Data: 95|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1692,7 +1692,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 97|Chang.Core.Lesson, Assembly-CSharp
+      Data: 97|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1737,7 +1737,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 99|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 99|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1749,14 +1749,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Colors
     - Name: Lessons
       Entry: 7
-      Data: 100|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 100|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 4
     - Name: 
       Entry: 7
-      Data: 101|Chang.Core.Lesson, Assembly-CSharp
+      Data: 101|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1792,7 +1792,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 103|Chang.Core.Lesson, Assembly-CSharp
+      Data: 103|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1828,7 +1828,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 105|Chang.Core.Lesson, Assembly-CSharp
+      Data: 105|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1864,7 +1864,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 107|Chang.Core.Lesson, Assembly-CSharp
+      Data: 107|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1906,7 +1906,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 109|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 109|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1918,14 +1918,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Clothes
     - Name: Lessons
       Entry: 7
-      Data: 110|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 110|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 3
     - Name: 
       Entry: 7
-      Data: 111|Chang.Core.Lesson, Assembly-CSharp
+      Data: 111|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1961,7 +1961,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 113|Chang.Core.Lesson, Assembly-CSharp
+      Data: 113|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -1997,7 +1997,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 115|Chang.Core.Lesson, Assembly-CSharp
+      Data: 115|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2042,7 +2042,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 117|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 117|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2054,14 +2054,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Shopping
     - Name: Lessons
       Entry: 7
-      Data: 118|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 118|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 5
     - Name: 
       Entry: 7
-      Data: 119|Chang.Core.Lesson, Assembly-CSharp
+      Data: 119|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2097,7 +2097,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 121|Chang.Core.Lesson, Assembly-CSharp
+      Data: 121|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2133,7 +2133,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 123|Chang.Core.Lesson, Assembly-CSharp
+      Data: 123|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2169,7 +2169,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 125|Chang.Core.Lesson, Assembly-CSharp
+      Data: 125|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2205,7 +2205,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 127|Chang.Core.Lesson, Assembly-CSharp
+      Data: 127|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2247,7 +2247,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 129|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 129|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2259,14 +2259,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/FamilyAndPeople
     - Name: Lessons
       Entry: 7
-      Data: 130|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 130|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 8
     - Name: 
       Entry: 7
-      Data: 131|Chang.Core.Lesson, Assembly-CSharp
+      Data: 131|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2302,7 +2302,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 133|Chang.Core.Lesson, Assembly-CSharp
+      Data: 133|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2338,7 +2338,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 135|Chang.Core.Lesson, Assembly-CSharp
+      Data: 135|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2374,7 +2374,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 137|Chang.Core.Lesson, Assembly-CSharp
+      Data: 137|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2410,7 +2410,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 139|Chang.Core.Lesson, Assembly-CSharp
+      Data: 139|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2446,7 +2446,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 141|Chang.Core.Lesson, Assembly-CSharp
+      Data: 141|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2482,7 +2482,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 143|Chang.Core.Lesson, Assembly-CSharp
+      Data: 143|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2518,7 +2518,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 145|Chang.Core.Lesson, Assembly-CSharp
+      Data: 145|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2563,7 +2563,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 147|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 147|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2575,14 +2575,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Introduce
     - Name: Lessons
       Entry: 7
-      Data: 148|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 148|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 3
     - Name: 
       Entry: 7
-      Data: 149|Chang.Core.Lesson, Assembly-CSharp
+      Data: 149|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2618,7 +2618,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 151|Chang.Core.Lesson, Assembly-CSharp
+      Data: 151|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2657,7 +2657,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 153|Chang.Core.Lesson, Assembly-CSharp
+      Data: 153|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2702,7 +2702,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 155|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 155|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2714,14 +2714,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Ocupation
     - Name: Lessons
       Entry: 7
-      Data: 156|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 156|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 157|Chang.Core.Lesson, Assembly-CSharp
+      Data: 157|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2757,7 +2757,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 159|Chang.Core.Lesson, Assembly-CSharp
+      Data: 159|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2802,7 +2802,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 161|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 161|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2814,14 +2814,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Places
     - Name: Lessons
       Entry: 7
-      Data: 162|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 162|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 13
     - Name: 
       Entry: 7
-      Data: 163|Chang.Core.Lesson, Assembly-CSharp
+      Data: 163|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2857,7 +2857,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 165|Chang.Core.Lesson, Assembly-CSharp
+      Data: 165|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2893,7 +2893,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 167|Chang.Core.Lesson, Assembly-CSharp
+      Data: 167|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2929,7 +2929,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 169|Chang.Core.Lesson, Assembly-CSharp
+      Data: 169|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -2965,7 +2965,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 171|Chang.Core.Lesson, Assembly-CSharp
+      Data: 171|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3001,7 +3001,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 173|Chang.Core.Lesson, Assembly-CSharp
+      Data: 173|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3037,7 +3037,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 175|Chang.Core.Lesson, Assembly-CSharp
+      Data: 175|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3073,7 +3073,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 177|Chang.Core.Lesson, Assembly-CSharp
+      Data: 177|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3109,7 +3109,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 179|Chang.Core.Lesson, Assembly-CSharp
+      Data: 179|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3145,7 +3145,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 181|Chang.Core.Lesson, Assembly-CSharp
+      Data: 181|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3181,7 +3181,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 183|Chang.Core.Lesson, Assembly-CSharp
+      Data: 183|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3217,7 +3217,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 185|Chang.Core.Lesson, Assembly-CSharp
+      Data: 185|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3253,7 +3253,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 187|Chang.Core.Lesson, Assembly-CSharp
+      Data: 187|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3295,7 +3295,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 189|Chang.Core.VocabularyBookSection, Assembly-CSharp
+      Data: 189|Chang.GoogleSheets.VocabularyBookSection, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3307,14 +3307,14 @@ MonoBehaviour:
       Data: Thai/VocabularyBook/Prepositions
     - Name: Lessons
       Entry: 7
-      Data: 190|System.Collections.Generic.List`1[[Chang.Core.Lesson, Assembly-CSharp]],
+      Data: 190|System.Collections.Generic.List`1[[Chang.GoogleSheets.Lesson, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 8
     - Name: 
       Entry: 7
-      Data: 191|Chang.Core.Lesson, Assembly-CSharp
+      Data: 191|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3350,7 +3350,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 193|Chang.Core.Lesson, Assembly-CSharp
+      Data: 193|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3386,7 +3386,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 195|Chang.Core.Lesson, Assembly-CSharp
+      Data: 195|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3422,7 +3422,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 197|Chang.Core.Lesson, Assembly-CSharp
+      Data: 197|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3458,7 +3458,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 199|Chang.Core.Lesson, Assembly-CSharp
+      Data: 199|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3494,7 +3494,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 201|Chang.Core.Lesson, Assembly-CSharp
+      Data: 201|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3530,7 +3530,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 203|Chang.Core.Lesson, Assembly-CSharp
+      Data: 203|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6
@@ -3569,7 +3569,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 205|Chang.Core.Lesson, Assembly-CSharp
+      Data: 205|Chang.GoogleSheets.Lesson, Assembly-CSharp
     - Name: Language
       Entry: 3
       Data: 6

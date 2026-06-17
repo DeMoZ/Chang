@@ -42,24 +42,24 @@ namespace Chang.Utilities.GoogleSheets
                 string folderPath = System.IO.Path.GetDirectoryName(path);
                 SpreadSheetUtilities.CreateFoldersRecursively(folderPath);
 
-                VocabularyInfo asset = ScriptableObject.CreateInstance<VocabularyInfo>();
+                Core.Vocabulary asset = ScriptableObject.CreateInstance<Core.Vocabulary>();
                 AssetDatabase.CreateAsset(asset, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 Debug.Log($"[{methodName}] Created new BookInfo asset at path: {path}");
             }
 
-            VocabularyInfo vocabularyInfo = AssetDatabase.LoadAssetAtPath<VocabularyInfo>(path);
-            if (vocabularyInfo == null)
+            Core.Vocabulary vocabulary = AssetDatabase.LoadAssetAtPath<Core.Vocabulary>(path);
+            if (vocabulary == null)
             {
                 Debug.LogError($"[{methodName}] Failed to load BookInfo asset.");
             }
 
-            vocabularyInfo.Language = book.Language;
-            vocabularyInfo.Words = book.Sheets.SelectMany(sheet => sheet.Words).ToList();
+            vocabulary.Language = book.Language;
+            vocabulary.Words = book.Sheets.SelectMany(sheet => sheet.Words).ToList();
 
-            EditorUtility.SetDirty(vocabularyInfo);
-            UnityEngine.Debug.LogWarning($"[{nameof(SheetsToVocabulary)}][{nameof(ReadAsync)}] --- Done --- path: {path}",vocabularyInfo);
+            EditorUtility.SetDirty(vocabulary);
+            UnityEngine.Debug.LogWarning($"[{nameof(SheetsToVocabulary)}][{nameof(ReadAsync)}] --- Done --- path: {path}",vocabulary);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

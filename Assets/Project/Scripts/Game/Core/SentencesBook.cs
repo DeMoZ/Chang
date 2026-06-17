@@ -3,9 +3,9 @@ using Sirenix.OdinInspector;
 
 namespace Chang.Core
 {
-    public class SentencesInfo : SerializedScriptableObject
+    public class SentencesBook : SerializedScriptableObject
     {
         public Languages Language;
-        public List<Sentence> Sentences;
+        public List<SentencesBookSection> Sections;
     }
 }

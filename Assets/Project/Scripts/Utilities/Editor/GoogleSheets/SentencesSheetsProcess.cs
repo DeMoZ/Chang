@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Chang.Core;
+using Chang.GoogleSheets;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;

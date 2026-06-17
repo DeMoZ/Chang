@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Chang.Core;
+using Chang.Utilities.GoogleSheets;
 using UnityEditor;
 using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
-namespace Chang.Utilities.GoogleSheets
+namespace Chang.GoogleSheets
 {
     // get sentences data from Google sheets
     public class SheetsToSentences

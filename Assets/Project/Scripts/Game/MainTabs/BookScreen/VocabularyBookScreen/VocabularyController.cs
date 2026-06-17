@@ -104,7 +104,8 @@ namespace Chang.Vocabulary
             {
                 if (question is Chang.Core.QuestSelectWord selectWord)
                 {
-                    sum += (float)_profileService.GetVocabularyMark(selectWord.Key) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
+                    sum += (float)_profileService.GetVocabularyMark(selectWord.Key) /
+                           (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
                 }
                 else
                 {
@@ -161,9 +162,12 @@ namespace Chang.Vocabulary
                 repetitionsCount > 0 && _profileService.ReorderedVocabularySections.ContainsKey(reorderedSectionKey),
                 repetitionsCount > 0);
 
-            sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
+            sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >=
+                                                                 ProjectConstants
+                                                                     .SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
 
-            if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey, out VocabularyBookSection reorderedSection))
+            if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey,
+                    out VocabularyBookSection reorderedSection))
             {
                 sectionData = reorderedSection;
             }
@@ -205,7 +209,7 @@ namespace Chang.Vocabulary
         {
             Debug.Log($"Clicked on item {sectionName}_{lessonIndex}");
             SaveScrollPosition();
-            OnLessonClickedAsync(sectionName, lessonIndex, _cts.Token).Forget();
+            OnLessonClicked(sectionName, lessonIndex);
         }
 
         private void SaveScrollPosition()
@@ -222,43 +226,40 @@ namespace Chang.Vocabulary
                 $"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
 
-        private async UniTaskVoid OnLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
+        private void OnLessonClicked(string sectionName, int lessonIndex)
         {
-            throw new NotImplementedException();
-            /*
             if (_mainScreenBus.IsLoading)
-                return;
-
-            _mainScreenBus.IsLoading = true;
-            await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
-
             {
-                LessonData simpleLesson;
-                string key = _profileService.ReorderedSectionKey(sectionName);
-
-                if (_profileService.ReorderedVocabularySections.TryGetValue(key, out SectionData section))
-                {
-                    simpleLesson = section.Lessons[lessonIndex - 1];
-                }
-                else
-                {
-                    key = $"{_profileService.ProfileData.LearnLanguage}Lesson{sectionName}_{lessonIndex}";
-                    simpleLesson = _gameBus.VocabularyLessons[key];
-                }
-
-                Lesson lesson = new Lesson();
-                lesson.FileName = simpleLesson.FileName;
-                lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
-
-                // _gameBus.CurrentVocabularyLesson = lesson;
-                _gameBus.LessonProvider = lesson;
+                return;
             }
 
+            _mainScreenBus.IsLoading = true;
+
+            Lesson lesson;
+            string key = _profileService.ReorderedSectionKey(sectionName);
+
+            if (_profileService.ReorderedVocabularySections.TryGetValue(key, out VocabularyBookSection section))
+            {
+                lesson = section.Lessons[lessonIndex - 1];
+            }
+            else
+            {
+                // lessonKey = ElementsPaths.LessonKey(_profileService.ProfileData.LearnLanguage, sectionName, lessonIndex);
+                string sectionKey = ElementsPaths.VocabularySectionKey(_profileService.ProfileData.LearnLanguage, sectionName);
+
+                if (!_gameBus.VocabularySections.TryGetValue(sectionKey, out section))
+                {
+                    throw new IndexOutOfRangeException($"Section not found with key: {sectionKey}");
+                }
+
+                lesson = section.Lessons[lessonIndex - 1];
+            }
+
+            _gameBus.SetLesson(lesson); 
             _mainScreenBus.IsLoading = false;
 
             _gameBus.GameType = GameType.Learn;
             _onLobbyExitState?.Invoke();
-            */
         }
 
         private async UniTaskVoid OnSectionRepeatClickedAsync(string section, CancellationToken ct)

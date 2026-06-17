@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Chang.Core
 {
-    public class VocabularyInfo : ScriptableObject
+    public class Vocabulary : ScriptableObject
     {
         public Languages Language;
         public List<Word> Words;

@@ -8,7 +8,7 @@ namespace Chang
 {
     public class PagesBus : IDisposable
     {
-        public ILessonProvider LessonProvider { get; set; }
+        public Lesson Lesson { get; set; }
         public IQuestionResult QuestionResult { get; set; }
         public List<IQuestionResult> LessonLog { get; } = new();
         public DMZState<bool> OnHintUsed { get; set; } = new();
@@ -17,7 +17,7 @@ namespace Chang
         public void Dispose()
         {
             LessonLog.Clear();
-            LessonProvider = null;
+            Lesson = null;
         }
     }
 }

@@ -1,32 +1,36 @@
+using System;
 using System.Collections.Generic;
 
 namespace Chang.Core
 {
-    /// <summary>
-    /// Book contanis lessons that determined by sections in Google Sheets page.
-    /// </summary>
-    public class Lesson
+    public class Lesson : IDisposable
     {
-        public Languages Language;
-        public string Section; 
-        public List<string> Keys;
-        
+        public Languages Language { get; private set; }
+        public string Section { get; private set; }
+        public List<string> Keys { get; private set; }
+
         /// <summary>
         /// selected name. Used to find config with the same name
         /// </summary>
-        public string FileName { get; set; } = string.Empty; // todo chang remove or what is this for as i dont use scriptable asset configs for lessons
         public IQuestion CurrentQuestion { get; private set; }
+
         public List<IQuestion> Questions { get; private set; }
         public Queue<IQuestion> QuestionQueue { get; private set; }
         public bool IsGeneratedMathWordsQuestPlayed { get; set; }
 
+        public Lesson(Languages language, string section, List<string> keys)
+        {
+            Language = language;
+            Section = section;
+            Keys = keys;
+        }
+
         public void Dispose()
         {
-            FileName = string.Empty;
             CurrentQuestion = null;
             QuestionQueue.Clear();
         }
-
+        
         public void DequeueAndSetSipmlQuestion()
         {
             CurrentQuestion = QuestionQueue.Dequeue();

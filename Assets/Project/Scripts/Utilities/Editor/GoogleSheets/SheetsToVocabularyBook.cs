@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Chang.Core;
+using Chang.GoogleSheets;
 using UnityEditor;
 using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -42,26 +42,26 @@ namespace Chang.Utilities.GoogleSheets
                 string folderPath = System.IO.Path.GetDirectoryName(path);
                 SpreadSheetUtilities.CreateFoldersRecursively(folderPath);
 
-                VocabularyBookData asset = ScriptableObject.CreateInstance<VocabularyBookData>();
+                VocabularyBook asset = ScriptableObject.CreateInstance<VocabularyBook>();
                 AssetDatabase.CreateAsset(asset, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 Debug.Log($"[{methodName}] Created new BookInfo asset at path: {path}");
             }
 
-            VocabularyBookData vocabularyBookData = AssetDatabase.LoadAssetAtPath<VocabularyBookData>(path);
-            if (vocabularyBookData == null)
+            VocabularyBook vocabularyBook = AssetDatabase.LoadAssetAtPath<VocabularyBook>(path);
+            if (vocabularyBook == null)
             {
                 Debug.LogError($"[{methodName}] Failed to load BookInfo asset.");
             }
 
-            vocabularyBookData.Language = book.Language;
-            vocabularyBookData.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
+            vocabularyBook.Language = book.Language;
+            vocabularyBook.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
 
-            EditorUtility.SetDirty(vocabularyBookData);
+            EditorUtility.SetDirty(vocabularyBook);
             UnityEngine.Debug.LogWarning(
                 $"[{nameof(SheetsToVocabularyBook)}][{nameof(ReadAsync)}] --- Done --- path: {path}",
-                vocabularyBookData);
+                vocabularyBook);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Chang.Core;
 using UnityEditor;
 using UnityEngine;
+using Chang.GoogleSheets;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Utilities.GoogleSheets
@@ -42,25 +42,25 @@ namespace Chang.Utilities.GoogleSheets
                 string folderPath = System.IO.Path.GetDirectoryName(path);
                 SpreadSheetUtilities.CreateFoldersRecursively(folderPath);
 
-                SentencesBookData asset = ScriptableObject.CreateInstance<SentencesBookData>();
+                SentencesBook asset = ScriptableObject.CreateInstance<SentencesBook>();
                 AssetDatabase.CreateAsset(asset, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 Debug.Log($"[{methodName}] Created new BookInfo asset at path: {path}");
             }
 
-            SentencesBookData sentencesBookData = AssetDatabase.LoadAssetAtPath<SentencesBookData>(path);
-            if (sentencesBookData == null)
+            SentencesBook sentencesBook = AssetDatabase.LoadAssetAtPath<SentencesBook>(path);
+            if (sentencesBook == null)
             {
                 Debug.LogError($"[{methodName}] Failed to load BookInfo asset.");
             }
 
-            sentencesBookData.Language = book.Language;
-            sentencesBookData.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
+            sentencesBook.Language = book.Language;
+            sentencesBook.Sections = book.Sheets.SelectMany(sheet => sheet.Sections).ToList();
 
-            EditorUtility.SetDirty(sentencesBookData);
+            EditorUtility.SetDirty(sentencesBook);
             UnityEngine.Debug.LogWarning(
-                $"[{nameof(SheetsToVocabulary)}][{nameof(ReadAsync)}] --- Done --- path: {path}", sentencesBookData);
+                $"[{nameof(SheetsToVocabulary)}][{nameof(ReadAsync)}] --- Done --- path: {path}", sentencesBook);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
