@@ -57,7 +57,7 @@ namespace Chang.Utilities.Depricated
                 AssetDatabase.Refresh();
             }
         }
-
+/*
         public static void CreateQuestSelectWordConfig(string name, QuestionConfig dataAsset)
         {
             var languagePrefix = dataAsset.Language.ToString();
@@ -76,6 +76,7 @@ namespace Chang.Utilities.Depricated
             CreateFolders(pathOnly);
             AssetDatabase.CreateAsset(dataAsset, $"{pathOnly}/{fileName}.asset");
         }
+        */
 
         public static void CreateLessonConfig(string section, LessonConfig dataAsset)
         {
@@ -150,6 +151,7 @@ namespace Chang.Utilities.Depricated
                 }
             };
 
+            /*
             var word = new WordConfig
             {
                 Section = phraseData.Section,
@@ -179,6 +181,7 @@ namespace Chang.Utilities.Depricated
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
+            */
         }
 
         private static string GetSheetJsonSystemFilePath(Languages language, string name)

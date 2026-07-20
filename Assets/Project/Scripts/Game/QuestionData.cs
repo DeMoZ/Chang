@@ -6,6 +6,7 @@ using System.Collections.Generic;
 /// </summary>
 namespace Chang
 {
+    /*
     public interface IQuestData
     {
         public ChangTypes QuestionType { get; }
@@ -60,5 +61,5 @@ namespace Chang
             MixWords.Clear();
             PlaceHolderPool.Clear();
         }
-    }
+    */
 }

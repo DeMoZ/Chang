@@ -47,7 +47,7 @@ namespace Chang.FSM
 
         private CancellationTokenSource _cts;
         private SentenceSelectWordStateResult _stateResult;
-        private QuestSentenceSelectWordData _questionData;
+        // private QuestSentenceSelectWordData _questionData;
         private SentenceSelectWords _sentenceQuestion;
 
         public override ChangTypes Type => ChangTypes.SentenceSelectWords;
@@ -74,7 +74,7 @@ namespace Chang.FSM
             _stateController.SetViewActive(false);
             _pagesContentProvider.ClearCache();
             _stateController.Clear();
-            _questionData.Dispose();
+            // _questionData.Dispose();
             _stateResult = null;
         }
 
@@ -89,6 +89,9 @@ namespace Chang.FSM
                 return;
             }
 
+            throw new NotImplementedException();
+            
+            /*
             await _pagesContentProvider.GetContentAsync(question, ct);
             await _pagesContentProvider.CacheContentAsync(AssetPaths.Addressables.EmptyWordPlaceHolderPath, ct);
 
@@ -113,10 +116,10 @@ namespace Chang.FSM
                 () =>
                 {
                     /*OnClickPlaySound(!isQuestInTranslation)*/
-                });
+            /*    });
 
             _stateController.SetViewActive(true);
-
+            */
             // OnClickPlaySound(!isQuestInTranslation);
         }
 
@@ -135,7 +138,7 @@ namespace Chang.FSM
             //
             // return true;
         }
-
+/*
         private QuestSentenceSelectWordData GetQuestionData(SentenceSelectWords sentenceQuestion)
         {
             var data = new QuestSentenceSelectWordData
@@ -170,12 +173,13 @@ namespace Chang.FSM
                         phraseData.SetIsPlaceHolder(string.IsNullOrEmpty(fileName));
                         phrasesDataList.Add(phraseData);
                     }
+                    
                 }
 
                 return phrasesDataList;
             }
         }
-
+*/
         private void OnClickPlaySound(bool isLearnLanguage)
         {
             throw new NotImplementedException();
@@ -201,6 +205,8 @@ namespace Chang.FSM
         {
             Debug.Log($"displayIndex: {displayIndex}; mixIndex: {mixIndex}");
 
+            throw new NotImplementedException();
+            /*
             if (displayIndex > -1) // display word clicked
             {
                 if (!_questionData.DisplaySequence[displayIndex].IsPlaceHolder)
@@ -281,6 +287,7 @@ namespace Chang.FSM
 
                 Bus.QuestionResult = result;
             }
+            */
         }
     }
 }

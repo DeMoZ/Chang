@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Chang.GoogleSheets;
+using Chang.Resources;
 using UnityEditor;
 using UnityEngine;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -11,7 +12,7 @@ namespace Chang.Utilities.GoogleSheets
     // get vocabulary book data from Google sheets (lessons)
     public class SheetsToVocabularyBook
     {
-        private static string Path(Languages language) => $"Assets/Project/Configs/{language}/VocabularyBook.asset";
+        private static string Path(Languages language) => AssetPaths.Utilities.VocabularyBookPath(language);
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.

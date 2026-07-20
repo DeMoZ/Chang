@@ -12,7 +12,7 @@ namespace Project.Services.PagesContentProvider
         /// <summary>
         /// Preloading all content on Enter Pages state. Content from all pages.
         /// </summary>
-        UniTask PreloadPagesStateAsync(List<IQuestion> questions, Action<float, float> percents, CancellationToken ct);
+        UniTask PreloadWordsContentAsync(List<Word> words, Action<float, float> percents, CancellationToken ct);
 
         /// <summary>
         /// Cache individual content by path
@@ -37,5 +37,7 @@ namespace Project.Services.PagesContentProvider
         /// Clears all cached content on Page Exit.
         /// </summary>
         void ClearCache();
+
+        bool GetPhrase(string path);
     }
 }

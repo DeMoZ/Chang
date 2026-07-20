@@ -7,6 +7,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 /// </summary>
 namespace Chang
 {
+    /*
     [System.Serializable]
     public abstract class QuestBase
     {
@@ -30,8 +31,8 @@ namespace Chang
             QuestionType = ChangTypes.SelectWord;
         }
 
-        public PhraseConfig CorrectWord;
-        public List<PhraseConfig> MixWords;
+        // public PhraseConfig CorrectWord;
+        // public List<PhraseConfig> MixWords;
         public string CorrectWordFileName { get; set; }
         public List<string> MixWordsFileNames { get; set; }
 
@@ -39,14 +40,15 @@ namespace Chang
         {
             return new QuestSelectWordData
             {
-                CorrectWord = CorrectWord.PhraseData,
-                MixWords = MixWords?.Select(m => m.PhraseData).ToList()
+                // CorrectWord = CorrectWord.PhraseData,
+                // MixWords = MixWords?.Select(m => m.PhraseData).ToList()
             };
         }
 
         protected override string GetEditorInfo()
         {
-            return CorrectWord == null ? string.Empty : CorrectWord.Key;
+            // return CorrectWord == null ? string.Empty : CorrectWord.Key;
+            return string.Empty;
         }
     }
 
@@ -58,11 +60,12 @@ namespace Chang
             QuestionType = ChangTypes.MatchWords;
         }
 
-        public List<PhraseConfig> MatchWords;
+        // public List<PhraseConfig> MatchWords;
 
         public override QuestDataBase GetQuestData()
         {
-            return new QuestMatchWordsData(MatchWords?.Select(m => m.PhraseData).ToList());
+            // return new QuestMatchWordsData(MatchWords?.Select(m => m.PhraseData).ToList());
+            return null;
         }
 
         protected override string GetEditorInfo()
@@ -71,4 +74,5 @@ namespace Chang
             return string.Empty;
         }
     }
+    */
 }

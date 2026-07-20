@@ -1,39 +1,8 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Chang
 {
-    [CreateAssetMenu(menuName = "Chang/Phrase Config", fileName = "PhraseConfig")]
-    public class PhraseConfig : ScriptableObject
-    {
-        [field: SerializeField] public string Key { get; set; } = string.Empty;
-        [field: SerializeField] public Languages Language { get; set; } = Languages.English;
-        [field: SerializeField] public string Section { get; set; } = string.Empty;
-        [field: SerializeField] public WordConfig Word { get; set; }
-
-        public PhraseData PhraseData => new(Key, Word.WordData, Language);
-    }
-
-    [Serializable]
-    public class WordConfig
-    {
-        [field: SerializeField] public string Section { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Do not use this field
-        /// </summary>
-        [Tooltip("Only to show in the inspector")]
-        [field: SerializeField]
-        public string Key { get; set; } = string.Empty;
-
-        [field: SerializeField] public string Word { get; set; } = string.Empty;
-        [field: SerializeField] public string Phonetic { get; set; } = string.Empty;
-        [field: SerializeField] public List<Translation> Meanings { get; set; }
-
-        public WordData WordData => new(Section, Key, Word, Phonetic, Meanings);
-    }
-
     [Serializable]
     public class Translation
     {

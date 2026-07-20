@@ -2,6 +2,14 @@ namespace Chang.Resources
 {
     public static class AssetPaths
     {
+        public static class Constants
+        {
+            public const string Vocabulary = "Vocabulary";
+            public const string Sentences = "Sentences";
+            public const string VocabularyBook = "VocabularyBook";
+            public const string SentencesBook = "SentencesBook";
+        }
+        
         public static class Utilities
         {
             public const string AssetsFolder = "Assets";
@@ -17,6 +25,20 @@ namespace Chang.Resources
 
             public const string Book = "Book";
             public const string Sound = "Sound";
+            
+            public const string Root = "Assets/Project/Configs/";
+            
+            public static string VocabularyPath(Languages language) =>
+                $"{Root}{language}/{Constants.Vocabulary}.asset";
+
+            public static string SentencesPath(Languages language) => 
+                $"{Root}{language}/{Constants.Sentences}.asset";
+            
+            public static string VocabularyBookPath(Languages language) =>
+                $"{Root}{language}/{Constants.VocabularyBook}.asset";
+
+            public static string SentencesBookPath(Languages language) =>
+                $"{Root}{language}/{Constants.SentencesBook}.asset";
         }
 
         public static class Addressables
@@ -25,9 +47,21 @@ namespace Chang.Resources
             public const string Words = "Words/";
             public const string SoundWords = "SoundWords/";
             public const string ImageWords = "ImageWords/";
-            
+
             public const string EmptyWordPlaceHolder = "EmptyWordPlaceHolder.asset";
             public const string EmptyWordPlaceHolderPath = Root + "EmptyWordPlaceHolder.asset";
+
+            public static string VocabularyPath(Languages language) =>
+                $"{Root}{language}/{Constants.Vocabulary}.asset";
+
+            public static string SentencesPath(Languages language) => 
+                $"{Root}{language}/{Constants.Sentences}.asset";
+            
+            public static string VocabularyBookPath(Languages language) =>
+                $"{Root}{language}/{Constants.VocabularyBook}.asset";
+
+            public static string SentencesBookPath(Languages language) =>
+                $"{Root}{language}/{Constants.SentencesBook}.asset";
         }
 
         public static class Resources

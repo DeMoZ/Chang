@@ -7,9 +7,9 @@ namespace Chang.Core
         ChangTypes Type { get; }
 
         HashSet<string> GetWordsKeys { get; }
-        HashSet<string> GetSoundKeys { get; }
-        HashSet<string> GetImageKeys { get; }
-        HashSet<string> GetNeedDemonstrationKeys { get; }
+        // HashSet<string> GetSoundKeys { get; } // this key is individual for each word and kept word class
+        // HashSet<string> GetImageKeys { get; } // this key is individual for each word and kept word class
+       HashSet<string> GetNeedDemonstrationKeys { get; }
     }
 
     public class QuestMatchWords : IQuestion

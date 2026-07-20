@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Chang.Core;
 using Chang.Resources;
@@ -14,12 +15,12 @@ namespace Chang.FSM
 {
     public class LobbyState : ResultStateBase<StateType, GameBus>
     {
-        private const string VocabularyBookKey = "VocabularyBook";
-        private const string SentencesBookKey = "SentencesBook";
-
         public override StateType Type => StateType.Lobby;
         private Languages Language => _profileService.LearnLanguage;
-        private string GetPath(string key) => $"Assets/Project/Resources_Bundled/{Language}/{key}.asset";
+        private string VocabularyPath => AssetPaths.Addressables.VocabularyPath(Language);
+        private string SentencesPath => AssetPaths.Addressables.SentencesPath(Language);
+        private string VocabularyBookPath => AssetPaths.Addressables.VocabularyBookPath(Language);
+        private string SentencesBookPath => AssetPaths.Addressables.SentencesBookPath(Language);
 
         [Inject] private readonly LobbyController _lobbyController;
         [Inject] private readonly AddressablesAssetManager _assetManager;
@@ -52,12 +53,18 @@ namespace Chang.FSM
                 new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
             _loadingUiController.SimulateProgress(2f).Forget();
 
+            HashSet<string> paths = new HashSet<string>
+                { VocabularyBookPath, VocabularyPath, SentencesBookPath, SentencesPath };
+            long downloadSize = await _assetManager.GetDownloadSize(paths, _cts.Token);
+
             await _profileService.LoadStoredData(_cts.Token);
 
             List<UniTask> loads = new()
             {
                 LoadVocabularyBookAsync(_cts.Token),
-                LoadSentencesBookAsync(_cts.Token)
+                LoadVocabularyAsync(_cts.Token),
+                LoadSentencesBookAsync(_cts.Token),
+                LoadSentencesAsync(_cts.Token)
             };
 
             await UniTask.WhenAll(loads);
@@ -77,19 +84,19 @@ namespace Chang.FSM
             string methodName = nameof(LoadVocabularyBookAsync);
             Debug.Log($"[{methodName}] Start");
             DisposableAsset<GoogleSheets.VocabularyBook> asset = await _assetManager
-                .LoadAssetAsync<GoogleSheets.VocabularyBook>(GetPath(VocabularyBookKey), ct);
+                .LoadAssetAsync<GoogleSheets.VocabularyBook>(VocabularyBookPath, ct);
 
             if (!asset.Item)
             {
                 Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: " +
-                               $"{GetPath(VocabularyBookKey)}");
+                               $"{VocabularyBookPath}");
                 return;
             }
 
             if (asset.Item.Sections == null || asset.Item.Sections.Count == 0)
             {
                 Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] no sections ins asset, BookKey: " +
-                               $"{GetPath(VocabularyBookKey)}");
+                               $"{VocabularyBookPath}");
                 return;
             }
 
@@ -100,15 +107,42 @@ namespace Chang.FSM
             Debug.Log($"[{methodName}] End");
         }
 
+        private async UniTask LoadVocabularyAsync(CancellationToken ct)
+        {
+            string methodName = nameof(LoadVocabularyAsync);
+            Debug.Log($"[{methodName}] Start");
+
+            DisposableAsset<Core.Vocabulary> asset =
+                await _assetManager.LoadAssetAsync<Core.Vocabulary>(VocabularyBookPath, ct);
+
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: " +
+                               $"{VocabularyBookPath}");
+                return;
+            }
+            Dictionary<string, Word> words = asset.Item.Words.ToDictionary(word => word.Key, word => word);
+            Bus.SetWords(words);
+            asset.Dispose();
+            Debug.Log($"[{methodName}] End");
+        }
+
+        private async UniTask LoadSentencesAsync(CancellationToken ct)
+        {
+            string methodName = nameof(LoadSentencesAsync);
+            Debug.Log($"[{methodName}] Start");
+            Debug.Log($"[{methodName}] End");
+        }
+
         private async UniTask LoadSentencesBookAsync(CancellationToken ct)
         {
             string methodName = nameof(LoadSentencesBookAsync);
             // Debug.Log($"[{methodName}] Start");
-            // DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(GetPath(SentencesBookKey), ct);
+            // DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(SentencesBookPath, ct);
             //
             // if (!asset.Item)
             // {
-            //     Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {GetPath(SentencesBookKey)}");
+            //     Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {SentencesBookPath}");
             //     return;
             // }
             //

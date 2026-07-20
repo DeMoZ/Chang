@@ -15,7 +15,7 @@ public class PromptsBank : ScriptableObject
     [SerializeField, FolderPath, VerticalGroup("Folders")]
     private List<string> _folders;
 
-    [SerializeField, TableList] private List<PromptItem> _promptItems;
+    // [SerializeField, TableList] private List<PromptItem> _promptItems;
 
     [Button, VerticalGroup("Folders")]
     private void PrepareWithWordsInFolders()
@@ -23,6 +23,7 @@ public class PromptsBank : ScriptableObject
         AssetDatabase.StartAssetEditing();
         try
         {
+            /*
             Dictionary<string, List<WordConfig>> wordDict = new();
             foreach (var folder in _folders)
             {
@@ -74,6 +75,7 @@ public class PromptsBank : ScriptableObject
                     })
                     .ToList();
             }
+            */
         }
         catch (Exception e)
         {
@@ -85,24 +87,24 @@ public class PromptsBank : ScriptableObject
         }
     }
 
-    private List<PhraseConfig> FindPhraseConfigsInFolder(string folder)
-    {
-        string[] assetsGuids = AssetDatabase.FindAssets("t: ScriptableObject", new[] { folder });
-        Debug.Log($"assets {assetsGuids.Length} in folder:\n{folder}");
-
-        List<PhraseConfig> configs = new();
-        foreach (string guid in assetsGuids)
-        {
-            string fromAssetPath = AssetDatabase.GUIDToAssetPath(guid);
-            PhraseConfig asset = AssetDatabase.LoadAssetAtPath<PhraseConfig>(fromAssetPath);
-            if (asset != null)
-            {
-                configs.Add(asset);
-            }
-        }
-
-        return configs;
-    }
+    // private List<PhraseConfig> FindPhraseConfigsInFolder(string folder)
+    // {
+    //     string[] assetsGuids = AssetDatabase.FindAssets("t: ScriptableObject", new[] { folder });
+    //     Debug.Log($"assets {assetsGuids.Length} in folder:\n{folder}");
+    //
+    //     List<PhraseConfig> configs = new();
+    //     foreach (string guid in assetsGuids)
+    //     {
+    //         string fromAssetPath = AssetDatabase.GUIDToAssetPath(guid);
+    //         PhraseConfig asset = AssetDatabase.LoadAssetAtPath<PhraseConfig>(fromAssetPath);
+    //         if (asset != null)
+    //         {
+    //             configs.Add(asset);
+    //         }
+    //     }
+    //
+    //     return configs;
+    // }
 }
 
 [Serializable]

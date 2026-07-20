@@ -6,6 +6,6 @@ namespace Chang
     [CreateAssetMenu(menuName = "Chang/LanguageBank Config", fileName = "WordConfig")]
     public class LanguageBankConfig : ScriptableObject
     {
-        public List<PhraseConfig> Key;
+        // public List<PhraseConfig> Key;
     }
 }

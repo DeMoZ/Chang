@@ -80,6 +80,7 @@ namespace Chang.FSM
 
             // var path = _wordPathHelper.GetConfigPath(((QuestDemonstrationWord)question).CorrectWordFileName);
             string path = string.Empty;
+            /*
             var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
 
             if (!asset)
@@ -89,7 +90,7 @@ namespace Chang.FSM
 
             QuestDemonstrateWordData questionData = new QuestDemonstrateWordData(asset.PhraseData);
             _correctWord = questionData.CorrectWord;
-
+*/
             // string spritePath = _wordPathHelper.GetTexturePath(((QuestDemonstrationWord)question).CorrectWordFileName);
             string spritePath = string.Empty;
             var sprite = _pagesContentProvider.GetCachedSprite(spritePath);

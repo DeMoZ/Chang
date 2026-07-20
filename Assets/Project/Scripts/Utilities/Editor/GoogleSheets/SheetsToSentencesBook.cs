@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using Chang.GoogleSheets;
+using Chang.Resources;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Utilities.GoogleSheets
@@ -11,7 +12,7 @@ namespace Chang.Utilities.GoogleSheets
     // get sentences book data from Google sheets (lessons)
     public class SheetsToSentencesBook
     {
-        private static string Path(Languages language) => $"Assets/Project/Configs/{language}/SentencesBook.asset";
+        private static string Path(Languages language) => AssetPaths.Utilities.SentencesBookPath(language);
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.

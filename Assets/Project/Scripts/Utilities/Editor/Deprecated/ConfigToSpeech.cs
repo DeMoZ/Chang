@@ -35,6 +35,7 @@ namespace Chang.Utilities.Depricated
             {
                 foreach (var folder in _folders)
                 {
+                    /*
                     var configs = FindConfigsInFolder(folder);
 
                     foreach (var config in configs)
@@ -57,7 +58,7 @@ namespace Chang.Utilities.Depricated
                         Debug.Log($"Sound for config: {config.Word.Key} created");
 
                         await UniTask.WaitForSeconds(2);
-                    }
+                    }*/
                 }
             }
             catch (System.Exception e)
@@ -79,6 +80,7 @@ namespace Chang.Utilities.Depricated
             await TextToSpeechService.GetAudioAsync(value);
         }
 
+        /*
         private List<PhraseConfig> FindConfigsInFolder(string folder)
         {
             string[] assetsGuids = AssetDatabase.FindAssets("t: ScriptableObject", new[] { folder });
@@ -97,6 +99,7 @@ namespace Chang.Utilities.Depricated
 
             return configs;
         }
+        */
     }
 
 // Класс для парсинга JSON-ответа

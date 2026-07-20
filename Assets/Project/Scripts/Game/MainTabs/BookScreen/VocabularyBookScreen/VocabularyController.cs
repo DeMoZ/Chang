@@ -66,10 +66,10 @@ namespace Chang.Vocabulary
             _view.Clear();
 
 
-            for (int i = 0; i < _gameBus.VocabularyBookData.Sections.Count; i++)
+            for (int i = 0; i < _gameBus.VocabularyBook.Sections.Count; i++)
             {
                 Color baseColor = _view.GetNextColor(i);
-                VocabularyBookSection sectionData = _gameBus.VocabularyBookData.Sections[i];
+                VocabularyBookSection sectionData = _gameBus.VocabularyBook.Sections[i];
 
                 SectionBlock sectionBlock = _view.InstantiateSectionBlock();
                 sectionBlock.SetBaseColor(baseColor);

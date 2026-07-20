@@ -81,24 +81,25 @@ namespace Chang.FSM
             IQuestion question = Bus.Lesson.CurrentQuestion;
 
             await _pagesContentProvider.GetContentAsync(question, ct);
-
+            throw new NotImplementedException();
+/*
             QuestMatchWordsData questionData = new QuestMatchWordsData(new List<PhraseData>());
             string path = string.Empty;
-            
+
             foreach (var fileName in question.GetWordsKeys)
             {
                 // path = _wordPathHelper.GetConfigPath(fileName);
                 path = string.Empty;
-                var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
+                var phrase = _pagesContentProvider.GetPhrase(path);
 
-                if (!asset)
+                if (!phrase)
                 {
                     Debug.LogError($"Asset not found: {path}");
                     continue;
                 }
 
-                var data = asset.PhraseData;
-                questionData.MatchWords.Add(data);
+                // var data = phrase.PhraseData;
+                // questionData.MatchWords.Add(data);
             }
 
             _correctCount = 0;
@@ -124,6 +125,7 @@ namespace Chang.FSM
             Debug.Log($"isLeft: {isLeftLearnLanguage}");
             _stateController.Init(isLeftLearnLanguage, _leftWords, _rightWords, OnToggleValueChanged, OnContinueClicked, OnPlaySound);
             _stateController.SetViewActive(true);
+            */
         }
 
         private void OnPlaySound(string key, bool isLearnLanguage)

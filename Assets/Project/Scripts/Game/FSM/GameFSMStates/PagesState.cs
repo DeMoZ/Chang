@@ -107,8 +107,13 @@ namespace Chang.FSM
         }
 
         private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
-        {
-            await _pagesContentProvider.PreloadPagesStateAsync(Bus.Lesson.Questions, progress, ct);
+        { 
+            HashSet<string> wordsKeys = Bus.Lesson.Questions.Select(q => q.GetWordsKeys)
+                .SelectMany(hashSet => hashSet)
+                .ToHashSet();
+
+            List<Word> words = wordsKeys.Select(key => Bus.Words[key]).ToList();
+            await _pagesContentProvider.PreloadWordsContentAsync(words, progress, ct);
         }
 
         private void ExitToLobby()

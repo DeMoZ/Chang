@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Chang.Resources;
 using Chang.Utilities.GoogleSheets;
 using UnityEditor;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Chang.GoogleSheets
     // get sentences data from Google sheets
     public class SheetsToSentences
     {
-        private static string Path(Languages language) => $"Assets/Project/Configs/{language}/Sentences.asset";
+        private static string Path(Languages language) => AssetPaths.Utilities.SentencesPath(language);
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
