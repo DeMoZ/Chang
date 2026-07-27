@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Chang.Core
 {
     [System.Serializable]
@@ -15,5 +17,25 @@ namespace Chang.Core
         public string Phonetics;
         public string DefaultTranslation;
         public string DefaultDescription;
+
+        // runtime properties
+        public bool IsShowPhonetics { get; private set; }
+        public Sprite Sprite { get; private set; }
+
+        public void SetShowPhonetics(bool getShowPhonetics)
+        {
+            IsShowPhonetics = getShowPhonetics;
+        }
+
+        public void SetSprite(Sprite sprite)
+        {
+            Sprite = sprite;
+        }
+
+        public string GetTranslation()
+        {
+            // todo chang Get Translation from i2language
+            return DefaultTranslation;
+        }
     }
 }

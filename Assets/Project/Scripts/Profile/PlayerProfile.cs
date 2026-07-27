@@ -9,7 +9,7 @@ namespace Chang.Profile
         public readonly Dictionary<Languages, ProgressData<VocabularyQuestLog>> VocabularyProgressDict = new();
         public readonly Dictionary<Languages, ProgressData<SentenceQuestLog>> SentencesProgressDict = new();
 
-        public ProfileData ProfileData;
+        public ProfileData ProfileData = new ProfileData();
 
         /// <summary>
         /// key Thai/Fruits, value section

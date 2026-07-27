@@ -113,15 +113,15 @@ namespace Chang.FSM
             Debug.Log($"[{methodName}] Start");
 
             DisposableAsset<Core.Vocabulary> asset =
-                await _assetManager.LoadAssetAsync<Core.Vocabulary>(VocabularyBookPath, ct);
+                await _assetManager.LoadAssetAsync<Core.Vocabulary>(VocabularyPath, ct);
 
             if (!asset.Item)
             {
                 Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: " +
-                               $"{VocabularyBookPath}");
+                               $"{VocabularyPath}");
                 return;
             }
-            Dictionary<string, Word> words = asset.Item.Words.ToDictionary(word => word.Key, word => word);
+            Dictionary<string, Word> words = asset.Item.Words.ToDictionary(word => word.WordKey, word => word);
             Bus.SetWords(words);
             asset.Dispose();
             Debug.Log($"[{methodName}] End");

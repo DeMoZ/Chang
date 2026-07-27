@@ -18,14 +18,19 @@ namespace Chang.Resources
         public string GetSoundPath(string key)
         {
             // key = Thai/Words/Fruits/Coconut
-            // result Assets/Project/Resources_Bundled/Thai/SoundWords/Fruits/Coconut.mp3
-            string[] keyParts = key.Split('/');
+            // result Assets/Project/Resources_Bundled/SoundWords/Thai/Fruits/Coconut.mp3
+            
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return string.Empty;
+            }
+            
+            key =  key.Replace("Vocabulary/", "");
+            
             string path = Path.Combine(
                 AssetPaths.Addressables.Root,
-                keyParts[0],
                 AssetPaths.Addressables.SoundWords,
-                keyParts[2],
-                $"{keyParts[3]}.mp3");
+                $"{key}.mp3");
 
             return NormalizePath(path);
         }
@@ -33,6 +38,11 @@ namespace Chang.Resources
         public string GetNativeSoundKey(string key, Languages language)
         {
             // key = Thai/Words/Fruits/Coconut
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return string.Empty;
+            }
+
             string[] keyParts = key.Split('/');
             keyParts[0] = language.ToString();
             return string.Join("/", keyParts);
@@ -41,19 +51,18 @@ namespace Chang.Resources
         public string GetTexturePath(string key)
         {
             // key = Thai/Words/Fruits/Coconut
-            // result Assets/Project/Resources_Bundled/Thai/ImageWords/Fruits/Coconut.png
+            // result Assets/Project/Resources_Bundled/ImageWords/Thai/Fruits/Coconut.png
             if (string.IsNullOrWhiteSpace(key))
             {
                 return string.Empty;
             }
 
-            string[] keyParts = key.Split('/');
+            key =  key.Replace("Vocabulary/", "");
+            
             string path = Path.Combine(
                 AssetPaths.Addressables.Root,
-                keyParts[0],
                 AssetPaths.Addressables.ImageWords,
-                keyParts[2],
-                $"{keyParts[3]}.png");
+                $"{key}.png");
 
             return NormalizePath(path);
         }

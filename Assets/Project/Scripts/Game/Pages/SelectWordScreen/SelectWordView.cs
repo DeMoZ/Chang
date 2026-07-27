@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Chang.Core;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,9 +25,8 @@ namespace Chang.UI
         private Action _onClickPlaySound;
 
         public void Init(bool isQuestInTranslation, 
-            PhraseData correctWord, 
-            Sprite sprite,
-            List<PhraseData> mixWords,
+            Word correctWord, 
+            List<Word> mixWords,
             Action<int, bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
@@ -40,24 +40,24 @@ namespace Chang.UI
                 Destroy(child.gameObject);
             }
 
-            var quesWord = _isQuestInTranslation ? correctWord.Word.Translation : correctWord.Word.LearnWord;
-            _questionWord.Set(quesWord, correctWord.Word.Phonetic);
-            _questionWord.EnablePhonetic(!_isQuestInTranslation && correctWord.ShowPhonetics);
-
+            string quesWord = _isQuestInTranslation ? correctWord.GetTranslation() : correctWord.LearnWord;
+            _questionWord.Set(quesWord, correctWord.Phonetics);
+            _questionWord.EnablePhonetic(!_isQuestInTranslation && correctWord.IsShowPhonetics);
+            
             // init mix words
             for (var i = 0; i < mixWords.Count; i++)
             {
                 var mix = Instantiate(_mixWordPrefab, _mixWordContent);
                 var index = i;
-
-                var word = !_isQuestInTranslation ? mixWords[i].Word.Translation : mixWords[i].Word.LearnWord;
-                mix.Set(word, mixWords[i].Word.Phonetic, _toggleGroup, isOn => onToggleValueChanged(index, isOn));
-                mix.EnablePhonetics(_isQuestInTranslation && mixWords[i].ShowPhonetics);
-
+            
+                var word = !_isQuestInTranslation ? mixWords[i].GetTranslation() : mixWords[i].LearnWord;
+                mix.Set(word, mixWords[i].Phonetics, _toggleGroup, isOn => onToggleValueChanged(index, isOn));
+                mix.EnablePhonetics(_isQuestInTranslation && mixWords[i].IsShowPhonetics);
+            
                 _mixWordToggles.Add(mix);
             }
             
-            _questionImage.sprite = sprite;
+            _questionImage.sprite = correctWord.Sprite;
             
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
             _playStopBtn.OnClick += OnClickPlaySound;

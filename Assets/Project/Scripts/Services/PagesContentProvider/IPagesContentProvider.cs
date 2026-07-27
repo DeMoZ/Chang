@@ -20,11 +20,6 @@ namespace Project.Services.PagesContentProvider
         UniTask CacheContentAsync(string emptyWordPlaceHolderPath, CancellationToken ct);
         
         /// <summary>
-        /// Get content on Enter Every Page. Content for current page.
-        /// </summary>
-        UniTask GetContentAsync(IQuestion question, CancellationToken ct);
-
-        /// <summary>
         /// Get an asset from the cache by its key.
         /// </summary>
         T GetCachedAsset<T>(string key) where T : class;

@@ -75,9 +75,7 @@ namespace Chang.FSM
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
             IQuestion question = Bus.Lesson.CurrentQuestion;
-
-            await _pagesContentProvider.GetContentAsync(question, ct);
-
+            throw new NotImplementedException();
             // var path = _wordPathHelper.GetConfigPath(((QuestDemonstrationWord)question).CorrectWordFileName);
             string path = string.Empty;
             /*

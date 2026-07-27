@@ -88,34 +88,28 @@ namespace Chang.FSM
             {
                 throw new Exception("SelectWordState: Current question is not of type QuestSelectWord.");
             }
-            
-            // Preload content for question.
-            // I actually do it on lesson start so may be it is not required step
-            await _pagesContentProvider.GetContentAsync(question, ct);
 
-            // _correctWord = question.Key;
-            // _mixWords = new List<WordModel> { _correctWord };
-            // _mixWords.AddRange(question.WordsKeys);
-            // _mixWords.Shuffle();
-            //
-            // string key = $"{_profileService.LearnLanguage}/{_correctWord.Word.LogKey}"; // todo chang use section lang/section/word
-            // int mark = _profileService.GetVocabularyMark(key);
-            // bool isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
-            // _correctWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
-            //
-            // foreach (var mixWord in _mixWords)
-            // {
-            //     mark = _profileService.GetVocabularyMark(mixWord.LogKey);
-            //     mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
-            // }
-            //
-            // string spritePath = _wordPathHelper.GetTexturePath(((QuestSelectWord)quest).CorrectWordFileName);
-            // Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
-            //
-            // _stateController.Init(isQuestInTranslation, _correctWord, sprite, _mixWords, OnToggleValueChanged, () => OnClickPlaySound(!isQuestInTranslation));
-            // _stateController.SetViewActive(true);
-            //
-            // OnClickPlaySound(!isQuestInTranslation);
+            _correctWord = Bus.Words[question.Key];
+            _mixWords = Bus.Words.Where(pair => question.WordsKeys.Contains(pair.Key)).Select(pair => pair.Value).ToList();
+            _mixWords.Add(_correctWord);
+            _mixWords.Shuffle();
+            
+            int mark = _profileService.GetVocabularyMark(_correctWord.WordKey);
+            bool isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
+            
+            _correctWord.SetShowPhonetics(WordHelper.GetShowPhonetics(mark));
+            
+            foreach (var mixWord in _mixWords)
+            {
+                mark = _profileService.GetVocabularyMark(mixWord.WordKey);
+                mixWord.SetShowPhonetics(WordHelper.GetShowPhonetics(mark));
+            }
+            
+            _correctWord.SetSprite(_pagesContentProvider.GetCachedSprite(_correctWord.ImageKey));
+            _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged, () => OnClickPlaySound(!isQuestInTranslation));
+            _stateController.SetViewActive(true);
+            
+            OnClickPlaySound(!isQuestInTranslation);
         }
         /*
         private QuestSelectWordData GetQuestionData(QuestSelectWord selectWord)
@@ -160,17 +154,17 @@ namespace Chang.FSM
 */
         private void OnClickPlaySound(bool isLearnLanguage) 
         {
-            // string key =  isLearnLanguage
-            //     ? _correctWord.LogKey
-            //     : _wordPathHelper.GetNativeSoundKey(_correctWord.LogKey, _profileService.ProfileData.NativeLanguage);
-            //
-            // string path = _wordPathHelper.GetSoundPath(key);
-            // AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
-            //
-            // if (asset)
-            // {
-            //     _pagesSoundController.PlaySound(asset);
-            // }
+            string key =  isLearnLanguage
+                ? _correctWord.WordKey
+                : _wordPathHelper.GetNativeSoundKey(_correctWord.WordKey, _profileService.ProfileData.NativeLanguage);
+            
+            string path = _wordPathHelper.GetSoundPath(key);
+            AudioClip asset = _pagesContentProvider.GetCachedAudioClip(path);
+            
+            if (asset)
+            {
+                _pagesSoundController.PlaySound(asset);
+            }
         }
 
         private void OnHint(bool isHintUsed)

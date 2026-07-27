@@ -78,6 +78,7 @@ namespace Chang.FSM
             {
                 Lesson = Bus.Lesson,
                 GameType = Bus.GameType,
+                Words = Bus.Words,
             };
 
             _pagesFsm = new PagesFSM(_diContainer, _pagesBus, _pagesContentProvider);

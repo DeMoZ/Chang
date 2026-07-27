@@ -80,7 +80,6 @@ namespace Chang.FSM
         {
             IQuestion question = Bus.Lesson.CurrentQuestion;
 
-            await _pagesContentProvider.GetContentAsync(question, ct);
             throw new NotImplementedException();
 /*
             QuestMatchWordsData questionData = new QuestMatchWordsData(new List<PhraseData>());

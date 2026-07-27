@@ -9,7 +9,6 @@ using Chang.Services;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Popup;
-using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -67,76 +66,51 @@ namespace Project.Services.PagesContentProvider
             CancellationToken ct)
         {
             _progress = progress;
-          
-            foreach (Word word in words)
-            {
-                
-            }
 
-            HashSet<string> imageKeys = words.Select(w => _wordPathHelper.GetTexturePath(w.WordKey)).ToHashSet();
-            HashSet<string> soundKeys = words.Select(w => _wordPathHelper.GetSoundPath(w.WordKey)).ToHashSet();
-            
-            
-            
-            
-            // throw new NotImplementedException();
-            // HashSet<string> totalKeys = new();
-            // foreach (IQuestion quest in questions)
-            // {
-            //     imageKeys.AddRange(quest.GetSoundKeys.Select(k => _wordPathHelper.GetTexturePath(k)));
-            //     // wordKeys.AddRange(quest.GetWordsKeys.Select(k => _wordPathHelper.GetConfigPath(k)));
-            //     soundKeys = GetSoundKeys(quest.GetSoundKeys.Select(k => k).ToHashSet()).ToHashSet();
-            // }
-            //
-            // totalKeys.UnionWith(imageKeys);
-            // totalKeys.UnionWith(soundKeys);
-            // totalKeys.UnionWith(wordKeys);
-            //
-            // long totalToLoad = await GetDownloadSize(totalKeys, ct);
-            //
+            HashSet<string> imageKeys = words.Select(w => _wordPathHelper.GetTexturePath(w.ImageKey)).ToHashSet();
+            HashSet<string> soundKeys = words.Select(w => _wordPathHelper.GetSoundPath(w.SoundKey)).ToHashSet();
+
+            HashSet<string> totalKeys = new();
+            totalKeys.UnionWith(imageKeys);
+            totalKeys.UnionWith(soundKeys);
+
+            long totalToLoad = await GetDownloadSize(totalKeys, ct);
+
             // if (totalToLoad == 0)
             // {
             //     Debug.Log("No assets need to be downloaded.");
             //     return;
             // }
-            //
-            // Dictionary<string, IDisposableAsset> images = new();
-            // Dictionary<string, IDisposableAsset> sounds = new();
-            // Dictionary<string, IDisposableAsset> wordsOld = new();
-            //
-            // long currentToLoad = 0;
-            // long downloadSizeOld = 0;
-            //
-            // downloadSizeOld = await GetDownloadSize(imageKeys, ct);
-            // if (downloadSizeOld > 0)
+
+            Dictionary<string, IDisposableAsset> images = new();
+            Dictionary<string, IDisposableAsset> sounds = new();
+
+            long currentToLoad = 0;
+            long downloadSize = 0;
+
+            downloadSize = await GetDownloadSize(imageKeys, ct);
+            // if (downloadSize > 0)
             // {
-            //     currentToLoad += downloadSizeOld;
-            //     images = await Preload<Sprite>(imageKeys,
-            //         progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
-            // }
-            //
-            // downloadSizeOld = await GetDownloadSize(soundKeys, ct);
-            // if (downloadSizeOld > 0)
-            // {
-            //     currentToLoad += downloadSizeOld;
-            //     sounds = await Preload<AudioClip>(soundKeys,
-            //         bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
-            // }
-            //
-            // downloadSizeOld = await GetDownloadSize(wordKeys, ct);
-            // if (downloadSizeOld > 0)
-            // {
-            //     currentToLoad += downloadSizeOld;
-            //     // words = await Preload<PhraseConfig>(wordKeys,
-            //     //     bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
+            currentToLoad += downloadSize;
+            images = await Preload<Sprite>(imageKeys,
+                progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
             // }
 
-            // Merge(Content, images);
-            // Merge(Content, sounds);
+            downloadSize = await GetDownloadSize(soundKeys, ct);
+            // if (downloadSize > 0)
+            // {
+            currentToLoad += downloadSize;
+            sounds = await Preload<AudioClip>(soundKeys,
+                bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
+            // }
+
+            Merge(Content, images);
+            Merge(Content, sounds);
         }
 
         public async UniTask CacheContentAsync(string path, CancellationToken ct)
         {
+            throw new NotImplementedException();
             if (Content.TryGetValue(path, out var configAsset))
             {
                 if (configAsset != null)
@@ -155,54 +129,6 @@ namespace Project.Services.PagesContentProvider
             */
         }
 
-        public async UniTask GetContentAsync(IQuestion nextQuestion, CancellationToken ct)
-        {
-            // LoadingUiModel loadingModel = new(LoadingElements.Animation);
-            // LoadingUiController loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
-            //
-            // HashSet<string> imageKeys = nextQuestion.GetImageKeys;
-            // HashSet<string> soundKeys = GetSoundKeys(nextQuestion.GetSoundKeys.Select(k => k).ToHashSet()).ToHashSet();
-            //
-            // foreach (string key in soundKeys)
-            // {
-            //     if (Content.TryGetValue(key, out var configAsset))
-            //     {
-            //         if (configAsset != null)
-            //         {
-            //             continue;
-            //         }
-            //     }
-            //
-            //     DisposableAsset<AudioClip> asset = await _assetManager.LoadAssetAsync<AudioClip>(key, ct);
-            //     if (asset.Item != null)
-            //     {
-            //         Content[key] = asset;
-            //     }
-            // }
-            //
-            // foreach (string key in imageKeys)
-            // {
-            //     string path = _wordPathHelper.GetTexturePath(key);
-            //
-            //     if (Content.TryGetValue(path, out var configAsset))
-            //     {
-            //         if (configAsset != null)
-            //         {
-            //             continue;
-            //         }
-            //     }
-            //
-            //     DisposableAsset<Sprite> asset = await _assetManager.LoadAssetAsync<Sprite>(path, ct);
-            //
-            //     if (asset.Item != null)
-            //     {
-            //         Content[path] = asset;
-            //     }
-            // }
-            //
-            // _popupManager.DisposePopup(loadingUiController);
-        }
-
         [CanBeNull]
         public T GetCachedAsset<T>(string key) where T : class
         {
@@ -218,8 +144,9 @@ namespace Project.Services.PagesContentProvider
             return null;
         }
 
-        public Sprite GetCachedSprite(string path)
+        public Sprite GetCachedSprite(string key)
         {
+            string path = _wordPathHelper.GetTexturePath(key);
             Sprite sprite = GetCachedAsset<Sprite>(path);
 
             if (sprite == null)
@@ -242,9 +169,9 @@ namespace Project.Services.PagesContentProvider
             );
         }
 
-        public AudioClip GetCachedAudioClip(string name)
+        public AudioClip GetCachedAudioClip(string key)
         {
-            string path = _wordPathHelper.GetSoundPath(name);
+            string path = _wordPathHelper.GetSoundPath(key);
             return GetCachedAsset<AudioClip>(path);
         }
 
