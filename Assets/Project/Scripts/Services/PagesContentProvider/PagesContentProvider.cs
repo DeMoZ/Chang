@@ -76,33 +76,21 @@ namespace Project.Services.PagesContentProvider
 
             long totalToLoad = await GetDownloadSize(totalKeys, ct);
 
-            // if (totalToLoad == 0)
-            // {
-            //     Debug.Log("No assets need to be downloaded.");
-            //     return;
-            // }
-
             Dictionary<string, IDisposableAsset> images = new();
             Dictionary<string, IDisposableAsset> sounds = new();
 
             long currentToLoad = 0;
             long downloadSize = 0;
-
             downloadSize = await GetDownloadSize(imageKeys, ct);
-            // if (downloadSize > 0)
-            // {
             currentToLoad += downloadSize;
             images = await Preload<Sprite>(imageKeys,
                 progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
-            // }
-
+           
             downloadSize = await GetDownloadSize(soundKeys, ct);
-            // if (downloadSize > 0)
-            // {
+           
             currentToLoad += downloadSize;
             sounds = await Preload<AudioClip>(soundKeys,
                 bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
-            // }
 
             Merge(Content, images);
             Merge(Content, sounds);

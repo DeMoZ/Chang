@@ -158,8 +158,7 @@ namespace Chang.FSM
                 ? _correctWord.WordKey
                 : _wordPathHelper.GetNativeSoundKey(_correctWord.WordKey, _profileService.ProfileData.NativeLanguage);
             
-            string path = _wordPathHelper.GetSoundPath(key);
-            AudioClip asset = _pagesContentProvider.GetCachedAudioClip(path);
+            AudioClip asset = _pagesContentProvider.GetCachedAudioClip(key);
             
             if (asset)
             {
