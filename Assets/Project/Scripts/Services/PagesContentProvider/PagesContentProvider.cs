@@ -165,19 +165,21 @@ namespace Project.Services.PagesContentProvider
 
         private async UniTask<long> GetDownloadSize(HashSet<string> keys, CancellationToken ct)
         {
-            AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
+            AsyncOperationHandle<long> handle = default;
 
             try
             {
-                await getDownloadSizeHandle.ToUniTask(cancellationToken: ct);
+                handle = Addressables.GetDownloadSizeAsync(keys);
+                
+                await handle.ToUniTask(cancellationToken: ct);
 
-                if (getDownloadSizeHandle.Status == AsyncOperationStatus.Succeeded)
+                if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    return getDownloadSizeHandle.Result;
+                    return handle.Result;
                 }
 
                 Debug.LogError(
-                    $"{nameof(GetDownloadSize)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                    $"{nameof(GetDownloadSize)} failed to get download size: {handle.OperationException}");
                 return 0;
             }
             catch (OperationCanceledException)
@@ -192,7 +194,7 @@ namespace Project.Services.PagesContentProvider
             }
             finally
             {
-                getDownloadSizeHandle.Release();
+                handle.Release();
             }
         }
 
@@ -217,7 +219,7 @@ namespace Project.Services.PagesContentProvider
             {
                 string key = keysList[i];
                 int index = i;
-                AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key);
+                AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key); // todo chang load with assetManager
                 handles.Add(handle);
                 loadAssetTasks.Add(handle.ToUniTask(
                     progress: Progress.Create<float>(p =>
