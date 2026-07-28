@@ -1,4 +1,5 @@
 using System;
+using Chang.Core;
 using Zenject;
 using Chang.UI;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        public void Init(PhraseData correctWord,
+        public void Init(Word correctWord,
             Sprite sprite,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound)

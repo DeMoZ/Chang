@@ -16,17 +16,17 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class MatchWordsStateResult : IQuestionResult
-    {
-        public readonly List<SelectWordResult> Results = new();
-
-        public object[] Info { get; } = null;
-
-        public string Key { get; } = string.Empty;
-        public string Presentation { get; } = string.Empty;
-        public ChangTypes Type => ChangTypes.MatchWords;
-        public bool IsCorrect => true;
-    }
+    // public class MatchWordsStateResult : IQuestionResult
+    // {
+    //     public readonly List<WordResult> Results = new();
+    //
+    //     public object[] Info { get; } = null;
+    //
+    //     public string Key { get; } = string.Empty;
+    //     public string Presentation { get; } = string.Empty;
+    //     public ChangTypes Type => ChangTypes.MatchWords;
+    //     public bool IsCorrect => true;
+    // }
 
     public class MatchWordsState : ResultStateBase<ChangTypes, PagesBus>
     {
@@ -40,11 +40,11 @@ namespace Chang.FSM
         [Inject] private readonly PagesSoundController _pagesSoundController;
         [Inject] private readonly PopupManager _popupManager;
 
-        private List<WordData> _leftWords;
-        private List<WordData> _rightWords;
+        private List<Word> _leftWords;
+        private List<Word> _rightWords;
         private CancellationTokenSource _cts;
         private int _correctCount;
-        private MatchWordsStateResult _result;
+        private MatchWordsResult _result;
 
         public override ChangTypes Type => ChangTypes.MatchWords;
 
@@ -144,44 +144,21 @@ namespace Chang.FSM
         {
             var isCorrect = _leftWords[leftIndex] == _rightWords[rightIndex];
             Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
-
             _stateController.ShowCorrectAsync(leftIndex, rightIndex, isCorrect).Forget();
-            string path = Path.Combine(
-                _profileService.ProfileData.LearnLanguage.ToString(),
-                AssetPaths.Addressables.Words,
-                _leftWords[leftIndex].Section,
-                _leftWords[leftIndex].Key);
-
-            var leftResult = new SelectWordResult(
-                _wordPathHelper.NormalizePath(path),
-                _leftWords[leftIndex].LearnWord, isCorrect,
-                _leftWords[leftIndex].LearnWord, _leftWords[leftIndex].Phonetic);
-
-            _result.Results.Add(leftResult);
+            _result.WordResults.Add(new WordResult(_leftWords[leftIndex], isCorrect, false));
 
             if (!isCorrect)
             {
-                path = Path.Combine(
-                    _profileService.ProfileData.LearnLanguage.ToString(),
-                    AssetPaths.Addressables.Words,
-                    _rightWords[rightIndex].Section,
-                    _rightWords[rightIndex].Key);
-
-                var rightResult = new SelectWordResult(
-                    _wordPathHelper.NormalizePath(path),
-                    _rightWords[rightIndex].LearnWord, false,
-                    _rightWords[rightIndex].LearnWord, _rightWords[rightIndex].Phonetic);
-
-                _result.Results.Add(rightResult);
-            }
-
-            if (!isCorrect)
+                _result.WordResults.Add(new WordResult(_rightWords[rightIndex], false, false));
                 return;
-
+            }
+            
             _correctCount++;
 
             if (_correctCount == _leftWords.Count)
+            {
                 _stateController.EnableContinueButton(true);
+            }
         }
 
         private void OnContinueClicked()

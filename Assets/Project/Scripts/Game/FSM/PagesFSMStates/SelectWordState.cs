@@ -16,21 +16,22 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class SelectWordResult : IQuestionResult
+    public class WordResult : IQuestionResult
     {
-        public string Key { get; }
-        public string Presentation { get; }
-        public ChangTypes Type => ChangTypes.SelectWord;
+        public virtual ChangTypes Type => ChangTypes.SelectWord;
+        public Word Word { get; }
         public bool IsCorrect { get; }
-        public object[] Info { get; }
+        public bool IsHintUsed { get; }
 
-        public SelectWordResult(string key, string presentation, bool isCorrect, params object[] info)
+        public WordResult(Word word, bool isCorrect, bool isHintUsed)
         {
-            Key = key;
-            Presentation = presentation;
+            Word = word;
             IsCorrect = isCorrect;
-            Info = info;
+            IsHintUsed = isHintUsed;
         }
+
+        public string Key => Word.WordKey;
+        public string Presentation => Word.LearnWord;
     }
 
     public class SelectWordState : ResultStateBase<ChangTypes, PagesBus>
@@ -139,9 +140,7 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index].Key == _correctWord.Key;
-            object[] info = { _correctWord.LearnWord, Bus.OnHintUsed.Value };
-            
-            var result = new SelectWordResult(_correctWord.WordKey, _correctWord.LearnWord, isCorrect, info);
+            var result = new WordResult(_correctWord, isCorrect, Bus.OnHintUsed.Value);
             Bus.QuestionResult = result;
         }
     }

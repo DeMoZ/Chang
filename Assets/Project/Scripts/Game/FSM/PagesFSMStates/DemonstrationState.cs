@@ -14,19 +14,12 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class DemonstrationWordResult : IQuestionResult
+    public class DemonstrationWordResult : WordResult
     {
-        public string Key { get; }
-        public string Presentation { get; }
-        public ChangTypes Type => ChangTypes.DemonstrationWord;
-        public bool IsCorrect => true;
-        public object[] Info { get; }
+        public override ChangTypes Type => ChangTypes.DemonstrationWord;
 
-        public DemonstrationWordResult(string key, string presentation, params object[] info)
+        public DemonstrationWordResult(Word word, bool isCorrect, bool isHintUsed) : base(word, isCorrect, isHintUsed)
         {
-            Key = key;
-            Presentation = presentation;
-            Info = info;
         }
     }
 
@@ -42,12 +35,13 @@ namespace Chang.FSM
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly PopupManager _popupManager;
 
-        private PhraseData _correctWord;
+        private Word _correctWord;
         private CancellationTokenSource _cts;
 
         public override ChangTypes Type => ChangTypes.DemonstrationWord;
 
-        public DemonstrationState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<ChangTypes> onStateResult)
+        public DemonstrationState(PagesBus bus, IPagesContentProvider pagesContentProvider,
+            Action<ChangTypes> onStateResult)
             : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
@@ -101,7 +95,7 @@ namespace Chang.FSM
 
         private void OnClickPlaySound()
         {
-            var path = _wordPathHelper.GetSoundPath(_correctWord.LogKey);
+            var path = _wordPathHelper.GetSoundPath(_correctWord.WordKey);
             var asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
@@ -114,16 +108,10 @@ namespace Chang.FSM
         {
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
-            object[] info = { _correctWord.Word.LearnWord, false };
-            string path = Path.Combine(
-                _profileService.ProfileData.LearnLanguage.ToString(),
-                AssetPaths.Addressables.Words,
-                _correctWord.Word.Section,
-                _correctWord.Word.Key);
             var result = new DemonstrationWordResult(
-                _wordPathHelper.NormalizePath(path),
-                _correctWord.Word.LearnWord,
-                info);
+                _correctWord,
+                true,
+                false);
             Bus.QuestionResult = result;
         }
     }

@@ -162,9 +162,8 @@ namespace Chang.FSM
 
             var isCorrect = _pagesBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
-            var answer = string.Join(" / ", _pagesBus.QuestionResult.Info);
-            Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
-            var needIncrement = !(bool)_pagesBus.QuestionResult.Info[1];
+            Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {_pagesBus.QuestionResult.Presentation}");
+            var needIncrement = !_pagesBus.QuestionResult.IsHintUsed;
             _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation,
                 ChangTypes.SelectWord, isCorrect,
                 needIncrement);
@@ -176,7 +175,7 @@ namespace Chang.FSM
 
             var info = new ContinueButtonInfo();
             info.IsCorrect = isCorrect;
-            info.InfoText = (string)_pagesBus.QuestionResult.Info[0];
+            info.InfoText = _pagesBus.QuestionResult.Key;
 
             _pagesBus.LessonLog.Add(_pagesBus.QuestionResult);
 
@@ -189,13 +188,13 @@ namespace Chang.FSM
         {
             Debug.Log($"{nameof(OnCheckMatchWordsAsync)}");
 
-            MatchWordsStateResult stateResult = _pagesBus.QuestionResult as MatchWordsStateResult;
+            MatchWordsResult stateResult = _pagesBus.QuestionResult as MatchWordsResult;
             if (stateResult == null)
             {
-                throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
+                throw new NullReferenceException($"{nameof(MatchWordsResult)} is null");
             }
 
-            foreach (SelectWordResult result in stateResult.Results)
+            foreach (WordResult result in stateResult.WordResults)
             {
                 _profileService.AddVocabularyLog(result.Key, result.Presentation, ChangTypes.SelectWord,
                     result.IsCorrect, false);
@@ -212,20 +211,20 @@ namespace Chang.FSM
 
             var isCorrect = _pagesBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
-            var answer = string.Join(" / ", _pagesBus.QuestionResult.Info);
+            var answer = string.Join(" / ", _pagesBus.QuestionResult.Presentation);
             Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
 
             SentenceSelectWordStateResult stateResult = _pagesBus.QuestionResult as SentenceSelectWordStateResult;
             if (stateResult == null)
             {
-                throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
+                throw new NullReferenceException($"{nameof(MatchWordsResult)} is null");
             }
 
-            bool needIncrement = !(bool)_pagesBus.QuestionResult.Info[1]; // whether hint was used
+            bool needIncrement = !_pagesBus.QuestionResult.IsHintUsed;
 
-            if (stateResult.Info[2] is List<SelectWordResult> vocabularyResults)
+            if (stateResult.Info[2] is List<WordResult> vocabularyResults)
             {
-                foreach (SelectWordResult vocabularyResult in vocabularyResults)
+                foreach (WordResult vocabularyResult in vocabularyResults)
                 {
                     _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation,
                         ChangTypes.SelectWord, vocabularyResult.IsCorrect, needIncrement);
@@ -244,10 +243,10 @@ namespace Chang.FSM
             ContinueButtonInfo info = new()
             {
                 IsCorrect = isCorrect,
-                InfoText = (string)_pagesBus.QuestionResult.Info[0]
+                InfoText = _pagesBus.QuestionResult.Presentation
             };
 
-            _pagesBus.LessonLog.Add(stateResult);
+            // _pagesBus.LessonLog.Add(stateResult); // todo chang uncomment
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);

@@ -16,7 +16,7 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class SentenceSelectWordStateResult : IQuestionResult
+    public class SentenceSelectWordStateResult //: IQuestionResult
     {
         public string Key { get; }
         public string Presentation { get; }
