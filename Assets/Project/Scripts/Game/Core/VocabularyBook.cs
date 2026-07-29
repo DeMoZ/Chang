@@ -32,7 +32,7 @@ namespace Chang.Core
                             Key = key,
                             WordsKeys = lesson.Keys.Where(k => !k.Equals(key)).ToHashSet(),
                             SectionKey = section.SectionKey,
-                            Language = lesson.Language
+                            // Language = lesson.Language
                         };
 
                         questions.Add(question);

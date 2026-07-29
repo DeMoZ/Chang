@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Threading;
 using Chang.Core;
 using Chang.Resources;
@@ -68,26 +67,16 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            IQuestion question = Bus.Lesson.CurrentQuestion;
-            throw new NotImplementedException();
-            // var path = _wordPathHelper.GetConfigPath(((QuestDemonstrationWord)question).CorrectWordFileName);
-            string path = string.Empty;
-            /*
-            var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
+            QuestSelectWord question = Bus.Lesson.CurrentQuestion as QuestSelectWord;
 
-            if (!asset)
+            if (question == null)
             {
-                return;
+                throw new Exception("DemonstrateWordState: Current question is not of type QuestSelectWord.");
             }
 
-            QuestDemonstrateWordData questionData = new QuestDemonstrateWordData(asset.PhraseData);
-            _correctWord = questionData.CorrectWord;
-*/
-            // string spritePath = _wordPathHelper.GetTexturePath(((QuestDemonstrationWord)question).CorrectWordFileName);
-            string spritePath = string.Empty;
-            var sprite = _pagesContentProvider.GetCachedSprite(spritePath);
-
-            _stateController.Init(_correctWord, sprite, OnToggleValueChanged, OnClickPlaySound);
+            _correctWord = Bus.Words[question.Key];
+            _correctWord.SetSprite(_pagesContentProvider.GetCachedSprite(_correctWord.ImageKey));
+            _stateController.Init(_correctWord, OnToggleValueChanged, OnClickPlaySound);
             _stateController.SetViewActive(true);
 
             OnClickPlaySound();
@@ -108,10 +97,7 @@ namespace Chang.FSM
         {
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
-            var result = new DemonstrationWordResult(
-                _correctWord,
-                true,
-                false);
+            var result = new DemonstrationWordResult(_correctWord, true, false);
             Bus.QuestionResult = result;
         }
     }

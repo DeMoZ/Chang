@@ -296,19 +296,18 @@ namespace Chang.FSM
             {
                 HashSet<string> keys = nextQuestion.GetNeedDemonstrationKeys;
 
-                foreach (var fileName in keys)
+                foreach (string key in keys)
                 {
-                    // todo chang add demonstratioin
-                    // if (IsNeedDemonstration(fileName))
-                    // {
-                    //     var demonstration = new Vocabulary.QuestDemonstrationWord
-                    //     {
-                    //         CorrectWordFileName = fileName
-                    //     };
-                    //     lesson.InsertNextQuest(demonstration);
-                    //     nextQuestionType = ChangTypes.DemonstrationWord;
-                    //     break;
-                    // }
+                    if (IsNeedDemonstration(key))
+                    {
+                        var demonstration = new QuestSelectWord
+                        {
+                            Key = key
+                        };
+                        lesson.InsertNextQuest(demonstration);
+                        nextQuestionType = ChangTypes.DemonstrationWord;
+                        break;
+                    }
                 }
             }
 
@@ -353,13 +352,13 @@ namespace Chang.FSM
             return true;
         }
 
-        private bool IsNeedDemonstration(string fileName)
+        private bool IsNeedDemonstration(string key)
         {
-            bool logExists = _profileService.TryGetVocabularyLog(fileName, out var questLog);
+            bool logExists = _profileService.TryGetVocabularyLog(key, out var questLog);
 
             if (!logExists)
             {
-                Debug.Log($"Demonstration required. No log for: {fileName}");
+                Debug.Log($"Demonstration required. No log for: {key}");
                 return true;
             }
 
@@ -367,7 +366,7 @@ namespace Chang.FSM
 
             if (isSmallMark)
             {
-                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {fileName}");
+                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {key}");
             }
 
             return isSmallMark;

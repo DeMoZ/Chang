@@ -5,7 +5,7 @@ namespace Chang.Core
     public class VocabularyBookSection
     {
         public Languages Language;
-        public string Section; // will use it as default translation
+        public string Section; // will use it as default translation for section to English for now
         public string SectionKey; // Thai/VocabularyBook/Fruits
         public string DefaultTranslation => Section;
         public List<Lesson> Lessons;

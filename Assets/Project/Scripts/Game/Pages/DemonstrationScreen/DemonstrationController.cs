@@ -27,11 +27,10 @@ namespace Chang
         }
 
         public void Init(Word correctWord,
-            Sprite sprite,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
-            _view.Init(correctWord, sprite, onToggleValueChanged, onClickPlaySound);
+            _view.Init(correctWord, onToggleValueChanged, onClickPlaySound);
         }
     }
 }

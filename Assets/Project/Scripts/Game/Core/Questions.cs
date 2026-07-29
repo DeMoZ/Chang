@@ -5,11 +5,8 @@ namespace Chang.Core
     public interface IQuestion
     {
         ChangTypes Type { get; }
-
         HashSet<string> GetWordsKeys { get; }
-        // HashSet<string> GetSoundKeys { get; } // this key is individual for each word and kept word class
-        // HashSet<string> GetImageKeys { get; } // this key is individual for each word and kept word class
-       HashSet<string> GetNeedDemonstrationKeys { get; }
+        HashSet<string> GetNeedDemonstrationKeys { get; }
     }
 
     public class QuestMatchWords : IQuestion
@@ -31,7 +28,7 @@ namespace Chang.Core
         public string Key;
         public HashSet<string> WordsKeys;
         public string SectionKey;
-        public Languages Language;
+        // public Languages Language;
 
         public HashSet<string> GetWordsKeys => new(WordsKeys) { Key };
         public HashSet<string> GetSoundKeys => new(WordsKeys) { Key };

@@ -21,7 +21,6 @@ namespace Chang.UI
         private Action _onClickPlaySound;
         
         public void Init(Word correctWord,
-            Sprite sprite,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
@@ -47,7 +46,7 @@ namespace Chang.UI
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
             _playStopBtn.OnClick += OnClickPlaySound;
             
-            _questionImage.sprite = sprite;
+            _questionImage.sprite = correctWord.Sprite;
         }
 
         private void OnSoundPlay(bool play)
