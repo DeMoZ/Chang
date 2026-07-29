@@ -40,7 +40,7 @@ namespace Chang.UI
                 Destroy(child.gameObject);
             }
 
-            string quesWord = _isQuestInTranslation ? correctWord.GetTranslation() : correctWord.LearnWord;
+            string quesWord = _isQuestInTranslation ? correctWord.Translation : correctWord.LearnWord;
             _questionWord.Set(quesWord, correctWord.Phonetics);
             _questionWord.EnablePhonetic(!_isQuestInTranslation && correctWord.IsShowPhonetics);
             
@@ -50,7 +50,7 @@ namespace Chang.UI
                 var mix = Instantiate(_mixWordPrefab, _mixWordContent);
                 var index = i;
             
-                var word = !_isQuestInTranslation ? mixWords[i].GetTranslation() : mixWords[i].LearnWord;
+                var word = !_isQuestInTranslation ? mixWords[i].Translation : mixWords[i].LearnWord;
                 mix.Set(word, mixWords[i].Phonetics, _toggleGroup, isOn => onToggleValueChanged(index, isOn));
                 mix.EnablePhonetics(_isQuestInTranslation && mixWords[i].IsShowPhonetics);
             

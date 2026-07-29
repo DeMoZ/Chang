@@ -62,7 +62,7 @@ namespace Chang.UI
 
                 string word = sequence[i].Word.LearnWord;
                 int index = i;
-                displayWord.Set(word, sequence[i].Word.Phonetic, null, isOn => OnToggleValueChanged(index, -1));
+                displayWord.Set(word, sequence[i].Word.Phonetics, null, isOn => OnToggleValueChanged(index, -1));
                 displayWord.SetGroup(_displayTogglesGroup);
                 displayWord.SetInteractable(sequence[i].IsInteractable);
                 displayWord.SetActive(sequence[i].IsInteractable);
@@ -78,7 +78,7 @@ namespace Chang.UI
                 CToggle mixWord = Instantiate(_mixWordPrefab, _mixSequenceContent);
                 string word = sequence[i].Word.LearnWord;
                 int index = i;
-                mixWord.Set(word, sequence[i].Word.Phonetic, null, isOn => OnToggleValueChanged(-1, index));
+                mixWord.Set(word, sequence[i].Word.Phonetics, null, isOn => OnToggleValueChanged(-1, index));
                 mixWord.SetGroup(_mixTogglesGroup);
                 mixWord.SetInteractable(sequence[i].IsInteractable);
                 mixWord.SetActive(sequence[i].IsInteractable);

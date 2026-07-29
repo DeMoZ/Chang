@@ -16,19 +16,21 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class SentenceSelectWordStateResult //: IQuestionResult
+    public class SentenceSelectWordStateResult : IQuestionResult
     {
         public string Key { get; }
         public string Presentation { get; }
         public ChangTypes Type => ChangTypes.SentenceSelectWords;
         public bool IsCorrect { get; }
+        public bool IsHintUsed { get; }
         public object[] Info { get; }
 
-        public SentenceSelectWordStateResult(string key, string presentation, bool isCorrect, params object[] info)
+        public SentenceSelectWordStateResult(string key, string presentation, bool isCorrect, bool isHintUsed, params object[] info)
         {
             Key = key;
             Presentation = presentation;
             IsCorrect = isCorrect;
+            IsHintUsed = isHintUsed;
             Info = info;
         }
     }

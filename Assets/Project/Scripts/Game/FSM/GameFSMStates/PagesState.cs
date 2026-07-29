@@ -9,6 +9,7 @@ using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
 using Project.Services.PagesContentProvider;
+using Sirenix.Utilities;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -246,7 +247,7 @@ namespace Chang.FSM
                 InfoText = _pagesBus.QuestionResult.Presentation
             };
 
-            // _pagesBus.LessonLog.Add(stateResult); // todo chang uncomment
+            _pagesBus.LessonLog.Add(stateResult); // todo chang uncomment
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
@@ -275,8 +276,7 @@ namespace Chang.FSM
             {
                 if (TryGenerateQuestMatchWordsData(lesson, out var matchWordsQuest))
                 {
-                    // todo chang add matchWordQuest
-                    // lessonProvider.AddQuestion(matchWordsQuest);
+                    lesson.AddQuestion(matchWordsQuest);
                     lesson.IsGeneratedMathWordsQuestPlayed = true;
                 }
             }
@@ -330,25 +330,24 @@ namespace Chang.FSM
             {
                 return false;
             }
-
-            /*
-            HashSet<string> selectWordQuests = lessonProvider.Keys.ToHashSet();
+            
+            HashSet<string> selectWordQuests = lesson.Keys.ToHashSet();
             matchWords.AddRange(selectWordQuests);
 
             if (matchWords.Count < 2)
             {
-                string lessonPath = string.Join("/", new List<string>{lessonProvider.Language.ToString(), "Vocabulary", lessonProvider.Section});
+                string lessonPath = string.Join("/", new List<string>{lesson.Language.ToString(), "Vocabulary", lesson.Section});
                 Debug.LogWarning($"matchWords not generated for lesson : {lessonPath}, count select words {matchWords.Count}");
                 return false;
             }
-
+            
             matchWords = _pagesBus.GameType == GameType.Learn
                 ? matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE).ToHashSet()
                 : matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE).ToHashSet();
 
             matchWords.Shuffle();
             questMatchWords.MatchWordsKeys = matchWords;
-*/
+
             return true;
         }
 

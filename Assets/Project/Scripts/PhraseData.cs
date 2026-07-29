@@ -1,15 +1,17 @@
+using Chang.Core;
+
 namespace Chang
 {
     public class PhraseData
     {
         public readonly string Key;
         public readonly Languages Language;
-        public readonly WordData Word;
+        public readonly Word Word;
 
         public bool ShowPhonetics { get; protected set; }
-        public string LogKey => $"{Language}/{Word.LogKey}";
+        public string LogKey => string.Empty;// $"{Language}/{Word.LogKey}";
 
-        public PhraseData(string key, WordData word, Languages language)
+        public PhraseData(string key, Word word, Languages language)
         {
             Key = key;
             Word = word;
@@ -33,7 +35,7 @@ namespace Chang
         public bool IsHighlighted { get; private set; }
         public bool IsInteractable { get; private set; }
 
-        public SequencePhraseData(string key, WordData word, Languages language) : base(key, word, language)
+        public SequencePhraseData(string key, Word word, Languages language) : base(key, word, language)
         {
         }
 

@@ -84,8 +84,8 @@ namespace Chang.FSM
 
         private void OnClickPlaySound()
         {
-            var path = _wordPathHelper.GetSoundPath(_correctWord.WordKey);
-            var asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
+            string path = _wordPathHelper.GetSoundPath(_correctWord.WordKey);
+            AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
             {
@@ -97,7 +97,7 @@ namespace Chang.FSM
         {
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
-            var result = new DemonstrationWordResult(_correctWord, true, false);
+            DemonstrationWordResult result = new (_correctWord, true, false);
             Bus.QuestionResult = result;
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Zenject;
 using Chang.UI;
 using Cysharp.Threading.Tasks;
@@ -46,7 +47,7 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        public void Init(bool isLeftLearnLanguage, List<WordData> left, List<WordData> right,
+        public void Init(bool isLeftLearnLanguage, List<Word> left, List<Word> right,
             Action<int, int> onToggleValueChanged, Action onContinueClicked, Action<string, bool> onPlaySound)
         {
             _cts?.Cancel();
@@ -57,40 +58,40 @@ namespace Chang
             _onToggleValueChanged = onToggleValueChanged;
             _view.Init(onContinueClicked);
 
-            for (var i = 0; i < left.Count; i++)
+            for (int i = 0; i < left.Count; i++)
             {
-                var index = i;
-                var toggle = _view.AddItem(true);
+                int index = i;
+                CToggle toggle = _view.AddItem(true);
                 _leftToggles.Add(toggle);
 
-                var word = _isLeftLearnLanguage ? left[i].LearnWord : left[i].Translation;
-                toggle.Set(word, left[i].Phonetic, isOn =>
+                string word = _isLeftLearnLanguage ? left[i].LearnWord : left[i].Translation;
+                toggle.Set(word, left[i].Phonetics, isOn =>
                 {
                     OnToggleValueChanged(true, index, isOn);
                     if (isOn && _isLeftLearnLanguage)
                     {
-                        onPlaySound?.Invoke(left[index].LogKey, _isLeftLearnLanguage);
+                        onPlaySound?.Invoke(left[index].WordKey, _isLeftLearnLanguage);
                     }
                 });
-                toggle.EnablePhonetics(_isLeftLearnLanguage && right[i].ShowPhonetics);
+                toggle.EnablePhonetics(_isLeftLearnLanguage && right[i].IsShowPhonetics);
             }
 
-            for (var i = 0; i < right.Count; i++)
+            for (int i = 0; i < right.Count; i++)
             {
-                var index = i;
-                var toggle = _view.AddItem(false);
+                int index = i;
+                CToggle toggle = _view.AddItem(false);
                 _rightToggles.Add(toggle);
 
-                var word = _isLeftLearnLanguage ? right[i].Translation : right[i].LearnWord;
-                toggle.Set(word, right[i].Phonetic, isOn =>
+                string word = _isLeftLearnLanguage ? right[i].Translation : right[i].LearnWord;
+                toggle.Set(word, right[i].Phonetics, isOn =>
                 {
                     OnToggleValueChanged(false, index, isOn);
                     if (isOn && !_isLeftLearnLanguage)
                     {
-                        onPlaySound?.Invoke(right[index].LogKey, !_isLeftLearnLanguage);
+                        onPlaySound?.Invoke(right[index].WordKey, !_isLeftLearnLanguage);
                     }
                 });
-                toggle.EnablePhonetics(!_isLeftLearnLanguage && right[i].ShowPhonetics);
+                toggle.EnablePhonetics(!_isLeftLearnLanguage && right[i].IsShowPhonetics);
             }
         }
 
@@ -134,19 +135,19 @@ namespace Chang
                 return;
             }
 
-            var column = isLeft ? "left" : "right";
+            string column = isLeft ? "left" : "right";
             Debug.Log($"Clicked column: {column}; toggle: {index}; isOn: {isOn}");
 
-            var left = _leftToggles.FirstOrDefault(t => t.IsOn);
-            var right = _rightToggles.FirstOrDefault(t => t.IsOn);
+            CToggle left = _leftToggles.FirstOrDefault(toggle => toggle.IsOn);
+            CToggle right = _rightToggles.FirstOrDefault(toggle => toggle.IsOn);
 
             if (left == null || right == null)
             {
                 return;
             }
 
-            var leftIndex = _leftToggles.IndexOf(left);
-            var rightIndex = _rightToggles.IndexOf(right);
+            int leftIndex = _leftToggles.IndexOf(left);
+            int rightIndex = _rightToggles.IndexOf(right);
 
             _onToggleValueChanged?.Invoke(leftIndex, rightIndex);
         }

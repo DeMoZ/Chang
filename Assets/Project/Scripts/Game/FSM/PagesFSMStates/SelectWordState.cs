@@ -91,8 +91,10 @@ namespace Chang.FSM
             }
 
             _correctWord = Bus.Words[question.Key];
-            _mixWords = Bus.Words.Where(pair => question.WordsKeys.Contains(pair.Key)).Select(pair => pair.Value)
+            _mixWords = Bus.Words.Where(pair => question.WordsKeys.Contains(pair.Key))
+                .Select(pair => pair.Value)
                 .ToList();
+            
             _mixWords.Add(_correctWord);
             _mixWords.Shuffle();
 

@@ -27,7 +27,7 @@ namespace Chang.Core
 
         public string Key;
         public HashSet<string> WordsKeys;
-        public string SectionKey;
+        public string SectionKey; // todo chang do i need it?
         // public Languages Language;
 
         public HashSet<string> GetWordsKeys => new(WordsKeys) { Key };

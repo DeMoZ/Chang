@@ -17,15 +17,15 @@ namespace Chang.UI
         [SerializeField] private PlayStopButton _playStopBtn;
 
         [ShowInInspector, ReadOnly] public override ChangTypes ScreenType { get; } = ChangTypes.DemonstrationWord;
-        
+
         private Action _onClickPlaySound;
-        
+
         public void Init(Word correctWord,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
             Debug.Log("Init SelectWordView");
-            
+
             _onClickPlaySound = onClickPlaySound;
 
             foreach (Transform child in _mixWordContent)
@@ -40,12 +40,12 @@ namespace Chang.UI
 
             // init translation words
             var mix = Instantiate(_mixWordPrefab, _mixWordContent);
-            var word = correctWord.GetTranslation();
+            var word = correctWord.Translation;
             mix.Set(word, correctWord.Phonetics, _toggleGroup, onToggleValueChanged);
             mix.EnablePhonetics(false);
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
             _playStopBtn.OnClick += OnClickPlaySound;
-            
+
             _questionImage.sprite = correctWord.Sprite;
         }
 

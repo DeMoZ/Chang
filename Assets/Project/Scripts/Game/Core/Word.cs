@@ -7,11 +7,11 @@ namespace Chang.Core
     {
         public Languages Language;
         public string Section;
-            
-        public string WordKey;      // Thai/Vocabulary/Food/Fried_rice
-        public string ImageKey;     // Thai/Vocabulary/Food/Fried_rice
-        public string SoundKey;     // Thai/Vocabulary/Food/Fried_rice
-        public string Key;          // Fried_rice
+
+        public string WordKey; // Thai/Vocabulary/Food/Fried_rice
+        public string ImageKey; // Thai/Vocabulary/Food/Fried_rice
+        public string SoundKey; // Thai/Vocabulary/Food/Fried_rice
+        public string Key; // Fried_rice
 
         public string LearnWord;
         public string Phonetics;
@@ -32,10 +32,13 @@ namespace Chang.Core
             Sprite = sprite;
         }
 
-        public string GetTranslation()
+        public string Translation
         {
-            // todo chang Get Translation from i2language
-            return DefaultTranslation;
+            get
+            {
+                // todo chang Get Translation from i2language
+                return DefaultTranslation;
+            }
         }
     }
 }

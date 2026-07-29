@@ -1,7 +1,6 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using Chang.Core;
@@ -16,17 +15,43 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    // public class MatchWordsStateResult : IQuestionResult
-    // {
-    //     public readonly List<WordResult> Results = new();
-    //
-    //     public object[] Info { get; } = null;
-    //
-    //     public string Key { get; } = string.Empty;
-    //     public string Presentation { get; } = string.Empty;
-    //     public ChangTypes Type => ChangTypes.MatchWords;
-    //     public bool IsCorrect => true;
-    // }
+    public class MatchWordsResult : IQuestionResult
+    {
+        public ChangTypes Type => ChangTypes.MatchWords;
+        public List<WordResult> WordResults { get; } = new ();
+
+        public string Key
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public string Presentation
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public bool IsCorrect
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public bool IsHintUsed
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+    }
 
     public class MatchWordsState : ResultStateBase<ChangTypes, PagesBus>
     {
@@ -78,44 +103,23 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            IQuestion question = Bus.Lesson.CurrentQuestion;
-
-            throw new NotImplementedException();
-/*
-            QuestMatchWordsData questionData = new QuestMatchWordsData(new List<PhraseData>());
-            string path = string.Empty;
-
-            foreach (var fileName in question.GetWordsKeys)
-            {
-                // path = _wordPathHelper.GetConfigPath(fileName);
-                path = string.Empty;
-                var phrase = _pagesContentProvider.GetPhrase(path);
-
-                if (!phrase)
-                {
-                    Debug.LogError($"Asset not found: {path}");
-                    continue;
-                }
-
-                // var data = phrase.PhraseData;
-                // questionData.MatchWords.Add(data);
-            }
+            QuestMatchWords question = Bus.Lesson.CurrentQuestion as  QuestMatchWords;
+            List<Word> words = Bus.Words.Where(pair => question.GetWordsKeys.Contains(pair.Key))
+                .Select(pair => pair.Value)
+                .ToList();
 
             _correctCount = 0;
-            _result = new MatchWordsStateResult();
+            _result = new MatchWordsResult();
 
             _stateController.EnableContinueButton(false);
-
-            var words = questionData.MatchWords.Select(p => p.Word);
-
+            
             foreach (var word in words)
             {
-                string key = $"{_profileService.ProfileData.LearnLanguage}/{word.LogKey}";
-                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetVocabularyMark(key)));
+                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetVocabularyMark(word.WordKey)));
             }
 
-            _leftWords = new List<WordData>(words);
-            _rightWords = new List<WordData>(words);
+            _leftWords = new List<Word>(words);
+            _rightWords = new List<Word>(words);
 
             _leftWords.Shuffle();
             _rightWords.Shuffle();
@@ -124,14 +128,15 @@ namespace Chang.FSM
             Debug.Log($"isLeft: {isLeftLearnLanguage}");
             _stateController.Init(isLeftLearnLanguage, _leftWords, _rightWords, OnToggleValueChanged, OnContinueClicked, OnPlaySound);
             _stateController.SetViewActive(true);
-            */
         }
 
         private void OnPlaySound(string key, bool isLearnLanguage)
         {
-            var language = isLearnLanguage ? _profileService.ProfileData.LearnLanguage.ToString() : _profileService.ProfileData.NativeLanguage.ToString();
-
-            string path = _wordPathHelper.GetSoundPath($"{language}/{key}");
+            var language = isLearnLanguage 
+                ? _profileService.ProfileData.LearnLanguage.ToString() 
+                : _profileService.ProfileData.NativeLanguage.ToString();
+            
+            string path = _wordPathHelper.GetSoundPath(key);
             AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
