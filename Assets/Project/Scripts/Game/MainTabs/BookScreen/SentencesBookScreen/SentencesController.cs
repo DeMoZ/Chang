@@ -61,36 +61,33 @@ namespace Chang.Sentences
 
         public async UniTask SetAsync(CancellationToken ct)
         {
-            throw new System.NotImplementedException();
-            /*
             _sectionBlocks.Clear();
             _lessons.Clear();
             _view.Clear();
-
-            for (int i = 0; i < _gameBus.SentencesBookData.Sections.Count; i++)
-            {
-                Color baseColor = _view.GetNextColor(i);
-                SectionData sectionData = _gameBus.SentencesBookData.Sections[i];
-
-                SectionBlock sectionBlock = _view.InstantiateSectionBlock();
-                sectionBlock.SetBaseColor(baseColor);
-                sectionBlock.SectionView.name = $"SectionBlock_{sectionData.Section}";
-                _sectionBlocks.Add(sectionData.Section, sectionBlock);
-
-                sectionBlock.SectionView.Init(sectionData.Section,
-                    () => OnSectionSortClick(sectionData.Section),
-                    () => OnSectionRepetitionClick(sectionData.Section));
-
-                sectionBlock.SectionView.name = $"Section_{sectionData.Section}";
-                sectionBlock.SectionView.SetBaseColor(baseColor);
-
-                await PopulateSectionAsync(sectionData, sectionBlock, ct);
-            }
-
-            await UniTask.Yield();
-
-            SetScrollPosition();
-            */
+            throw new NotImplementedException();
+            // for (int i = 0; i < _gameBus.SentencesBook.Sections.Count; i++)
+            // {
+            //     Color baseColor = _view.GetNextColor(i);
+            //     SectionData sectionData = _gameBus.SentencesBookData.Sections[i];
+            //
+            //     SectionBlock sectionBlock = _view.InstantiateSectionBlock();
+            //     sectionBlock.SetBaseColor(baseColor);
+            //     sectionBlock.SectionView.name = $"SectionBlock_{sectionData.Section}";
+            //     _sectionBlocks.Add(sectionData.Section, sectionBlock);
+            //
+            //     sectionBlock.SectionView.Init(sectionData.Section,
+            //         () => OnSectionSortClick(sectionData.Section),
+            //         () => OnSectionRepetitionClick(sectionData.Section));
+            //
+            //     sectionBlock.SectionView.name = $"Section_{sectionData.Section}";
+            //     sectionBlock.SectionView.SetBaseColor(baseColor);
+            //
+            //     await PopulateSectionAsync(sectionData, sectionBlock, ct);
+            // }
+            //
+            // await UniTask.Yield();
+            //
+            // SetScrollPosition();
         }
 
         public void OnGeneralRepeatClicked()

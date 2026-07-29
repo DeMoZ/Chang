@@ -10,6 +10,8 @@ using DMZ.FSM;
 using Popup;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
+using SentencesBook = Chang.Core.SentencesBook;
+using VocabularyBook = Chang.Core.VocabularyBook;
 
 namespace Chang.FSM
 {
@@ -88,19 +90,17 @@ namespace Chang.FSM
 
             if (!asset.Item)
             {
-                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: " +
-                               $"{VocabularyBookPath}");
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {VocabularyBookPath}");
                 return;
             }
 
             if (asset.Item.Sections == null || asset.Item.Sections.Count == 0)
             {
-                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] no sections ins asset, BookKey: " +
-                               $"{VocabularyBookPath}");
+                Debug.LogError(
+                    $"[{nameof(LobbyState)}] [{methodName}] no sections in asset, BookKey: {VocabularyBookPath}");
                 return;
             }
 
-            // todo chang GoogleSheets.VocabularyBook to Core.VocabularyBook
             VocabularyBook book = GoogleSheetsToCore.GetVocabularyBook(asset.Item);
             Bus.SetVocabularyBook(book);
             asset.Dispose();
@@ -121,6 +121,7 @@ namespace Chang.FSM
                                $"{VocabularyPath}");
                 return;
             }
+
             Dictionary<string, Word> words = asset.Item.Words.ToDictionary(word => word.WordKey, word => word);
             Bus.SetWords(words);
             asset.Dispose();
@@ -131,58 +132,36 @@ namespace Chang.FSM
         {
             string methodName = nameof(LoadSentencesAsync);
             Debug.Log($"[{methodName}] Start");
+            DisposableAsset<GoogleSheets.SentencesInfo> asset =
+                await _assetManager.LoadAssetAsync<GoogleSheets.SentencesInfo>(SentencesPath, ct);
+
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: " +
+                               $"{SentencesPath}");
+                return;
+            }
+            List<Sentence> sentences = GoogleSheetsToCore.GetSentences(asset.Item.Sentences);
+            Bus.SetSentences(sentences);
+            asset.Dispose();
             Debug.Log($"[{methodName}] End");
         }
 
         private async UniTask LoadSentencesBookAsync(CancellationToken ct)
         {
             string methodName = nameof(LoadSentencesBookAsync);
-            // Debug.Log($"[{methodName}] Start");
-            // DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(SentencesBookPath, ct);
-            //
-            // if (!asset.Item)
-            // {
-            //     Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {SentencesBookPath}");
-            //     return;
-            // }
-            //
-            // JsonSerializerSettings settings = new JsonSerializerSettings
-            // {
-            //     Converters = new List<JsonConverter> { new Sentences.SentencesBookConverter() }
-            // };
-            //
-            // Bus.SentencesBookData = JsonConvert.DeserializeObject<Sentences.SentencesBookData>(asset.Item.text, settings);
-            //
-            // // populate fileNames (keys)
-            // // Thai.Lesson.First.Test.1
-            // foreach (SectionData sectionData in Bus.SentencesBookData.Sections)
-            // {
-            //     for (int i = 0; i < sectionData.Lessons.Count; i++)
-            //     {
-            //         LessonData lesson = sectionData.Lessons[i];
-            //         lesson.FileName = ProjectSharedLogic.SENTENCE_LESSON_KEY(Language.ToString(), sectionData.Section, i + 1);
-            //
-            //         foreach (var question in lesson.Questions)
-            //         {
-            //             if (question is ISentenceQuestion sentenceQuestion)
-            //             {
-            //                 sentenceQuestion.Language = Language;
-            //                 sentenceQuestion.Section = sectionData.Section;
-            //             }
-            //             else
-            //             {
-            //                 throw new Exception($"[{methodName}] Unknown question type in SentencesBookData: {question.GetType()}");
-            //             }
-            //         }
-            //     }
-            // }
-            //
-            // Bus.SentencesLessons = Bus.SentencesBookData.Sections
-            //     .SelectMany(section => section.Lessons)
-            //     .ToDictionary(lesson => lesson.FileName);
-            //
-            // asset.Dispose();
+            Debug.Log($"[{methodName}] Start");
+            DisposableAsset<GoogleSheets.SentencesBook> asset = await _assetManager
+                .LoadAssetAsync<GoogleSheets.SentencesBook>(SentencesBookPath, ct);
 
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {SentencesBookPath}");
+                return;
+            }
+            
+            SentencesBook book = GoogleSheetsToCore.GetSentencesBook(asset.Item);
+            Bus.SetSentencesBook(book);
             Debug.Log($"[{methodName}] End");
         }
 

@@ -101,10 +101,8 @@ namespace Chang.FSM
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
             _gameOverlayController.OnReturnFromGame -= ExitToLobby;
-
             _gameOverlayController.OnHint -= OnHint;
             _gameOverlayController.EnableHintButton(false);
-
             _gameOverlayController.OnExitToLobby();
         }
 

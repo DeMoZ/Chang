@@ -7,13 +7,10 @@ namespace Chang
     public class GameBus
     {
         public VocabularyBook VocabularyBook { get; private set; }
+        public SentencesBook SentencesBook { get; private set; }
         public Dictionary<string, Word> Words { get; private set; }
-
-        // public SentencesBookData SentencesBook { get; set; }
-
-        // public Dictionary<string, Lesson> VocabularyLessons { get; private set; }
+        public Dictionary<string, Sentence> Sentences { get; private set; }
         public Dictionary<string, VocabularyBookSection> VocabularySections { get; private set; }
-        // public Lesson CurrentLesson { get; private set; }
 
         // public Dictionary<string, Sentences.Deprecated.LessonData> SentencesLessons { get; set; }
 
@@ -31,12 +28,18 @@ namespace Chang
         {
             Words = words;
         }
+        
+        public void SetSentencesBook(SentencesBook book)
+        {
+            SentencesBook = book;
+        }
 
-        // public void SetCurrentLesson(Lesson lesson)
-        // {
-        //     CurrentLesson = lesson;
-        // }
-
+        public void SetSentences(List<Sentence> sentences)
+        {
+            Sentences = sentences.Select(sentence =>  new KeyValuePair<string, Sentence>(sentence.SentenceKey, sentence))
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+        
         public void SetLesson(Lesson lesson)
         {
             Lesson = lesson;

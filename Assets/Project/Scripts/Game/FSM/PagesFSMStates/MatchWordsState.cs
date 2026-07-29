@@ -19,38 +19,10 @@ namespace Chang.FSM
     {
         public ChangTypes Type => ChangTypes.MatchWords;
         public List<WordResult> WordResults { get; } = new ();
-
-        public string Key
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public string Presentation
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public bool IsCorrect
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public bool IsHintUsed
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public string Key => throw new NotImplementedException();
+        public string Presentation => throw new NotImplementedException();
+        public bool IsCorrect => throw new NotImplementedException();
+        public bool IsHintUsed => throw new NotImplementedException();
     }
 
     public class MatchWordsState : ResultStateBase<ChangTypes, PagesBus>

@@ -7,5 +7,11 @@ namespace Chang.Core
     {
         public Languages Language;
         public List<SentencesBookSection> Sections;
+
+        public SentencesBook(Languages language, List<SentencesBookSection> sections)
+        {
+            Language = language;
+            Sections = sections;
+        }
     }
 }
