@@ -21,7 +21,7 @@ namespace Chang.Sentences
         private readonly ProfileService _profileService;
         private readonly SentencesRepetitionService _repetitionService;
 
-        private Dictionary<string, LessonData> _lessons = new();
+        private Dictionary<string, Lesson> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
         private CancellationTokenSource _cts;
         private Action _onLobbyExitState;
@@ -64,30 +64,29 @@ namespace Chang.Sentences
             _sectionBlocks.Clear();
             _lessons.Clear();
             _view.Clear();
-            throw new NotImplementedException();
-            // for (int i = 0; i < _gameBus.SentencesBook.Sections.Count; i++)
-            // {
-            //     Color baseColor = _view.GetNextColor(i);
-            //     SectionData sectionData = _gameBus.SentencesBookData.Sections[i];
-            //
-            //     SectionBlock sectionBlock = _view.InstantiateSectionBlock();
-            //     sectionBlock.SetBaseColor(baseColor);
-            //     sectionBlock.SectionView.name = $"SectionBlock_{sectionData.Section}";
-            //     _sectionBlocks.Add(sectionData.Section, sectionBlock);
-            //
-            //     sectionBlock.SectionView.Init(sectionData.Section,
-            //         () => OnSectionSortClick(sectionData.Section),
-            //         () => OnSectionRepetitionClick(sectionData.Section));
-            //
-            //     sectionBlock.SectionView.name = $"Section_{sectionData.Section}";
-            //     sectionBlock.SectionView.SetBaseColor(baseColor);
-            //
-            //     await PopulateSectionAsync(sectionData, sectionBlock, ct);
-            // }
-            //
-            // await UniTask.Yield();
-            //
-            // SetScrollPosition();
+            
+            for (int i = 0; i < _gameBus.SentencesBook.Sections.Count; i++)
+            {
+                Color baseColor = _view.GetNextColor(i);
+                SentencesBookSection section = _gameBus.SentencesBook.Sections[i];
+                SectionBlock sectionBlock = _view.InstantiateSectionBlock();
+                sectionBlock.SetBaseColor(baseColor);
+                sectionBlock.SectionView.name = $"SectionBlock_{section.Section}";
+                _sectionBlocks.Add(section.Section, sectionBlock);
+            
+                sectionBlock.SectionView.Init(section.Section,
+                    () => OnSectionSortClick(section.Section),
+                    () => OnSectionRepetitionClick(section.Section));
+            
+                sectionBlock.SectionView.name = $"Section_{section.Section}";
+                sectionBlock.SectionView.SetBaseColor(baseColor);
+            
+                await PopulateSectionAsync(section, sectionBlock, ct);
+            }
+            
+            await UniTask.Yield();
+            
+            SetScrollPosition();
         }
 
         public void OnGeneralRepeatClicked()
@@ -95,26 +94,23 @@ namespace Chang.Sentences
             throw new NotImplementedException();
         }
 
-        private Color GetLessonColor(LessonData lessonData)
+        private Color GetLessonColor(Lesson lesson) 
         {
-            throw new NotImplementedException();
-            /*
-            float sum = 0;
+              float sum = 0;
 
-            foreach (IQuestion question in lessonData.Questions)
-            {
-                if (question is SentenceSelectWords selectWord)
-                {
-                    sum += _profileService.GetSentencesMark(selectWord.LogKey) / (ProjectConstants.MARK_MAX * lessonData.Questions.Count);
-                }
-                else
-                {
-                    throw new NotImplementedException($"Question type {question.Type} is not implemented");
-                }
-            }
+              foreach (IQuestion question in lesson.Questions)
+              {
+                  if (question is SentenceSelectWords selectWord)
+                  {
+                      sum += _profileService.GetSentencesMark(selectWord.LogKey) / (ProjectConstants.MARK_MAX * lesson.Questions.Count);
+                  }
+                  else
+                  {
+                      throw new NotImplementedException($"Question type {question.Type} is not implemented");
+                  }
+              }
 
-            return _view.GetLessonColor(sum);
-            */
+              return _view.GetLessonColor(sum);
         }
 
         private void OnSectionSortClick(string key)
@@ -147,15 +143,13 @@ namespace Chang.Sentences
             */
         }
 
-        private async UniTask PopulateSectionAsync(SectionData sectionData, SectionBlock sectionBlock, CancellationToken ct)
+        private async UniTask PopulateSectionAsync(SentencesBookSection section, SectionBlock sectionBlock, CancellationToken ct)
         {
-            throw new System.NotImplementedException();
-            /*
             List<SentenceQuestLog> repetitions = await _repetitionService
-                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
+                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section, ct);
 
             int repetitionsCount = repetitions.Count;
-            string reorderedSectionKey = _profileService.ReorderedSectionKey(sectionData.Section);
+            string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
 
             sectionBlock.SectionView.SetSortToggle(
                 repetitionsCount > 0 && _profileService.ReorderedSentencesSections.ContainsKey(reorderedSectionKey),
@@ -163,14 +157,14 @@ namespace Chang.Sentences
 
             sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
 
-            if (_profileService.ReorderedSentencesSections.TryGetValue(reorderedSectionKey, out SectionData reorderedSection))
+            if (_profileService.ReorderedSentencesSections.TryGetValue(reorderedSectionKey, out SentencesBookSection reorderedSection))
             {
-                sectionData = reorderedSection;
+                section = reorderedSection;
             }
 
             RectTransform row = null;
             int count = -1;
-            for (int m = 0; m < sectionData.Lessons.Count; m++)
+            for (int m = 0; m < section.SectionLessons.Count; m++)
             {
                 if (m / 6 > count)
                 {
@@ -178,10 +172,10 @@ namespace Chang.Sentences
                     row = _view.InstantiateRow(sectionBlock.Container);
                 }
 
-                string sectionName = sectionData.Section;
+                string sectionName = section.Section;
                 int lessonIndex = m + 1;
-                string key = $"{sectionData.Section}_{m + 1}";
-                _lessons[key] = sectionData.Lessons[m];
+                string key = $"{section.Section}_{m + 1}";
+                _lessons[key] = section.SectionLessons[m];
 
                 GameBookItem lessonItem = m % 2 == 0
                     ? _view.InstantiateUpLesson(row)
@@ -189,10 +183,9 @@ namespace Chang.Sentences
 
                 lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
                 lessonItem.name = $"Item {key}";
-                Color color = GetLessonColor(sectionData.Lessons[m]);
+                Color color = GetLessonColor(section.SectionLessons[m]);
                 lessonItem.SetColor(color);
             }
-            */
         }
 
         private void OnSectionRepetitionClick(string key)

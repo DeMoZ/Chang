@@ -45,6 +45,7 @@ namespace Chang.Resources
         {
             public const string Root = "Assets/Project/Resources_Bundled/";
             public const string Words = "Words/";
+            public const string BookConfigs = "BookConfigs/";
             public const string SoundWords = "SoundWords/";
             public const string ImageWords = "ImageWords/";
 
@@ -52,16 +53,16 @@ namespace Chang.Resources
             public const string EmptyWordPlaceHolderPath = Root + "EmptyWordPlaceHolder.asset";
 
             public static string VocabularyPath(Languages language) =>
-                $"{Root}{language}/{Constants.Vocabulary}.asset";
+                $"{Root}{BookConfigs}{language}/{Constants.Vocabulary}.asset";
 
             public static string SentencesPath(Languages language) => 
-                $"{Root}{language}/{Constants.Sentences}.asset";
+                $"{Root}{BookConfigs}{language}/{Constants.Sentences}.asset";
             
             public static string VocabularyBookPath(Languages language) =>
-                $"{Root}{language}/{Constants.VocabularyBook}.asset";
+                $"{Root}{BookConfigs}{language}/{Constants.VocabularyBook}.asset";
 
             public static string SentencesBookPath(Languages language) =>
-                $"{Root}{language}/{Constants.SentencesBook}.asset";
+                $"{Root}{BookConfigs}{language}/{Constants.SentencesBook}.asset";
         }
 
         public static class Resources
