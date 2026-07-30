@@ -14,8 +14,8 @@ namespace Chang.Core
         /// </summary>
         public IQuestion CurrentQuestion { get; private set; }
 
-        public List<IQuestion> Questions { get; private set; }
-        public Queue<IQuestion> QuestionQueue { get; private set; }
+        public List<IQuestion> Questions { get; private set; } = new ();
+        public Queue<IQuestion> QuestionQueue { get; private set; } = new ();
         public bool IsGeneratedMathWordsQuestPlayed { get; set; }
 
         public Lesson(Languages language, string section, List<string> keys)

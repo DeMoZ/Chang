@@ -31,7 +31,7 @@ namespace Chang.Core
 
         public static SentencesBook GetSentencesBook(GoogleSheets.SentencesBook book)
         {
-            List<SentencesBookSection> coreSections = new();
+            List<SentencesSection> coreSections = new();
 
             foreach (var section in book.Sections)
             {
@@ -39,7 +39,7 @@ namespace Chang.Core
                     .Select(lesson => new Lesson(lesson.Language, lesson.Section, lesson.Keys))
                     .ToList();
 
-                SentencesBookSection coreSection = new()
+                SentencesSection coreSection = new()
                 {
                     Language = section.Language,
                     Section = section.Section,

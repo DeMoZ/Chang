@@ -16,7 +16,7 @@ namespace Chang.Profile
         /// </summary>
         public Dictionary<string, VocabularyBookSection> ReorderedVocabularySections { get; } = new();
 
-        public Dictionary<string, SentencesBookSection> ReorderedSentencesSections { get; } = new();
+        public Dictionary<string, SentencesSection> ReorderedSentencesSections { get; } = new();
 
         public ProgressData<VocabularyQuestLog> VocabularyProgress => VocabularyProgressDict[ProfileData.LearnLanguage];
         public ProgressData<SentenceQuestLog> SentencesProgress => SentencesProgressDict[ProfileData.LearnLanguage];
@@ -37,7 +37,7 @@ namespace Chang.Profile
             ReorderedVocabularySections[key] = sectionData;
         }
 
-        public void AddReorderSentencesSection(string key, SentencesBookSection sectionData)
+        public void AddReorderSentencesSection(string key, SentencesSection sectionData)
         {
             ReorderedSentencesSections[key] = sectionData;
         }

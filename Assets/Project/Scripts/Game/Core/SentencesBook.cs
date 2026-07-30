@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 
 namespace Chang.Core
 {
-    public class SentencesBook : SerializedScriptableObject
+    public class SentencesBook
     {
         public Languages Language;
-        public List<SentencesBookSection> Sections;
+        public List<SentencesSection> Sections;
 
-        public SentencesBook(Languages language, List<SentencesBookSection> sections)
+        public SentencesBook(Languages language, List<SentencesSection> sections)
         {
             Language = language;
             Sections = sections;

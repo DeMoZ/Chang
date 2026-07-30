@@ -55,9 +55,8 @@ namespace Chang.FSM
                 new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
             _loadingUiController.SimulateProgress(2f).Forget();
 
-            HashSet<string> paths = new HashSet<string>
-                { VocabularyBookPath, VocabularyPath, SentencesBookPath, SentencesPath };
-            long downloadSize = await _assetManager.GetDownloadSize(paths, _cts.Token);
+            // HashSet<string> paths = new HashSet<string> { VocabularyBookPath, VocabularyPath, SentencesBookPath, SentencesPath };
+            // long downloadSize = await _assetManager.GetDownloadSize(paths, _cts.Token);
 
             await _profileService.LoadStoredData(_cts.Token);
 

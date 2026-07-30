@@ -22,7 +22,7 @@ namespace Chang.Services
         public ProfileData ProfileData => _playerProfile.ProfileData;
         public string PlayerId => _unityCloudDataProvider.PlayerId;
         public Dictionary<string, VocabularyBookSection> ReorderedVocabularySections => _playerProfile.ReorderedVocabularySections;
-        public Dictionary<string, SentencesBookSection> ReorderedSentencesSections => _playerProfile.ReorderedSentencesSections;
+        public Dictionary<string, SentencesSection> ReorderedSentencesSections => _playerProfile.ReorderedSentencesSections;
         public Languages LearnLanguage => _playerProfile.ProfileData.LearnLanguage;
         public string ReorderedSectionKey(string section) => $"{LearnLanguage}/{section}";
         

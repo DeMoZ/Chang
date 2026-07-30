@@ -68,7 +68,7 @@ namespace Chang.Sentences
             for (int i = 0; i < _gameBus.SentencesBook.Sections.Count; i++)
             {
                 Color baseColor = _view.GetNextColor(i);
-                SentencesBookSection section = _gameBus.SentencesBook.Sections[i];
+                SentencesSection section = _gameBus.SentencesBook.Sections[i];
                 SectionBlock sectionBlock = _view.InstantiateSectionBlock();
                 sectionBlock.SetBaseColor(baseColor);
                 sectionBlock.SectionView.name = $"SectionBlock_{section.Section}";
@@ -143,7 +143,7 @@ namespace Chang.Sentences
             */
         }
 
-        private async UniTask PopulateSectionAsync(SentencesBookSection section, SectionBlock sectionBlock, CancellationToken ct)
+        private async UniTask PopulateSectionAsync(SentencesSection section, SectionBlock sectionBlock, CancellationToken ct)
         {
             List<SentenceQuestLog> repetitions = await _repetitionService
                 .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section, ct);
@@ -157,7 +157,7 @@ namespace Chang.Sentences
 
             sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >= ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
 
-            if (_profileService.ReorderedSentencesSections.TryGetValue(reorderedSectionKey, out SentencesBookSection reorderedSection))
+            if (_profileService.ReorderedSentencesSections.TryGetValue(reorderedSectionKey, out SentencesSection reorderedSection))
             {
                 section = reorderedSection;
             }
@@ -172,7 +172,7 @@ namespace Chang.Sentences
                     row = _view.InstantiateRow(sectionBlock.Container);
                 }
 
-                string sectionName = section.Section;
+                string sectionName = section.SectionKey;
                 int lessonIndex = m + 1;
                 string key = $"{section.Section}_{m + 1}";
                 _lessons[key] = section.SectionLessons[m];
@@ -214,8 +214,8 @@ namespace Chang.Sentences
             Debug.Log($"Load gamebook scroll position: {_profileService.VocabularyProgress.ScrollPosition}, scroll position: {_view.ScrollPosition}");
         }
 
-        private async UniTaskVoid OnLessonClickedAsync(string sectionName, int lessonIndex, CancellationToken ct)
-        {/*
+        private async UniTaskVoid OnLessonClickedAsync(string sectionKey, int lessonIndex, CancellationToken ct)
+        {
             if (_mainScreenBus.IsLoading)
                 return;
 
@@ -223,32 +223,26 @@ namespace Chang.Sentences
             await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
 
             {
-                LessonData simpleLesson;
-                string key = _profileService.ReorderedSectionKey(sectionName);
+                Lesson lesson;
+                string key = _profileService.ReorderedSectionKey(sectionKey);
 
-                if (_profileService.ReorderedSentencesSections.TryGetValue(key, out SectionData section))
+                if (_profileService.ReorderedSentencesSections.TryGetValue(key, out SentencesSection section))
                 {
-                    simpleLesson = section.Lessons[lessonIndex - 1];
+                    lesson = section.SectionLessons[lessonIndex - 1];
                 }
                 else
                 {
-                    key = ProjectSharedLogic.SENTENCE_LESSON_KEY(_profileService.LearnLanguage.ToString(), sectionName, lessonIndex);
-                    simpleLesson = _gameBus.SentencesLessons[key];
+                    // key = ProjectSharedLogic.SENTENCE_LESSON_KEY(_profileService.LearnLanguage.ToString(), sectionName, lessonIndex);
+                    lesson = _gameBus.SentencesSections[sectionKey].SectionLessons[lessonIndex - 1];
                 }
 
-                Lesson lesson = new Lesson();
-                lesson.FileName = simpleLesson.FileName;
-                lesson.SetSimpleQuestions(simpleLesson.Questions.ToList());
-
-                // _gameBus.CurrentSentencesLesson = lesson;
-                _gameBus.LessonProvider = lesson;
+                lesson.SetQuestions(lesson.Questions.ToList());
+                _gameBus.SetLesson(lesson);
             }
 
             _mainScreenBus.IsLoading = false;
-
             _gameBus.GameType = GameType.Learn;
             _onLobbyExitState?.Invoke();
-            */
         }
 
         private async UniTaskVoid OnSectionRepeatClickedAsync(string section, CancellationToken ct)
