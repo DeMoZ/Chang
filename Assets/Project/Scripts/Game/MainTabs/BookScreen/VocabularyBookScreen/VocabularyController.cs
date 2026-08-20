@@ -69,7 +69,7 @@ namespace Chang.Vocabulary
             for (int i = 0; i < _gameBus.VocabularyBook.Sections.Count; i++)
             {
                 Color baseColor = _view.GetNextColor(i);
-                VocabularyBookSection sectionData = _gameBus.VocabularyBook.Sections[i];
+                VocabularySection sectionData = _gameBus.VocabularyBook.Sections[i];
 
                 SectionBlock sectionBlock = _view.InstantiateSectionBlock();
                 sectionBlock.SetBaseColor(baseColor);
@@ -148,7 +148,7 @@ namespace Chang.Vocabulary
         }
 
         private async UniTask PopulateSectionAsync(
-            VocabularyBookSection sectionData,
+            VocabularySection sectionData,
             SectionBlock sectionBlock,
             CancellationToken ct)
         {
@@ -167,7 +167,7 @@ namespace Chang.Vocabulary
                                                                      .SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
 
             if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey,
-                    out VocabularyBookSection reorderedSection))
+                    out VocabularySection reorderedSection))
             {
                 sectionData = reorderedSection;
             }
@@ -238,7 +238,7 @@ namespace Chang.Vocabulary
             Lesson lesson;
             string key = _profileService.ReorderedSectionKey(sectionName);
 
-            if (_profileService.ReorderedVocabularySections.TryGetValue(key, out VocabularyBookSection section))
+            if (_profileService.ReorderedVocabularySections.TryGetValue(key, out VocabularySection section))
             {
                 lesson = section.Lessons[lessonIndex - 1];
             }

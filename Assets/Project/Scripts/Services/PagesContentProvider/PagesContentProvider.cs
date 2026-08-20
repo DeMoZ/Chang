@@ -96,9 +96,51 @@ namespace Project.Services.PagesContentProvider
             Merge(Content, sounds);
         }
 
+
+        public async UniTask PreloadSentencesContentAsync(List<Sentence> sentences, Action<float, float> progress,
+            CancellationToken ct)
+        {
+            _progress = progress;
+        
+            HashSet<string> imageKeys = sentences.Select(s => _wordPathHelper.GetTexturePath(s.ImageKey)).ToHashSet();
+            HashSet<string> soundKeys = new();
+            soundKeys = GetSoundKeys(sentences.Select(s => s.SoundKey)).ToHashSet();
+            
+            //soundKeys = GetSoundKeys(sentences.Select(s => s.SentenceWords.Select(w => w.WordKey))).ToHashSet();
+            // todo chang тут надо и звуки слов собрать, но сначала надо определиться над предложением.
+            // выбрать варианты слов и выбрать пол.
+            
+            // todo chang но для начала можно сделать как раньше, без вариантов, просто для тестирования работоспособности предложений.
+            // тогда и не нужно тут качать, так как картинки и звуки индивидуальных слов уже будут загружены в PreloadWordsContentAsync
+            return;
+            HashSet<string> totalKeys = new();
+            totalKeys.UnionWith(imageKeys);
+            totalKeys.UnionWith(soundKeys);
+        
+            long totalToLoad = await GetDownloadSize(totalKeys, ct);
+        
+            Dictionary<string, IDisposableAsset> images = new();
+            Dictionary<string, IDisposableAsset> sounds = new();
+        
+            long currentToLoad = 0;
+            long downloadSize = 0;
+            downloadSize = await GetDownloadSize(imageKeys, ct);
+            currentToLoad += downloadSize;
+            images = await Preload<Sprite>(imageKeys,
+                progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
+        
+            downloadSize = await GetDownloadSize(soundKeys, ct);
+            currentToLoad += downloadSize;
+            sounds = await Preload<AudioClip>(soundKeys,
+                bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
+        
+            Merge(Content, images);
+            Merge(Content, sounds);
+        }
+
         public async UniTask CacheContentAsync(string path, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            /*
             if (Content.TryGetValue(path, out var configAsset))
             {
                 if (configAsset != null)
@@ -107,7 +149,7 @@ namespace Project.Services.PagesContentProvider
                 }
             }
 
-            /*
+            
             DisposableAsset<PhraseConfig> asset = await _assetManager.LoadAssetAsync<PhraseConfig>(path, ct);
 
             if (asset.Item != null)

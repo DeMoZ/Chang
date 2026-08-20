@@ -65,11 +65,11 @@ namespace Chang.FSM
                 LoadVocabularyBookAsync(_cts.Token),
                 LoadVocabularyAsync(_cts.Token),
                 LoadSentencesBookAsync(_cts.Token),
-                LoadSentencesAsync(_cts.Token)
+                LoadSentencesAsync(_cts.Token),
             };
 
             await UniTask.WhenAll(loads);
-
+            
             _loadingUiController.SetPercents(1f);
             if (_loadingUiController != null)
             {
@@ -140,6 +140,7 @@ namespace Chang.FSM
                                $"{SentencesPath}");
                 return;
             }
+
             List<Sentence> sentences = GoogleSheetsToCore.GetSentences(asset.Item.Sentences);
             Bus.SetSentences(sentences);
             asset.Dispose();
@@ -158,7 +159,7 @@ namespace Chang.FSM
                 Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {SentencesBookPath}");
                 return;
             }
-            
+
             SentencesBook book = GoogleSheetsToCore.GetSentencesBook(asset.Item);
             Bus.SetSentencesBook(book);
             Debug.Log($"[{methodName}] End");

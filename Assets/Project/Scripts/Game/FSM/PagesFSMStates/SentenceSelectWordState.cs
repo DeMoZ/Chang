@@ -10,6 +10,7 @@ using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
 using Project.Services.PagesContentProvider;
+using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -24,7 +25,8 @@ namespace Chang.FSM
         public bool IsHintUsed { get; }
         public object[] Info { get; }
 
-        public SentenceSelectWordStateResult(string key, string presentation, bool isCorrect, bool isHintUsed, params object[] info)
+        public SentenceSelectWordStateResult(string key, string presentation, bool isCorrect, bool isHintUsed,
+            params object[] info)
         {
             Key = key;
             Presentation = presentation;
@@ -32,6 +34,13 @@ namespace Chang.FSM
             IsHintUsed = isHintUsed;
             Info = info;
         }
+    }
+    
+    public class QuestSentenceSelectWordData
+    {
+        public List<SequencePhraseData> CompareSequence { get; set; }
+        public List<SequencePhraseData> DisplaySequence { get; set; }
+        public List<SequencePhraseData> MixWords { get; set; }
     }
 
     public class SentenceSelectWordState : ResultStateBase<ChangTypes, PagesBus>
@@ -47,13 +56,16 @@ namespace Chang.FSM
         private readonly IPagesContentProvider _pagesContentProvider;
 
         private CancellationTokenSource _cts;
+
         private SentenceSelectWordStateResult _stateResult;
-        // private QuestSentenceSelectWordData _questionData;
+
+        private QuestSentenceSelectWordData _questionData;
         private SentenceSelectWords _sentenceQuestion;
 
         public override ChangTypes Type => ChangTypes.SentenceSelectWords;
 
-        public SentenceSelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<ChangTypes> onStateResult) : base(bus, onStateResult)
+        public SentenceSelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider,
+            Action<ChangTypes> onStateResult) : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
         }
@@ -86,27 +98,28 @@ namespace Chang.FSM
 
             if (_sentenceQuestion == null)
             {
-                throw new Exception("SentenceSelectWords is not a SentenceSelectWords"); // todo chang implement exit state
+                throw new Exception(
+                    "SentenceSelectWords is not a SentenceSelectWords"); // todo chang implement exit state
                 return;
             }
 
-            throw new NotImplementedException();
-            
-            /*
-            await _pagesContentProvider.GetContentAsync(question, ct);
-            await _pagesContentProvider.CacheContentAsync(AssetPaths.Addressables.EmptyWordPlaceHolderPath, ct);
+
+            // await _pagesContentProvider.PreloadWordsContentAsync(question, ct);
+            // todo chang в PagesState надо сначала определиться с вариантами в предложении. 
+            // но на данном этапе действую как раньше.
 
             _questionData = GetQuestionData(_sentenceQuestion);
             bool isQuestInTranslation = false; // todo chang
 
-            if (!TryGetLocalization(_sentenceQuestion.LocalizationKey, out string translation))
+
+            if (!TryGetLocalization(_sentenceQuestion.Key, out string translation))
             {
                 translation = _sentenceQuestion.DefaultTranslation;
             }
-            
-            string spritePath = _wordPathHelper.GetTexturePath(_sentenceQuestion.ImageFileName);
-            Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
 
+            string spritePath = _wordPathHelper.GetTexturePath(_sentenceQuestion.GetImageKeys.First());
+            Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
+            
             _stateController.Init(
                 isQuestInTranslation,
                 _questionData.DisplaySequence,
@@ -117,11 +130,11 @@ namespace Chang.FSM
                 () =>
                 {
                     /*OnClickPlaySound(!isQuestInTranslation)*/
-            /*    });
+                });
 
             _stateController.SetViewActive(true);
-            */
-            // OnClickPlaySound(!isQuestInTranslation);
+
+            OnClickPlaySound(!isQuestInTranslation);
         }
 
         // todo chang implement localization
@@ -139,48 +152,40 @@ namespace Chang.FSM
             //
             // return true;
         }
-/*
+
         private QuestSentenceSelectWordData GetQuestionData(SentenceSelectWords sentenceQuestion)
         {
             var data = new QuestSentenceSelectWordData
             {
-                CompareSequence = GetPhrasesDataList(sentenceQuestion.CompareWordsFileNames),
-                DisplaySequence = GetPhrasesDataList(sentenceQuestion.DisplayWordsFileNames),
-                MixWords = GetPhrasesDataList(sentenceQuestion.MixWordsFileNames)
+                CompareSequence = GetPhrasesDataList(sentenceQuestion.CompareWordsKeys),
+                DisplaySequence = GetPhrasesDataList(sentenceQuestion.DisplayWordsKeys),
+                MixWords = GetPhrasesDataList(sentenceQuestion.MixWordsKeys)
             };
 
-            data.DisplaySequence.Where(pData => pData.IsPlaceHolder).ToList().ForEach(pData => pData.SetInteractable(true));
+            data.DisplaySequence.Where(pData => pData.IsPlaceHolder).ToList()
+                .ForEach(pData => pData.SetInteractable(true));
             data.MixWords.ForEach(pData => pData.SetInteractable(true));
 
             return data;
 
-            List<SequencePhraseData> GetPhrasesDataList(List<string> fileNames)
+            List<SequencePhraseData> GetPhrasesDataList(List<string> keys)
             {
                 List<SequencePhraseData> phrasesDataList = new List<SequencePhraseData>();
 
-                foreach (var fileName in fileNames)
+                foreach (var key in keys)
                 {
-                    string path = string.Empty;
-
-                    // path = string.IsNullOrEmpty(fileName)
-                    //     ? AssetPaths.Addressables.EmptyWordPlaceHolderPath
-                    //     : _wordPathHelper.GetConfigPath(fileName);
-
-                    PhraseConfig asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
-
-                    if (asset)
+                    if (Bus.Words.TryGetValue(key, out Word word))
                     {
-                        SequencePhraseData phraseData = new SequencePhraseData(asset.PhraseData);
-                        phraseData.SetIsPlaceHolder(string.IsNullOrEmpty(fileName));
+                        SequencePhraseData phraseData = new SequencePhraseData(word);
+                        phraseData.SetIsPlaceHolder(string.IsNullOrEmpty(key));
                         phrasesDataList.Add(phraseData);
                     }
-                    
                 }
 
                 return phrasesDataList;
             }
         }
-*/
+
         private void OnClickPlaySound(bool isLearnLanguage)
         {
             throw new NotImplementedException();
@@ -263,13 +268,13 @@ namespace Chang.FSM
                 string compare = string.Join("", _questionData.CompareSequence.Select(pData => pData.Word.LearnWord));
                 string display = string.Join("", _questionData.DisplaySequence.Select(pData => pData.Word.LearnWord));
                 bool isCorrect = string.Equals(compare, display);
-                
+
                 List<SelectWordResult> inCorrectWords = new();
 
                 for (int i = 0; i > _questionData.DisplaySequence.Count; i++)
                 {
-                    WordData compareWord = _questionData.CompareSequence[i].Word;
-                    WordData displayWord = _questionData.DisplaySequence[i].Word;
+                    W/o/r/d/D/a/t/a compareWord = _questionData.CompareSequence[i].Word; // WordData старый формат. Теперь новый WordData заменил PhraseData и для старого нужно придумать что то еще
+                    W/o/r/d/D/a/t/a displayWord = _questionData.DisplaySequence[i].Word; // WordData старый формат. Теперь новый WordData заменил PhraseData и для старого нужно придумать что то еще
 
                     if (!string.Equals(compareWord.LogKey, displayWord.LogKey))
                     {
@@ -277,9 +282,9 @@ namespace Chang.FSM
                         inCorrectWords.Add(new SelectWordResult(displayWord.LogKey, displayWord.LearnWord, false));
                     }
                 }
-                
+
                 object[] info = { compare, Bus.OnHintUsed.Value, inCorrectWords };
-                
+
                 var result = new SentenceSelectWordStateResult(
                     _sentenceQuestion.LogKey,
                     display,

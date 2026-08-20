@@ -11,6 +11,32 @@ namespace Chang.Core
         {
             Language = language;
             Sections = sections;
+
+            PopulateQuestions();
+        }
+
+        private void PopulateQuestions()
+        {
+            // add lessons questions
+            foreach (SentencesSection section in Sections)
+            {
+                foreach (Lesson lesson in section.SectionLessons)
+                {
+                    List<IQuestion> questions = new List<IQuestion>();
+
+                    foreach (var sentenceKey in lesson.Keys)
+                    {
+                        IQuestion question = new SentenceSelectWords
+                        {
+                            Key = sentenceKey,
+                        };
+
+                        questions.Add(question);
+                    }
+
+                    lesson.SetQuestions(questions);
+                }
+            }
         }
     }
 }

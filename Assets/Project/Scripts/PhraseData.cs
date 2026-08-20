@@ -9,13 +9,13 @@ namespace Chang
         public readonly Word Word;
 
         public bool ShowPhonetics { get; protected set; }
-        public string LogKey => string.Empty;// $"{Language}/{Word.LogKey}";
+        public string LogKey => string.Empty; // $"{Language}/{Word.LogKey}";
 
-        public PhraseData(string key, Word word, Languages language)
+        public PhraseData(Word word)
         {
-            Key = key;
             Word = word;
-            Language = language;
+            Key = Word.WordKey;
+            Language = Word.Language;
         }
 
         public void SetPhonetics(bool showPhonetics)
@@ -25,7 +25,8 @@ namespace Chang
 
         public override string ToString()
         {
-            return $"key: {Key}; language: {Language}; word: {Word.LearnWord}; phonetic: {ShowPhonetics}; logKey: {LogKey}"; //  audioclip: {AudioClip?.name}; sprite: {Sprite?.name}
+            return
+                $"key: {Key}; language: {Language}; word: {Word.LearnWord}; phonetic: {ShowPhonetics}; logKey: {LogKey}"; //  audioclip: {AudioClip?.name}; sprite: {Sprite?.name}
         }
     }
 
@@ -35,15 +36,10 @@ namespace Chang
         public bool IsHighlighted { get; private set; }
         public bool IsInteractable { get; private set; }
 
-        public SequencePhraseData(string key, Word word, Languages language) : base(key, word, language)
+        public SequencePhraseData(Word word) : base(word)
         {
         }
 
-        public SequencePhraseData(PhraseData data) : base(data.Key, data.Word, data.Language)
-        {
-             ShowPhonetics = data.ShowPhonetics;
-        }
-        
         public void SetIsPlaceHolder(bool value)
         {
             IsPlaceHolder = value;

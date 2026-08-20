@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Chang.Core
 {
-    public class VocabularyBookSection
+    public class VocabularySection
     {
         public Languages Language;
         public string Section; // will use it as default translation for section to English for now

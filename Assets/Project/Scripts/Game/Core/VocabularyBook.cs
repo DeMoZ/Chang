@@ -6,9 +6,9 @@ namespace Chang.Core
     public class VocabularyBook
     {
         public Languages Language;
-        public List<VocabularyBookSection> Sections;
+        public List<VocabularySection> Sections;
 
-        public VocabularyBook(Languages language, List<VocabularyBookSection> sections)
+        public VocabularyBook(Languages language, List<VocabularySection> sections)
         {
             Language = language;
             Sections = sections;
@@ -19,7 +19,7 @@ namespace Chang.Core
         private void PopulateQuestions()
         {
             // add lessons questions
-            foreach (VocabularyBookSection section in Sections)
+            foreach (VocabularySection section in Sections)
             {
                 foreach (Lesson lesson in section.Lessons)
                 {
@@ -27,7 +27,7 @@ namespace Chang.Core
 
                     foreach (var key in lesson.Keys)
                     {
-                        QuestSelectWord question = new QuestSelectWord
+                        IQuestion question = new QuestSelectWord
                         {
                             Key = key,
                             WordsKeys = lesson.Keys.Where(k => !k.Equals(key)).ToHashSet(),

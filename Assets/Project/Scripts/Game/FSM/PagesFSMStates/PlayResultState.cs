@@ -1,6 +1,7 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
+using Chang.Core;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -23,8 +24,8 @@ namespace Chang.FSM
         [Inject] private readonly PlayResultController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
 
-        private List<PhraseData> _mixWords;
-        private PhraseData _correctWord;
+        private List<Word> _mixWords;
+        private Word _correctWord;
 
         public override ChangTypes Type => ChangTypes.Result;
 

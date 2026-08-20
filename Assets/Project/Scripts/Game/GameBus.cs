@@ -10,8 +10,8 @@ namespace Chang
         public SentencesBook SentencesBook { get; private set; }
         public Dictionary<string, Word> Words { get; private set; }
         public Dictionary<string, Sentence> Sentences { get; private set; }
-        public Dictionary<string, VocabularyBookSection> VocabularySections { get; private set; }
-        public Dictionary<string, SentencesSection> SentencesSections { get; set; }
+        public Dictionary<string, VocabularySection> VocabularySections { get; private set; }
+        public Dictionary<string, SentencesSection> SentencesSections { get; private set; }
 
         public Lesson Lesson { get; private set; }
         public GameType GameType { get; set; }

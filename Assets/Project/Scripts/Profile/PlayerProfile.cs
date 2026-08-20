@@ -14,7 +14,7 @@ namespace Chang.Profile
         /// <summary>
         /// key Thai/Fruits, value section
         /// </summary>
-        public Dictionary<string, VocabularyBookSection> ReorderedVocabularySections { get; } = new();
+        public Dictionary<string, VocabularySection> ReorderedVocabularySections { get; } = new();
 
         public Dictionary<string, SentencesSection> ReorderedSentencesSections { get; } = new();
 
@@ -32,7 +32,7 @@ namespace Chang.Profile
         {
         }
 
-        public void AddReorderVocabularySection(string key, VocabularyBookSection sectionData)
+        public void AddReorderVocabularySection(string key, VocabularySection sectionData)
         {
             ReorderedVocabularySections[key] = sectionData;
         }

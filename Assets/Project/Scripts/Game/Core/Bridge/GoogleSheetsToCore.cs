@@ -7,7 +7,7 @@ namespace Chang.Core
     {
         public static VocabularyBook GetVocabularyBook(GoogleSheets.VocabularyBook book)
         {
-            List<VocabularyBookSection> coreSections = new();
+            List<VocabularySection> coreSections = new();
 
             foreach (var section in book.Sections)
             {
@@ -15,7 +15,7 @@ namespace Chang.Core
                     .Select(lesson => new Lesson(lesson.Language, lesson.Section, lesson.Keys))
                     .ToList();
 
-                VocabularyBookSection coreSection = new VocabularyBookSection
+                VocabularySection coreSection = new VocabularySection
                 {
                     Language = section.Language,
                     Section = section.Section,

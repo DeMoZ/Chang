@@ -10,10 +10,15 @@ namespace Project.Services.PagesContentProvider
     public interface IPagesContentProvider : IDisposable
     {
         /// <summary>
-        /// Preloading all content on Enter Pages state. Content from all pages.
+        /// Preloading all content on Enter Pages state. Content from all pages. For words
         /// </summary>
         UniTask PreloadWordsContentAsync(List<Word> words, Action<float, float> percents, CancellationToken ct);
 
+        /// <summary>
+        /// Preloading all content on Enter Pages state. Content from all pages. For sentences
+        /// </summary>
+        UniTask PreloadSentencesContentAsync(List<Sentence> sentences, Action<float, float> percents, CancellationToken ct);
+        
         /// <summary>
         /// Cache individual content by path
         /// </summary>

@@ -57,6 +57,12 @@ namespace Chang.Core
             QuestionQueue = new Queue<IQuestion>(questions);
         }
 
+        public void SetQuestions(List<string> keys)
+        {
+            // Questions = questions;
+            // QuestionQueue = new Queue<IQuestion>(questions);
+        }
+
         public void AddQuestion(IQuestion question)
         {
             Questions.Add(question);

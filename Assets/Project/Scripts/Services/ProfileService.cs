@@ -21,7 +21,7 @@ namespace Chang.Services
         public ProgressData<SentenceQuestLog> SentencesProgress => _playerProfile.SentencesProgress;
         public ProfileData ProfileData => _playerProfile.ProfileData;
         public string PlayerId => _unityCloudDataProvider.PlayerId;
-        public Dictionary<string, VocabularyBookSection> ReorderedVocabularySections => _playerProfile.ReorderedVocabularySections;
+        public Dictionary<string, VocabularySection> ReorderedVocabularySections => _playerProfile.ReorderedVocabularySections;
         public Dictionary<string, SentencesSection> ReorderedSentencesSections => _playerProfile.ReorderedSentencesSections;
         public Languages LearnLanguage => _playerProfile.ProfileData.LearnLanguage;
         public string ReorderedSectionKey(string section) => $"{LearnLanguage}/{section}";
@@ -151,7 +151,7 @@ namespace Chang.Services
             return logs.TryGetValue(key, out vocabularyQuestLog);
         }
 
-        public void ReorderVocabularySection(VocabularyBookSection sectionData)
+        public void ReorderVocabularySection(VocabularySection sectionData)
         {
             throw new NotImplementedException();
             /*

@@ -62,7 +62,7 @@ namespace Chang.FSM
                                                   LoadingElements.Percent | LoadingElements.Bytes);
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
             loadingUiController.SetPercentsAndBytes(0, 0);
-
+            
             await PreloadContentAsync(loadingUiController.SetPercentsAndBytes, ct);
 
             _screenManager.SetActivePagesContainer(true);
@@ -108,12 +108,40 @@ namespace Chang.FSM
 
         private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
         { 
-            HashSet<string> wordsKeys = Bus.Lesson.Questions.Select(q => q.GetWordsKeys)
+            IEnumerable<IQuestion> wQuests = Bus.Lesson.Questions.Where(q => IsWordQuest(q.Type));
+            IEnumerable<IQuestion> sQuests = Bus.Lesson.Questions.Where(q => IsSentenceQuest(q.Type));
+            
+            HashSet<string> wWKeys = wQuests.Select(q => q.GetWordsKeys)
                 .SelectMany(hashSet => hashSet)
                 .ToHashSet();
-
-            List<Word> words = wordsKeys.Select(key => Bus.Words[key]).ToList();
+            
+            HashSet<string> sWKeys = sQuests.Select(q => q.GetWordsKeys)
+                .SelectMany(hashSet => hashSet)
+                .ToHashSet();
+            
+            // HashSet<string> wordsKeys = Bus.Lesson.Questions.Select(q => q.GetWordsKeys)
+            //     .SelectMany(hashSet => hashSet)
+            //     .ToHashSet();
+            
+            List<Word> words = wWKeys.Select(key => Bus.Words[key]).ToList();
             await _pagesContentProvider.PreloadWordsContentAsync(words, progress, ct);
+            
+            List<Sentence> sentenceWords = sWKeys.Select(key => Bus.Sentences[key]).ToList();
+            if (sentenceWords.Count > 0)
+            {
+                await _pagesContentProvider.PreloadSentencesContentAsync(sentenceWords, progress, ct);
+                await _pagesContentProvider.CacheContentAsync(AssetPaths.Addressables.EmptyWordPlaceHolderPath, ct);
+            }
+        }
+
+        private bool IsWordQuest(ChangTypes argType)
+        {
+            return argType == ChangTypes.DemonstrationWord || argType == ChangTypes.SelectWord || argType == ChangTypes.MatchWords;
+        }
+
+        private bool IsSentenceQuest(ChangTypes argType)
+        {
+            return argType == ChangTypes.SentenceSelectWords;
         }
 
         private void ExitToLobby()

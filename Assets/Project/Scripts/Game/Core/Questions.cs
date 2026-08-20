@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chang.Core
 {
@@ -40,18 +41,33 @@ namespace Chang.Core
     {
         public ChangTypes Type => ChangTypes.SentenceSelectWords;
 
+        public string Key { get; set; }
+
+// -> old
         public HashSet<string> MatchWordsKeys;
 
-        public HashSet<string> GetWordsKeys => new(MatchWordsKeys);
-        public HashSet<string> GetSoundKeys => new(MatchWordsKeys);
-        public HashSet<string> GetImageKeys => new();
         public HashSet<string> GetNeedDemonstrationKeys => new(MatchWordsKeys);
-        public string LocalizationKey { get; set; }
-        public string DefaultTranslation { get; set; }
-        public string ImageFileName { get; set; }
-        public List<string> CompareWordsFileNames { get; set; }
-        public List<string> DisplayWordsFileNames { get; set; }
-        public List<string> MixWordsFileNames { get; set; }
-        public string LogKey { get; set; }
+
+        // public string LocalizationKey => Sentence.Key;
+        public string DefaultTranslation => Sentence.DefaultTranslation;
+        // public string ImageKey => Sentence.ImageKey;
+        // public string SoundKey => Sentence.SoundKey;
+        //
+// <- old
+        public List<string> CompareWordsKeys => Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+        public List<string> DisplayWordsKeys => Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+        public List<string> MixWordsKeys => Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+
+
+        public Sentence Sentence { get; set; } // runtime field
+
+        public HashSet<string> GetWordsKeys => _wordsKeys ??= new HashSet<string> { Sentence.SentenceKey };
+        public HashSet<string> GetSoundKeys => _soundKeys ??= new HashSet<string> { Sentence.SoundKey }; // todo chang incorrect. WHen i use variants for word, the sound will be changed
+        public HashSet<string> GetImageKeys => _imageKeys ??= new HashSet<string> { Sentence.ImageKey };
+
+
+        private HashSet<string> _wordsKeys;
+        private HashSet<string> _soundKeys;
+        private HashSet<string> _imageKeys;
     }
 }
