@@ -80,6 +80,41 @@ namespace Chang
             _cancellationTokenSource = new CancellationTokenSource();
             MonitorAudioCompletion(audioClip, _cancellationTokenSource.Token).Forget();
         }
+        
+        public async UniTaskVoid PlaySoundsAsync(List<AudioClip> audioClips, CancellationToken token)
+        {
+            if (audioClips == null || audioClips.Count == 0)
+            {
+                return;
+            }
+
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+
+            using var cancellationRegistration = token.Register(StopSound);
+            
+            PlaySound(audioClips[0]);
+
+            try
+            {
+                for (int i = 1; i < audioClips.Count; i++)
+                {
+                    await UniTask.WaitUntil(() => !_audioSource.isPlaying, cancellationToken: token);
+
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    PlaySound(audioClips[i]);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        }
 
         private void StopSound()
         {

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using Chang.Core;
 using Chang.Resources;
-using Chang.Sentences;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
@@ -41,6 +40,7 @@ namespace Chang.FSM
         public List<SequencePhraseData> CompareSequence { get; set; }
         public List<SequencePhraseData> DisplaySequence { get; set; }
         public List<SequencePhraseData> MixWords { get; set; }
+        public Queue<SequencePhraseData> PlaceHolderPool { get; set; }
     }
 
     public class SentenceSelectWordState : ResultStateBase<ChangTypes, PagesBus>
@@ -56,9 +56,8 @@ namespace Chang.FSM
         private readonly IPagesContentProvider _pagesContentProvider;
 
         private CancellationTokenSource _cts;
-
+        private CancellationTokenSource _soundCts; // play sentence sounds async
         private SentenceSelectWordStateResult _stateResult;
-
         private QuestSentenceSelectWordData _questionData;
         private SentenceSelectWords _sentenceQuestion;
 
@@ -83,11 +82,13 @@ namespace Chang.FSM
         {
             base.Exit();
 
+            _soundCts?.Cancel();
+            _soundCts?.Dispose();
+            
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
             _pagesContentProvider.ClearCache();
             _stateController.Clear();
-            // _questionData.Dispose();
             _stateResult = null;
         }
 
@@ -100,18 +101,11 @@ namespace Chang.FSM
             {
                 throw new Exception(
                     "SentenceSelectWords is not a SentenceSelectWords"); // todo chang implement exit state
-                return;
             }
-
-
-            // await _pagesContentProvider.PreloadWordsContentAsync(question, ct);
-            // todo chang в PagesState надо сначала определиться с вариантами в предложении. 
-            // но на данном этапе действую как раньше.
 
             _questionData = GetQuestionData(_sentenceQuestion);
             bool isQuestInTranslation = false; // todo chang
-
-
+            
             if (!TryGetLocalization(_sentenceQuestion.Key, out string translation))
             {
                 translation = _sentenceQuestion.DefaultTranslation;
@@ -129,7 +123,7 @@ namespace Chang.FSM
                 OnToggleValueChanged,
                 () =>
                 {
-                    /*OnClickPlaySound(!isQuestInTranslation)*/
+                    OnClickPlaySound(!isQuestInTranslation);
                 });
 
             _stateController.SetViewActive(true);
@@ -188,18 +182,29 @@ namespace Chang.FSM
 
         private void OnClickPlaySound(bool isLearnLanguage)
         {
-            throw new NotImplementedException();
-            // string key =  isLearnLanguage
-            //     ? _correctWord.LogKey
-            //     : _wordPathHelper.GetNativeSoundKey(_correctWord.LogKey, _profileService.ProfileData.NativeLanguage);
-            //
-            // string path = _wordPathHelper.GetSoundPath(key);
-            // AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
-            //
-            // if (asset)
-            // {
-            //     _pagesSoundController.PlaySound(asset);
-            // }
+            _soundCts?.Cancel();
+            _soundCts?.Dispose();
+            _soundCts = null;
+            
+            List<AudioClip> audioClips = new List<AudioClip>();
+            
+            _questionData.CompareSequence.ForEach(pData =>
+            {
+                string key = isLearnLanguage
+                    ? pData.Word.WordKey
+                    : _wordPathHelper.GetNativeSoundKey(pData.Word.WordKey, _profileService.ProfileData.NativeLanguage);
+
+                string path = _wordPathHelper.GetSoundPath(key);
+                AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
+
+                if (asset)
+                {
+                    audioClips.Add(asset);
+                }
+            });
+            
+            _soundCts = new CancellationTokenSource();
+            _pagesSoundController.PlaySoundsAsync(audioClips, _soundCts.Token).Forget();
         }
 
         private void OnHint(bool isHintUsed)
@@ -211,8 +216,7 @@ namespace Chang.FSM
         {
             Debug.Log($"displayIndex: {displayIndex}; mixIndex: {mixIndex}");
 
-            throw new NotImplementedException();
-            /*
+           
             if (displayIndex > -1) // display word clicked
             {
                 if (!_questionData.DisplaySequence[displayIndex].IsPlaceHolder)
@@ -227,7 +231,7 @@ namespace Chang.FSM
                     _questionData.DisplaySequence[displayIndex].SetHighlighted(!_questionData.DisplaySequence[displayIndex].IsHighlighted);
                 }
             }
-
+            
             SequencePhraseData placeToMove;
 
             if (mixIndex > -1) // mix word checked
@@ -252,7 +256,7 @@ namespace Chang.FSM
                 _stateController.UpdateDisplaySequence(_questionData.DisplaySequence);
                 _stateController.UpdateMixSequence(_questionData.MixWords);
             }
-
+           
             placeToMove = _questionData.DisplaySequence.FirstOrDefault(pData => pData.IsPlaceHolder);
 
             foreach (var pData in _questionData.MixWords)
@@ -263,6 +267,8 @@ namespace Chang.FSM
             _stateController.UpdateMixSequence(_questionData.MixWords);
             _gameOverlayController.EnableCheckButton(placeToMove == null);
 
+            throw new NotImplementedException();
+/*
             if (placeToMove == null) // no more placeholders
             {
                 string compare = string.Join("", _questionData.CompareSequence.Select(pData => pData.Word.LearnWord));
