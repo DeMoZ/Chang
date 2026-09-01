@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,9 +55,29 @@ namespace Chang.Core
         // public string SoundKey => Sentence.SoundKey;
         //
 // <- old
-        public List<string> CompareWordsKeys => Sentence.SentenceWords.Select(word => word.WordKey).ToList();
-        public List<string> DisplayWordsKeys => Sentence.SentenceWords.Select(word => word.WordKey).ToList();
-        public List<string> MixWordsKeys => Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+        public List<string> CompareWordsKeys
+        {
+            get
+            {
+                throw new NotImplementedException("сначала надо инициализировать Sentence, потом получать ключи не из того что есть в книге, а из инициализированного Sentence");
+                return Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+            }
+        }
+
+        public List<string> DisplayWordsKeys {
+            get
+            {
+                throw new NotImplementedException("сначала надо инициализировать Sentence, потом получать ключи не из того что есть в книге, а из инициализированного Sentence");
+                return Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+            }
+        } // todo chang Not all words from 
+        public List<string> MixWordsKeys {
+            get
+            {
+                throw new NotImplementedException("сначала надо инициализировать Sentence, потом получать ключи не из того что есть в книге, а из инициализированного Sentence");
+                return Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+            }
+        } // todo chang missed words and something else
 
 
         public Sentence Sentence { get; set; } // runtime field

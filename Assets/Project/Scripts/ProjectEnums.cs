@@ -2,9 +2,8 @@ namespace Chang
 {
     public enum GenderType
     {
-        None,
-        Male,
         Female,
+        Male,
     }
 
     public enum ChangTypes

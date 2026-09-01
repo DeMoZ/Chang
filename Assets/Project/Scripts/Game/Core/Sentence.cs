@@ -33,29 +33,6 @@ namespace Chang.Core
     {
         public Modifier Modifiers;
         public string WordKey;
-
-        public void SetModifiers(string value)
-        {
-            Modifiers = Modifier.None;
-            
-            if (string.IsNullOrEmpty(value))
-            {
-                return;
-            }
-
-            if (value.Contains('V'))
-            {
-                Modifiers |= Modifier.Variant;
-            }
-            if (value.Contains('D'))
-            {
-                Modifiers |= Modifier.Dynamic;
-            }
-            if (value.Contains('G'))
-            {
-                Modifiers |= Modifier.Gender;
-            }
-        }
     }
 
     // Key	            Do_not_add_sugar

@@ -32,6 +32,13 @@ namespace Chang.Profile
         [field: SerializeField]
         public string Name { get; set; }
         
+        /// <summary>
+        /// Player gender
+        /// </summary>
+        [JsonProperty]
+        [field: SerializeField]
+        public GenderType Gender { get; set; }
+        
         [field: SerializeField]
         public Languages LearnLanguage { get; set; } = Languages.Thai;
         public Languages NativeLanguage { get; set; } = Languages.English;

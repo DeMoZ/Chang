@@ -10,6 +10,7 @@ using DMZ.FSM;
 using Popup;
 using Project.Services.PagesContentProvider;
 using Sirenix.Utilities;
+using Unity.VisualScripting;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -62,7 +63,7 @@ namespace Chang.FSM
                                                   LoadingElements.Percent | LoadingElements.Bytes);
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
             loadingUiController.SetPercentsAndBytes(0, 0);
-            
+
             await PreloadContentAsync(loadingUiController.SetPercentsAndBytes, ct);
 
             _screenManager.SetActivePagesContainer(true);
@@ -74,7 +75,7 @@ namespace Chang.FSM
 
             _gameOverlayController.EnableReturnButton(true);
             _gameOverlayController.EnableHintButton(true);
-            
+
             _pagesBus = new PagesBus
             {
                 Lesson = Bus.Lesson,
@@ -107,25 +108,29 @@ namespace Chang.FSM
         }
 
         private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
-        { 
+        {
             IEnumerable<IQuestion> wQuests = Bus.Lesson.Questions.Where(q => IsWordQuest(q.Type));
             IEnumerable<IQuestion> sQuests = Bus.Lesson.Questions.Where(q => IsSentenceQuest(q.Type));
+
+            HashSet<string> wWKeys = Enumerable.ToHashSet(wQuests.Select(q => q.GetWordsKeys)
+                .SelectMany(hashSet => hashSet));
+
+            HashSet<string> sWKeys = Enumerable.ToHashSet(sQuests.Select(q => q.GetWordsKeys)
+                .SelectMany(hashSet => hashSet));
+
             
-            HashSet<string> wWKeys = wQuests.Select(q => q.GetWordsKeys)
-                .SelectMany(hashSet => hashSet)
-                .ToHashSet();
-            
-            HashSet<string> sWKeys = sQuests.Select(q => q.GetWordsKeys)
-                .SelectMany(hashSet => hashSet)
-                .ToHashSet();
-            
-            // HashSet<string> wordsKeys = Bus.Lesson.Questions.Select(q => q.GetWordsKeys)
-            //     .SelectMany(hashSet => hashSet)
-            //     .ToHashSet();
-            
+            // initialize sentences with variants and dynamic words, and then preload content for them
+            if (Bus.Sentences.Count > 0)
+            {
+                foreach (var sentence in Bus.Sentences.Values)
+                {
+                    InitSentence(sentence);
+                }
+            }
+
             List<Word> words = wWKeys.Select(key => Bus.Words[key]).ToList();
             await _pagesContentProvider.PreloadWordsContentAsync(words, progress, ct);
-            
+
             List<Sentence> sentenceWords = sWKeys.Select(key => Bus.Sentences[key]).ToList();
             if (sentenceWords.Count > 0)
             {
@@ -134,9 +139,120 @@ namespace Chang.FSM
             }
         }
 
+        private void InitSentence(Sentence sentence)
+        {
+            foreach (SentenceWord sentenceWord in sentence.SentenceWords)
+            {
+                Debug.Log(
+                    $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with modifiers {sentenceWord.Modifiers}");
+
+                if (!Bus.Words.ContainsKey(sentenceWord.WordKey))
+                {
+                    throw new Exception(
+                        $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Dynamic modifier, but the word is not in the Bus.Words");
+                }
+
+                if (sentenceWord.Modifiers == Modifier.None)
+                {
+                    continue;
+                }
+
+                if (sentenceWord.Modifiers.HasFlag(Modifier.Variant)) // todo chang what is Variant I dont remember;
+                {
+                    Debug.Log(
+                        $"Sentence {sentence.SentenceKey}, word {sentenceWord.WordKey} has Variant modifier, I skip it for now");
+                }
+
+                if (sentenceWord.Modifiers.HasFlag(Modifier.Dynamic))
+                {
+                    SetDynamicWord(sentenceWord);
+                }
+
+                if (sentenceWord.Modifiers.HasFlag(Modifier.Gender))
+                {
+                    SetGenderWord(sentenceWord);
+                }
+            }
+
+            return;
+
+            void SetDynamicWord(SentenceWord sentenceWord)
+            {
+                Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Dynamic modifier");
+                Word word = Bus.Words[sentenceWord.WordKey];
+                string section =
+                    ElementsPaths.VocabularySectionKey(_profileService.ProfileData.LearnLanguage, word.Section);
+                List<Lesson> sectionLessons = Bus.VocabularySections[section].Lessons;
+                List<string> wordKeys = Enumerable.ToHashSet(sectionLessons.SelectMany(lesson => lesson.Keys)).ToList();
+                string randomWordKey = wordKeys[UnityEngine.Random.Range(0, wordKeys.Count)];
+                sentenceWord.WordKey = randomWordKey;
+            }
+
+            void SetGenderWord(SentenceWord sentenceWord)
+            {
+                if (_profileService.LearnLanguage != Languages.Thai)
+                {
+                    Debug.LogError(
+                        $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier, but the language is not Thai");
+                    return;
+                }
+
+                Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier");
+                
+                /*  phom chan ka krap
+                    Thai/Vocabulary/Gender/_Polite_male_
+                    Thai/Vocabulary/Gender/_Polite_female_
+                    Thai/Vocabulary/Gender/_Man_I_
+                    Thai/Vocabulary/Gender/_Woman_I_
+                 */
+                switch (_profileService.ProfileData.Gender)
+                {
+                    case GenderType.Female:
+                        switch (sentenceWord.WordKey)
+                        {
+                            case "Thai/Vocabulary/Gender/_Polite_male_":
+                            case "Thai/Vocabulary/Gender/_Polite_female_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Polite_female_";
+                                break;
+                            case "Thai/Vocabulary/Gender/_Man_I_":
+                            case "Thai/Vocabulary/Gender/_Woman_I_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Woman_I_";
+                                break;
+                            default:
+                                Debug.LogError(
+                                    $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier");
+                                break;
+                        }
+
+                        break;
+                    case GenderType.Male:
+                        switch (sentenceWord.WordKey)
+                        {
+                            case "Thai/Vocabulary/Gender/_Polite_male_":
+                            case "Thai/Vocabulary/Gender/_Polite_female_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Polite_male_";
+                                break;
+                            case "Thai/Vocabulary/Gender/_Man_I_":
+                            case "Thai/Vocabulary/Gender/_Woman_I_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Man_I_";
+                                break;
+                            default:
+                                Debug.LogError(
+                                    $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier");
+                                break;
+                        }
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         private bool IsWordQuest(ChangTypes argType)
         {
-            return argType == ChangTypes.DemonstrationWord || argType == ChangTypes.SelectWord || argType == ChangTypes.MatchWords;
+            return argType == ChangTypes.DemonstrationWord || argType == ChangTypes.SelectWord ||
+                   argType == ChangTypes.MatchWords;
         }
 
         private bool IsSentenceQuest(ChangTypes argType)
@@ -189,7 +305,8 @@ namespace Chang.FSM
 
             var isCorrect = _pagesBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
-            Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {_pagesBus.QuestionResult.Presentation}");
+            Debug.Log(
+                $"The answer is <color={isCorrectColor}>{isCorrect}</color>; {_pagesBus.QuestionResult.Presentation}");
             var needIncrement = !_pagesBus.QuestionResult.IsHintUsed;
             _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation,
                 ChangTypes.SelectWord, isCorrect,
@@ -356,20 +473,22 @@ namespace Chang.FSM
             {
                 return false;
             }
-            
-            HashSet<string> selectWordQuests = lesson.Keys.ToHashSet();
+
+            HashSet<string> selectWordQuests = Enumerable.ToHashSet(lesson.Keys);
             matchWords.AddRange(selectWordQuests);
 
             if (matchWords.Count < 2)
             {
-                string lessonPath = string.Join("/", new List<string>{lesson.Language.ToString(), "Vocabulary", lesson.Section});
-                Debug.LogWarning($"matchWords not generated for lesson : {lessonPath}, count select words {matchWords.Count}");
+                string lessonPath = string.Join("/",
+                    new List<string> { lesson.Language.ToString(), "Vocabulary", lesson.Section });
+                Debug.LogWarning(
+                    $"matchWords not generated for lesson : {lessonPath}, count select words {matchWords.Count}");
                 return false;
             }
-            
+
             matchWords = _pagesBus.GameType == GameType.Learn
-                ? matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE).ToHashSet()
-                : matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE).ToHashSet();
+                ? Enumerable.ToHashSet(matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE))
+                : Enumerable.ToHashSet(matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE));
 
             matchWords.Shuffle();
             questMatchWords.MatchWordsKeys = matchWords;
