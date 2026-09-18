@@ -44,7 +44,7 @@ namespace Chang.Core
 
         public string Key { get; set; }
 
-// -> old
+        // -> old
         public HashSet<string> MatchWordsKeys;
 
         public HashSet<string> GetNeedDemonstrationKeys => new(MatchWordsKeys);
@@ -54,24 +54,30 @@ namespace Chang.Core
         // public string ImageKey => Sentence.ImageKey;
         // public string SoundKey => Sentence.SoundKey;
         //
-// <- old
-        public List<string> CompareWordsKeys
+        // <- old
+        // private List<string> _compareWordsKeys;
+        private List<string> _displayWordsKeys;
+        private List<string> _mixWordsKeys;
+
+        public List<string> CompareWordsKeys { get; set; }
+        // {
+        //     get
+        //     {
+        //         _compareWordsKeys??= Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+        //         return _compareWordsKeys;
+        //     }
+        // }
+
+        public List<string> DisplayWordsKeys
         {
             get
             {
                 throw new NotImplementedException("сначала надо инициализировать Sentence, потом получать ключи не из того что есть в книге, а из инициализированного Sentence");
                 return Sentence.SentenceWords.Select(word => word.WordKey).ToList();
             }
-        }
-
-        public List<string> DisplayWordsKeys {
-            get
-            {
-                throw new NotImplementedException("сначала надо инициализировать Sentence, потом получать ключи не из того что есть в книге, а из инициализированного Sentence");
-                return Sentence.SentenceWords.Select(word => word.WordKey).ToList();
-            }
         } // todo chang Not all words from 
-        public List<string> MixWordsKeys {
+        public List<string> MixWordsKeys
+        {
             get
             {
                 throw new NotImplementedException("сначала надо инициализировать Sentence, потом получать ключи не из того что есть в книге, а из инициализированного Sentence");

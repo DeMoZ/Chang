@@ -72,7 +72,8 @@ namespace Chang.Core
             return sentenceSentenceWords.Select(word => new SentenceWord
             {
                 WordKey = word.WordKey,
-                Modifiers = word.Modifiers
+                Modifiers = word.Modifiers,
+                DisplayIndex = word.DisplayIndex
             }).ToList();
         }
     }

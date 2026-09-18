@@ -29,6 +29,7 @@ namespace Chang.Services.DataProvider
 
         public async UniTask<ProfileData> LoadProfileDataAsync(CancellationToken ct)
         {
+            await UniTask.Yield(ct); // todo chang delete
             throw new NotImplementedException();
         }
 

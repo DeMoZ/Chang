@@ -80,6 +80,8 @@ namespace Chang.FSM
             _stateController.SetViewActive(true);
 
             OnClickPlaySound();
+            
+            await UniTask.Yield(ct);
         }
 
         private void OnClickPlaySound()

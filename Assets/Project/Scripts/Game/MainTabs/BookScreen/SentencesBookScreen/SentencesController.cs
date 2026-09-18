@@ -243,11 +243,11 @@ namespace Chang.Sentences
             {
                 lesson = _gameBus.SentencesSections[sectionKey].SectionLessons[lessonIndex - 1];
             }
-            
+
             lesson.SetQuestions(lesson.Questions);
             InitQuestions(lesson);
             _gameBus.SetLesson(lesson);
-            
+
             _mainScreenBus.IsLoading = false;
             _gameBus.GameType = GameType.Learn;
             _onLobbyExitState?.Invoke();
@@ -280,9 +280,9 @@ namespace Chang.Sentences
                                 public List<string> MixWordsFileNames { get; set; }
                                 public string LogKey { get; set; }
                              */
-                            
+
                 // MatchWordsKeys = busSentences[sentenceKey].WordsKeys,
-                            
+
                 // LocalizationKey = busSentences[sentenceKey].Key,
                 // DefaultTranslation = busSentences[sentenceKey].DefaultTranslation,
                 // ImageKey = busSentences[sentenceKey].ImageKey,
@@ -292,30 +292,38 @@ namespace Chang.Sentences
                 // // MixWordsKeys = busSentences[sentenceKey].MixWordsKeys,
                 // Key = busSentences[sentenceKey].Key,
                 // LogKey = busSentences[sentenceKey].SentenceKey,
-                
+
                 quest.Sentence = sentence;
                 quest.MatchWordsKeys = new HashSet<string>(sentence.SentenceWords.Select(word => word.WordKey));
                 // quest.ImageKey = sentence.ImageKey;
                 // quest.SoundKey = sentence.SoundKey;
-                
+
             }
         }
 
         private async UniTaskVoid OnSectionRepeatClickedAsync(string section, CancellationToken ct)
         {
             if (_mainScreenBus.IsLoading)
+            {
                 return;
+            }
 
+            await UniTask.Yield(ct); // todo chang delete
             throw new NotImplementedException();
             // todo chang show loading animation ?
             // var repetitions = await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
             // MakeRepetitionAsync(repetitions, _cts.Token).Forget();
+
         }
 
         private async UniTaskVoid OnGeneralRepeatClickedAsync(CancellationToken ct)
         {
             if (_mainScreenBus.IsLoading)
+            {
                 return;
+            }
+
+            await UniTask.Yield(ct); // todo chang delete
             throw new NotImplementedException();
             // todo chang show loading animation ?
             // var repetitions = await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);

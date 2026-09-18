@@ -287,6 +287,7 @@ namespace Chang.Vocabulary
 
         private async UniTaskVoid MakeRepetitionAsync(List<VocabularyQuestLog> repetitions, CancellationToken ct)
         {
+            await UniTask.Yield(ct); // todo chang delete
             throw new NotImplementedException();
             /*
             if (repetitions.Count < ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT)

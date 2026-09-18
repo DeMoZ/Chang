@@ -118,13 +118,11 @@ namespace Chang.FSM
             HashSet<string> sWKeys = Enumerable.ToHashSet(sQuests.Select(q => q.GetWordsKeys)
                 .SelectMany(hashSet => hashSet));
 
-            
-            // initialize sentences with variants and dynamic words, and then preload content for them
-            if (Bus.Sentences.Count > 0)
+            if (sQuests.Any())
             {
-                foreach (var sentence in Bus.Sentences.Values)
+                foreach (IQuestion sQuest in sQuests)
                 {
-                    InitSentence(sentence);
+                    InitSentenceQuest(sQuest);
                 }
             }
 
@@ -139,9 +137,55 @@ namespace Chang.FSM
             }
         }
 
-        private void InitSentence(Sentence sentence)
+        private void InitSentenceQuest(IQuestion sQuest)
         {
-            foreach (SentenceWord sentenceWord in sentence.SentenceWords)
+            if (sQuest is SentenceSelectWords sSelectWords)
+            {
+                if (!Bus.Sentences.TryGetValue(sSelectWords.Key, out Sentence sentence))
+                {
+                    throw new Exception($"Sentence with key {sSelectWords.Key} not found in Bus.Sentences");
+                }
+
+                sSelectWords.Sentence = InitSentence(sentence);
+                // Initialize sentence select words specific logic here
+                sSelectWords.CompareWordsKeys = sSelectWords.Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+
+                float sentenceMark = _profileService.GetSentencesMark(sentence.SentenceKey);
+                // todo chang: implement display word by word index
+
+                // нужно взять sWord и увидеть его индекс, затем сравнить с оценкой предложения
+                foreach (SentenceWord sWord in sSelectWords.Sentence.SentenceWords)
+                {
+                    if (sWord.DisplayIndex < sentenceMark)
+                    {                 
+                        // remove from display words list (add blank word instead)
+                        !throw new NotImplementedException("Sentence word display index not implemented yet");
+                    }
+                }
+
+
+
+                // Set MixWords
+                // based on sentence log mark. Set the empty words. Epmty word put into mix. If mix words are not enough
+                // all dynamic and variant words are added to mix words among with correct words if not enough in mix.
+
+                // if (sentenceWord.Modifiers.HasFlag(Modifier.Variant))
+                // {
+                //     // variants words are for add into mix words. they not supposed to be chosen by the player, and if he do - that is his fault
+                //     Debug.Log(
+                //         $"Sentence {sentence.SentenceKey}, word {sentenceWord.WordKey} has Variant modifier, I skip it for now");
+                //     SetVariantWord(sentenceWord);
+                // }
+                //
+
+            }
+        }
+
+        private Sentence InitSentence(Sentence sentence)
+        {
+            Sentence result = new(sentence);
+
+            foreach (SentenceWord sentenceWord in result.SentenceWords)
             {
                 Debug.Log(
                     $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with modifiers {sentenceWord.Modifiers}");
@@ -157,12 +201,6 @@ namespace Chang.FSM
                     continue;
                 }
 
-                if (sentenceWord.Modifiers.HasFlag(Modifier.Variant)) // todo chang what is Variant I dont remember;
-                {
-                    Debug.Log(
-                        $"Sentence {sentence.SentenceKey}, word {sentenceWord.WordKey} has Variant modifier, I skip it for now");
-                }
-
                 if (sentenceWord.Modifiers.HasFlag(Modifier.Dynamic))
                 {
                     SetDynamicWord(sentenceWord);
@@ -174,7 +212,7 @@ namespace Chang.FSM
                 }
             }
 
-            return;
+            return result;
 
             void SetDynamicWord(SentenceWord sentenceWord)
             {
@@ -198,7 +236,7 @@ namespace Chang.FSM
                 }
 
                 Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier");
-                
+
                 /*  phom chan ka krap
                     Thai/Vocabulary/Gender/_Polite_male_
                     Thai/Vocabulary/Gender/_Polite_female_

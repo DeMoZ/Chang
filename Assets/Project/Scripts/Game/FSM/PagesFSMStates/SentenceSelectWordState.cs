@@ -129,6 +129,8 @@ namespace Chang.FSM
             _stateController.SetViewActive(true);
 
             OnClickPlaySound(!isQuestInTranslation);
+            
+            await UniTask.Yield(ct);
         }
 
         // todo chang implement localization

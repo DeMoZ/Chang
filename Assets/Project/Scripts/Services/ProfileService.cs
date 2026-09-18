@@ -79,11 +79,13 @@ namespace Chang.Services
 
         public async UniTask SaveVocabularyProgressAsync(CancellationToken ct)
         {
+            await UniTask.Yield(ct); // todo chang delete
             throw new NotImplementedException();
         }
 
         public async UniTask SaveSentencesProgressAsync(CancellationToken ct)
         {
+            await UniTask.Yield(ct); // todo chang delete
             throw new NotImplementedException();
         }
 

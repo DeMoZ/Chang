@@ -157,6 +157,8 @@ namespace Project.Services.PagesContentProvider
                 Content[path] = asset;
             }
             */
+
+            await UniTask.Yield(ct); // todo chang delete
         }
 
         [CanBeNull]

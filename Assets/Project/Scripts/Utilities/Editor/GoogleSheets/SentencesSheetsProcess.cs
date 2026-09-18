@@ -31,12 +31,14 @@ namespace Chang.Utilities.GoogleSheets
 
         private const string JsonCredentials = "chang_gcloudconsole_credentials.json";
         private const string SheetType = "Sentences";
-        private const int ChunkSize = 8;
+        private const int ChunkSize = 9;
 
         private readonly Languages _language;
 
         private string SpreadSheetIdFileName => $"{_language}VocabularyAndSentences_ids.json";
-        private string JsonCredentialsPath => Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, JsonCredentials);
+
+        private string JsonCredentialsPath =>
+            Path.Combine(Application.dataPath, UtilitiesConstants.RelativePath, JsonCredentials);
 
         public SentencesSheetsProcess(Languages language)
         {
@@ -49,7 +51,8 @@ namespace Chang.Utilities.GoogleSheets
             await provider.InitAsync();
 
             SpreadSheetInfo spreadSheet = await provider.GetBookAsync();
-            List<SheetInfo> sheets = spreadSheet.Sheets.Where(s => s.Type == SheetType && s.Language == _language).ToList();
+            List<SheetInfo> sheets = spreadSheet.Sheets.Where(s => s.Type == SheetType && s.Language == _language)
+                .ToList();
 
             Book book = new()
             {
@@ -88,19 +91,23 @@ namespace Chang.Utilities.GoogleSheets
                     var sentenceWords = new List<SentenceWord>();
                     for (int j = 0; j < ChunkSize; j++)
                     {
-                        string wordKey = SpreadSheetUtilities.SafeGetValue(chunk, 7, j);
+                        string wordKey = SpreadSheetUtilities.SafeGetValue(chunk, 8, j);
 
                         if (string.IsNullOrEmpty(wordKey))
                         {
                             break;
                         }
 
+                        int displayIndex = int.TryParse(SpreadSheetUtilities.SafeGetValue(chunk, 5, j), out var parsed)
+                            ? parsed
+                            : 0;
                         SentenceWord sentenceWord = new SentenceWord
                         {
-                            WordKey = wordKey
+                            WordKey = wordKey,
+                            DisplayIndex = displayIndex,
                         };
 
-                        sentenceWord.SetModifiers(SpreadSheetUtilities.SafeGetValue(chunk, 5, j));
+                        sentenceWord.SetModifiers(SpreadSheetUtilities.SafeGetValue(chunk, 6, j));
                         sentenceWords.Add(sentenceWord);
                     }
 

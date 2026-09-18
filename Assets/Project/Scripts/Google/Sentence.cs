@@ -23,6 +23,7 @@ namespace Chang.GoogleSheets
     {
         public Modifier Modifiers;
         public string WordKey;
+        public int DisplayIndex;
 
         public void SetModifiers(string value)
         {
