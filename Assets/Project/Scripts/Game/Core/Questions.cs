@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.Utilities;
 
 namespace Chang.Core
 {
@@ -44,57 +44,40 @@ namespace Chang.Core
 
         public string Key { get; set; }
 
-        // -> old
         public HashSet<string> MatchWordsKeys;
 
         public HashSet<string> GetNeedDemonstrationKeys => new(MatchWordsKeys);
 
-        // public string LocalizationKey => Sentence.Key;
-        public string DefaultTranslation => Sentence.DefaultTranslation;
-        // public string ImageKey => Sentence.ImageKey;
-        // public string SoundKey => Sentence.SoundKey;
-        //
-        // <- old
-        // private List<string> _compareWordsKeys;
-        private List<string> _displayWordsKeys;
-        private List<string> _mixWordsKeys;
-
-        public List<string> CompareWordsKeys { get; set; }
-        // {
-        //     get
-        //     {
-        //         _compareWordsKeys??= Sentence.SentenceWords.Select(word => word.WordKey).ToList();
-        //         return _compareWordsKeys;
-        //     }
-        // }
-
-        public List<string> DisplayWordsKeys
-        {
-            get
-            {
-                throw new NotImplementedException("сначала надо инициализировать Sentence, потом получать ключи не из того что есть в книге, а из инициализированного Sentence");
-                return Sentence.SentenceWords.Select(word => word.WordKey).ToList();
-            }
-        } // todo chang Not all words from 
-        public List<string> MixWordsKeys
-        {
-            get
-            {
-                throw new NotImplementedException("сначала надо инициализировать Sentence, потом получать ключи не из того что есть в книге, а из инициализированного Sentence");
-                return Sentence.SentenceWords.Select(word => word.WordKey).ToList();
-            }
-        } // todo chang missed words and something else
-
+        public string Translation {get; private set;}
 
         public Sentence Sentence { get; set; } // runtime field
 
-        public HashSet<string> GetWordsKeys => _wordsKeys ??= new HashSet<string> { Sentence.SentenceKey };
-        public HashSet<string> GetSoundKeys => _soundKeys ??= new HashSet<string> { Sentence.SoundKey }; // todo chang incorrect. WHen i use variants for word, the sound will be changed
-        public HashSet<string> GetImageKeys => _imageKeys ??= new HashSet<string> { Sentence.ImageKey };
-
+        public List<string> CompareWordsKeys { get; set; }
+        public List<string> DisplayWordsKeys { get; set; }
+        public List<string> MixWordsKeys { get; set; }
 
         private HashSet<string> _wordsKeys;
         private HashSet<string> _soundKeys;
         private HashSet<string> _imageKeys;
+
+        public HashSet<string> GetWordsKeys => _wordsKeys ??= CompareWordsKeys.ToHashSet();
+        public HashSet<string> GetImageKeys => _imageKeys ?? throw new System.Exception("_imageKeys not set");
+        public HashSet<string> GetSoundKeys => _soundKeys ?? throw new System.Exception("_soundKeys not set");
+
+        public void SetTranslation(string translation)
+        {
+            Translation = translation;
+        }
+
+        public void SetImageKeys(IEnumerable<string> imageKeys)
+        {
+            _imageKeys = new HashSet<string> { Sentence.ImageKey };
+            _imageKeys.AddRange(imageKeys);
+        }
+
+        public void SetSoundKeys(IEnumerable<string> soundKeys)
+        {
+            _soundKeys = soundKeys.ToHashSet();
+        }
     }
 }

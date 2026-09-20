@@ -40,5 +40,20 @@ namespace Chang.Core
                 return DefaultTranslation;
             }
         }
+
+        public static Word CreateEmptyPlaceholder()
+        {
+            return new Word
+            {
+                WordKey = string.Empty,
+                ImageKey = string.Empty,
+                SoundKey = string.Empty,
+                Key = string.Empty,
+                LearnWord = string.Empty,
+                Phonetics = string.Empty,
+                DefaultTranslation = string.Empty,
+                DefaultDescription = string.Empty,
+            };
+        }
     }
 }

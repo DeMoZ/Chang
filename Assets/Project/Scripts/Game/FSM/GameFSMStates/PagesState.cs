@@ -10,7 +10,6 @@ using DMZ.FSM;
 using Popup;
 using Project.Services.PagesContentProvider;
 using Sirenix.Utilities;
-using Unity.VisualScripting;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -18,6 +17,8 @@ namespace Chang.FSM
 {
     public class PagesState : ResultStateBase<StateType, GameBus>, IDisposable
     {
+        private const string EmptyWordKey = "";
+
         public override StateType Type => StateType.PlayPages;
 
         [Inject] private readonly GameOverlayController _gameOverlayController;
@@ -115,9 +116,6 @@ namespace Chang.FSM
             HashSet<string> wWKeys = Enumerable.ToHashSet(wQuests.Select(q => q.GetWordsKeys)
                 .SelectMany(hashSet => hashSet));
 
-            HashSet<string> sWKeys = Enumerable.ToHashSet(sQuests.Select(q => q.GetWordsKeys)
-                .SelectMany(hashSet => hashSet));
-
             if (sQuests.Any())
             {
                 foreach (IQuestion sQuest in sQuests)
@@ -126,13 +124,18 @@ namespace Chang.FSM
                 }
             }
 
+            HashSet<string> sWordKeys = Enumerable.ToHashSet(sQuests.Select(q => q.GetWordsKeys)
+                .SelectMany(hashSet => hashSet));
+
             List<Word> words = wWKeys.Select(key => Bus.Words[key]).ToList();
             await _pagesContentProvider.PreloadWordsContentAsync(words, progress, ct);
 
-            List<Sentence> sentenceWords = sWKeys.Select(key => Bus.Sentences[key]).ToList();
-            if (sentenceWords.Count > 0)
+            HashSet<string> sentenceKeys = Enumerable.ToHashSet(sQuests.OfType<SentenceSelectWords>().Select(q => q.Key));
+
+            List<Sentence> sentences = sentenceKeys.Select(key => Bus.Sentences[key]).ToList();
+            if (sentences.Count > 0)
             {
-                await _pagesContentProvider.PreloadSentencesContentAsync(sentenceWords, progress, ct);
+                await _pagesContentProvider.PreloadSentencesContentAsync(sentences, progress, ct);
                 await _pagesContentProvider.CacheContentAsync(AssetPaths.Addressables.EmptyWordPlaceHolderPath, ct);
             }
         }
@@ -147,37 +150,45 @@ namespace Chang.FSM
                 }
 
                 sSelectWords.Sentence = InitSentence(sentence);
-                // Initialize sentence select words specific logic here
                 sSelectWords.CompareWordsKeys = sSelectWords.Sentence.SentenceWords.Select(word => word.WordKey).ToList();
-
                 float sentenceMark = _profileService.GetSentencesMark(sentence.SentenceKey);
-                // todo chang: implement display word by word index
 
-                // нужно взять sWord и увидеть его индекс, затем сравнить с оценкой предложения
+                // todo chang implement display word by word index
+                sSelectWords.DisplayWordsKeys = new List<string>();
+                sSelectWords.MixWordsKeys = new List<string>();
+                // take sWord and get its index then compare with sentenence mark
                 foreach (SentenceWord sWord in sSelectWords.Sentence.SentenceWords)
                 {
-                    if (sWord.DisplayIndex < sentenceMark)
-                    {                 
-                        // remove from display words list (add blank word instead)
-                        !throw new NotImplementedException("Sentence word display index not implemented yet");
+                    if (sWord.DisplayIndex <= sentenceMark)
+                    {
+                        sSelectWords.DisplayWordsKeys.Add(EmptyWordKey);
+                        sSelectWords.MixWordsKeys.Add(sWord.WordKey);
+
+                    }
+                    else
+                    {
+                        sSelectWords.DisplayWordsKeys.Add(sWord.WordKey);
                     }
                 }
 
+                // todo chang complete mix word
+                if (sSelectWords.MixWordsKeys.Count < 2)
+                {
+                    Debug.LogWarning("Implement mix words amout based on the sentence mark");
+                }
 
+                string defaultTranslation = sSelectWords.Sentence.DefaultTranslation;
+                List<SentenceWord> dynamicWords = sSelectWords.Sentence.SentenceWords
+                    .Where(w => w.Modifiers.HasFlag(Modifier.Dynamic))
+                    .ToList();
+                    
+                object[] translationArgs = dynamicWords.Select(w => (object)Bus.Words[w.WordKey].Translation).ToArray();
+                defaultTranslation = string.Format(defaultTranslation, translationArgs);
+                sSelectWords.SetTranslation(defaultTranslation);
 
-                // Set MixWords
-                // based on sentence log mark. Set the empty words. Epmty word put into mix. If mix words are not enough
-                // all dynamic and variant words are added to mix words among with correct words if not enough in mix.
-
-                // if (sentenceWord.Modifiers.HasFlag(Modifier.Variant))
-                // {
-                //     // variants words are for add into mix words. they not supposed to be chosen by the player, and if he do - that is his fault
-                //     Debug.Log(
-                //         $"Sentence {sentence.SentenceKey}, word {sentenceWord.WordKey} has Variant modifier, I skip it for now");
-                //     SetVariantWord(sentenceWord);
-                // }
-                //
-
+                HashSet<string> allWordsKeys = new(sSelectWords.CompareWordsKeys.Concat(sSelectWords.MixWordsKeys));
+                sSelectWords.SetImageKeys(allWordsKeys.Select(key => Bus.Words[key].ImageKey));
+                sSelectWords.SetSoundKeys(allWordsKeys.Select(key => Bus.Words[key].SoundKey));
             }
         }
 

@@ -50,7 +50,6 @@ namespace Chang.FSM
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly PagesSoundController _pagesSoundController;
         [Inject] private readonly WordPathHelper _wordPathHelper;
-        [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly PopupManager _popupManager;
 
         private readonly IPagesContentProvider _pagesContentProvider;
@@ -108,7 +107,7 @@ namespace Chang.FSM
             
             if (!TryGetLocalization(_sentenceQuestion.Key, out string translation))
             {
-                translation = _sentenceQuestion.DefaultTranslation;
+                translation = _sentenceQuestion.Translation;
             }
 
             string spritePath = _wordPathHelper.GetTexturePath(_sentenceQuestion.GetImageKeys.First());
@@ -170,11 +169,17 @@ namespace Chang.FSM
 
                 foreach (var key in keys)
                 {
+                    if (string.IsNullOrEmpty(key))
+                    {
+                        SequencePhraseData placeholderData = new SequencePhraseData(Word.CreateEmptyPlaceholder());
+                        placeholderData.SetIsPlaceHolder(true);
+                        phrasesDataList.Add(placeholderData);
+                        continue;
+                    }
+
                     if (Bus.Words.TryGetValue(key, out Word word))
                     {
-                        SequencePhraseData phraseData = new SequencePhraseData(word);
-                        phraseData.SetIsPlaceHolder(string.IsNullOrEmpty(key));
-                        phrasesDataList.Add(phraseData);
+                        phrasesDataList.Add(new SequencePhraseData(word));
                     }
                 }
 
