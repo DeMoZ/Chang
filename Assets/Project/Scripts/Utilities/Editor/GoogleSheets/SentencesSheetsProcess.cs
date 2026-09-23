@@ -75,7 +75,7 @@ namespace Chang.Utilities.GoogleSheets
                     Title = sheet.Title,
                 };
 
-                string dataRange = $"{sheet.Title}!C5:O";
+                string dataRange = SpreadSheetUtilities.Range(sheet.Title, "C5:O");
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
                 List<Sentence> sentences = new();
 

@@ -56,7 +56,7 @@ namespace Chang.Resources
             throw new NotImplementedException();
         }
         
-        public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct) where T : Object
+        public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct, IProgress<float> progress = null) where T : Object
         {
             bool isKeyNotFound = false;
             AsyncOperationHandle<T> handle = default;
@@ -65,7 +65,7 @@ namespace Chang.Resources
             try
             {
                 handle = Addressables.LoadAssetAsync<T>(key);
-                result = await handle.WithCancellation(ct);
+                result = await handle.ToUniTask(progress: progress, cancellationToken: ct);
             }
             catch (OperationCanceledException)
             {
@@ -85,7 +85,7 @@ namespace Chang.Resources
                 {
                     Debug.Log($"Repeat load asset from cached path '{key}':");
                     handle = Addressables.LoadAssetAsync<T>(key);
-                    result = await handle.WithCancellation(ct);
+                    result = await handle.ToUniTask(progress: progress, cancellationToken: ct);
                 }
                 catch (OperationCanceledException)
                 {

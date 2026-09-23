@@ -140,7 +140,7 @@ namespace Chang.Resources
         {
         }
 
-        public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken token) where T : Object
+        public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken token, IProgress<float> progress = null) where T : Object
         {
             await UniTask.Yield(token);
             throw new NotImplementedException();

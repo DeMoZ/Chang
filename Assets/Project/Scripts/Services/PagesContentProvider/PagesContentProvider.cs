@@ -249,13 +249,12 @@ namespace Project.Services.PagesContentProvider
 
         private async UniTask<Dictionary<string, IDisposableAsset>> Preload<T>(HashSet<string> keys,
             Action<float> bytes, CancellationToken ct)
-            where T : class
+            where T : UnityEngine.Object
         {
             Debug.Log($"{nameof(Preload)}");
             Dictionary<string, IDisposableAsset> result = new();
             List<string> keysList = keys.ToList();
-            List<AsyncOperationHandle<T>> handles = new();
-            List<UniTask<T>> loadAssetTasks = new();
+            List<UniTask<DisposableAsset<T>>> loadAssetTasks = new();
 
             float[] individualProgress = new float[keysList.Count];
 
@@ -263,21 +262,19 @@ namespace Project.Services.PagesContentProvider
             {
                 string key = keysList[i];
                 int index = i;
-                AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key); // todo chang load with assetManager
-                handles.Add(handle);
-                loadAssetTasks.Add(handle.ToUniTask(
-                    progress: Progress.Create<float>(p =>
+                loadAssetTasks.Add(_assetManager.LoadAssetAsync<T>(key, ct,
+                    Progress.Create<float>(p =>
                     {
                         individualProgress[index] = p;
                         bytes?.Invoke(individualProgress.Sum());
-                    }), cancellationToken: ct));
+                    })));
             }
 
-            T[] completedTasks = await UniTask.WhenAll(loadAssetTasks);
+            DisposableAsset<T>[] loadedAssets = await UniTask.WhenAll(loadAssetTasks);
 
-            for (int i = 0; i < completedTasks.Length; i++)
+            for (int i = 0; i < loadedAssets.Length; i++)
             {
-                result[keysList[i]] = new DisposableAsset<T>(completedTasks[i], handles[i]);
+                result[keysList[i]] = loadedAssets[i];
             }
 
             return result;

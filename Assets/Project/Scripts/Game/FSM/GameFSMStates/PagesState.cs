@@ -153,7 +153,6 @@ namespace Chang.FSM
                 sSelectWords.CompareWordsKeys = sSelectWords.Sentence.SentenceWords.Select(word => word.WordKey).ToList();
                 float sentenceMark = _profileService.GetSentencesMark(sentence.SentenceKey);
 
-                // todo chang implement display word by word index
                 sSelectWords.DisplayWordsKeys = new List<string>();
                 sSelectWords.MixWordsKeys = new List<string>();
                 // take sWord and get its index then compare with sentenence mark

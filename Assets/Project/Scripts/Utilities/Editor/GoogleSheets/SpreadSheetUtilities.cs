@@ -7,6 +7,23 @@ namespace Chang.Utilities.GoogleSheets
 {
     public class SpreadSheetUtilities
     {
+        // sheet title suffix by sheet type (B2), e.g. "Food.V", "Mix.S"
+        public static readonly Dictionary<string, string> SheetTitleSuffixes = new(StringComparer.InvariantCultureIgnoreCase)
+        {
+            { "Vocabulary", ".V" },
+            { "Sentences", ".S" },
+            { "VocabularyBook", ".VB" },
+            { "SentencesBook", ".SB" },
+        };
+
+        /// <summary>
+        /// A1 notation range. Title is quoted, so titles with dots or spaces ("Food.V") are valid.
+        /// </summary>
+        public static string Range(string sheetTitle, string cells)
+        {
+            return $"'{sheetTitle.Replace("'", "''")}'!{cells}";
+        }
+
         public static string SafeGetValue(IList<object> collection, int index, bool notify = false)
         {
             if (collection == null || collection.Count <= index)

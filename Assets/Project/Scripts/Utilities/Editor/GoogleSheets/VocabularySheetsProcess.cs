@@ -71,7 +71,7 @@ namespace Chang.Utilities.GoogleSheets
                     Title = sheet.Title,
                 };
 
-                string dataRange = $"{sheet.Title}!B6:I";
+                string dataRange = SpreadSheetUtilities.Range(sheet.Title, "B6:I");
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
                 List<Word> words = new ();
 

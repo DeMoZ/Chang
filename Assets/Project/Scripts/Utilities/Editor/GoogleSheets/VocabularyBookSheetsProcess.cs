@@ -80,7 +80,7 @@ namespace Chang.Utilities.GoogleSheets
                 };
                 book.Sheets.Add(currentSheet);
 
-                string dataRange = $"{sheetInfo.Title}!A4:C";
+                string dataRange = SpreadSheetUtilities.Range(sheetInfo.Title, "A4:C");
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
 
                 VocabularyBookSection currentSection = null;

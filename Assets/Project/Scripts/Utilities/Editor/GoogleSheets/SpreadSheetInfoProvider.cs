@@ -86,8 +86,9 @@ namespace Chang.Utilities.GoogleSheets
             IList<Sheet> sheets = spreadsheet.Sheets;
             SpreadSheetInfo localBook =
                 _bookInfo.SpreadsheetInfos.FirstOrDefault(s => s.Title == spreadsheet.Properties.Title);
-            // if spreadsheet is not cached or sheet count changed, update all info
-            if (localBook == null || localBook.Sheets == null || localBook.Sheets.Count != sheets.Count)
+            // if spreadsheet is not cached or sheets were added, removed or renamed, update all info
+            if (localBook == null || localBook.Sheets == null ||
+                !localBook.Sheets.Select(s => s.Title).SequenceEqual(sheets.Select(s => s.Properties.Title)))
             {
                 Languages language = await GetBookLanguageAsync();
                 List<SheetInfo> sheetInfos = await GetSheetsInfoAsync(sheets);
@@ -99,9 +100,11 @@ namespace Chang.Utilities.GoogleSheets
                     Sheets = sheetInfos
                 };
 
+                _bookInfo.SpreadsheetInfos.RemoveAll(s => s.Title == spreadsheet.Properties.Title);
                 _bookInfo.SpreadsheetInfos.Add(localBookSpreadSheetInfo);
                 localBook = localBookSpreadSheetInfo;
 
+                EditorUtility.SetDirty(_bookInfo);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 Debug.Log($"[{methodName}] Updated BookInfo asset at path: {Path}");
@@ -149,7 +152,7 @@ namespace Chang.Utilities.GoogleSheets
                 SheetInfo sheetInfo = new SheetInfo();
                 sheetInfo.Title = sheet.Properties.Title;
 
-                string checkRange = $"{sheetInfo.Title}!A1:B3";
+                string checkRange = SpreadSheetUtilities.Range(sheetInfo.Title, "A1:B3");
                 SpreadsheetsResource.ValuesResource.GetRequest checkRequest = Service.Spreadsheets.Values.Get(_spreadsheetId, checkRange);
                 ValueRange checkResponse = await checkRequest.ExecuteAsync();
                 IList<IList<object>> checkValues = checkResponse.Values;
@@ -164,6 +167,13 @@ namespace Chang.Utilities.GoogleSheets
 
                     sheetInfo.Type = SpreadSheetUtilities.SafeGetValue(checkValues, 1, 1);
                     sheetInfo.Section = SpreadSheetUtilities.SafeGetValue(checkValues, 2, 1);
+
+                    if (SpreadSheetUtilities.SheetTitleSuffixes.TryGetValue(sheetInfo.Type, out string suffix)
+                        && !sheetInfo.Title.EndsWith(suffix, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        string expectedName = string.IsNullOrEmpty(sheetInfo.Section) ? sheetInfo.Title : sheetInfo.Section;
+                        Debug.LogWarning($"Sheet '{sheetInfo.Title}' has type {sheetInfo.Type}, expected title '{expectedName}{suffix}'");
+                    }
                 }
                 catch (Exception e)
                 {
