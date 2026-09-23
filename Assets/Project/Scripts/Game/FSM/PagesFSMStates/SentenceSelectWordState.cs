@@ -40,7 +40,6 @@ namespace Chang.FSM
         public List<SequencePhraseData> CompareSequence { get; set; }
         public List<SequencePhraseData> DisplaySequence { get; set; }
         public List<SequencePhraseData> MixWords { get; set; }
-        public Queue<SequencePhraseData> PlaceHolderPool { get; set; }
     }
 
     public class SentenceSelectWordState : ResultStateBase<ChangTypes, PagesBus>
@@ -81,9 +80,14 @@ namespace Chang.FSM
         {
             base.Exit();
 
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = null;
+
             _soundCts?.Cancel();
             _soundCts?.Dispose();
-            
+            _soundCts = null;
+
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
             _pagesContentProvider.ClearCache();
@@ -157,8 +161,7 @@ namespace Chang.FSM
                 MixWords = GetPhrasesDataList(sentenceQuestion.MixWordsKeys)
             };
 
-            data.DisplaySequence.Where(pData => pData.IsPlaceHolder).ToList()
-                .ForEach(pData => pData.SetInteractable(true));
+            data.MixWords.Shuffle();
             data.MixWords.ForEach(pData => pData.SetInteractable(true));
 
             return data;
@@ -173,15 +176,7 @@ namespace Chang.FSM
 
                     if (string.IsNullOrEmpty(key))
                     {
-                        // display keys are parallel to compare keys, so the replaced word has the same index
-                        string replacedWord = i < sentenceQuestion.CompareWordsKeys.Count
-                                              && Bus.Words.TryGetValue(sentenceQuestion.CompareWordsKeys[i], out Word replaced)
-                            ? replaced.LearnWord
-                            : null;
-
-                        SequencePhraseData placeholderData = new SequencePhraseData(Word.CreateEmptyPlaceholder(replacedWord));
-                        placeholderData.SetIsPlaceHolder(true);
-                        phrasesDataList.Add(placeholderData);
+                        phrasesDataList.Add(CreatePlaceholder(sentenceQuestion, i));
                         continue;
                     }
 
@@ -193,6 +188,20 @@ namespace Chang.FSM
 
                 return phrasesDataList;
             }
+        }
+
+        private SequencePhraseData CreatePlaceholder(SentenceSelectWords sentenceQuestion, int index)
+        {
+            // display keys are parallel to compare keys, so the replaced word has the same index
+            string replacedWord = index < sentenceQuestion.CompareWordsKeys.Count
+                                  && Bus.Words.TryGetValue(sentenceQuestion.CompareWordsKeys[index], out Word replaced)
+                ? replaced.LearnWord
+                : null;
+
+            SequencePhraseData placeholderData = new SequencePhraseData(Word.CreateEmptyPlaceholder(replacedWord));
+            placeholderData.SetIsPlaceHolder(true);
+            placeholderData.SetInteractable(true);
+            return placeholderData;
         }
 
         private void OnClickPlaySound(bool isLearnLanguage)
@@ -222,6 +231,33 @@ namespace Chang.FSM
             _pagesSoundController.PlaySoundsAsync(audioClips, _soundCts.Token).Forget();
         }
 
+        private SentenceSelectWordStateResult GetResult()
+        {
+            string compare = string.Join("", _questionData.CompareSequence.Select(pData => pData.Word.LearnWord));
+            string display = string.Join("", _questionData.DisplaySequence.Select(pData => pData.Word.LearnWord));
+            bool isCorrect = string.Equals(compare, display);
+            bool isHintUsed = Bus.OnHintUsed.Value;
+
+            List<WordResult> inCorrectWords = new();
+
+            for (int i = 0; i < _questionData.DisplaySequence.Count && i < _questionData.CompareSequence.Count; i++)
+            {
+                Word compareWord = _questionData.CompareSequence[i].Word;
+                Word displayWord = _questionData.DisplaySequence[i].Word;
+
+                // compare by spelling, a different word with the same spelling is not a mistake
+                if (!string.Equals(compareWord.LearnWord, displayWord.LearnWord))
+                {
+                    inCorrectWords.Add(new WordResult(compareWord, false, isHintUsed));
+                    inCorrectWords.Add(new WordResult(displayWord, false, isHintUsed));
+                }
+            }
+
+            object[] info = { compare, isHintUsed, inCorrectWords };
+
+            return new SentenceSelectWordStateResult(_sentenceQuestion.Key, display, isCorrect, isHintUsed, info);
+        }
+
         private void OnHint(bool isHintUsed)
         {
             _stateController.ShowHint();
@@ -237,7 +273,7 @@ namespace Chang.FSM
                 if (!_questionData.DisplaySequence[displayIndex].IsPlaceHolder)
                 {
                     _questionData.MixWords.Add(_questionData.DisplaySequence[displayIndex]);
-                    _questionData.DisplaySequence[displayIndex] = _questionData.PlaceHolderPool.Dequeue();
+                    _questionData.DisplaySequence[displayIndex] = CreatePlaceholder(_sentenceQuestion, displayIndex);
                     _stateController.UpdateDisplaySequence(_questionData.DisplaySequence);
                     _stateController.UpdateMixSequence(_questionData.MixWords);
                 }
@@ -265,7 +301,6 @@ namespace Chang.FSM
                 }
 
                 int index = _questionData.DisplaySequence.IndexOf(placeToMove);
-                _questionData.PlaceHolderPool.Enqueue(_questionData.DisplaySequence[index]);
                 _questionData.DisplaySequence[index] = _questionData.MixWords[mixIndex];
                 _questionData.MixWords.RemoveAt(mixIndex);
                 _stateController.UpdateDisplaySequence(_questionData.DisplaySequence);
@@ -282,39 +317,10 @@ namespace Chang.FSM
             _stateController.UpdateMixSequence(_questionData.MixWords);
             _gameOverlayController.EnableCheckButton(placeToMove == null);
 
-            throw new NotImplementedException();
-/*
             if (placeToMove == null) // no more placeholders
             {
-                string compare = string.Join("", _questionData.CompareSequence.Select(pData => pData.Word.LearnWord));
-                string display = string.Join("", _questionData.DisplaySequence.Select(pData => pData.Word.LearnWord));
-                bool isCorrect = string.Equals(compare, display);
-
-                List<SelectWordResult> inCorrectWords = new();
-
-                for (int i = 0; i > _questionData.DisplaySequence.Count; i++)
-                {
-                    W/o/r/d/D/a/t/a compareWord = _questionData.CompareSequence[i].Word; // WordData старый формат. Теперь новый WordData заменил PhraseData и для старого нужно придумать что то еще
-                    W/o/r/d/D/a/t/a displayWord = _questionData.DisplaySequence[i].Word; // WordData старый формат. Теперь новый WordData заменил PhraseData и для старого нужно придумать что то еще
-
-                    if (!string.Equals(compareWord.LogKey, displayWord.LogKey))
-                    {
-                        inCorrectWords.Add(new SelectWordResult(compareWord.LogKey, compareWord.LearnWord, false));
-                        inCorrectWords.Add(new SelectWordResult(displayWord.LogKey, displayWord.LearnWord, false));
-                    }
-                }
-
-                object[] info = { compare, Bus.OnHintUsed.Value, inCorrectWords };
-
-                var result = new SentenceSelectWordStateResult(
-                    _sentenceQuestion.LogKey,
-                    display,
-                    isCorrect,
-                    info);
-
-                Bus.QuestionResult = result;
+                Bus.QuestionResult = GetResult();
             }
-            */
         }
     }
 }
