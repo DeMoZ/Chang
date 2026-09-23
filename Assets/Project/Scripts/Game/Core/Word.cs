@@ -41,15 +41,20 @@ namespace Chang.Core
             }
         }
 
-        public static Word CreateEmptyPlaceholder()
+        public static Word CreateEmptyPlaceholder(string replacedWord)
         {
+            // count text elements, so Thai combining vowels and tone marks don't add extra underscores
+            int length = string.IsNullOrEmpty(replacedWord)
+                ? 1
+                : new System.Globalization.StringInfo(replacedWord).LengthInTextElements;
+
             return new Word
             {
                 WordKey = string.Empty,
                 ImageKey = string.Empty,
                 SoundKey = string.Empty,
                 Key = string.Empty,
-                LearnWord = string.Empty,
+                LearnWord = new string('_', length),
                 Phonetics = string.Empty,
                 DefaultTranslation = string.Empty,
                 DefaultDescription = string.Empty,

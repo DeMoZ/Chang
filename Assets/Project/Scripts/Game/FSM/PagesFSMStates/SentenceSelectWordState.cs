@@ -167,11 +167,19 @@ namespace Chang.FSM
             {
                 List<SequencePhraseData> phrasesDataList = new List<SequencePhraseData>();
 
-                foreach (var key in keys)
+                for (var i = 0; i < keys.Count; i++)
                 {
+                    string key = keys[i];
+
                     if (string.IsNullOrEmpty(key))
                     {
-                        SequencePhraseData placeholderData = new SequencePhraseData(Word.CreateEmptyPlaceholder());
+                        // display keys are parallel to compare keys, so the replaced word has the same index
+                        string replacedWord = i < sentenceQuestion.CompareWordsKeys.Count
+                                              && Bus.Words.TryGetValue(sentenceQuestion.CompareWordsKeys[i], out Word replaced)
+                            ? replaced.LearnWord
+                            : null;
+
+                        SequencePhraseData placeholderData = new SequencePhraseData(Word.CreateEmptyPlaceholder(replacedWord));
                         placeholderData.SetIsPlaceHolder(true);
                         phrasesDataList.Add(placeholderData);
                         continue;
