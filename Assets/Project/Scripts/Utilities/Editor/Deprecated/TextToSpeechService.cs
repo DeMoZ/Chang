@@ -95,10 +95,11 @@ public class Voices
 
 public class TextToSpeechService : IDisposable
 {
+    // field names match api_textToSpeech.json
     private class IpiData
     {
-        public string speechUrl;
-        public string speechApiKey;
+        public string Url;
+        public string ApiKey;
     }
 
     public class SynthesisInput
@@ -182,9 +183,15 @@ public class TextToSpeechService : IDisposable
             return null;
         }
 
+        if (string.IsNullOrEmpty(_apiData?.Url) || string.IsNullOrEmpty(_apiData.ApiKey))
+        {
+            Debug.LogError($"Text-To-Speech Url or ApiKey is not set in {ApiFileName}");
+            return null;
+        }
+
         var jsonBody = CreateJsonBody(text);
 
-        using UnityWebRequest request = new UnityWebRequest($"{_apiData.speechUrl}?key={_apiData.speechApiKey}", "POST");
+        using UnityWebRequest request = new UnityWebRequest($"{_apiData.Url}?key={_apiData.ApiKey}", "POST");
 
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -192,11 +199,18 @@ public class TextToSpeechService : IDisposable
         request.SetRequestHeader("Content-Type", "application/json");
 
         Debug.Log($"Send request for text: {text}");
-        await request.SendWebRequest();
+        try
+        {
+            await request.SendWebRequest();
+        }
+        catch (UnityWebRequestException)
+        {
+            // UniTask throws on HTTP errors, the details are logged below
+        }
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError($"Error request for text: {text}; error:\n{request.error}");
+            Debug.LogError($"Error request for text: {text}; error:\n{request.error}\n{request.downloadHandler?.text}");
             return null;
         }
 
