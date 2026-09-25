@@ -127,7 +127,8 @@ namespace Chang.FSM
             HashSet<string> sWordKeys = Enumerable.ToHashSet(sQuests.Select(q => q.GetWordsKeys)
                 .SelectMany(hashSet => hashSet));
 
-            List<Word> words = wWKeys.Select(key => Bus.Words[key]).ToList();
+            // sentence words are shown and played as separate words, so preload them together with the words quests
+            List<Word> words = wWKeys.Union(sWordKeys).Select(key => Bus.Words[key]).ToList();
             await _pagesContentProvider.PreloadWordsContentAsync(words, progress, ct);
 
             HashSet<string> sentenceKeys = Enumerable.ToHashSet(sQuests.OfType<SentenceSelectWords>().Select(q => q.Key));
