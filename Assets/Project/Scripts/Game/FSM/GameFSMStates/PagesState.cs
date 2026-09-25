@@ -248,23 +248,23 @@ namespace Chang.FSM
                 Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier");
 
                 /*  phom chan ka krap
-                    Thai/Vocabulary/Gender/_Polite_male_
-                    Thai/Vocabulary/Gender/_Polite_female_
-                    Thai/Vocabulary/Gender/_Man_I_
-                    Thai/Vocabulary/Gender/_Woman_I_
+                    Thai/Vocabulary/Gender/_Polite male_
+                    Thai/Vocabulary/Gender/_Polite female_
+                    Thai/Vocabulary/Gender/_Man I_
+                    Thai/Vocabulary/Gender/_Woman I_
                  */
                 switch (_profileService.ProfileData.Gender)
                 {
                     case GenderType.Female:
                         switch (sentenceWord.WordKey)
                         {
-                            case "Thai/Vocabulary/Gender/_Polite_male_":
-                            case "Thai/Vocabulary/Gender/_Polite_female_":
-                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Polite_female_";
+                            case "Thai/Vocabulary/Gender/_Polite male_":
+                            case "Thai/Vocabulary/Gender/_Polite female_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Polite female_";
                                 break;
-                            case "Thai/Vocabulary/Gender/_Man_I_":
-                            case "Thai/Vocabulary/Gender/_Woman_I_":
-                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Woman_I_";
+                            case "Thai/Vocabulary/Gender/_Man I_":
+                            case "Thai/Vocabulary/Gender/_Woman I_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Woman I_";
                                 break;
                             default:
                                 Debug.LogError(
@@ -276,13 +276,13 @@ namespace Chang.FSM
                     case GenderType.Male:
                         switch (sentenceWord.WordKey)
                         {
-                            case "Thai/Vocabulary/Gender/_Polite_male_":
-                            case "Thai/Vocabulary/Gender/_Polite_female_":
-                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Polite_male_";
+                            case "Thai/Vocabulary/Gender/_Polite male_":
+                            case "Thai/Vocabulary/Gender/_Polite female_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Polite male_";
                                 break;
-                            case "Thai/Vocabulary/Gender/_Man_I_":
-                            case "Thai/Vocabulary/Gender/_Woman_I_":
-                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Man_I_";
+                            case "Thai/Vocabulary/Gender/_Man I_":
+                            case "Thai/Vocabulary/Gender/_Woman I_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Man I_";
                                 break;
                             default:
                                 Debug.LogError(
@@ -438,7 +438,7 @@ namespace Chang.FSM
                 InfoText = _pagesBus.QuestionResult.Presentation
             };
 
-            _pagesBus.LessonLog.Add(stateResult); // todo chang uncomment
+            _pagesBus.LessonLog.Add(stateResult);
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
