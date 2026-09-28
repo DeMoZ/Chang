@@ -51,6 +51,11 @@ namespace Chang
             _view.UpdateDisplaySequence(sequence);
         }
 
+        public void SetSoundPlaying(bool isPlaying)
+        {
+            _view.SetSoundPlaying(isPlaying);
+        }
+
         public void UpdateMixSequence(List<SequencePhraseData> sequence)
         {
             _view.UpdateMixSequence(sequence);

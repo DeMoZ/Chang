@@ -84,9 +84,7 @@ namespace Chang.FSM
             _cts?.Dispose();
             _cts = null;
 
-            _soundCts?.Cancel();
-            _soundCts?.Dispose();
-            _soundCts = null;
+            StopSentenceSound();
 
             Bus.OnHintUsed.Unsubscribe(OnHint);
             _stateController.SetViewActive(false);
@@ -204,31 +202,82 @@ namespace Chang.FSM
             return placeholderData;
         }
 
+        // plays the whole sentence word by word from the compare sequence, a second click stops it
         private void OnClickPlaySound(bool isLearnLanguage)
         {
-            _soundCts?.Cancel();
-            _soundCts?.Dispose();
-            _soundCts = null;
-            
+            bool wasPlaying = _soundCts != null;
+            StopSentenceSound();
+
+            if (wasPlaying)
+            {
+                return;
+            }
+
             List<AudioClip> audioClips = new List<AudioClip>();
-            
+
             _questionData.CompareSequence.ForEach(pData =>
             {
                 string key = isLearnLanguage
                     ? pData.Word.WordKey
                     : _wordPathHelper.GetNativeSoundKey(pData.Word.WordKey, _profileService.ProfileData.NativeLanguage);
 
-                string path = _wordPathHelper.GetSoundPath(key);
-                AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
+                AudioClip asset = GetSoundClip(key);
 
                 if (asset)
                 {
                     audioClips.Add(asset);
                 }
             });
-            
+
             _soundCts = new CancellationTokenSource();
-            _pagesSoundController.PlaySoundsAsync(audioClips, _soundCts.Token).Forget();
+            PlaySentenceSoundAsync(audioClips, _soundCts.Token).Forget();
+        }
+
+        private async UniTaskVoid PlaySentenceSoundAsync(List<AudioClip> audioClips, CancellationToken ct)
+        {
+            _stateController.SetSoundPlaying(true);
+
+            await _pagesSoundController.PlaySoundsAsync(audioClips, ct);
+
+            if (ct.IsCancellationRequested) // stopped or restarted, StopSentenceSound already reset the state
+            {
+                return;
+            }
+
+            _soundCts?.Dispose();
+            _soundCts = null;
+            _stateController.SetSoundPlaying(false);
+        }
+
+        private void StopSentenceSound()
+        {
+            if (_soundCts == null)
+            {
+                return;
+            }
+
+            _soundCts.Cancel();
+            _soundCts.Dispose();
+            _soundCts = null;
+            _stateController.SetSoundPlaying(false);
+        }
+
+        private void PlayWordSound(Word word)
+        {
+            StopSentenceSound();
+
+            AudioClip asset = GetSoundClip(word.WordKey);
+
+            if (asset)
+            {
+                _pagesSoundController.PlaySound(asset);
+            }
+        }
+
+        private AudioClip GetSoundClip(string key)
+        {
+            string path = _wordPathHelper.GetSoundPath(key);
+            return _pagesContentProvider.GetCachedAsset<AudioClip>(path);
         }
 
         private SentenceSelectWordStateResult GetResult()
@@ -287,6 +336,8 @@ namespace Chang.FSM
 
             if (mixIndex > -1) // mix word checked
             {
+                PlayWordSound(_questionData.MixWords[mixIndex].Word);
+
                 placeToMove = _questionData.DisplaySequence.FirstOrDefault(pData => pData.IsHighlighted);
 
                 if (placeToMove == null)

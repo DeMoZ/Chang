@@ -81,7 +81,7 @@ namespace Chang
             MonitorAudioCompletion(audioClip, _cancellationTokenSource.Token).Forget();
         }
         
-        public async UniTaskVoid PlaySoundsAsync(List<AudioClip> audioClips, CancellationToken token)
+        public async UniTask PlaySoundsAsync(List<AudioClip> audioClips, CancellationToken token)
         {
             if (audioClips == null || audioClips.Count == 0)
             {
@@ -110,6 +110,8 @@ namespace Chang
 
                     PlaySound(audioClips[i]);
                 }
+
+                await UniTask.WaitUntil(() => !_audioSource.isPlaying, cancellationToken: token);
             }
             catch (OperationCanceledException)
             {

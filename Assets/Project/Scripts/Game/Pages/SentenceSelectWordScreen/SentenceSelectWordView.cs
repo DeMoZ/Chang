@@ -17,10 +17,12 @@ namespace Chang.UI
         [SerializeField] private CToggle _mixWordPrefab;
         [SerializeField] private ToggleGroup _displayTogglesGroup;
         [SerializeField] private ToggleGroup _mixTogglesGroup;
+        [SerializeField] private PlayStopButton _playStopBtn;
 
         [ShowInInspector, ReadOnly] public override ChangTypes ScreenType { get; } = ChangTypes.SentenceSelectWords;
 
         private Action<int, int> OnToggleValueChanged;
+        private Action _onClickPlaySound;
 
         public void Init(bool isQuestInTranslation,
             List<SequencePhraseData> displaySequence,
@@ -35,8 +37,28 @@ namespace Chang.UI
             _translation.SetText(translation);
             _questionImage.sprite = sprite;
             OnToggleValueChanged = onToggleValueChanged;
+            _onClickPlaySound = onClickPlaySound;
             UpdateDisplaySequence(displaySequence);
             UpdateMixSequence(mixWords);
+
+            SetSoundPlaying(false);
+            _playStopBtn.OnClick -= OnClickPlaySound;
+            _playStopBtn.OnClick += OnClickPlaySound;
+        }
+
+        public void SetSoundPlaying(bool isPlaying)
+        {
+            _playStopBtn.SetPlay(!isPlaying);
+        }
+
+        private void OnClickPlaySound()
+        {
+            _onClickPlaySound?.Invoke();
+        }
+
+        private void OnDisable()
+        {
+            _playStopBtn.OnClick -= OnClickPlaySound;
         }
 
         private void Clear(Transform parent)
