@@ -129,6 +129,7 @@ namespace Chang.FSM
 
             _stateController.SetViewActive(true);
 
+            PreloadWordSounds(!isQuestInTranslation);
             OnClickPlaySound(!isQuestInTranslation);
             
             await UniTask.Yield(ct);
@@ -213,6 +214,14 @@ namespace Chang.FSM
                 return;
             }
 
+            List<AudioClip> audioClips = GetSentenceSoundClips(isLearnLanguage);
+
+            _soundCts = new CancellationTokenSource();
+            PlaySentenceSoundAsync(audioClips, _soundCts.Token).Forget();
+        }
+
+        private List<AudioClip> GetSentenceSoundClips(bool isLearnLanguage)
+        {
             List<AudioClip> audioClips = new List<AudioClip>();
 
             _questionData.CompareSequence.ForEach(pData =>
@@ -229,8 +238,7 @@ namespace Chang.FSM
                 }
             });
 
-            _soundCts = new CancellationTokenSource();
-            PlaySentenceSoundAsync(audioClips, _soundCts.Token).Forget();
+            return audioClips;
         }
 
         private async UniTaskVoid PlaySentenceSoundAsync(List<AudioClip> audioClips, CancellationToken ct)
@@ -260,6 +268,17 @@ namespace Chang.FSM
             _soundCts.Dispose();
             _soundCts = null;
             _stateController.SetSoundPlaying(false);
+        }
+
+        private void PreloadWordSounds(bool isLearnLanguage)
+        {
+            List<AudioClip> audioClips = GetSentenceSoundClips(isLearnLanguage);
+            audioClips.AddRange(_questionData.MixWords
+                .Where(pData => !pData.IsPlaceHolder)
+                .Select(pData => GetSoundClip(pData.Word.WordKey))
+                .Where(clip => clip));
+
+            _pagesSoundController.PreloadAudioData(audioClips);
         }
 
         private void PlayWordSound(Word word)

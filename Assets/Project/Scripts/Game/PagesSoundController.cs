@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DMZ.Events;
@@ -10,7 +11,10 @@ namespace Chang
 {
     public class PagesSoundController : IDisposable
     {
+        private const double ScheduleLeadTime = 0.1; // time to schedule the first clip of a sequence
+
         private readonly AudioSource _audioSource;
+        private AudioSource _sequenceAudioSource; // second source, sequence clips alternate between sources to play gapless
         private readonly Dictionary<string, DMZState<bool>> _listeners = new();
         
         private CancellationTokenSource _cancellationTokenSource;
@@ -81,6 +85,7 @@ namespace Chang
             MonitorAudioCompletion(audioClip, _cancellationTokenSource.Token).Forget();
         }
         
+        // plays clips one after another without gaps, clips are scheduled on the audio (dsp) timeline
         public async UniTask PlaySoundsAsync(List<AudioClip> audioClips, CancellationToken token)
         {
             if (audioClips == null || audioClips.Count == 0)
@@ -93,35 +98,88 @@ namespace Chang
                 return;
             }
 
-            using var cancellationRegistration = token.Register(StopSound);
-            
-            PlaySound(audioClips[0]);
+            StopSound();
 
             try
             {
-                for (int i = 1; i < audioClips.Count; i++)
-                {
-                    await UniTask.WaitUntil(() => !_audioSource.isPlaying, cancellationToken: token);
+                await LoadAudioDataAsync(audioClips, token);
 
-                    if (token.IsCancellationRequested)
+                using var cancellationRegistration = token.Register(StopSound);
+
+                AudioSource[] sources = { _audioSource, GetSequenceAudioSource() };
+                double[] endTimes = new double[audioClips.Count];
+                double time = AudioSettings.dspTime + ScheduleLeadTime;
+
+                for (int i = 0; i < audioClips.Count; i++)
+                {
+                    if (i >= 2)
                     {
-                        return;
+                        // the source is free when its previous clip ends, there is still a whole clip (i - 1) ahead
+                        double sourceFreeTime = endTimes[i - 2];
+                        await UniTask.WaitUntil(() => AudioSettings.dspTime >= sourceFreeTime, cancellationToken: token);
                     }
 
-                    PlaySound(audioClips[i]);
+                    AudioSource source = sources[i % 2];
+                    source.clip = audioClips[i];
+                    source.PlayScheduled(time);
+
+                    time += (double)audioClips[i].samples / audioClips[i].frequency;
+                    endTimes[i] = time;
                 }
 
-                await UniTask.WaitUntil(() => !_audioSource.isPlaying, cancellationToken: token);
+                double sequenceEndTime = time;
+                await UniTask.WaitUntil(() => AudioSettings.dspTime >= sequenceEndTime, cancellationToken: token);
             }
             catch (OperationCanceledException)
             {
             }
         }
 
+        // audio data of clips is loaded lazily on the first play, load it in advance to avoid a delay
+        public void PreloadAudioData(IEnumerable<AudioClip> audioClips)
+        {
+            foreach (AudioClip clip in audioClips)
+            {
+                if (clip && clip.loadState == AudioDataLoadState.Unloaded)
+                {
+                    clip.LoadAudioData();
+                }
+            }
+        }
+
+        private async UniTask LoadAudioDataAsync(List<AudioClip> audioClips, CancellationToken token)
+        {
+            PreloadAudioData(audioClips);
+            await UniTask.WaitUntil(() => audioClips.All(clip => clip.loadState != AudioDataLoadState.Loading),
+                cancellationToken: token);
+        }
+
+        private AudioSource GetSequenceAudioSource()
+        {
+            if (_sequenceAudioSource)
+            {
+                return _sequenceAudioSource;
+            }
+
+            _sequenceAudioSource = _audioSource.gameObject.AddComponent<AudioSource>();
+            _sequenceAudioSource.playOnAwake = false;
+            _sequenceAudioSource.outputAudioMixerGroup = _audioSource.outputAudioMixerGroup;
+            _sequenceAudioSource.volume = _audioSource.volume;
+            _sequenceAudioSource.pitch = _audioSource.pitch;
+            _sequenceAudioSource.spatialBlend = _audioSource.spatialBlend;
+            _sequenceAudioSource.priority = _audioSource.priority;
+            return _sequenceAudioSource;
+        }
+
         private void StopSound()
         {
             _cancellationTokenSource?.Cancel();
             _audioSource.Stop();
+
+            if (_sequenceAudioSource)
+            {
+                _sequenceAudioSource.Stop();
+            }
             
             if (_audioSource.clip != null && _listeners.TryGetValue(_audioSource.clip.name, out var state))
             {
