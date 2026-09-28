@@ -468,7 +468,8 @@ namespace Chang.FSM
             {
                 if (TryGenerateQuestMatchWordsData(lesson, out var matchWordsQuest))
                 {
-                    lesson.AddQuestion(matchWordsQuest);
+                    // queue only, lesson.Questions keeps the lesson's own questions (marks, replay init)
+                    lesson.InsertNextQuest(matchWordsQuest);
                     lesson.IsGeneratedMathWordsQuestPlayed = true;
                 }
             }
@@ -523,8 +524,14 @@ namespace Chang.FSM
                 return false;
             }
 
-            HashSet<string> selectWordQuests = Enumerable.ToHashSet(lesson.Keys);
-            matchWords.AddRange(selectWordQuests);
+            List<SentenceSelectWords> sentenceQuests = lesson.Questions.OfType<SentenceSelectWords>().ToList();
+
+            // sentence lesson keys are sentences, match the words that were picked from the mix instead
+            IEnumerable<string> wordKeys = sentenceQuests.Count > 0
+                ? sentenceQuests.SelectMany(quest => quest.SelectWordsKeys)
+                : lesson.Keys;
+
+            matchWords.AddRange(wordKeys.Where(key => _pagesBus.Words.ContainsKey(key)));
 
             if (matchWords.Count < 2)
             {

@@ -55,6 +55,7 @@ namespace Chang.Core
         {
             Questions = questions;
             QuestionQueue = new Queue<IQuestion>(questions);
+            IsGeneratedMathWordsQuestPlayed = false;
         }
 
         public void SetQuestions(List<string> keys)

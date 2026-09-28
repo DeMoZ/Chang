@@ -56,6 +56,11 @@ namespace Chang.Core
         public List<string> DisplayWordsKeys { get; set; }
         public List<string> MixWordsKeys { get; set; }
 
+        // sentence words the player has to pick from the mix (compare words under the display placeholders),
+        // extra mix words are not included
+        public IEnumerable<string> SelectWordsKeys => CompareWordsKeys
+            .Where((key, i) => i < DisplayWordsKeys.Count && string.IsNullOrEmpty(DisplayWordsKeys[i]));
+
         private HashSet<string> _wordsKeys;
         private HashSet<string> _soundKeys;
         private HashSet<string> _imageKeys;
