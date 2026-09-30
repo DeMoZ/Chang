@@ -47,7 +47,7 @@ namespace Chang.Services.DataProvider
 
         public async UniTask SaveProfileDataAsync(ProfileData data, CancellationToken ct)
         {
-            await SaveAsync(DataProviderConstants.ProgressDataKey, data, ct);
+            await SaveAsync(DataProviderConstants.ProfileDataKey, data, ct);
         }
 
         public async UniTask<ProgressData<VocabularyQuestLog>> LoadVocabularyProgressDataAsync(Languages language, CancellationToken ct)

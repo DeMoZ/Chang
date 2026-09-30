@@ -38,6 +38,10 @@ namespace Popup
                         labelAndInput.InputText,
                         labelAndInput.OnInputTextChanged);
                 }
+                else if (element is PopupSelector selector)
+                {
+                    _view.CreateSelector(selector.Options, selector.SelectedIndex, selector.OnSelect);
+                }
                 else if (element is PopupButton button)
                 {
                     _view.CreateButton(button.Text,

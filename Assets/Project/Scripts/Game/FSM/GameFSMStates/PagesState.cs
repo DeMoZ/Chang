@@ -247,6 +247,7 @@ namespace Chang.FSM
                  */
                 switch (_profileService.ProfileData.Gender)
                 {
+                    case GenderType.No:
                     case GenderType.Female:
                         switch (sentenceWord.WordKey)
                         {

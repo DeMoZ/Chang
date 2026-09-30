@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UnityEngine;
 
 namespace Chang.Profile
@@ -36,8 +37,9 @@ namespace Chang.Profile
         /// Player gender
         /// </summary>
         [JsonProperty]
+        [JsonConverter(typeof(StringEnumConverter))]
         [field: SerializeField]
-        public GenderType Gender { get; set; }
+        public GenderType Gender { get; set; } = GenderType.No;
         
         [field: SerializeField]
         public Languages LearnLanguage { get; set; } = Languages.Thai;

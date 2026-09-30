@@ -15,6 +15,7 @@ namespace Chang
         private readonly PopupManager _popupManager;
 
         private PopupController<ChangeNamePopupModel> _changeNameController;
+        private PopupController<ChangeGenderPopupModel> _changeGenderController;
         private LoadingUiController _loadingUiController;
         private CancellationTokenSource _cts = new();
 
@@ -44,11 +45,17 @@ namespace Chang
                 _popupManager.DisposePopup(_changeNameController);
                 _changeNameController = null;
             }
+
+            if (_changeGenderController != null)
+            {
+                _popupManager.DisposePopup(_changeGenderController);
+                _changeGenderController = null;
+            }
         }
 
         public void Init()
         {
-            _view.Init(_mainScreenBus.OnLogOutClicked, OnChangeNameClicked);
+            _view.Init(_mainScreenBus.OnLogOutClicked, OnChangeNameClicked, OnChangeGenderClicked);
         }
 
         private void OnChangeNameClicked()
@@ -101,6 +108,51 @@ namespace Chang
             }
         }
 
+        private void OnChangeGenderClicked()
+        {
+            ChangeGenderPopupModel model = new();
+            model.Gender.Value = _profileService.ProfileData.Gender;
+            model.OnChangeGenderCancel += OnChangeGenderCancel;
+            model.OnChangeGenderSubmit += OnChangeGenderSubmit;
+
+            _changeGenderController = _popupManager.ShowChangeGenderPopup(model);
+        }
+
+        private void OnChangeGenderCancel()
+        {
+            _popupManager.DisposePopup(_changeGenderController);
+            _changeGenderController = null;
+        }
+
+        private void OnChangeGenderSubmit()
+        {
+            OnChangeGenderSubmitAsync(_cts.Token).Forget();
+        }
+
+        private async UniTaskVoid OnChangeGenderSubmitAsync(CancellationToken ct)
+        {
+            _profileService.ProfileData.Gender = _changeGenderController.Model.Gender.Value;
+
+            try
+            {
+                _loadingUiController = _popupManager.ShowLoadingUi(new LoadingUiModel(LoadingElements.Animation));
+                await _profileService.SaveProfileDataAsync(ct);
+
+                if (_changeGenderController != null)
+                {
+                    _popupManager.DisposePopup(_changeGenderController);
+                    _changeGenderController = null;
+                }
+
+                UpdateScreen();
+            }
+            finally
+            {
+                _popupManager.DisposePopup(_loadingUiController);
+                _loadingUiController = null;
+            }
+        }
+
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
@@ -117,6 +169,7 @@ namespace Chang
         {
             _view.SetUserId(_profileService.PlayerId);
             _view.SetUserName(_profileService.ProfileData.Name);
+            _view.SetGender(_profileService.ProfileData.Gender);
         }
 
         public async UniTask SetAsync(CancellationToken ct)

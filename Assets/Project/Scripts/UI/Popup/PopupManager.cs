@@ -40,6 +40,29 @@ namespace Popup
             return popupController;
         }
 
+        public PopupController<ChangeGenderPopupModel> ShowChangeGenderPopup(ChangeGenderPopupModel model)
+        {
+            PopupView popupView = Instantiate(popupPrefab, transform);
+            PopupController<ChangeGenderPopupModel> popupController = new(popupView, model);
+
+            popupController.CreatePopup(
+                new PopupHeader("Change Gender"),
+                PopupSelector.ForEnum(model.Gender),
+                new PopupButton("Cancel", () =>
+                {
+                    Debug.Log($"{model.GetType()} Cancelled");
+                    model.OnChangeGenderCancel?.Invoke();
+                }, new DMZState<bool>()),
+                new PopupButton("Submit", () =>
+                {
+                    Debug.Log($"{model.GetType()} Submitted");
+                    model.OnChangeGenderSubmit?.Invoke();
+                }, new DMZState<bool>()));
+
+            _popupStack.Push(popupController);
+            return popupController;
+        }
+
         public PopupController<ErrorPopupModel> ShowErrorPopup(ErrorPopupModel model)
         {
             PopupView popupView = Instantiate(popupPrefab, transform);

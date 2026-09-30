@@ -60,4 +60,31 @@ namespace Popup
             OnSetInputColor = onSetInputColor;
         }
     }
+
+    public class PopupSelector : IPopupElement
+    {
+        public string[] Options { get; set; }
+        public int SelectedIndex { get; set; }
+        public Action<int> OnSelect { get; set; }
+
+        public PopupSelector(string[] options, int selectedIndex, Action<int> onSelect)
+        {
+            Options = options;
+            SelectedIndex = selectedIndex;
+            OnSelect = onSelect;
+        }
+
+        /// <summary>
+        /// One option per enum value, the selection is written to the state
+        /// </summary>
+        public static PopupSelector ForEnum<TEnum>(DMZState<TEnum> state) where TEnum : struct, Enum
+        {
+            TEnum[] values = (TEnum[])Enum.GetValues(typeof(TEnum));
+
+            return new PopupSelector(
+                Array.ConvertAll(values, value => value.ToString()),
+                Array.IndexOf(values, state.Value),
+                index => state.Value = values[index]);
+        }
+    }
 }
