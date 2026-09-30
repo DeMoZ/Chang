@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -13,6 +15,8 @@ namespace Chang.Services.DataProvider
 {
     public class UnityCloudDataProvider : IDataProvider
     {
+        private const int MaxRateLimitedAttempts = 3;
+
         private readonly ErrorHandler _errorHandler;
         private readonly Action _onNotAuthenticated;
 
@@ -115,17 +119,18 @@ namespace Chang.Services.DataProvider
 
             try
             {
-                await CloudSaveService.Instance.Data.Player
-                    .SaveAsync(dataDict)
-                    .AsUniTask()
-                    .AttachExternalCancellation(ct);
+                await RequestAsync(() => CloudSaveService.Instance.Data.Player.SaveAsync(dataDict), ct);
 
                 Debug.Log($"{key} saved.");
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.LogWarning($"Saving data type: {typeof(T).Name}, for key: {key} was cancelled.");
             }
             catch (Exception e)
             {
                 Debug.LogError($"Error on saving data type: {typeof(T).Name}, for key: {key}, error:\n{e}");
-                HandleError(e);
+                HandleError(e, "Failed to save data");
             }
         }
 
@@ -133,10 +138,8 @@ namespace Chang.Services.DataProvider
         {
             try
             {
-                Dictionary<string, Item> savedData = await CloudSaveService.Instance.Data.Player
-                    .LoadAsync(new HashSet<string> { key })
-                    .AsUniTask()
-                    .AttachExternalCancellation(ct);
+                Dictionary<string, Item> savedData = await RequestAsync(
+                    () => CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { key }), ct);
 
                 string rawJson = JsonConvert.SerializeObject(savedData);
                 Debug.Log($"Loaded raw data for key: {key}:\n{rawJson}");
@@ -153,23 +156,73 @@ namespace Chang.Services.DataProvider
                 Debug.LogWarning($"No saved data found for key: {key}");
                 return null;
             }
+            catch (OperationCanceledException)
+            {
+                Debug.LogWarning($"Loading data type: {typeof(T).Name}, for key: {key} was cancelled.");
+                return null;
+            }
             catch (Exception e)
             {
                 Debug.LogError($"Error on loading data type: {typeof(T).Name}, for key: {key}, error:\n{e}");
-                HandleError(e);
+                HandleError(e, "Failed to load data");
                 return null;
             }
         }
 
-        private void HandleError(Exception e)
+        /// <summary>
+        /// Runs the cloud request, on rate limit waits for the time the service asks for and repeats the request
+        /// </summary>
+        private async UniTask<TResult> RequestAsync<TResult>(Func<Task<TResult>> request, CancellationToken ct)
         {
-            // todo chang solve exceptions
-            // <exception cref="CloudSaveException">Thrown if request is unsuccessful.</exception>
-            // <exception cref="CloudSaveValidationException">Thrown if the service returned validation error.</exception>
-            // <exception cref="CloudSaveRateLimitedException">Thrown if the service returned rate limited error.</exception>
-            // todo chang add error handling, probably internet issue
+            for (int attempt = 1; ; attempt++)
+            {
+                try
+                {
+                    return await request().AsUniTask().AttachExternalCancellation(ct);
+                }
+                catch (CloudSaveRateLimitedException e) when (attempt < MaxRateLimitedAttempts)
+                {
+                    Debug.LogWarning($"Cloud save rate limited, attempt {attempt}, retry after {e.RetryAfter} sec.");
+                    await UniTask.Delay(TimeSpan.FromSeconds(e.RetryAfter), cancellationToken: ct);
+                }
+            }
+        }
 
-            _errorHandler.HandleError(e, "Failed to save data");
+        private void HandleError(Exception e, string description)
+        {
+            if (e is not CloudSaveException cloudSaveException)
+            {
+                _errorHandler.HandleError(e, description);
+                return;
+            }
+
+            switch (cloudSaveException.Reason)
+            {
+                case CloudSaveExceptionReason.PlayerIdMissing:
+                case CloudSaveExceptionReason.AccessTokenMissing:
+                case CloudSaveExceptionReason.Unauthorized:
+                    _onNotAuthenticated?.Invoke();
+                    break;
+
+                case CloudSaveExceptionReason.NoInternetConnection:
+                    _errorHandler.HandleError(e, $"{description}. Check the internet connection");
+                    break;
+
+                case CloudSaveExceptionReason.TooManyRequests:
+                case CloudSaveExceptionReason.ServiceUnavailable:
+                    _errorHandler.HandleError(e, $"{description}. Service is unavailable, try again later");
+                    break;
+
+                case CloudSaveExceptionReason.InvalidArgument when e is CloudSaveValidationException validationException:
+                    string details = string.Join("\n", validationException.Details.Select(d => $"{d.Field}: {string.Join(", ", d.Messages)}"));
+                    Debug.LogError($"Cloud save validation error:\n{details}");
+                    _errorHandler.HandleError(e, description);
+                    break;
+
+                default:
+                    _errorHandler.HandleError(e, description);
+                    break;
+            }
         }
     }
 }
