@@ -10,6 +10,7 @@ namespace Chang.Services
     public class AuthorizationService : IDisposable
     {
         public Action OnPlayerLoggedOut;
+        public Action OnAuthenticationRequired;
 
         private readonly MainScreenBus _mainScreenBus;
         private readonly LogInController _logInController;
@@ -41,6 +42,12 @@ namespace Chang.Services
             await _logInController.LoginAsync();
             _logInController.SetViewActive(false);
             Debug.Log("AuthorizeAsync end");
+        }
+
+        public void RequestAuthentication()
+        {
+            Debug.Log("RequestAuthentication");
+            OnAuthenticationRequired?.Invoke();
         }
 
         private void OnLogOutClicked()

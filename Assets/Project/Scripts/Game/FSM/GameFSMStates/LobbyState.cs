@@ -58,7 +58,12 @@ namespace Chang.FSM
             // HashSet<string> paths = new HashSet<string> { VocabularyBookPath, VocabularyPath, SentencesBookPath, SentencesPath };
             // long downloadSize = await _assetManager.GetDownloadSize(paths, _cts.Token);
 
-            await _profileService.LoadStoredData(_cts.Token);
+            bool isLoaded = await _profileService.LoadStoredData(_cts.Token);
+            if (!isLoaded)
+            {
+                // not authenticated, the reboot scene with authorization is loading
+                return;
+            }
 
             List<UniTask> loads = new()
             {

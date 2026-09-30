@@ -14,6 +14,7 @@ namespace Chang.Services.DataProvider
     public class UnityCloudDataProvider : IDataProvider
     {
         private readonly ErrorHandler _errorHandler;
+        private readonly Action _onNotAuthenticated;
 
         public string PlayerId => AuthenticationService.Instance.PlayerId;
 
@@ -22,9 +23,10 @@ namespace Chang.Services.DataProvider
             Formatting = Formatting.Indented,
         };
 
-        public UnityCloudDataProvider(ErrorHandler errorHandler)
+        public UnityCloudDataProvider(ErrorHandler errorHandler, Action onNotAuthenticated)
         {
             _errorHandler = errorHandler;
+            _onNotAuthenticated = onNotAuthenticated;
         }
 
         public void Dispose()
@@ -37,6 +39,7 @@ namespace Chang.Services.DataProvider
             if (!isAuthenticated)
             {
                 Debug.LogError("User is not authenticated.");
+                _onNotAuthenticated?.Invoke();
             }
 
             return isAuthenticated;
@@ -51,7 +54,7 @@ namespace Chang.Services.DataProvider
         {
             bool isOk = CheckSession();
             if (!isOk)
-                return null; // todo chang should be exception or callback to start authorization
+                return null;
 
             ProgressData<VocabularyQuestLog> result = await LoadDataAsync<ProgressData<VocabularyQuestLog>>($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", ct);
             result ??= new ProgressData<VocabularyQuestLog>();
@@ -63,7 +66,7 @@ namespace Chang.Services.DataProvider
             bool isOk = CheckSession();
             if (!isOk)
             {
-                return null; // todo chang should be exception or callback to start authorization
+                return null;
             }
 
             ProgressData<SentenceQuestLog> result = await LoadDataAsync<ProgressData<SentenceQuestLog>>($"{language}_{DataProviderConstants.SentencesProgressDataKey}", ct);

@@ -22,6 +22,7 @@ namespace Chang
 
         // private bool _isLoading;
         private CancellationTokenSource _cts;
+        private CancellationTokenSource _tabCts;
 
         /// <summary>
         /// should return to this tab after play any other game state
@@ -56,6 +57,8 @@ namespace Chang
 
         public void Dispose()
         {
+            _tabCts?.Cancel();
+            _tabCts?.Dispose();
             _cts.Cancel();
             _cts.Dispose();
             _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClicked;
@@ -86,14 +89,18 @@ namespace Chang
 
         private void OnToggleSelected(bool isOn, MainTabType tabType)
         {
-            OnToggleSelectedAsync(isOn, tabType, _cts.Token).Forget();
-        }
-
-        private async UniTaskVoid OnToggleSelectedAsync(bool isOn, MainTabType tabType, CancellationToken ct)
-        {
             if (_mainScreenBus.IsLoading || !isOn)
                 return;
 
+            _tabCts?.Cancel();
+            _tabCts?.Dispose();
+            _tabCts = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token);
+
+            OnToggleSelectedAsync(tabType, _tabCts.Token).Forget();
+        }
+
+        private async UniTaskVoid OnToggleSelectedAsync(MainTabType tabType, CancellationToken ct)
+        {
             _vocabularyController.SetViewActive(tabType == MainTabType.Vocabulary);
             _sentencesController.SetViewActive(tabType == MainTabType.Sentences);
             _vocabularyRepetitionController.SetViewActive(tabType == MainTabType.Repetition);

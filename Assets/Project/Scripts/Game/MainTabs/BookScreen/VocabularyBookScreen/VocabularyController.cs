@@ -86,7 +86,7 @@ namespace Chang.Vocabulary
                 await PopulateSectionAsync(sectionData, sectionBlock, ct);
             }
 
-            await UniTask.Yield();
+            await UniTask.Yield(ct);
 
             SetScrollPosition();
         }

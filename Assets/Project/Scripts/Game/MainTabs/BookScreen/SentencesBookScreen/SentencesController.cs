@@ -84,7 +84,7 @@ namespace Chang.Sentences
                 await PopulateSectionAsync(section, sectionBlock, ct);
             }
 
-            await UniTask.Yield();
+            await UniTask.Yield(ct);
 
             SetScrollPosition();
         }

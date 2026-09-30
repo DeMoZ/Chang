@@ -27,11 +27,11 @@ namespace Chang.Services
         public string ReorderedSectionKey(string section) => $"{LearnLanguage}/{section}";
         
         [Inject]
-        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler)
+        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler, AuthorizationService authorizationService)
         {
             _playerProfile = playerProfile;
             _prefsDataProvider = new PrefsDataProvider();
-            _unityCloudDataProvider = new UnityCloudDataProvider(errorHandler);
+            _unityCloudDataProvider = new UnityCloudDataProvider(errorHandler, authorizationService.RequestAuthentication);
         }
 
         public void Dispose()
@@ -40,9 +40,14 @@ namespace Chang.Services
             _unityCloudDataProvider.Dispose();
         }
 
-        public async UniTask LoadStoredData(CancellationToken ct)
+        /// <returns>false if the player is not authenticated, authentication is requested then</returns>
+        public async UniTask<bool> LoadStoredData(CancellationToken ct)
         {
             ProfileData unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(ct);
+            if (unityProfileData == null)
+            {
+                return false;
+            }
 
             Languages language = unityProfileData.LearnLanguage;
 
@@ -54,6 +59,7 @@ namespace Chang.Services
             _playerProfile.ProfileData = unityProfileData;
             _playerProfile.VocabularyProgressDict[language] = vocabularyProgress;
             _playerProfile.SentencesProgressDict[language] = sentencesProgress;
+            return true;
         }
 
         public async UniTask SaveProfileDataAsync(CancellationToken ct)

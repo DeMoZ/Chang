@@ -12,12 +12,15 @@ namespace Chang
         private readonly GameFSM _gameFSM;
         private readonly AuthorizationService _authorizationService;
 
+        private bool _isRebooting;
+
         [Inject]
         public Game(GameFSM gameFSM, AuthorizationService authorizationService)
         {
             _gameFSM = gameFSM;
             _authorizationService = authorizationService;
             _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
+            _authorizationService.OnAuthenticationRequired += OnAuthenticationRequired;
         }
 
         public void Initialize()
@@ -29,11 +32,30 @@ namespace Chang
         public void Dispose()
         {
             _authorizationService.OnPlayerLoggedOut -= OnLoggedOut;
+            _authorizationService.OnAuthenticationRequired -= OnAuthenticationRequired;
         }
         
         private void OnLoggedOut()
         {
             Debug.Log("OnLoggedOut");
+            LoadRebootScene();
+        }
+
+        private void OnAuthenticationRequired()
+        {
+            Debug.Log("OnAuthenticationRequired");
+            LoadRebootScene();
+        }
+
+        // reboot scene runs the authorization, several cloud requests may fail at once, so reboot only once
+        private void LoadRebootScene()
+        {
+            if (_isRebooting)
+            {
+                return;
+            }
+
+            _isRebooting = true;
             SceneManager.LoadScene(ProjectConstants.REBOOT_SCENE);
         }
     }
