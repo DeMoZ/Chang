@@ -54,7 +54,7 @@ namespace Chang.FSM
 
             _cts = new CancellationTokenSource();
             _pagesContentProvider =
-                new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager, _profileService);
+                new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager);
             EnterAsync(_cts.Token).Forget();
         }
 
@@ -130,15 +130,6 @@ namespace Chang.FSM
             // sentence words are shown and played as separate words, so preload them together with the words quests
             List<Word> words = wWKeys.Union(sWordKeys).Select(key => Bus.Words[key]).ToList();
             await _pagesContentProvider.PreloadWordsContentAsync(words, progress, ct);
-
-            HashSet<string> sentenceKeys = Enumerable.ToHashSet(sQuests.OfType<SentenceSelectWords>().Select(q => q.Key));
-
-            List<Sentence> sentences = sentenceKeys.Select(key => Bus.Sentences[key]).ToList();
-            if (sentences.Count > 0)
-            {
-                await _pagesContentProvider.PreloadSentencesContentAsync(sentences, progress, ct);
-                await _pagesContentProvider.CacheContentAsync(AssetPaths.Addressables.EmptyWordPlaceHolderPath, ct);
-            }
         }
 
         private void InitSentenceQuest(IQuestion sQuest)

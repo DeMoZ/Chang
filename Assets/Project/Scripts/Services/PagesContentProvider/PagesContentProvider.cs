@@ -21,7 +21,6 @@ namespace Project.Services.PagesContentProvider
         private readonly IResourcesManager _assetManager;
         private readonly WordPathHelper _wordPathHelper;
         private readonly PopupManager _popupManager;
-        private readonly ProfileService _profileService;
 
         private Action<float, float> _progress;
 
@@ -29,13 +28,11 @@ namespace Project.Services.PagesContentProvider
 
         public PagesContentProvider(IResourcesManager assetManager,
             WordPathHelper wordPathHelper,
-            PopupManager popupManager,
-            ProfileService profileService)
+            PopupManager popupManager)
         {
             _assetManager = assetManager;
             _wordPathHelper = wordPathHelper;
             _popupManager = popupManager;
-            _profileService = profileService;
 
             Content = new Dictionary<string, IDisposableAsset>();
         }
@@ -94,71 +91,6 @@ namespace Project.Services.PagesContentProvider
 
             Merge(Content, images);
             Merge(Content, sounds);
-        }
-
-
-        public async UniTask PreloadSentencesContentAsync(List<Sentence> sentences, Action<float, float> progress,
-            CancellationToken ct)
-        {
-            _progress = progress;
-        
-            HashSet<string> imageKeys = sentences.Select(s => _wordPathHelper.GetTexturePath(s.ImageKey)).ToHashSet();
-            HashSet<string> soundKeys = new();
-            soundKeys = GetSoundKeys(sentences.Select(s => s.SoundKey)).ToHashSet();
-            
-            //soundKeys = GetSoundKeys(sentences.Select(s => s.SentenceWords.Select(w => w.WordKey))).ToHashSet();
-            // todo chang тут надо и звуки слов собрать, но сначала надо определиться над предложением.
-            // выбрать варианты слов и выбрать пол.
-            
-            // todo chang но для начала можно сделать как раньше, без вариантов, просто для тестирования работоспособности предложений.
-            // тогда и не нужно тут качать, так как картинки и звуки индивидуальных слов уже будут загружены в PreloadWordsContentAsync
-            return;
-            HashSet<string> totalKeys = new();
-            totalKeys.UnionWith(imageKeys);
-            totalKeys.UnionWith(soundKeys);
-        
-            long totalToLoad = await GetDownloadSize(totalKeys, ct);
-        
-            Dictionary<string, IDisposableAsset> images = new();
-            Dictionary<string, IDisposableAsset> sounds = new();
-        
-            long currentToLoad = 0;
-            long downloadSize = 0;
-            downloadSize = await GetDownloadSize(imageKeys, ct);
-            currentToLoad += downloadSize;
-            images = await Preload<Sprite>(imageKeys,
-                progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
-        
-            downloadSize = await GetDownloadSize(soundKeys, ct);
-            currentToLoad += downloadSize;
-            sounds = await Preload<AudioClip>(soundKeys,
-                bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
-        
-            Merge(Content, images);
-            Merge(Content, sounds);
-        }
-
-        public async UniTask CacheContentAsync(string path, CancellationToken ct)
-        {
-            /*
-            if (Content.TryGetValue(path, out var configAsset))
-            {
-                if (configAsset != null)
-                {
-                    return;
-                }
-            }
-
-            
-            DisposableAsset<PhraseConfig> asset = await _assetManager.LoadAssetAsync<PhraseConfig>(path, ct);
-
-            if (asset.Item != null)
-            {
-                Content[path] = asset;
-            }
-            */
-
-            await UniTask.Yield(ct); // todo chang delete
         }
 
         [CanBeNull]
@@ -287,23 +219,6 @@ namespace Project.Services.PagesContentProvider
             {
                 toDictionary.TryAdd(pair.Key, pair.Value);
             }
-        }
-
-        private IEnumerable<string> GetSoundKeys(IEnumerable<string> keys)
-        {
-            IEnumerable<string> nativeSoundKeys = GetNativeSoundKeys(keys);
-            IEnumerable<string> soundKeys = keys;
-            soundKeys = soundKeys.Concat(nativeSoundKeys);
-
-            return soundKeys.Select(key => _wordPathHelper.GetSoundPath(key));
-        }
-
-        private IEnumerable<string> GetNativeSoundKeys(IEnumerable<string> soundKeys)
-        {
-            return
-                new List<string>(); // todo chang disable native sound for now. Delete row on native sounds assets ready
-            return soundKeys.Select(key =>
-                _wordPathHelper.GetNativeSoundKey(key, _profileService.ProfileData.NativeLanguage));
         }
     }
 }

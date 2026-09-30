@@ -15,16 +15,6 @@ namespace Project.Services.PagesContentProvider
         UniTask PreloadWordsContentAsync(List<Word> words, Action<float, float> percents, CancellationToken ct);
 
         /// <summary>
-        /// Preloading all content on Enter Pages state. Content from all pages. For sentences
-        /// </summary>
-        UniTask PreloadSentencesContentAsync(List<Sentence> sentences, Action<float, float> percents, CancellationToken ct);
-        
-        /// <summary>
-        /// Cache individual content by path
-        /// </summary>
-        UniTask CacheContentAsync(string emptyWordPlaceHolderPath, CancellationToken ct);
-        
-        /// <summary>
         /// Get an asset from the cache by its key.
         /// </summary>
         T GetCachedAsset<T>(string key) where T : class;

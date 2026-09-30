@@ -54,12 +54,7 @@ namespace Chang.Services.DataProvider
                 return null; // todo chang should be exception or callback to start authorization
 
             ProgressData<VocabularyQuestLog> result = await LoadDataAsync<ProgressData<VocabularyQuestLog>>($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", ct);
-            // result ??= new ProgressData<VocabularyQuestLog>(); // todo chang  uncomment 
-            {
-                // todo chang remove block
-                result ??= await TempMockVocabularyProgressWithOldProgress(ct);
-            }
-
+            result ??= new ProgressData<VocabularyQuestLog>();
             return result;
         }
 
@@ -172,31 +167,6 @@ namespace Chang.Services.DataProvider
             // todo chang add error handling, probably internet issue
 
             _errorHandler.HandleError(e, "Failed to save data");
-        }
-
-        // todo chang remove when all users will have new data
-        private async UniTask<ProgressData<VocabularyQuestLog>> TempMockVocabularyProgressWithOldProgress(CancellationToken ct)
-        {
-            OldProgressData oldResult = await LoadOldProgressDataAsync(ct);
-            oldResult ??= new OldProgressData();
-
-            ProgressData<VocabularyQuestLog> result = new ProgressData<VocabularyQuestLog>(oldResult.UtcTime, oldResult.Log);
-            return result;
-        }
-
-        // todo chang remove when all users will have new data
-        private async UniTask<OldProgressData> LoadOldProgressDataAsync(CancellationToken ct)
-        {
-            var isOk = CheckSession();
-            if (!isOk)
-            {
-                return null; // todo chang should be exception or callback to start authorization
-            }
-
-            OldProgressData result = await LoadDataAsync<OldProgressData>(DataProviderConstants.ProgressDataKey, ct);
-            result ??= new OldProgressData();
-
-            return result;
         }
     }
 }

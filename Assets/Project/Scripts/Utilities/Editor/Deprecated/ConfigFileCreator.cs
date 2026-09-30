@@ -317,30 +317,5 @@ namespace Chang.Utilities.Depricated
                 return hash < 0 ? -hash : hash; // Ensure the hash is positive
             }
         }
-
-        /*
-        public static async Task<List<(string filename, string word)>> GetDatasetForAudio(Languages language)
-        {
-            var path = string.Empty;// GetWordsJsonFilePath(language);
-            List<(string filename, string word)> dataset = new();
-            if (!File.Exists(path))
-            {
-                Debug.LogError($"File {path} does not exist");
-                return dataset;
-            }
-
-            await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-            var dataString = await new StreamReader(stream).ReadToEndAsync();
-            var data = JsonConvert.DeserializeObject<List<PhraseData>>(dataString);
-
-            // todo chang create dataset for audio
-            foreach (PhraseData phraseData in data)
-            {
-                dataset.Add((phraseData.Key, phraseData.Word));
-            }
-
-            return dataset;
-        }
-        */
     }
 }
