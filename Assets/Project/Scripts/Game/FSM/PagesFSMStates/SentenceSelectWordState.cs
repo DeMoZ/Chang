@@ -112,8 +112,7 @@ namespace Chang.FSM
                 translation = _sentenceQuestion.Translation;
             }
 
-            string spritePath = _wordPathHelper.GetTexturePath(_sentenceQuestion.GetImageKeys.First());
-            Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
+            Sprite sprite = _pagesContentProvider.GetCachedSprite(_sentenceQuestion.Sentence.ImageKey);
             
             _stateController.Init(
                 isQuestInTranslation,

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Sirenix.Utilities;
 
 namespace Chang.Core
 {
@@ -62,27 +61,15 @@ namespace Chang.Core
             .Where((key, i) => i < DisplayWordsKeys.Count && string.IsNullOrEmpty(DisplayWordsKeys[i]));
 
         private HashSet<string> _wordsKeys;
-        private HashSet<string> _soundKeys;
-        private HashSet<string> _imageKeys;
 
-        public HashSet<string> GetWordsKeys => _wordsKeys ??= CompareWordsKeys.ToHashSet();
-        public HashSet<string> GetImageKeys => _imageKeys ?? throw new System.Exception("_imageKeys not set");
-        public HashSet<string> GetSoundKeys => _soundKeys ?? throw new System.Exception("_soundKeys not set");
+        public HashSet<string> GetWordsKeys => _wordsKeys ??= CompareWordsKeys.Concat(MixWordsKeys).ToHashSet();
+        public HashSet<string> GetImageKeys => new() { Sentence.ImageKey };
+        // the sentence is voiced word by word
+        public HashSet<string> GetSoundKeys => new(GetWordsKeys);
 
         public void SetTranslation(string translation)
         {
             Translation = translation;
-        }
-
-        public void SetImageKeys(IEnumerable<string> imageKeys)
-        {
-            _imageKeys = new HashSet<string> { Sentence.ImageKey };
-            _imageKeys.AddRange(imageKeys);
-        }
-
-        public void SetSoundKeys(IEnumerable<string> soundKeys)
-        {
-            _soundKeys = soundKeys.ToHashSet();
         }
     }
 }

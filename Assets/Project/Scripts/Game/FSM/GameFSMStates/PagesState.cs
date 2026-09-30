@@ -24,7 +24,6 @@ namespace Chang.FSM
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
-        [Inject] private readonly AddressablesDownloader _assetDownloader;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly DiContainer _diContainer;
@@ -147,14 +146,13 @@ namespace Chang.FSM
 
                 sSelectWords.DisplayWordsKeys = new List<string>();
                 sSelectWords.MixWordsKeys = new List<string>();
-                // take sWord and get its index then compare with sentenence mark
+                // words with display index within the sentence mark are hidden and go to the mix
                 foreach (SentenceWord sWord in sSelectWords.Sentence.SentenceWords)
                 {
                     if (sWord.DisplayIndex <= sentenceMark)
                     {
                         sSelectWords.DisplayWordsKeys.Add(EmptyWordKey);
                         sSelectWords.MixWordsKeys.Add(sWord.WordKey);
-
                     }
                     else
                     {
@@ -162,11 +160,7 @@ namespace Chang.FSM
                     }
                 }
 
-                // todo chang complete mix word
-                if (sSelectWords.MixWordsKeys.Count < 2)
-                {
-                    Debug.LogWarning("Implement mix words amout based on the sentence mark");
-                }
+                AddAlternativeMixWords(sSelectWords, sentenceMark);
 
                 string defaultTranslation = sSelectWords.Sentence.DefaultTranslation;
                 List<SentenceWord> dynamicWords = sSelectWords.Sentence.SentenceWords
@@ -176,11 +170,42 @@ namespace Chang.FSM
                 object[] translationArgs = dynamicWords.Select(w => (object)Bus.Words[w.WordKey].Translation).ToArray();
                 defaultTranslation = string.Format(defaultTranslation, translationArgs);
                 sSelectWords.SetTranslation(defaultTranslation);
-
-                HashSet<string> allWordsKeys = new(sSelectWords.CompareWordsKeys.Concat(sSelectWords.MixWordsKeys));
-                sSelectWords.SetImageKeys(allWordsKeys.Select(key => Bus.Words[key].ImageKey));
-                sSelectWords.SetSoundKeys(allWordsKeys.Select(key => Bus.Words[key].SoundKey));
             }
+        }
+
+        /// <summary>
+        /// fills the mix with not repeated alternative words, so the mix words amount is not less than the sentence mark
+        /// </summary>
+        private void AddAlternativeMixWords(SentenceSelectWords sSelectWords, float sentenceMark)
+        {
+            if (sentenceMark < ProjectConstants.SENTENCE_MIX_WORDS_FILL_MIN_MARK)
+            {
+                return;
+            }
+
+            int missingAmount = UnityEngine.Mathf.CeilToInt(sentenceMark) - sSelectWords.MixWordsKeys.Count;
+            if (missingAmount <= 0)
+            {
+                return;
+            }
+
+            HashSet<string> usedKeys = new(sSelectWords.CompareWordsKeys.Concat(sSelectWords.MixWordsKeys));
+            List<string> alternativeKeys = sSelectWords.Sentence.SentenceWords
+                .Where(w => (w.Modifiers & (Modifier.Dynamic | Modifier.Variant)) != 0)
+                .SelectMany(w => GetSectionWordKeys(Bus.Words[w.WordKey]))
+                .Where(key => !usedKeys.Contains(key) && Bus.Words.ContainsKey(key))
+                .Distinct()
+                .ToList();
+
+            alternativeKeys.Shuffle();
+            sSelectWords.MixWordsKeys.AddRange(alternativeKeys.Take(missingAmount));
+        }
+
+        private List<string> GetSectionWordKeys(Word word)
+        {
+            string section = ElementsPaths.VocabularySectionKey(_profileService.ProfileData.LearnLanguage, word.Section);
+            List<Lesson> sectionLessons = Bus.VocabularySections[section].Lessons;
+            return Enumerable.ToHashSet(sectionLessons.SelectMany(lesson => lesson.Keys)).ToList();
         }
 
         private Sentence InitSentence(Sentence sentence)
@@ -195,7 +220,7 @@ namespace Chang.FSM
                 if (!Bus.Words.ContainsKey(sentenceWord.WordKey))
                 {
                     throw new Exception(
-                        $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Dynamic modifier, but the word is not in the Bus.Words");
+                        $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey}, but the word is not in the Bus.Words");
                 }
 
                 if (sentenceWord.Modifiers == Modifier.None)
@@ -219,11 +244,7 @@ namespace Chang.FSM
             void SetDynamicWord(SentenceWord sentenceWord)
             {
                 Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Dynamic modifier");
-                Word word = Bus.Words[sentenceWord.WordKey];
-                string section =
-                    ElementsPaths.VocabularySectionKey(_profileService.ProfileData.LearnLanguage, word.Section);
-                List<Lesson> sectionLessons = Bus.VocabularySections[section].Lessons;
-                List<string> wordKeys = Enumerable.ToHashSet(sectionLessons.SelectMany(lesson => lesson.Keys)).ToList();
+                List<string> wordKeys = GetSectionWordKeys(Bus.Words[sentenceWord.WordKey]);
                 string randomWordKey = wordKeys[UnityEngine.Random.Range(0, wordKeys.Count)];
                 sentenceWord.WordKey = randomWordKey;
             }
