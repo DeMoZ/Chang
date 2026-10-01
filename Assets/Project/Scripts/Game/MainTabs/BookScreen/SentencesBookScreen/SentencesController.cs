@@ -116,18 +116,13 @@ namespace Chang.Sentences
 
         private void OnSectionSortClick(string key)
         {
-            throw new System.NotImplementedException();
-            /*
             Debug.Log($"OnSectionSortClick key: {key}");
-            SectionData sectionData = _gameBus.SentencesBookData.Sections.Find(s => s.Section == key);
+            SentencesSection section = _gameBus.SentencesBook.Sections.Find(s => s.Section == key);
+            string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
 
-            if (_profileService.ReorderedVocabularySections.TryGetValue(_profileService.ReorderedSectionKey(sectionData.Section), out _))
+            if (!_profileService.ReorderedSentencesSections.Remove(reorderedSectionKey))
             {
-                _profileService.ReorderedVocabularySections.Remove(_profileService.ReorderedSectionKey(sectionData.Section));
-            }
-            else
-            {
-                _profileService.ReorderSentencesSection(sectionData);
+                _profileService.ReorderSentencesSection(section);
             }
 
             SectionBlock sectionBlock = _sectionBlocks[key];
@@ -140,8 +135,7 @@ namespace Chang.Sentences
                 }
             }
 
-            PopulateSectionAsync(sectionData, sectionBlock, _cts.Token).Forget();
-            */
+            PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
         }
 
         private async UniTask PopulateSectionAsync(SentencesSection section, SectionBlock sectionBlock,
@@ -232,17 +226,15 @@ namespace Chang.Sentences
 
             _mainScreenBus.IsLoading = true;
 
-            Lesson lesson;
-            string lessonKey = _profileService.ReorderedSectionKey(sectionKey);
+            SentencesSection section = _gameBus.SentencesSections[sectionKey];
+            string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
 
-            if (_profileService.ReorderedSentencesSections.TryGetValue(lessonKey, out SentencesSection section))
+            if (_profileService.ReorderedSentencesSections.TryGetValue(reorderedSectionKey, out SentencesSection reorderedSection))
             {
-                lesson = section.SectionLessons[lessonIndex - 1];
+                section = reorderedSection;
             }
-            else
-            {
-                lesson = _gameBus.SentencesSections[sectionKey].SectionLessons[lessonIndex - 1];
-            }
+
+            Lesson lesson = section.SectionLessons[lessonIndex - 1];
 
             lesson.SetQuestions(lesson.Questions);
             InitQuestions(lesson);

@@ -334,7 +334,6 @@ namespace Chang.FSM
         {
             Debug.Log($"displayIndex: {displayIndex}; mixIndex: {mixIndex}");
 
-           
             if (displayIndex > -1) // display word clicked
             {
                 if (!_questionData.DisplaySequence[displayIndex].IsPlaceHolder)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chang.Core
 {
@@ -9,6 +10,29 @@ namespace Chang.Core
         public string SectionKey; // Thai/VocabularyBook/Fruits
         public string DefaultTranslation => Section;
         public List<Lesson> Lessons;
+
+        public void PopulateQuestions()
+        {
+            foreach (Lesson lesson in Lessons)
+            {
+                List<IQuestion> questions = new List<IQuestion>();
+
+                foreach (var key in lesson.Keys)
+                {
+                    IQuestion question = new QuestSelectWord
+                    {
+                        Key = key,
+                        WordsKeys = lesson.Keys.Where(k => !k.Equals(key)).ToHashSet(),
+                        SectionKey = SectionKey,
+                        // Language = lesson.Language
+                    };
+
+                    questions.Add(question);
+                }
+
+                lesson.SetQuestions(questions);
+            }
+        }
         
         // Section	Fruits	
         //         Lesson1 Thai/Vocabulary/Fruits/Fruit

@@ -159,107 +159,60 @@ namespace Chang.Services
             return logs.TryGetValue(key, out vocabularyQuestLog);
         }
 
-        public void ReorderVocabularySection(VocabularySection sectionData)
+        /// <summary>
+        /// Redistributes section keys between lessons ordered by mark descending, keeping lessons sizes
+        /// </summary>
+        public void ReorderVocabularySection(VocabularySection section)
         {
-            throw new NotImplementedException();
-            /*
-            Vocabulary.SectionData newSectionData = new Vocabulary.SectionData
+            VocabularySection newSection = new VocabularySection
             {
-                Section = sectionData.Section,
-                Lessons = new List<Vocabulary.LessonData>()
+                Language = section.Language,
+                Section = section.Section,
+                SectionKey = section.SectionKey,
+                Lessons = ReorderLessons(section.Lessons, key => GetVocabularyMark(key)),
             };
 
-            string key = ReorderedSectionKey(sectionData.Section);
-            List<IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
-            IOrderedEnumerable<IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
-            Queue<IQuestion> questQueue = new Queue<IQuestion>(orderedQuests);
+            newSection.PopulateQuestions();
 
-            foreach (var lesson in sectionData.Lessons)
-            {
-                int count = lesson.Questions.Count;
-                List<IQuestion> quests = new();
-
-                for (int i = 0; i < count; i++)
-                {
-                    quests.Add(questQueue.Dequeue());
-                }
-
-                var newLesson = new Vocabulary.LessonData
-                {
-                    SectionName = lesson.SectionName,
-                    GenerateQuestMatchWordsData = true,
-                    Questions = quests,
-                };
-
-                newSectionData.Lessons.Add(newLesson);
-            }
-
-            _playerProfile.AddReorderVocabularySection(key, newSectionData);
-*/
-            return;
-/*
-            int GetQuestMark(IQuestion quest)
-            {
-                if (quest is Vocabulary.QuestSelectWord selectWord)
-                {
-                    return GetVocabularyMark(selectWord.CorrectWordFileName);
-                }
-
-                throw new NotImplementedException($"Question type {quest.QuestionType} is not implemented");
-            }
-            */
+            _playerProfile.AddReorderVocabularySection(ReorderedSectionKey(section.Section), newSection);
         }
 
-        public void ReorderSentencesSection(Sentences.SectionData sectionData)
+        /// <summary>
+        /// Redistributes section keys between lessons ordered by mark descending, keeping lessons sizes
+        /// </summary>
+        public void ReorderSentencesSection(SentencesSection section)
         {
-            throw new NotImplementedException();
-            /*
-            Sentences.SectionData newSectionData = new Sentences.SectionData
+            SentencesSection newSection = new SentencesSection
             {
-                Section = sectionData.Section,
-                Lessons = new List<Sentences.LessonData>()
+                Language = section.Language,
+                Section = section.Section,
+                SectionKey = section.SectionKey,
+                SectionLessons = ReorderLessons(section.SectionLessons, GetSentencesMark),
             };
 
-            string key = ReorderedSectionKey(sectionData.Section);
-            List<IQuestion> questions = sectionData.Lessons.SelectMany(lesson => lesson.Questions).ToList();
-            IOrderedEnumerable<IQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
-            Queue<IQuestion> questQueue = new Queue<IQuestion>(orderedQuests);
+            newSection.PopulateQuestions();
 
-            foreach (var lesson in sectionData.Lessons)
+            _playerProfile.AddReorderSentencesSection(ReorderedSectionKey(section.Section), newSection);
+        }
+
+        private static List<Lesson> ReorderLessons(List<Lesson> lessons, Func<string, float> getMark)
+        {
+            Queue<string> keysQueue = new Queue<string>(lessons.SelectMany(lesson => lesson.Keys).OrderByDescending(getMark));
+            List<Lesson> newLessons = new();
+
+            foreach (Lesson lesson in lessons)
             {
-                int count = lesson.Questions.Count;
-                List<IQuestion> quests = new();
+                List<string> keys = new();
 
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < lesson.Keys.Count; i++)
                 {
-                    quests.Add(questQueue.Dequeue());
+                    keys.Add(keysQueue.Dequeue());
                 }
 
-                var newLesson = new Sentences.LessonData
-                {
-                    SectionName = lesson.SectionName,
-                    Questions = quests,
-                };
-
-                newSectionData.Lessons.Add(newLesson);
+                newLessons.Add(new Lesson(lesson.Language, lesson.Section, keys));
             }
 
-            _playerProfile.AddReorderSentencesSection(key, newSectionData);
-
-            return;
-
-            int GetQuestMark(IQuestion quest)
-            {
-                if (quest is Sentences.SentenceSelectWords selectWord)
-                {
-                    // return GetVocabularyMark(selectWord.CorrectWordFileName);
-                    // todo chang implement sentences mark
-                    return 1;
-                }
-
-                throw new NotImplementedException($"Question type {quest.QuestionType} is not implemented");
-            }
-            */
+            return newLessons;
         }
     }
 }

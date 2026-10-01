@@ -119,18 +119,13 @@ namespace Chang.Vocabulary
 
         private void OnSectionSortClick(string key)
         {
-            throw new NotImplementedException();
-            /*
             Debug.Log($"OnSectionSortClick key: {key}");
-            SectionData sectionData = _gameBus.VocabularyBookData.Sections.Find(s => s.Section == key);
+            VocabularySection section = _gameBus.VocabularyBook.Sections.Find(s => s.Section == key);
+            string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
 
-            if (_profileService.ReorderedVocabularySections.TryGetValue(_profileService.ReorderedSectionKey(sectionData.Section), out _))
+            if (!_profileService.ReorderedVocabularySections.Remove(reorderedSectionKey))
             {
-                _profileService.ReorderedVocabularySections.Remove(_profileService.ReorderedSectionKey(sectionData.Section));
-            }
-            else
-            {
-                _profileService.ReorderVocabularySection(sectionData);
+                _profileService.ReorderVocabularySection(section);
             }
 
             SectionBlock sectionBlock = _sectionBlocks[key];
@@ -143,8 +138,7 @@ namespace Chang.Vocabulary
                 }
             }
 
-            PopulateSectionAsync(sectionData, sectionBlock, _cts.Token).Forget();
-            */
+            PopulateSectionAsync(section, sectionBlock, _cts.Token).Forget();
         }
 
         private async UniTask PopulateSectionAsync(
