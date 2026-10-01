@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Chang.Core;
 using Chang.Profile;
@@ -157,62 +156,6 @@ namespace Chang.Services
         {
             Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
             return logs.TryGetValue(key, out vocabularyQuestLog);
-        }
-
-        /// <summary>
-        /// Redistributes section keys between lessons ordered by mark descending, keeping lessons sizes
-        /// </summary>
-        public void ReorderVocabularySection(VocabularySection section)
-        {
-            VocabularySection newSection = new VocabularySection
-            {
-                Language = section.Language,
-                Section = section.Section,
-                SectionKey = section.SectionKey,
-                Lessons = ReorderLessons(section.Lessons, key => GetVocabularyMark(key)),
-            };
-
-            newSection.PopulateQuestions();
-
-            _playerProfile.AddReorderVocabularySection(ReorderedSectionKey(section.Section), newSection);
-        }
-
-        /// <summary>
-        /// Redistributes section keys between lessons ordered by mark descending, keeping lessons sizes
-        /// </summary>
-        public void ReorderSentencesSection(SentencesSection section)
-        {
-            SentencesSection newSection = new SentencesSection
-            {
-                Language = section.Language,
-                Section = section.Section,
-                SectionKey = section.SectionKey,
-                SectionLessons = ReorderLessons(section.SectionLessons, GetSentencesMark),
-            };
-
-            newSection.PopulateQuestions();
-
-            _playerProfile.AddReorderSentencesSection(ReorderedSectionKey(section.Section), newSection);
-        }
-
-        private static List<Lesson> ReorderLessons(List<Lesson> lessons, Func<string, float> getMark)
-        {
-            Queue<string> keysQueue = new Queue<string>(lessons.SelectMany(lesson => lesson.Keys).OrderByDescending(getMark));
-            List<Lesson> newLessons = new();
-
-            foreach (Lesson lesson in lessons)
-            {
-                List<string> keys = new();
-
-                for (int i = 0; i < lesson.Keys.Count; i++)
-                {
-                    keys.Add(keysQueue.Dequeue());
-                }
-
-                newLessons.Add(new Lesson(lesson.Language, lesson.Section, keys));
-            }
-
-            return newLessons;
         }
     }
 }

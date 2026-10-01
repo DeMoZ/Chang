@@ -20,6 +20,7 @@ namespace Chang.Vocabulary
         private readonly BookVocabularyView _view;
         private readonly ProfileService _profileService;
         private readonly VocabularyRepetitionService _repetitionService;
+        private readonly SectionSortService _sectionSortService;
 
         private Dictionary<string, Lesson> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
@@ -32,13 +33,15 @@ namespace Chang.Vocabulary
             MainScreenBus mainScreenBus,
             BookVocabularyView view,
             ProfileService profileService,
-            VocabularyRepetitionService repetitionService)
+            VocabularyRepetitionService repetitionService,
+            SectionSortService sectionSortService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
             _repetitionService = repetitionService;
+            _sectionSortService = sectionSortService;
 
             _cts = new CancellationTokenSource();
         }
@@ -121,12 +124,7 @@ namespace Chang.Vocabulary
         {
             Debug.Log($"OnSectionSortClick key: {key}");
             VocabularySection section = _gameBus.VocabularyBook.Sections.Find(s => s.Section == key);
-            string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
-
-            if (!_profileService.ReorderedVocabularySections.Remove(reorderedSectionKey))
-            {
-                _profileService.ReorderVocabularySection(section);
-            }
+            _sectionSortService.ToggleSort(section);
 
             SectionBlock sectionBlock = _sectionBlocks[key];
 
@@ -147,14 +145,13 @@ namespace Chang.Vocabulary
             CancellationToken ct)
         {
             List<VocabularyQuestLog> repetitions = await _repetitionService
-                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData.Section, ct);
+                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData, ct);
 
             int repetitionsCount = repetitions.Count;
             string reorderedSectionKey = _profileService.ReorderedSectionKey(sectionData.Section);
 
-            sectionBlock.SectionView.SetSortToggle(
-                repetitionsCount > 0 && _profileService.ReorderedVocabularySections.ContainsKey(reorderedSectionKey),
-                repetitionsCount > 0);
+            bool canSort = _sectionSortService.CanSort(sectionData);
+            sectionBlock.SectionView.SetSortToggle(canSort && _sectionSortService.IsSorted(sectionData), canSort);
 
             sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >=
                                                                  ProjectConstants
@@ -262,8 +259,9 @@ namespace Chang.Vocabulary
                 return;
 
             // todo chang show loading animation ?
+            VocabularySection sectionData = _gameBus.VocabularyBook.Sections.Find(s => s.Section == section);
             List<VocabularyQuestLog> repetitions =
-                await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section,
+                await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData,
                     ct);
             MakeRepetitionAsync(repetitions, _cts.Token).Forget();
         }

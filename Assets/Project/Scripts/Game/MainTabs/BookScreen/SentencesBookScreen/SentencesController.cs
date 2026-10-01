@@ -20,6 +20,7 @@ namespace Chang.Sentences
         private readonly BookSentencesView _view;
         private readonly ProfileService _profileService;
         private readonly SentencesRepetitionService _repetitionService;
+        private readonly SectionSortService _sectionSortService;
 
         private Dictionary<string, Lesson> _lessons = new();
         private Dictionary<string, SectionBlock> _sectionBlocks = new();
@@ -32,13 +33,15 @@ namespace Chang.Sentences
             MainScreenBus mainScreenBus,
             BookSentencesView view,
             ProfileService profileService,
-            SentencesRepetitionService sentencesRepetitionService)
+            SentencesRepetitionService sentencesRepetitionService,
+            SectionSortService sectionSortService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
             _repetitionService = sentencesRepetitionService;
+            _sectionSortService = sectionSortService;
 
             _cts = new CancellationTokenSource();
         }
@@ -118,12 +121,7 @@ namespace Chang.Sentences
         {
             Debug.Log($"OnSectionSortClick key: {key}");
             SentencesSection section = _gameBus.SentencesBook.Sections.Find(s => s.Section == key);
-            string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
-
-            if (!_profileService.ReorderedSentencesSections.Remove(reorderedSectionKey))
-            {
-                _profileService.ReorderSentencesSection(section);
-            }
+            _sectionSortService.ToggleSort(section);
 
             SectionBlock sectionBlock = _sectionBlocks[key];
 
@@ -142,14 +140,13 @@ namespace Chang.Sentences
             CancellationToken ct)
         {
             List<SentenceQuestLog> repetitions = await _repetitionService
-                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section.Section, ct);
+                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
 
             int repetitionsCount = repetitions.Count;
             string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
 
-            sectionBlock.SectionView.SetSortToggle(
-                repetitionsCount > 0 && _profileService.ReorderedSentencesSections.ContainsKey(reorderedSectionKey),
-                repetitionsCount > 0);
+            bool canSort = _sectionSortService.CanSort(section);
+            sectionBlock.SectionView.SetSortToggle(canSort && _sectionSortService.IsSorted(section), canSort);
 
             sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >=
                                                                  ProjectConstants

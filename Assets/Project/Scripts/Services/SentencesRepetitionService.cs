@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Chang.Core;
 using Chang.Profile;
 using Cysharp.Threading.Tasks;
 
@@ -14,15 +15,19 @@ namespace Chang.Services
         {
         }
 
-        public async Task<List<SentenceQuestLog>> GetSectionRepetitionAsync(int amount, string section, CancellationToken ct)
+        /// <summary>
+        /// Logs are taken by section lessons keys, log section is ignored
+        /// </summary>
+        public async Task<List<SentenceQuestLog>> GetSectionRepetitionAsync(int amount, SentencesSection section, CancellationToken ct)
         {
             Dictionary<string, SentenceQuestLog> log = ProfileService.SentencesProgress.Log;
+            IEnumerable<string> sectionKeys = section.SectionLessons.SelectMany(lesson => lesson.Keys).Distinct();
 
             await UniTask.Yield(ct);
 
-            return log
-                .Select(q => q.Value)
-                .Where(q => string.Equals(q.Section, section))
+            return sectionKeys
+                .Where(log.ContainsKey)
+                .Select(key => log[key])
                 .OrderByDescending(OrderByWeight)
                 .Take(amount)
                 .ToList();
