@@ -381,7 +381,8 @@ namespace Chang.FSM
 
             var info = new ContinueButtonInfo();
             info.IsCorrect = isCorrect;
-            info.InfoText = _pagesBus.QuestionResult.Key;
+            Word word = _pagesBus.Words[_pagesBus.QuestionResult.Key];
+            info.InfoText = $"{word.LearnWord}\n{word.Translation}";
 
             _pagesBus.LessonLog.Add(_pagesBus.QuestionResult);
 
