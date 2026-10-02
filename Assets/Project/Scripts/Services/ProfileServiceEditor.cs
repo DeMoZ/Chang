@@ -1,42 +1,34 @@
-using System.Threading;
+#if UNITY_EDITOR
 using Chang.Services.DataProvider;
-using Cysharp.Threading.Tasks;
 using UnityEditor;
+#endif
 
 namespace Chang.Services
 {
     public partial class ProfileService
     {
+#if UNITY_EDITOR
         private const string AssetPath = "Assets/Project/EditorCheckSaveLoad.asset";
 
-        private IDataProvider _scriptableObjectDataProvider;
-
-        private IDataProvider ScriptableObjectDataProvider
-        {
-            get
-            {
-#if UNITY_EDITOR
-                _scriptableObjectDataProvider ??= AssetDatabase.LoadAssetAtPath<ScriptableObjectDataProviderEditor>(AssetPath);
+        private PrefsDataViewEditor _prefsDataView;
 #endif
-                return _scriptableObjectDataProvider;
-            }
-        }
 
-        private async UniTask SaveIntoScriptableObject(CancellationToken ct)
+        /// <summary>
+        /// Editor only, shows the data stored in PlayerPrefs in the asset for the visual control
+        /// </summary>
+        private void RefreshPrefsDataView()
         {
-            if (ScriptableObjectDataProvider == null)
+#if UNITY_EDITOR
+            _prefsDataView ??= AssetDatabase.LoadAssetAtPath<PrefsDataViewEditor>(AssetPath);
+            if (_prefsDataView == null)
             {
                 return;
             }
 
-            await ScriptableObjectDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData, ct);
-            await ScriptableObjectDataProvider.SaveVocabularyProgressDataAsync(_playerProfile.ProfileData.LearnLanguage, _playerProfile.VocabularyProgress, ct);
-            await ScriptableObjectDataProvider.SaveSentencesProgressDataAsync(_playerProfile.ProfileData.LearnLanguage, _playerProfile.SentencesProgress, ct);
+            _prefsDataView.Refresh(LearnLanguage);
 
-#if UNITY_EDITOR
-            EditorUtility.SetDirty(_scriptableObjectDataProvider as ScriptableObjectDataProviderEditor);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            EditorUtility.SetDirty(_prefsDataView);
+            AssetDatabase.SaveAssetIfDirty(_prefsDataView);
 #endif
         }
     }

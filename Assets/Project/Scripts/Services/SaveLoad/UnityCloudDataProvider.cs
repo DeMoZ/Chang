@@ -37,7 +37,8 @@ namespace Chang.Services.DataProvider
         {
         }
 
-        private bool CheckSession()
+        /// <returns>false if the player is not authenticated, authentication is requested then</returns>
+        public bool CheckSession()
         {
             bool isAuthenticated = AuthenticationService.Instance.IsSignedIn;
             if (!isAuthenticated)
@@ -51,18 +52,18 @@ namespace Chang.Services.DataProvider
 
         public async UniTask SaveProfileDataAsync(ProfileData data, CancellationToken ct)
         {
-            await SaveAsync(DataProviderConstants.ProfileDataKey, data, ct);
+            await SaveAsync(new Dictionary<string, object> { { DataProviderConstants.ProfileDataKey, data } }, ct);
         }
 
         public async UniTask<ProgressData<VocabularyQuestLog>> LoadVocabularyProgressDataAsync(Languages language, CancellationToken ct)
         {
             bool isOk = CheckSession();
             if (!isOk)
+            {
                 return null;
+            }
 
-            ProgressData<VocabularyQuestLog> result = await LoadDataAsync<ProgressData<VocabularyQuestLog>>($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", ct);
-            result ??= new ProgressData<VocabularyQuestLog>();
-            return result;
+            return await LoadDataAsync<ProgressData<VocabularyQuestLog>>(DataProviderConstants.VocabularyProgressKey(language), ct);
         }
 
         public async UniTask<ProgressData<SentenceQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct)
@@ -73,20 +74,29 @@ namespace Chang.Services.DataProvider
                 return null;
             }
 
-            ProgressData<SentenceQuestLog> result = await LoadDataAsync<ProgressData<SentenceQuestLog>>($"{language}_{DataProviderConstants.SentencesProgressDataKey}", ct);
-            result ??= new ProgressData<SentenceQuestLog>();
-
-            return result;
+            return await LoadDataAsync<ProgressData<SentenceQuestLog>>(DataProviderConstants.SentencesProgressKey(language), ct);
         }
 
-        public async UniTask SaveVocabularyProgressDataAsync(Languages language, ProgressData<VocabularyQuestLog> data, CancellationToken ct)
+        public async UniTask SaveProgressDataAsync(Languages language, ProgressData<VocabularyQuestLog> vocabulary, ProgressData<SentenceQuestLog> sentences, CancellationToken ct)
         {
-            await SaveAsync($"{language}_{DataProviderConstants.VocabularyProgressDataKey}", data, ct);
-        }
+            Dictionary<string, object> dataDict = new();
 
-        public async UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentenceQuestLog> data, CancellationToken ct)
-        {
-            await SaveAsync($"{language}_{DataProviderConstants.SentencesProgressDataKey}", data, ct);
+            if (vocabulary != null)
+            {
+                dataDict[DataProviderConstants.VocabularyProgressKey(language)] = vocabulary;
+            }
+
+            if (sentences != null)
+            {
+                dataDict[DataProviderConstants.SentencesProgressKey(language)] = sentences;
+            }
+
+            if (dataDict.Count == 0)
+            {
+                return;
+            }
+
+            await SaveAsync(dataDict, ct);
         }
 
         public async UniTask<ProfileData> LoadProfileDataAsync(CancellationToken ct)
@@ -97,17 +107,13 @@ namespace Chang.Services.DataProvider
                 return null;
             }
 
-            ProfileData profileData = await LoadDataAsync<ProfileData>(DataProviderConstants.ProfileDataKey, ct);
-            if (profileData == null)
-            {
-                profileData = new ProfileData();
-                await SaveProfileDataAsync(profileData, ct);
-            }
-
-            return profileData;
+            return await LoadDataAsync<ProfileData>(DataProviderConstants.ProfileDataKey, ct);
         }
 
-        private async UniTask SaveAsync<T>(string key, T data, CancellationToken ct)
+        /// <summary>
+        /// Saves all the data in one request
+        /// </summary>
+        private async UniTask SaveAsync(Dictionary<string, object> dataDict, CancellationToken ct)
         {
             bool isOk = CheckSession();
             if (!isOk)
@@ -115,21 +121,21 @@ namespace Chang.Services.DataProvider
                 return;
             }
 
-            Dictionary<string, object> dataDict = new Dictionary<string, object> { { key, data } };
+            string keys = string.Join(", ", dataDict.Keys);
 
             try
             {
                 await RequestAsync(() => CloudSaveService.Instance.Data.Player.SaveAsync(dataDict), ct);
 
-                Debug.Log($"{key} saved.");
+                Debug.Log($"{keys} saved.");
             }
             catch (OperationCanceledException)
             {
-                Debug.LogWarning($"Saving data type: {typeof(T).Name}, for key: {key} was cancelled.");
+                Debug.LogWarning($"Saving data for keys: {keys} was cancelled.");
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error on saving data type: {typeof(T).Name}, for key: {key}, error:\n{e}");
+                Debug.LogError($"Error on saving data for keys: {keys}, error:\n{e}");
                 HandleError(e, "Failed to save data");
             }
         }

@@ -63,5 +63,10 @@ namespace Chang.Profile
         {
             UtcTime = utcTime;
         }
+
+        public void SetPlayerId(string playerId)
+        {
+            UnityCloudSavePlayerId = playerId;
+        }
     }
 }

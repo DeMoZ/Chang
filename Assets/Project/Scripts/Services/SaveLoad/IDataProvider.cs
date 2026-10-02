@@ -7,14 +7,18 @@ namespace Chang.Services.DataProvider
 {
     public interface IDataProvider : IDisposable
     {
+        /// <returns>null if there is no stored data</returns>
         UniTask<ProfileData> LoadProfileDataAsync(CancellationToken ct);
         UniTask SaveProfileDataAsync(ProfileData data, CancellationToken ct);
         
+        /// <returns>null if there is no stored data</returns>
         UniTask<ProgressData<VocabularyQuestLog>> LoadVocabularyProgressDataAsync(Languages language, CancellationToken ct);
+        /// <returns>null if there is no stored data</returns>
         UniTask<ProgressData<SentenceQuestLog>> LoadSentencesProgressDataAsync(Languages language, CancellationToken ct);
-        UniTask SaveVocabularyProgressDataAsync(Languages language, ProgressData<VocabularyQuestLog> data, CancellationToken ct);
-        UniTask SaveSentencesProgressDataAsync(Languages language, ProgressData<SentenceQuestLog> data, CancellationToken ct);
         
-        string PlayerId { get; }
+        /// <summary>
+        /// Saves the progress at once, null progress is skipped
+        /// </summary>
+        UniTask SaveProgressDataAsync(Languages language, ProgressData<VocabularyQuestLog> vocabulary, ProgressData<SentenceQuestLog> sentences, CancellationToken ct);
     }
 }
