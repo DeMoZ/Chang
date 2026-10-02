@@ -13,7 +13,7 @@ namespace Chang.UI
         [SerializeField] private ToggleGroup _rightTogglesGroup;
         [SerializeField] private Button _continuteBtn;
 
-        public override QuestionType ScreenType { get; } = QuestionType.MatchWords;
+        public override ChangTypes ScreenType { get; } = ChangTypes.MatchWords;
 
         public void Init(Action onContinueClick)
         {

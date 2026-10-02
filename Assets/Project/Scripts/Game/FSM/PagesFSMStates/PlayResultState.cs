@@ -1,6 +1,7 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
+using Chang.Core;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -18,17 +19,17 @@ namespace Chang.FSM
         }
     }
 
-    public class PlayResultState : ResultStateBase<QuestionType, PagesBus>
+    public class PlayResultState : ResultStateBase<ChangTypes, PagesBus>
     {
         [Inject] private readonly PlayResultController _stateController;
         [Inject] private readonly GameOverlayController _gameOverlayController;
 
-        private List<PhraseData> _mixWords;
-        private PhraseData _correctWord;
+        private List<Word> _mixWords;
+        private Word _correctWord;
 
-        public override QuestionType Type => QuestionType.Result;
+        public override ChangTypes Type => ChangTypes.Result;
 
-        public PlayResultState(PagesBus bus, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public PlayResultState(PagesBus bus, Action<ChangTypes> onStateResult) : base(bus, onStateResult)
         {
         }
 

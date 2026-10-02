@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Chang.Core;
+using Chang.Profile;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using Zenject;
@@ -7,24 +11,27 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
+    /// <summary>
+    /// Repetition screen: words and sentences log ordered by the last answer time, repetition buttons
+    /// </summary>
     public class RepetitionController : IViewController
     {
         private const int ShowLogLimitAmount = 30;
 
         private readonly ProfileService _profileService;
-        private readonly MainScreenBus _mainScreenBus;
+        private readonly GameBus _gameBus;
         private readonly RepetitionView _view;
         private readonly RepetitionService _repetitionService;
 
         [Inject]
         public RepetitionController(
             ProfileService profileService,
-            MainScreenBus mainScreenBus,
+            GameBus gameBus,
             RepetitionView view,
             RepetitionService repetitionService)
         {
             _profileService = profileService;
-            _mainScreenBus = mainScreenBus;
+            _gameBus = gameBus;
             _view = view;
             _repetitionService = repetitionService;
         }
@@ -33,15 +40,28 @@ namespace Chang
         {
         }
 
-        public void Init()
+        public void Init(Action onRepeatWordsClick, Action onRepeatSentencesClick, Action onRepeatMixedClick)
         {
-            _view.Init(_mainScreenBus.OnRepeatClicked);
+            _view.Init(onRepeatWordsClick, onRepeatSentencesClick, onRepeatMixedClick);
         }
 
         public async UniTask SetAsync(CancellationToken ct)
         {
-            var sortedList = await _repetitionService.GetGeneralRepetitionAsync(ShowLogLimitAmount, ct);
-            _view.Set(sortedList);
+            await UniTask.Yield(ct);
+
+            List<RepetitionLogItem> items = _repetitionService.GetAllPlayed()
+                .Select(candidate => candidate.Kind == RepetitionKind.Word
+                    ? CreateWordItem(candidate.Key)
+                    : CreateSentenceItem(candidate.Key))
+                .OrderByDescending(item => item.UtcTime)
+                .Take(ShowLogLimitAmount)
+                .ToList();
+
+            _view.Set(items);
+            _view.SetInteractableRepeatButtons(
+                _repetitionService.CanRepeatVocabulary(),
+                _repetitionService.CanRepeatSentences(),
+                _repetitionService.CanRepeatMixed());
         }
 
         public void SetViewActive(bool active)
@@ -49,17 +69,52 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
+        private RepetitionLogItem CreateWordItem(string key)
+        {
+            Word word = _gameBus.Words[key];
+            VocabularyQuestLog log = _profileService.VocabularyProgress.Log[key];
+
+            return new RepetitionLogItem(word.LearnWord, word.Translation, log.Mark, log.Log.Count, log.UtcTime, log.SuccessSequence);
+        }
+
+        private RepetitionLogItem CreateSentenceItem(string key)
+        {
+            Sentence sentence = _gameBus.Sentences[key];
+            SentenceQuestLog log = _profileService.SentencesProgress.Log[key];
+
+            // the book sentence, not the player answer
+            string learnSentence = string.Join("", sentence.SentenceWords.Select(word => _gameBus.Words[word.WordKey].LearnWord));
+
+            return new RepetitionLogItem(learnSentence, GetTranslation(sentence), log.Mark, log.Log.Count, log.UtcTime, log.SuccessSequence);
+        }
+
+        /// <summary>
+        /// Dynamic words are taken by their sentence keys, in the game they may be replaced with variants
+        /// </summary>
+        private string GetTranslation(Sentence sentence)
+        {
+            object[] args = sentence.SentenceWords
+                .Where(word => word.Modifiers.HasFlag(Modifier.Dynamic))
+                .Select(word => (object)_gameBus.Words[word.WordKey].Translation)
+                .ToArray();
+
+            try
+            {
+                return string.Format(sentence.DefaultTranslation, args);
+            }
+            catch (FormatException e)
+            {
+                Debug.LogWarning($"Translation format error for sentence: {sentence.SentenceKey}, {e.Message}");
+                return sentence.DefaultTranslation;
+            }
+        }
+
+        // todo chang implement items interacitons - show popup with word in Thai, translation, mark, info from log - marks, list when played
         // private void OnItemClick(int index)
         // {
         //     Debug.Log($"Clicked on item {index}");
         //
         //     //_mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
-        // }
-        //
-        // public int GetLogCount()
-        // {
-        //     // return _repetitionService.GetProgress().Questions;
-        //     throw new NotImplementedException("Not implemented count log");
         // }
     }
 }

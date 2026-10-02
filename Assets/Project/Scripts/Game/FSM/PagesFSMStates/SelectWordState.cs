@@ -1,9 +1,9 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -15,24 +15,25 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class SelectWordResult : IQuestionResult
+    public class WordResult : IQuestionResult
     {
-        public string Key { get; }
-        public string Presentation { get; }
-        public QuestionType Type => QuestionType.SelectWord;
+        public virtual ChangTypes Type => ChangTypes.SelectWord;
+        public Word Word { get; }
         public bool IsCorrect { get; }
-        public object[] Info { get; }
+        public bool IsHintUsed { get; }
 
-        public SelectWordResult(string key, string presentation, bool isCorrect, params object[] info)
+        public WordResult(Word word, bool isCorrect, bool isHintUsed)
         {
-            Key = key;
-            Presentation = presentation;
+            Word = word;
             IsCorrect = isCorrect;
-            Info = info;
+            IsHintUsed = isHintUsed;
         }
+
+        public string Key => Word.WordKey;
+        public string Presentation => Word.LearnWord;
     }
 
-    public class SelectWordState : ResultStateBase<QuestionType, PagesBus>
+    public class SelectWordState : ResultStateBase<ChangTypes, PagesBus>
     {
         private readonly IPagesContentProvider _pagesContentProvider;
 
@@ -44,13 +45,14 @@ namespace Chang.FSM
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly PopupManager _popupManager;
 
-        private List<PhraseData> _mixWords;
-        private PhraseData _correctWord;
+        private List<Word> _mixWords;
+        private Word _correctWord;
         private CancellationTokenSource _cts;
 
-        public override QuestionType Type => QuestionType.SelectWord;
+        public override ChangTypes Type => ChangTypes.SelectWord;
 
-        public SelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus, onStateResult)
+        public SelectWordState(PagesBus bus, IPagesContentProvider pagesContentProvider,
+            Action<ChangTypes> onStateResult) : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
         }
@@ -81,83 +83,50 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
+            QuestSelectWord question = Bus.Lesson.CurrentQuestion as QuestSelectWord;
 
-            await _pagesContentProvider.GetContentAsync(question, ct);
+            if (question == null)
+            {
+                throw new Exception("SelectWordState: Current question is not of type QuestSelectWord.");
+            }
 
-            QuestSelectWordData questionData = GetQuestionData((SimpleQuestSelectWord)question);
-            _correctWord = questionData.CorrectWord;
-            _mixWords ??= new List<PhraseData>();
-            _mixWords.Clear();
+            _correctWord = Bus.Words[question.Key];
+            _mixWords = Bus.Words.Where(pair => question.WordsKeys.Contains(pair.Key))
+                .Select(pair => pair.Value)
+                .ToList();
+            
             _mixWords.Add(_correctWord);
-            _mixWords.AddRange(questionData.MixWords);
             _mixWords.Shuffle();
 
-            string key = $"{_profileService.ProfileData.LearnLanguage}/{_correctWord.Word.LogKey}"; // todo chang use section lang/section/word
-            int mark = _profileService.GetMark(key);
+            int mark = _profileService.GetVocabularyMark(_correctWord.WordKey);
             bool isQuestInTranslation = WordHelper.GetQuestInTranslation(mark);
-            _correctWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
+
+            _correctWord.SetShowPhonetics(WordHelper.GetShowPhonetics(mark));
 
             foreach (var mixWord in _mixWords)
             {
-                mark = _profileService.GetMark(mixWord.LogKey);
-                mixWord.SetPhonetics(WordHelper.GetShowPhonetics(mark));
+                mark = _profileService.GetVocabularyMark(mixWord.WordKey);
+                mixWord.SetShowPhonetics(WordHelper.GetShowPhonetics(mark));
             }
 
-            string spritePath = _wordPathHelper.GetTexturePath(((SimpleQuestSelectWord)question).CorrectWordFileName);
-            Sprite sprite = _pagesContentProvider.GetCachedSprite(spritePath);
-
-            _stateController.Init(isQuestInTranslation, _correctWord, sprite, _mixWords, OnToggleValueChanged, () => OnClickPlaySound(!isQuestInTranslation));
+            _correctWord.SetSprite(_pagesContentProvider.GetCachedSprite(_correctWord.ImageKey));
+            _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged,
+                () => OnClickPlaySound(!isQuestInTranslation));
             _stateController.SetViewActive(true);
 
             OnClickPlaySound(!isQuestInTranslation);
+
+            await UniTask.Yield(ct);
         }
 
-        private QuestSelectWordData GetQuestionData(SimpleQuestSelectWord selectWord)
+        private void OnClickPlaySound(bool isLearnLanguage)
         {
-            var path = _wordPathHelper.GetConfigPath(selectWord.CorrectWordFileName);
-            var config = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
+            string key = isLearnLanguage
+                ? _correctWord.WordKey
+                : _wordPathHelper.GetNativeSoundKey(_correctWord.WordKey, _profileService.ProfileData.NativeLanguage);
 
-            if (!config)
-            {
-                Debug.LogError($"SelectWordState: Config not found at path {path}");
-                return null;
-            }
+            AudioClip asset = _pagesContentProvider.GetCachedAudioClip(key);
 
-            QuestSelectWordData selectWordData = new QuestSelectWordData
-            {
-                CorrectWord = config.PhraseData,
-                MixWords = new List<PhraseData>()
-            };
-
-            var mixWordsAmount = Bus.GameType == GameType.Learn
-                ? ProjectConstants.MIX_WORDS_AMOUNT_IN_LEARN_SELECT_WORD_PAGE
-                : ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE;
-
-            var mixWords = selectWord.MixWordsFileNames.Take(mixWordsAmount);
-            foreach (var fileName in mixWords)
-            {
-                path = _wordPathHelper.GetConfigPath(fileName);
-                var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
-
-                if (asset)
-                {
-                    selectWordData.MixWords.Add(asset.PhraseData);
-                }
-            }
-
-            return selectWordData;
-        }
-
-        private void OnClickPlaySound(bool isLearnLanguage) 
-        {
-            string key =  isLearnLanguage
-                ? _correctWord.LogKey
-                : _wordPathHelper.GetNativeSoundKey(_correctWord.LogKey, _profileService.ProfileData.NativeLanguage);
-            
-            string path = _wordPathHelper.GetSoundPath(key);
-            AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
-            
             if (asset)
             {
                 _pagesSoundController.PlaySound(asset);
@@ -174,17 +143,7 @@ namespace Chang.FSM
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle: {index}; isOn: {isOn}");
             var isCorrect = _mixWords[index].Key == _correctWord.Key;
-            object[] info = { _correctWord.Word.LearnWord, Bus.OnHintUsed.Value };
-
-            string path = Path.Combine(
-                _profileService.ProfileData.LearnLanguage.ToString(),
-                AssetPaths.Addressables.Words,
-                _correctWord.Word.Section,
-                _correctWord.Word.Key);
-
-            var result = new SelectWordResult(
-                _wordPathHelper.NormalizePath(path),
-                _correctWord.Word.LearnWord, isCorrect, info);
+            var result = new WordResult(_correctWord, isCorrect, Bus.OnHintUsed.Value);
             Bus.QuestionResult = result;
         }
     }

@@ -1,68 +1,58 @@
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+using Chang.Core;
 
 namespace Chang
 {
     public class PhraseData
     {
-        public string Key { get; private set; }
-        public Languages Language { get; private set; } = Languages.Thai;
-        public WordData Word { get; private set; }
-        public bool ShowPhonetics { get; private set; }
-        public string LogKey => $"{Language}/{Word.LogKey}";
-        
-        public PhraseData(string key, WordData word)
+        public readonly string Key;
+        public readonly Languages Language;
+        public readonly Word Word;
+
+        public bool ShowPhonetics { get; protected set; }
+        public string LogKey => string.Empty; // $"{Language}/{Word.LogKey}";
+
+        public PhraseData(Word word)
         {
-            Key = key;
             Word = word;
+            Key = Word.WordKey;
+            Language = Word.Language;
         }
 
         public void SetPhonetics(bool showPhonetics)
         {
             ShowPhonetics = showPhonetics;
         }
-        
+
         public override string ToString()
         {
-            return $"key: {Key}; language: {Language}; word: {Word.LearnWord}; phonetic: {ShowPhonetics}"; //  audioclip: {AudioClip?.name}; sprite: {Sprite?.name}
+            return
+                $"key: {Key}; language: {Language}; word: {Word.LearnWord}; phonetic: {ShowPhonetics}; logKey: {LogKey}"; //  audioclip: {AudioClip?.name}; sprite: {Sprite?.name}
         }
     }
 
-    public class WordData
+    public class SequencePhraseData : PhraseData
     {
-        public string Section { get; private set; }
-        public string Key { get; private set; }
-        public string LearnWord { get; private set; }
-        public string Phonetic { get; private set; }
-        public List<Translation> Meanings { get; private set; }
-        public bool ShowPhonetics { get; private set; }
-        public AudioClip AudioClip { get; set; } 
-        public string LogKey => $"Words/{Section}/{Key}";
-        public string Translation => Meanings.FirstOrDefault(t => t.Language == Languages.English)?.Meaning;
-        
-        public WordData(string section, string key, string learnWord, string phonetic, List<Translation> meanings)
+        public bool IsPlaceHolder { get; private set; }
+        public bool IsHighlighted { get; private set; }
+        public bool IsInteractable { get; private set; }
+
+        public SequencePhraseData(Word word) : base(word)
         {
-            Section = section;
-            Key = key;
-            LearnWord = learnWord;
-            Phonetic = phonetic;
-            Meanings = meanings;
-        }
-        
-        public WordData(string section, string key, string learnWord, string phonetic, List<Translation> meanings, bool showPhonetics)
-        {
-            Section = section;
-            Key = key;
-            LearnWord = learnWord;
-            Phonetic = phonetic;
-            Meanings = meanings;
-            ShowPhonetics = showPhonetics;
         }
 
-        public void SetShowPhonetics(bool showPhonetics)
+        public void SetIsPlaceHolder(bool value)
         {
-            ShowPhonetics = showPhonetics;
+            IsPlaceHolder = value;
+        }
+
+        public void SetHighlighted(bool value)
+        {
+            IsHighlighted = value;
+        }
+
+        public void SetInteractable(bool value)
+        {
+            IsInteractable = value;
         }
     }
 }

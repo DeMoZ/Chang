@@ -1,21 +1,25 @@
 using System;
 using System.Collections.Generic;
+using Chang.Core;
 
 namespace Chang.Profile
 {
     public class PlayerProfile : IDisposable
     {
-        public ProfileData ProfileData;
-        public ProgressData ProgressData;
+        public readonly Dictionary<Languages, ProgressData<VocabularyQuestLog>> VocabularyProgressDict = new();
+        public readonly Dictionary<Languages, ProgressData<SentenceQuestLog>> SentencesProgressDict = new();
+
+        public ProfileData ProfileData = new ProfileData();
 
         /// <summary>
         /// key Thai/Fruits, value section
         /// </summary>
-        public Dictionary<string, SimpleSection> ReorderedSections { get; private set; } = new();
+        public Dictionary<string, VocabularySection> ReorderedVocabularySections { get; } = new();
 
-        public PlayerProfile()
-        {
-        }
+        public Dictionary<string, SentencesSection> ReorderedSentencesSections { get; } = new();
+
+        public ProgressData<VocabularyQuestLog> VocabularyProgress => VocabularyProgressDict[ProfileData.LearnLanguage];
+        public ProgressData<SentenceQuestLog> SentencesProgress => SentencesProgressDict[ProfileData.LearnLanguage];
 
         public void Dispose()
         {
@@ -28,9 +32,14 @@ namespace Chang.Profile
         {
         }
 
-        public void AddReorderSection(string key, SimpleSection section)
+        public void AddReorderVocabularySection(string key, VocabularySection sectionData)
         {
-            ReorderedSections[key] = section;
+            ReorderedVocabularySections[key] = sectionData;
+        }
+
+        public void AddReorderSentencesSection(string key, SentencesSection sectionData)
+        {
+            ReorderedSentencesSections[key] = sectionData;
         }
     }
 }

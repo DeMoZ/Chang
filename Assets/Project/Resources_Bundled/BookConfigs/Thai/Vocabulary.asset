@@ -1,0 +1,3932 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b17f44b9ee5b42d091fec50335e50788, type: 3}
+  m_Name: Vocabulary
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.Core.Vocabulary
+  Language: 6
+  Words:
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/No_Not_Don_t
+    ImageKey: Thai/Vocabulary/Mix/No_Not_Don_t
+    SoundKey: Thai/Vocabulary/Mix/No_Not_Don_t
+    Key: No_Not_Don_t
+    LearnWord: "\u0E44\u0E21\u0E48"
+    Phonetics: Mai
+    DefaultTranslation: No / Not / Don't
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Put_Add
+    ImageKey: Thai/Vocabulary/Mix/Put_Add
+    SoundKey: Thai/Vocabulary/Mix/Put_Add
+    Key: Put_Add
+    LearnWord: "\u0E43\u0E2A\u0E48"
+    Phonetics: Sai
+    DefaultTranslation: Put / Add
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Want
+    ImageKey: Thai/Vocabulary/Mix/Want
+    SoundKey: Thai/Vocabulary/Mix/Want
+    Key: Want
+    LearnWord: "\u0E2D\u0E22\u0E32\u0E01"
+    Phonetics: Yak
+    DefaultTranslation: Want
+    DefaultDescription: (to do something)
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Buy
+    ImageKey: Thai/Vocabulary/Mix/Buy
+    SoundKey: Thai/Vocabulary/Mix/Buy
+    Key: Buy
+    LearnWord: "\u0E0B\u0E37\u0E49\u0E2D"
+    Phonetics: Sue
+    DefaultTranslation: Buy
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Eat
+    ImageKey: Thai/Vocabulary/Mix/Eat
+    SoundKey: Thai/Vocabulary/Mix/Eat
+    Key: Eat
+    LearnWord: "\u0E01\u0E34\u0E19"
+    Phonetics: Gin
+    DefaultTranslation: Eat
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Drink
+    ImageKey: Thai/Vocabulary/Mix/Drink
+    SoundKey: Thai/Vocabulary/Mix/Drink
+    Key: Drink
+    LearnWord: "\u0E14\u0E37\u0E48\u0E21"
+    Phonetics: "D\xF9em"
+    DefaultTranslation: Drink
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Go
+    ImageKey: Thai/Vocabulary/Mix/Go
+    SoundKey: Thai/Vocabulary/Mix/Go
+    Key: Go
+    LearnWord: "\u0E44\u0E1B"
+    Phonetics: Bpai
+    DefaultTranslation: Go
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Have_There is
+    ImageKey: Thai/Vocabulary/Mix/Have_There is
+    SoundKey: Thai/Vocabulary/Mix/Have_There is
+    Key: Have_There is
+    LearnWord: "\u0E21\u0E35"
+    Phonetics: Mii
+    DefaultTranslation: Have / There is
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Be at_Located
+    ImageKey: Thai/Vocabulary/Mix/Be at_Located
+    SoundKey: Thai/Vocabulary/Mix/Be at_Located
+    Key: Be at_Located
+    LearnWord: "\u0E2D\u0E22\u0E39\u0E48"
+    Phonetics: "Y\xF9u"
+    DefaultTranslation: Be at / Located
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Question particle
+    ImageKey: Thai/Vocabulary/Mix/Question particle
+    SoundKey: Thai/Vocabulary/Mix/Question particle
+    Key: Question particle
+    LearnWord: "\u0E44\u0E2B\u0E21"
+    Phonetics: "M\u01CEi"
+    DefaultTranslation: Question particle
+    DefaultDescription: yes/no question at the end of a sentence
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Very
+    ImageKey: Thai/Vocabulary/Mix/Very
+    SoundKey: Thai/Vocabulary/Mix/Very
+    Key: Very
+    LearnWord: "\u0E21\u0E32\u0E01"
+    Phonetics: "M\xE2ak"
+    DefaultTranslation: Very
+    DefaultDescription: 
+  - Language: 6
+    Section: Mix
+    WordKey: Thai/Vocabulary/Mix/Half
+    ImageKey: Thai/Vocabulary/Mix/Half
+    SoundKey: Thai/Vocabulary/Mix/Half
+    Key: Half
+    LearnWord: "\u0E04\u0E23\u0E36\u0E48\u0E07"
+    Phonetics: "Kr\xEAung"
+    DefaultTranslation: Half
+    DefaultDescription: 
+  - Language: 6
+    Section: Gender
+    WordKey: Thai/Vocabulary/Gender/_Polite male_
+    ImageKey: Thai/Vocabulary/Gender/_Polite male_
+    SoundKey: Thai/Vocabulary/Gender/_Polite male_
+    Key: _Polite male_
+    LearnWord: "\u0E04\u0E23\u0E31\u0E1A"
+    Phonetics: Krap
+    DefaultTranslation: '[Polite male]'
+    DefaultDescription: used by male speakers
+  - Language: 6
+    Section: Gender
+    WordKey: Thai/Vocabulary/Gender/_Polite female_
+    ImageKey: Thai/Vocabulary/Gender/_Polite female_
+    SoundKey: Thai/Vocabulary/Gender/_Polite female_
+    Key: _Polite female_
+    LearnWord: "\u0E04\u0E48\u0E30"
+    Phonetics: Ka
+    DefaultTranslation: '[Polite female]'
+    DefaultDescription: used by female speakers
+  - Language: 6
+    Section: Gender
+    WordKey: Thai/Vocabulary/Gender/_Man I_
+    ImageKey: Thai/Vocabulary/Gender/_Man I_
+    SoundKey: Thai/Vocabulary/Gender/_Man I_
+    Key: _Man I_
+    LearnWord: "\u0E1C\u0E21"
+    Phonetics: "P\u01D2m"
+    DefaultTranslation: '[Man I]'
+    DefaultDescription: used by male speakers
+  - Language: 6
+    Section: Gender
+    WordKey: Thai/Vocabulary/Gender/_Woman I_
+    ImageKey: Thai/Vocabulary/Gender/_Woman I_
+    SoundKey: Thai/Vocabulary/Gender/_Woman I_
+    Key: _Woman I_
+    LearnWord: "\u0E09\u0E31\u0E19"
+    Phonetics: "Ch\u01CEn"
+    DefaultTranslation: '[Woman I]'
+    DefaultDescription: used by female speakers
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Fried rice
+    ImageKey: Thai/Vocabulary/Food/Fried rice
+    SoundKey: Thai/Vocabulary/Food/Fried rice
+    Key: Fried rice
+    LearnWord: "\u0E02\u0E49\u0E32\u0E27\u0E1C\u0E31\u0E14"
+    Phonetics: "K\xE2aw p\xE0t"
+    DefaultTranslation: Fried rice
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Meat
+    ImageKey: Thai/Vocabulary/Food/Meat
+    SoundKey: Thai/Vocabulary/Food/Meat
+    Key: Meat
+    LearnWord: "\u0E40\u0E19\u0E37\u0E49\u0E2D\u0E2A\u0E31\u0E15\u0E27\u0E4C"
+    Phonetics: "N\xFAea s\xE0t"
+    DefaultTranslation: Meat
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Pork
+    ImageKey: Thai/Vocabulary/Food/Pork
+    SoundKey: Thai/Vocabulary/Food/Pork
+    Key: Pork
+    LearnWord: "\u0E2B\u0E21\u0E39"
+    Phonetics: "M\u01D4u"
+    DefaultTranslation: Pork
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Beef
+    ImageKey: Thai/Vocabulary/Food/Beef
+    SoundKey: Thai/Vocabulary/Food/Beef
+    Key: Beef
+    LearnWord: "\u0E40\u0E19\u0E37\u0E49\u0E2D"
+    Phonetics: "N\xFAea"
+    DefaultTranslation: Beef
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Chicken
+    ImageKey: Thai/Vocabulary/Food/Chicken
+    SoundKey: Thai/Vocabulary/Food/Chicken
+    Key: Chicken
+    LearnWord: "\u0E44\u0E01\u0E48"
+    Phonetics: "G\xE0i"
+    DefaultTranslation: Chicken
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Fish
+    ImageKey: Thai/Vocabulary/Food/Fish
+    SoundKey: Thai/Vocabulary/Food/Fish
+    Key: Fish
+    LearnWord: "\u0E1B\u0E25\u0E32"
+    Phonetics: Bplaa
+    DefaultTranslation: Fish
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Vegetable
+    ImageKey: Thai/Vocabulary/Food/Vegetable
+    SoundKey: Thai/Vocabulary/Food/Vegetable
+    Key: Vegetable
+    LearnWord: "\u0E1C\u0E31\u0E01"
+    Phonetics: "P\xE1k"
+    DefaultTranslation: Vegetable
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Tomato
+    ImageKey: Thai/Vocabulary/Food/Tomato
+    SoundKey: Thai/Vocabulary/Food/Tomato
+    Key: Tomato
+    LearnWord: "\u0E21\u0E30\u0E40\u0E02\u0E37\u0E2D\u0E40\u0E17\u0E28"
+    Phonetics: "M\xE1-kuea-teet"
+    DefaultTranslation: Tomato
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Potato
+    ImageKey: Thai/Vocabulary/Food/Potato
+    SoundKey: Thai/Vocabulary/Food/Potato
+    Key: Potato
+    LearnWord: "\u0E21\u0E31\u0E19\u0E1D\u0E23\u0E31\u0E48\u0E07"
+    Phonetics: "Man far\xE0ng"
+    DefaultTranslation: Potato
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Chinese kale
+    ImageKey: Thai/Vocabulary/Food/Chinese kale
+    SoundKey: Thai/Vocabulary/Food/Chinese kale
+    Key: Chinese kale
+    LearnWord: "\u0E04\u0E30\u0E19\u0E49\u0E32"
+    Phonetics: "Ka-n\xE1a"
+    DefaultTranslation: Chinese kale
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Cabbage
+    ImageKey: Thai/Vocabulary/Food/Cabbage
+    SoundKey: Thai/Vocabulary/Food/Cabbage
+    Key: Cabbage
+    LearnWord: "\u0E01\u0E30\u0E2B\u0E25\u0E48\u0E33\u0E1B\u0E25\u0E35"
+    Phonetics: Gra lam bplii
+    DefaultTranslation: Cabbage
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Seasoning
+    ImageKey: Thai/Vocabulary/Food/Seasoning
+    SoundKey: Thai/Vocabulary/Food/Seasoning
+    Key: Seasoning
+    LearnWord: "\u0E40\u0E04\u0E23\u0E37\u0E48\u0E2D\u0E07\u0E1B\u0E23\u0E38\u0E07"
+    Phonetics: Krueang-bprung
+    DefaultTranslation: Seasoning
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Chili
+    ImageKey: Thai/Vocabulary/Food/Chili
+    SoundKey: Thai/Vocabulary/Food/Chili
+    Key: Chili
+    LearnWord: "\u0E1E\u0E23\u0E34\u0E01"
+    Phonetics: "Pr\xEDk"
+    DefaultTranslation: Chili
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Pepper
+    ImageKey: Thai/Vocabulary/Food/Pepper
+    SoundKey: Thai/Vocabulary/Food/Pepper
+    Key: Pepper
+    LearnWord: "\u0E1E\u0E23\u0E34\u0E01\u0E44\u0E17\u0E22"
+    Phonetics: "Pr\xEDk tai"
+    DefaultTranslation: Pepper
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Garlic
+    ImageKey: Thai/Vocabulary/Food/Garlic
+    SoundKey: Thai/Vocabulary/Food/Garlic
+    Key: Garlic
+    LearnWord: "\u0E01\u0E23\u0E30\u0E40\u0E17\u0E35\u0E22\u0E21"
+    Phonetics: Gra tiam
+    DefaultTranslation: Garlic
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Lime
+    ImageKey: Thai/Vocabulary/Food/Lime
+    SoundKey: Thai/Vocabulary/Food/Lime
+    Key: Lime
+    LearnWord: "\u0E21\u0E30\u0E19\u0E32\u0E27"
+    Phonetics: "M\xE1 Naaw"
+    DefaultTranslation: Lime
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Noodle soup
+    ImageKey: Thai/Vocabulary/Food/Noodle soup
+    SoundKey: Thai/Vocabulary/Food/Noodle soup
+    Key: Noodle soup
+    LearnWord: "\u0E01\u0E4B\u0E27\u0E22\u0E40\u0E15\u0E35\u0E4B\u0E22\u0E27"
+    Phonetics: "Gu\xE0y dt\xEEaw"
+    DefaultTranslation: Noodle soup
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Spicy sour soup
+    ImageKey: Thai/Vocabulary/Food/Spicy sour soup
+    SoundKey: Thai/Vocabulary/Food/Spicy sour soup
+    Key: Spicy sour soup
+    LearnWord: "\u0E15\u0E49\u0E21\u0E22\u0E33"
+    Phonetics: "Dt\xF4m yam"
+    DefaultTranslation: Spicy sour soup
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Stir fried noodles with peanuts
+    ImageKey: Thai/Vocabulary/Food/Stir fried noodles with peanuts
+    SoundKey: Thai/Vocabulary/Food/Stir fried noodles with peanuts
+    Key: Stir fried noodles with peanuts
+    LearnWord: "\u0E1C\u0E31\u0E14\u0E44\u0E17\u0E22"
+    Phonetics: Phad Thai
+    DefaultTranslation: Stir fried noodles with peanuts
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Stir fried basil
+    ImageKey: Thai/Vocabulary/Food/Stir fried basil
+    SoundKey: Thai/Vocabulary/Food/Stir fried basil
+    Key: Stir fried basil
+    LearnWord: "\u0E1C\u0E31\u0E14\u0E01\u0E30\u0E40\u0E1E\u0E23\u0E32"
+    Phonetics: "P\xE1t gapraw"
+    DefaultTranslation: Stir fried basil
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Stir fried mixed vegetables
+    ImageKey: Thai/Vocabulary/Food/Stir fried mixed vegetables
+    SoundKey: Thai/Vocabulary/Food/Stir fried mixed vegetables
+    Key: Stir fried mixed vegetables
+    LearnWord: "\u0E1C\u0E31\u0E14\u0E1C\u0E31\u0E01\u0E23\u0E27\u0E21"
+    Phonetics: "P\xE1t p\xE1kruam"
+    DefaultTranslation: Stir fried mixed vegetables
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Green curry
+    ImageKey: Thai/Vocabulary/Food/Green curry
+    SoundKey: Thai/Vocabulary/Food/Green curry
+    Key: Green curry
+    LearnWord: "\u0E41\u0E01\u0E07\u0E40\u0E02\u0E35\u0E22\u0E27\u0E2B\u0E27\u0E32\u0E19"
+    Phonetics: "Gaeng K\u01D0aw W\u01CEan"
+    DefaultTranslation: Green curry
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Papaya salad_Central Thai style_
+    ImageKey: Thai/Vocabulary/Food/Papaya salad_Central Thai style_
+    SoundKey: Thai/Vocabulary/Food/Papaya salad_Central Thai style_
+    Key: Papaya salad_Central Thai style_
+    LearnWord: "\u0E2A\u0E49\u0E21\u0E15\u0E33\u0E44\u0E17\u0E22"
+    Phonetics: "S\xF4m dtam Thai"
+    DefaultTranslation: Papaya salad (Central Thai style)
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Fried egg
+    ImageKey: Thai/Vocabulary/Food/Fried egg
+    SoundKey: Thai/Vocabulary/Food/Fried egg
+    Key: Fried egg
+    LearnWord: "\u0E44\u0E02\u0E48\u0E14\u0E32\u0E27"
+    Phonetics: "K\xE0i daaw"
+    DefaultTranslation: Fried egg
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Omelette
+    ImageKey: Thai/Vocabulary/Food/Omelette
+    SoundKey: Thai/Vocabulary/Food/Omelette
+    Key: Omelette
+    LearnWord: "\u0E44\u0E02\u0E48\u0E40\u0E08\u0E35\u0E22\u0E27"
+    Phonetics: "K\xE0i jiaw"
+    DefaultTranslation: Omelette
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Boiled egg
+    ImageKey: Thai/Vocabulary/Food/Boiled egg
+    SoundKey: Thai/Vocabulary/Food/Boiled egg
+    Key: Boiled egg
+    LearnWord: "\u0E44\u0E02\u0E48\u0E15\u0E49\u0E21"
+    Phonetics: "K\xE0i dt\xF4m"
+    DefaultTranslation: Boiled egg
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Shrimp
+    ImageKey: Thai/Vocabulary/Food/Shrimp
+    SoundKey: Thai/Vocabulary/Food/Shrimp
+    Key: Shrimp
+    LearnWord: "\u0E01\u0E38\u0E49\u0E07"
+    Phonetics: "G\xFBng"
+    DefaultTranslation: Shrimp
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Squid
+    ImageKey: Thai/Vocabulary/Food/Squid
+    SoundKey: Thai/Vocabulary/Food/Squid
+    Key: Squid
+    LearnWord: "\u0E1B\u0E25\u0E32\u0E2B\u0E21\u0E36\u0E01"
+    Phonetics: "Bplaa m\xE8uk"
+    DefaultTranslation: Squid
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Crab
+    ImageKey: Thai/Vocabulary/Food/Crab
+    SoundKey: Thai/Vocabulary/Food/Crab
+    Key: Crab
+    LearnWord: "\u0E1B\u0E39"
+    Phonetics: Bpuu
+    DefaultTranslation: Crab
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Seafood
+    ImageKey: Thai/Vocabulary/Food/Seafood
+    SoundKey: Thai/Vocabulary/Food/Seafood
+    Key: Seafood
+    LearnWord: "\u0E17\u0E30\u0E40\u0E25"
+    Phonetics: "T\xE1-lee"
+    DefaultTranslation: Seafood
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Crispy pork
+    ImageKey: Thai/Vocabulary/Food/Crispy pork
+    SoundKey: Thai/Vocabulary/Food/Crispy pork
+    Key: Crispy pork
+    LearnWord: "\u0E2B\u0E21\u0E39\u0E01\u0E23\u0E2D\u0E1A"
+    Phonetics: "M\u01D4u gro\xF2rp"
+    DefaultTranslation: Crispy pork
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Minced pork
+    ImageKey: Thai/Vocabulary/Food/Minced pork
+    SoundKey: Thai/Vocabulary/Food/Minced pork
+    Key: Minced pork
+    LearnWord: "\u0E2B\u0E21\u0E39\u0E2A\u0E31\u0E1A"
+    Phonetics: "M\u01D4u s\xE0b"
+    DefaultTranslation: Minced pork
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Cucumber
+    ImageKey: Thai/Vocabulary/Food/Cucumber
+    SoundKey: Thai/Vocabulary/Food/Cucumber
+    Key: Cucumber
+    LearnWord: "\u0E41\u0E15\u0E07\u0E01\u0E27\u0E32"
+    Phonetics: "Dt\xE0aeng gwaa"
+    DefaultTranslation: Cucumber
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Carrot
+    ImageKey: Thai/Vocabulary/Food/Carrot
+    SoundKey: Thai/Vocabulary/Food/Carrot
+    Key: Carrot
+    LearnWord: "\u0E41\u0E04\u0E23\u0E4C\u0E23\u0E2D\u0E15"
+    Phonetics: "Kae-r\xF4t"
+    DefaultTranslation: Carrot
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Onion
+    ImageKey: Thai/Vocabulary/Food/Onion
+    SoundKey: Thai/Vocabulary/Food/Onion
+    Key: Onion
+    LearnWord: "\u0E2B\u0E2D\u0E21\u0E43\u0E2B\u0E0D\u0E48"
+    Phonetics: "H\xF2rm yai"
+    DefaultTranslation: Onion
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Morning glory
+    ImageKey: Thai/Vocabulary/Food/Morning glory
+    SoundKey: Thai/Vocabulary/Food/Morning glory
+    Key: Morning glory
+    LearnWord: "\u0E1C\u0E31\u0E01\u0E1A\u0E38\u0E49\u0E07"
+    Phonetics: "P\xE0k b\xFBng"
+    DefaultTranslation: Morning glory
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Long bean
+    ImageKey: Thai/Vocabulary/Food/Long bean
+    SoundKey: Thai/Vocabulary/Food/Long bean
+    Key: Long bean
+    LearnWord: "\u0E16\u0E31\u0E48\u0E27\u0E1D\u0E31\u0E01\u0E22\u0E32\u0E27"
+    Phonetics: "T\xF9a f\xE0k yaao"
+    DefaultTranslation: Long bean
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Mushroom
+    ImageKey: Thai/Vocabulary/Food/Mushroom
+    SoundKey: Thai/Vocabulary/Food/Mushroom
+    Key: Mushroom
+    LearnWord: "\u0E40\u0E2B\u0E47\u0E14"
+    Phonetics: "H\xE8t"
+    DefaultTranslation: Mushroom
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Fish sauce
+    ImageKey: Thai/Vocabulary/Food/Fish sauce
+    SoundKey: Thai/Vocabulary/Food/Fish sauce
+    Key: Fish sauce
+    LearnWord: "\u0E19\u0E49\u0E33\u0E1B\u0E25\u0E32"
+    Phonetics: Nam bplaa
+    DefaultTranslation: Fish sauce
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Sugar
+    ImageKey: Thai/Vocabulary/Food/Sugar
+    SoundKey: Thai/Vocabulary/Food/Sugar
+    Key: Sugar
+    LearnWord: "\u0E19\u0E49\u0E33\u0E15\u0E32\u0E25"
+    Phonetics: "N\xE1m dtaan"
+    DefaultTranslation: Sugar
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Vinegar
+    ImageKey: Thai/Vocabulary/Food/Vinegar
+    SoundKey: Thai/Vocabulary/Food/Vinegar
+    Key: Vinegar
+    LearnWord: "\u0E19\u0E49\u0E33\u0E2A\u0E49\u0E21\u0E2A\u0E32\u0E22\u0E0A\u0E39"
+    Phonetics: "Nam s\xF4m saay chuu"
+    DefaultTranslation: Vinegar
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Salt
+    ImageKey: Thai/Vocabulary/Food/Salt
+    SoundKey: Thai/Vocabulary/Food/Salt
+    Key: Salt
+    LearnWord: "\u0E40\u0E01\u0E25\u0E37\u0E2D"
+    Phonetics: Gluea
+    DefaultTranslation: Salt
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Soy sauce
+    ImageKey: Thai/Vocabulary/Food/Soy sauce
+    SoundKey: Thai/Vocabulary/Food/Soy sauce
+    Key: Soy sauce
+    LearnWord: "\u0E0B\u0E2D\u0E2A\u0E16\u0E31\u0E48\u0E27\u0E40\u0E2B\u0E25\u0E37\u0E2D\u0E07"
+    Phonetics: "S\xF3ot t\xF9a-l\u01D4eang"
+    DefaultTranslation: Soy sauce
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Light soy sauce
+    ImageKey: Thai/Vocabulary/Food/Light soy sauce
+    SoundKey: Thai/Vocabulary/Food/Light soy sauce
+    Key: Light soy sauce
+    LearnWord: "\u0E0B\u0E35\u0E2D\u0E34\u0E4A\u0E27\u0E02\u0E32\u0E27"
+    Phonetics: "Sii-\xEDw k\u01CEao"
+    DefaultTranslation: Light soy sauce
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Spicy
+    ImageKey: Thai/Vocabulary/Food/Spicy
+    SoundKey: Thai/Vocabulary/Food/Spicy
+    Key: Spicy
+    LearnWord: "\u0E40\u0E1C\u0E47\u0E14"
+    Phonetics: "P\xE8t"
+    DefaultTranslation: Spicy
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Not spicy
+    ImageKey: Thai/Vocabulary/Food/Not spicy
+    SoundKey: Thai/Vocabulary/Food/Not spicy
+    Key: Not spicy
+    LearnWord: "\u0E44\u0E21\u0E48\u0E40\u0E1C\u0E47\u0E14"
+    Phonetics: "M\xE2i p\xE8t"
+    DefaultTranslation: Not spicy
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/A little spicy
+    ImageKey: Thai/Vocabulary/Food/A little spicy
+    SoundKey: Thai/Vocabulary/Food/A little spicy
+    Key: A little spicy
+    LearnWord: "\u0E40\u0E1C\u0E47\u0E14\u0E19\u0E34\u0E14\u0E2B\u0E19\u0E48\u0E2D\u0E22"
+    Phonetics: "P\xE8t n\xEDt-n\xF2i"
+    DefaultTranslation: A little spicy
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Delicious
+    ImageKey: Thai/Vocabulary/Food/Delicious
+    SoundKey: Thai/Vocabulary/Food/Delicious
+    Key: Delicious
+    LearnWord: "\u0E2D\u0E23\u0E48\u0E2D\u0E22"
+    Phonetics: "\xC0-r\xF2i"
+    DefaultTranslation: Delicious
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Rice
+    ImageKey: Thai/Vocabulary/Food/Rice
+    SoundKey: Thai/Vocabulary/Food/Rice
+    Key: Rice
+    LearnWord: "\u0E02\u0E49\u0E32\u0E27"
+    Phonetics: "K\xE2aw"
+    DefaultTranslation: Rice
+    DefaultDescription: 
+  - Language: 6
+    Section: Food
+    WordKey: Thai/Vocabulary/Food/Taste
+    ImageKey: Thai/Vocabulary/Food/Taste
+    SoundKey: Thai/Vocabulary/Food/Taste
+    Key: Taste
+    LearnWord: "\u0E0A\u0E34\u0E21"
+    Phonetics: Chim
+    DefaultTranslation: Taste
+    DefaultDescription: try food
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Soft boil
+    ImageKey: Thai/Vocabulary/HowToCook/Soft boil
+    SoundKey: Thai/Vocabulary/HowToCook/Soft boil
+    Key: Soft boil
+    LearnWord: "\u0E25\u0E27\u0E01"
+    Phonetics: "L\xF9ak"
+    DefaultTranslation: Soft boil
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Boil
+    ImageKey: Thai/Vocabulary/HowToCook/Boil
+    SoundKey: Thai/Vocabulary/HowToCook/Boil
+    Key: Boil
+    LearnWord: "\u0E15\u0E49\u0E21"
+    Phonetics: "Dt\xF4m"
+    DefaultTranslation: Boil
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Spicy sour soup
+    ImageKey: Thai/Vocabulary/HowToCook/Spicy sour soup
+    SoundKey: Thai/Vocabulary/HowToCook/Spicy sour soup
+    Key: Spicy sour soup
+    LearnWord: "\u0E15\u0E49\u0E21\u0E22\u0E33"
+    Phonetics: "Dt\xF4m yam"
+    DefaultTranslation: Spicy sour soup
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Spicy sour salad
+    ImageKey: Thai/Vocabulary/HowToCook/Spicy sour salad
+    SoundKey: Thai/Vocabulary/HowToCook/Spicy sour salad
+    Key: Spicy sour salad
+    LearnWord: "\u0E22\u0E33"
+    Phonetics: Yam
+    DefaultTranslation: Spicy sour salad
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Stir fry
+    ImageKey: Thai/Vocabulary/HowToCook/Stir fry
+    SoundKey: Thai/Vocabulary/HowToCook/Stir fry
+    Key: Stir fry
+    LearnWord: "\u0E1C\u0E31\u0E14"
+    Phonetics: "P\xE0t"
+    DefaultTranslation: Stir fry
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Deep fry
+    ImageKey: Thai/Vocabulary/HowToCook/Deep fry
+    SoundKey: Thai/Vocabulary/HowToCook/Deep fry
+    Key: Deep fry
+    LearnWord: "\u0E17\u0E2D\u0E14"
+    Phonetics: "T\xF2rt"
+    DefaultTranslation: Deep fry
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Curry
+    ImageKey: Thai/Vocabulary/HowToCook/Curry
+    SoundKey: Thai/Vocabulary/HowToCook/Curry
+    Key: Curry
+    LearnWord: "\u0E41\u0E01\u0E07"
+    Phonetics: Gaaeng
+    DefaultTranslation: Curry
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Grill
+    ImageKey: Thai/Vocabulary/HowToCook/Grill
+    SoundKey: Thai/Vocabulary/HowToCook/Grill
+    Key: Grill
+    LearnWord: "\u0E22\u0E48\u0E32\u0E07"
+    Phonetics: "Y\xE2ang"
+    DefaultTranslation: Grill
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Toast
+    ImageKey: Thai/Vocabulary/HowToCook/Toast
+    SoundKey: Thai/Vocabulary/HowToCook/Toast
+    Key: Toast
+    LearnWord: "\u0E1B\u0E34\u0E49\u0E07"
+    Phonetics: "Bp\xEEng"
+    DefaultTranslation: Toast
+    DefaultDescription: 
+  - Language: 6
+    Section: HowToCook
+    WordKey: Thai/Vocabulary/HowToCook/Bake
+    ImageKey: Thai/Vocabulary/HowToCook/Bake
+    SoundKey: Thai/Vocabulary/HowToCook/Bake
+    Key: Bake
+    LearnWord: "\u0E2D\u0E1A"
+    Phonetics: "\xD4b"
+    DefaultTranslation: Bake
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/Month
+    ImageKey: Thai/Vocabulary/Months/Month
+    SoundKey: Thai/Vocabulary/Months/Month
+    Key: Month
+    LearnWord: "\u0E40\u0E14\u0E37\u0E2D\u0E19"
+    Phonetics: Duean
+    DefaultTranslation: Month
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/January
+    ImageKey: Thai/Vocabulary/Months/January
+    SoundKey: Thai/Vocabulary/Months/January
+    Key: January
+    LearnWord: "\u0E21\u0E01\u0E23\u0E32\u0E04\u0E21"
+    Phonetics: "m\xE1 ga ra kom"
+    DefaultTranslation: January
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/February
+    ImageKey: Thai/Vocabulary/Months/February
+    SoundKey: Thai/Vocabulary/Months/February
+    Key: February
+    LearnWord: "\u0E01\u0E38\u0E21\u0E20\u0E32\u0E1E\u0E31\u0E19\u0E18\u0E4C"
+    Phonetics: gum paa pan
+    DefaultTranslation: February
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/March
+    ImageKey: Thai/Vocabulary/Months/March
+    SoundKey: Thai/Vocabulary/Months/March
+    Key: March
+    LearnWord: "\u0E21\u0E35\u0E19\u0E32\u0E04\u0E21"
+    Phonetics: mii naa kom
+    DefaultTranslation: March
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/April
+    ImageKey: Thai/Vocabulary/Months/April
+    SoundKey: Thai/Vocabulary/Months/April
+    Key: April
+    LearnWord: "\u0E40\u0E21\u0E29\u0E32\u0E22\u0E19"
+    Phonetics: mee saa yon
+    DefaultTranslation: April
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/May
+    ImageKey: Thai/Vocabulary/Months/May
+    SoundKey: Thai/Vocabulary/Months/May
+    Key: May
+    LearnWord: "\u0E1E\u0E24\u0E29\u0E20\u0E32\u0E04\u0E21"
+    Phonetics: "pr\xFAet sa paa kom"
+    DefaultTranslation: May
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/June
+    ImageKey: Thai/Vocabulary/Months/June
+    SoundKey: Thai/Vocabulary/Months/June
+    Key: June
+    LearnWord: "\u0E21\u0E34\u0E16\u0E38\u0E19\u0E32\u0E22\u0E19"
+    Phonetics: "mi th\xFA naa yon"
+    DefaultTranslation: June
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/July
+    ImageKey: Thai/Vocabulary/Months/July
+    SoundKey: Thai/Vocabulary/Months/July
+    Key: July
+    LearnWord: "\u0E01\u0E23\u0E01\u0E0E\u0E32\u0E04\u0E21"
+    Phonetics: "g\xE0 r\xE0k g\xE0 daa kom"
+    DefaultTranslation: July
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/August
+    ImageKey: Thai/Vocabulary/Months/August
+    SoundKey: Thai/Vocabulary/Months/August
+    Key: August
+    LearnWord: "\u0E2A\u0E34\u0E07\u0E2B\u0E32\u0E04\u0E21"
+    Phonetics: "sing h\xE2a kom"
+    DefaultTranslation: August
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/September
+    ImageKey: Thai/Vocabulary/Months/September
+    SoundKey: Thai/Vocabulary/Months/September
+    Key: September
+    LearnWord: "\u0E01\u0E31\u0E19\u0E22\u0E32\u0E22\u0E19"
+    Phonetics: Gan-yaa-yon
+    DefaultTranslation: September
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/October
+    ImageKey: Thai/Vocabulary/Months/October
+    SoundKey: Thai/Vocabulary/Months/October
+    Key: October
+    LearnWord: "\u0E15\u0E38\u0E25\u0E32\u0E04\u0E21"
+    Phonetics: "dt\xF9 laa kom"
+    DefaultTranslation: October
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/November
+    ImageKey: Thai/Vocabulary/Months/November
+    SoundKey: Thai/Vocabulary/Months/November
+    Key: November
+    LearnWord: "\u0E1E\u0E24\u0E28\u0E08\u0E34\u0E01\u0E32\u0E22\u0E19"
+    Phonetics: "pr\xFAet s\xE0 jii gaa yon"
+    DefaultTranslation: November
+    DefaultDescription: 
+  - Language: 6
+    Section: Months
+    WordKey: Thai/Vocabulary/Months/December
+    ImageKey: Thai/Vocabulary/Months/December
+    SoundKey: Thai/Vocabulary/Months/December
+    Key: December
+    LearnWord: "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21"
+    Phonetics: Tan-waa-kom
+    DefaultTranslation: December
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Coffee
+    ImageKey: Thai/Vocabulary/Beverages/Coffee
+    SoundKey: Thai/Vocabulary/Beverages/Coffee
+    Key: Coffee
+    LearnWord: "\u0E01\u0E32\u0E41\u0E1F"
+    Phonetics: Gaa-faae
+    DefaultTranslation: Coffee
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Tea
+    ImageKey: Thai/Vocabulary/Beverages/Tea
+    SoundKey: Thai/Vocabulary/Beverages/Tea
+    Key: Tea
+    LearnWord: "\u0E0A\u0E32"
+    Phonetics: Chaa
+    DefaultTranslation: Tea
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Green tea
+    ImageKey: Thai/Vocabulary/Beverages/Green tea
+    SoundKey: Thai/Vocabulary/Beverages/Green tea
+    Key: Green tea
+    LearnWord: "\u0E0A\u0E32\u0E40\u0E02\u0E35\u0E22\u0E27"
+    Phonetics: Chaa-kiaw
+    DefaultTranslation: Green tea
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Thai tea
+    ImageKey: Thai/Vocabulary/Beverages/Thai tea
+    SoundKey: Thai/Vocabulary/Beverages/Thai tea
+    Key: Thai tea
+    LearnWord: "\u0E0A\u0E32\u0E44\u0E17\u0E22"
+    Phonetics: Chaa Thai
+    DefaultTranslation: Thai tea
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Lemon tea
+    ImageKey: Thai/Vocabulary/Beverages/Lemon tea
+    SoundKey: Thai/Vocabulary/Beverages/Lemon tea
+    Key: Lemon tea
+    LearnWord: "\u0E0A\u0E32\u0E21\u0E30\u0E19\u0E32\u0E27"
+    Phonetics: Chaa ma-naaw
+    DefaultTranslation: Lemon tea
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Cocoa
+    ImageKey: Thai/Vocabulary/Beverages/Cocoa
+    SoundKey: Thai/Vocabulary/Beverages/Cocoa
+    Key: Cocoa
+    LearnWord: "\u0E42\u0E01\u0E42\u0E01\u0E49"
+    Phonetics: Goo-goo
+    DefaultTranslation: Cocoa
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Milk
+    ImageKey: Thai/Vocabulary/Beverages/Milk
+    SoundKey: Thai/Vocabulary/Beverages/Milk
+    Key: Milk
+    LearnWord: "\u0E19\u0E21"
+    Phonetics: Nom
+    DefaultTranslation: Milk
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Hot
+    ImageKey: Thai/Vocabulary/Beverages/Hot
+    SoundKey: Thai/Vocabulary/Beverages/Hot
+    Key: Hot
+    LearnWord: "\u0E23\u0E49\u0E2D\u0E19"
+    Phonetics: "R\xF4orn"
+    DefaultTranslation: Hot
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Cold_for drink_with ice
+    ImageKey: Thai/Vocabulary/Beverages/Cold_for drink_with ice
+    SoundKey: Thai/Vocabulary/Beverages/Cold_for drink_with ice
+    Key: Cold_for drink_with ice
+    LearnWord: "\u0E40\u0E22\u0E47\u0E19"
+    Phonetics: Yen
+    DefaultTranslation: Cold (for drink), with ice
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Smoothie_Blend
+    ImageKey: Thai/Vocabulary/Beverages/Smoothie_Blend
+    SoundKey: Thai/Vocabulary/Beverages/Smoothie_Blend
+    Key: Smoothie_Blend
+    LearnWord: "\u0E1B\u0E31\u0E48\u0E19"
+    Phonetics: "Bp\xE0n"
+    DefaultTranslation: Smoothie, Blend
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Water_Normal_
+    ImageKey: Thai/Vocabulary/Beverages/Water_Normal_
+    SoundKey: Thai/Vocabulary/Beverages/Water_Normal_
+    Key: Water_Normal_
+    LearnWord: "\u0E19\u0E49\u0E33 (\u0E40\u0E1B\u0E25\u0E48\u0E32)"
+    Phonetics: "N\xE1m (bpl\xE0ao)"
+    DefaultTranslation: Water (Normal)
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Not cold_Room_temperature
+    ImageKey: Thai/Vocabulary/Beverages/Not cold_Room_temperature
+    SoundKey: Thai/Vocabulary/Beverages/Not cold_Room_temperature
+    Key: Not cold_Room_temperature
+    LearnWord: "\u0E44\u0E21\u0E48\u0E40\u0E22\u0E47\u0E19"
+    Phonetics: "M\xE0i yen"
+    DefaultTranslation: 'Not cold,
+
+      Room-temperature'
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Soda
+    ImageKey: Thai/Vocabulary/Beverages/Soda
+    SoundKey: Thai/Vocabulary/Beverages/Soda
+    Key: Soda
+    LearnWord: "\u0E42\u0E0B\u0E14\u0E32"
+    Phonetics: Soda
+    DefaultTranslation: Soda
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Red wine
+    ImageKey: Thai/Vocabulary/Beverages/Red wine
+    SoundKey: Thai/Vocabulary/Beverages/Red wine
+    Key: Red wine
+    LearnWord: "\u0E44\u0E27\u0E19\u0E4C\u0E41\u0E14\u0E07"
+    Phonetics: Wine daaeng
+    DefaultTranslation: Red wine
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/White wine
+    ImageKey: Thai/Vocabulary/Beverages/White wine
+    SoundKey: Thai/Vocabulary/Beverages/White wine
+    Key: White wine
+    LearnWord: "\u0E44\u0E27\u0E19\u0E4C\u0E02\u0E32\u0E27"
+    Phonetics: "Wine k\u01CEaw"
+    DefaultTranslation: White wine
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Beer
+    ImageKey: Thai/Vocabulary/Beverages/Beer
+    SoundKey: Thai/Vocabulary/Beverages/Beer
+    Key: Beer
+    LearnWord: "\u0E40\u0E1A\u0E35\u0E22\u0E23\u0E4C"
+    Phonetics: Beer
+    DefaultTranslation: Beer
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Liquor
+    ImageKey: Thai/Vocabulary/Beverages/Liquor
+    SoundKey: Thai/Vocabulary/Beverages/Liquor
+    Key: Liquor
+    LearnWord: "\u0E40\u0E2B\u0E25\u0E49\u0E32"
+    Phonetics: "L\xE2w"
+    DefaultTranslation: Liquor
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/_Juice
+    ImageKey: Thai/Vocabulary/Beverages/_Juice
+    SoundKey: Thai/Vocabulary/Beverages/_Juice
+    Key: _Juice
+    LearnWord: "\u0E19\u0E49\u0E33\u0E1C\u0E25\u0E44\u0E21\u0E49"
+    Phonetics: "N\xE1m Pon-l\xE1-m\xE1i"
+    DefaultTranslation: ... Juice
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Ice
+    ImageKey: Thai/Vocabulary/Beverages/Ice
+    SoundKey: Thai/Vocabulary/Beverages/Ice
+    Key: Ice
+    LearnWord: "\u0E19\u0E49\u0E33\u0E41\u0E02\u0E47\u0E07"
+    Phonetics: "N\xE1m-kaeng"
+    DefaultTranslation: Ice
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Bottle
+    ImageKey: Thai/Vocabulary/Beverages/Bottle
+    SoundKey: Thai/Vocabulary/Beverages/Bottle
+    Key: Bottle
+    LearnWord: "\u0E02\u0E27\u0E14"
+    Phonetics: "K\xF9uat"
+    DefaultTranslation: Bottle
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Can
+    ImageKey: Thai/Vocabulary/Beverages/Can
+    SoundKey: Thai/Vocabulary/Beverages/Can
+    Key: Can
+    LearnWord: "\u0E01\u0E23\u0E30\u0E1B\u0E4B\u0E2D\u0E07"
+    Phonetics: "Gr\xE0-bp\u01D2ng"
+    DefaultTranslation: Can
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Bucket
+    ImageKey: Thai/Vocabulary/Beverages/Bucket
+    SoundKey: Thai/Vocabulary/Beverages/Bucket
+    Key: Bucket
+    LearnWord: "\u0E16\u0E31\u0E07"
+    Phonetics: "T\xF9ng"
+    DefaultTranslation: Bucket
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Classifiers for small items
+    ImageKey: Thai/Vocabulary/Beverages/Classifiers for small items
+    SoundKey: Thai/Vocabulary/Beverages/Classifiers for small items
+    Key: Classifiers for small items
+    LearnWord: "\u0E2D\u0E31\u0E19"
+    Phonetics: An
+    DefaultTranslation: 'Classifiers for
+
+      small items'
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Glass_mug_cup
+    ImageKey: Thai/Vocabulary/Beverages/Glass_mug_cup
+    SoundKey: Thai/Vocabulary/Beverages/Glass_mug_cup
+    Key: Glass_mug_cup
+    LearnWord: "\u0E41\u0E01\u0E49\u0E27"
+    Phonetics: "G\xE2aew"
+    DefaultTranslation: Glass, mug, cup
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Small
+    ImageKey: Thai/Vocabulary/Beverages/Small
+    SoundKey: Thai/Vocabulary/Beverages/Small
+    Key: Small
+    LearnWord: "\u0E40\u0E25\u0E47\u0E01"
+    Phonetics: "L\xE8k"
+    DefaultTranslation: Small
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Medium
+    ImageKey: Thai/Vocabulary/Beverages/Medium
+    SoundKey: Thai/Vocabulary/Beverages/Medium
+    Key: Medium
+    LearnWord: "\u0E01\u0E25\u0E32\u0E07"
+    Phonetics: Glaang
+    DefaultTranslation: Medium
+    DefaultDescription: 
+  - Language: 6
+    Section: Beverages
+    WordKey: Thai/Vocabulary/Beverages/Big_Large
+    ImageKey: Thai/Vocabulary/Beverages/Big_Large
+    SoundKey: Thai/Vocabulary/Beverages/Big_Large
+    Key: Big_Large
+    LearnWord: "\u0E43\u0E2B\u0E0D\u0E48"
+    Phonetics: "Y\xE0i"
+    DefaultTranslation: Big, Large
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Sweet
+    ImageKey: Thai/Vocabulary/Sweetnes/Sweet
+    SoundKey: Thai/Vocabulary/Sweetnes/Sweet
+    Key: Sweet
+    LearnWord: "\u0E2B\u0E27\u0E32\u0E19"
+    Phonetics: "W\u01CEan"
+    DefaultTranslation: Sweet
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Standard sweet
+    ImageKey: Thai/Vocabulary/Sweetnes/Standard sweet
+    SoundKey: Thai/Vocabulary/Sweetnes/Standard sweet
+    Key: Standard sweet
+    LearnWord: "\u0E2B\u0E27\u0E32\u0E19\u0E1B\u0E01\u0E15\u0E34"
+    Phonetics: "W\u01CEan bp\xF2k-g\xE0-dt\xEC"
+    DefaultTranslation: Standard sweet
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Less sweet
+    ImageKey: Thai/Vocabulary/Sweetnes/Less sweet
+    SoundKey: Thai/Vocabulary/Sweetnes/Less sweet
+    Key: Less sweet
+    LearnWord: "\u0E2B\u0E27\u0E32\u0E19\u0E19\u0E49\u0E2D\u0E22"
+    Phonetics: "W\u01CEan n\xF3i"
+    DefaultTranslation: Less sweet
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Not sweet
+    ImageKey: Thai/Vocabulary/Sweetnes/Not sweet
+    SoundKey: Thai/Vocabulary/Sweetnes/Not sweet
+    Key: Not sweet
+    LearnWord: "\u0E44\u0E21\u0E48\u0E2B\u0E27\u0E32\u0E19"
+    Phonetics: "M\xE2i w\u01CEan"
+    DefaultTranslation: Not sweet
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Not sweet at all
+    ImageKey: Thai/Vocabulary/Sweetnes/Not sweet at all
+    SoundKey: Thai/Vocabulary/Sweetnes/Not sweet at all
+    Key: Not sweet at all
+    LearnWord: "\u0E44\u0E21\u0E48\u0E2B\u0E27\u0E32\u0E19\u0E40\u0E25\u0E22"
+    Phonetics: "M\xE2i w\u01CEan loei"
+    DefaultTranslation: Not sweet at all
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Extra sweet_Add more sweet
+    ImageKey: Thai/Vocabulary/Sweetnes/Extra sweet_Add more sweet
+    SoundKey: Thai/Vocabulary/Sweetnes/Extra sweet_Add more sweet
+    Key: Extra sweet_Add more sweet
+    LearnWord: "\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E2B\u0E27\u0E32\u0E19"
+    Phonetics: "P\xF4em w\u01CEan"
+    DefaultTranslation: Extra sweet, Add more sweet
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Add_put in_with
+    ImageKey: Thai/Vocabulary/Sweetnes/Add_put in_with
+    SoundKey: Thai/Vocabulary/Sweetnes/Add_put in_with
+    Key: Add_put in_with
+    LearnWord: "\u0E43\u0E2A\u0E48"
+    Phonetics: "S\xE0i"
+    DefaultTranslation: Add, put in..., with
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/No added_not put_without
+    ImageKey: Thai/Vocabulary/Sweetnes/No added_not put_without
+    SoundKey: Thai/Vocabulary/Sweetnes/No added_not put_without
+    Key: No added_not put_without
+    LearnWord: "\u0E44\u0E21\u0E48\u0E43\u0E2A\u0E48"
+    Phonetics: "M\xE0i s\xE0i"
+    DefaultTranslation: No added, not put, without
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Sugar
+    ImageKey: Thai/Vocabulary/Sweetnes/Sugar
+    SoundKey: Thai/Vocabulary/Sweetnes/Sugar
+    Key: Sugar
+    LearnWord: "\u0E19\u0E49\u0E33\u0E15\u0E32\u0E25"
+    Phonetics: "N\xE1m-dtaan"
+    DefaultTranslation: Sugar
+    DefaultDescription: 
+  - Language: 6
+    Section: Sweetnes
+    WordKey: Thai/Vocabulary/Sweetnes/Syrup
+    ImageKey: Thai/Vocabulary/Sweetnes/Syrup
+    SoundKey: Thai/Vocabulary/Sweetnes/Syrup
+    Key: Syrup
+    LearnWord: "\u0E19\u0E49\u0E33\u0E40\u0E0A\u0E37\u0E48\u0E2D\u0E21"
+    Phonetics: "N\xE1m-Ch\xFAeam"
+    DefaultTranslation: Syrup
+    DefaultDescription: 
+  - Language: 6
+    Section: PointThings
+    WordKey: Thai/Vocabulary/PointThings/This
+    ImageKey: Thai/Vocabulary/PointThings/This
+    SoundKey: Thai/Vocabulary/PointThings/This
+    Key: This
+    LearnWord: "\u0E19\u0E35\u0E48"
+    Phonetics: "N\xEEi"
+    DefaultTranslation: This
+    DefaultDescription: 
+  - Language: 6
+    Section: PointThings
+    WordKey: Thai/Vocabulary/PointThings/That
+    ImageKey: Thai/Vocabulary/PointThings/That
+    SoundKey: Thai/Vocabulary/PointThings/That
+    Key: That
+    LearnWord: "\u0E19\u0E31\u0E49\u0E19"
+    Phonetics: "N\xE2n"
+    DefaultTranslation: That
+    DefaultDescription: 
+  - Language: 6
+    Section: PointThings
+    WordKey: Thai/Vocabulary/PointThings/Over there
+    ImageKey: Thai/Vocabulary/PointThings/Over there
+    SoundKey: Thai/Vocabulary/PointThings/Over there
+    Key: Over there
+    LearnWord: "\u0E42\u0E19\u0E48\u0E19"
+    Phonetics: "N\xF4on"
+    DefaultTranslation: Over there
+    DefaultDescription: 
+  - Language: 6
+    Section: PointThings
+    WordKey: Thai/Vocabulary/PointThings/This one
+    ImageKey: Thai/Vocabulary/PointThings/This one
+    SoundKey: Thai/Vocabulary/PointThings/This one
+    Key: This one
+    LearnWord: "\u0E2D\u0E31\u0E19\u0E19\u0E35\u0E49"
+    Phonetics: "An-n\xEEi"
+    DefaultTranslation: This one
+    DefaultDescription: 
+  - Language: 6
+    Section: PointThings
+    WordKey: Thai/Vocabulary/PointThings/That one
+    ImageKey: Thai/Vocabulary/PointThings/That one
+    SoundKey: Thai/Vocabulary/PointThings/That one
+    Key: That one
+    LearnWord: "\u0E2D\u0E31\u0E19\u0E19\u0E31\u0E49\u0E19"
+    Phonetics: "An-n\xE2n"
+    DefaultTranslation: That one
+    DefaultDescription: 
+  - Language: 6
+    Section: PointThings
+    WordKey: Thai/Vocabulary/PointThings/That one over there
+    ImageKey: Thai/Vocabulary/PointThings/That one over there
+    SoundKey: Thai/Vocabulary/PointThings/That one over there
+    Key: That one over there
+    LearnWord: "\u0E2D\u0E31\u0E19\u0E42\u0E19\u0E48\u0E19"
+    Phonetics: "An-n\xF4on"
+    DefaultTranslation: That one over there
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Fruit
+    ImageKey: Thai/Vocabulary/Fruits/Fruit
+    SoundKey: Thai/Vocabulary/Fruits/Fruit
+    Key: Fruit
+    LearnWord: "\u0E1C\u0E25\u0E44\u0E21\u0E49"
+    Phonetics: Pon-la-mai
+    DefaultTranslation: Fruit
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Watermelon
+    ImageKey: Thai/Vocabulary/Fruits/Watermelon
+    SoundKey: Thai/Vocabulary/Fruits/Watermelon
+    Key: Watermelon
+    LearnWord: "\u0E41\u0E15\u0E07\u0E42\u0E21"
+    Phonetics: Dtaaeng-moo
+    DefaultTranslation: Watermelon
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Mango
+    ImageKey: Thai/Vocabulary/Fruits/Mango
+    SoundKey: Thai/Vocabulary/Fruits/Mango
+    Key: Mango
+    LearnWord: "\u0E21\u0E30\u0E21\u0E48\u0E27\u0E07"
+    Phonetics: "M\xE1-m\xFBang"
+    DefaultTranslation: Mango
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Pineapple
+    ImageKey: Thai/Vocabulary/Fruits/Pineapple
+    SoundKey: Thai/Vocabulary/Fruits/Pineapple
+    Key: Pineapple
+    LearnWord: "\u0E2A\u0E31\u0E1A\u0E1B\u0E30\u0E23\u0E14"
+    Phonetics: "S\xE0b-bp\xE0-r\xF3t"
+    DefaultTranslation: Pineapple
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Papaya
+    ImageKey: Thai/Vocabulary/Fruits/Papaya
+    SoundKey: Thai/Vocabulary/Fruits/Papaya
+    Key: Papaya
+    LearnWord: "\u0E21\u0E30\u0E25\u0E30\u0E01\u0E2D"
+    Phonetics: "M\xE1-l\xE1-gor"
+    DefaultTranslation: Papaya
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Guava
+    ImageKey: Thai/Vocabulary/Fruits/Guava
+    SoundKey: Thai/Vocabulary/Fruits/Guava
+    Key: Guava
+    LearnWord: "\u0E1D\u0E23\u0E31\u0E48\u0E07"
+    Phonetics: "F\xE1-r\xE0ng"
+    DefaultTranslation: Guava
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Banana
+    ImageKey: Thai/Vocabulary/Fruits/Banana
+    SoundKey: Thai/Vocabulary/Fruits/Banana
+    Key: Banana
+    LearnWord: "\u0E01\u0E25\u0E49\u0E27\u0E22"
+    Phonetics: "Gl\xFBay"
+    DefaultTranslation: Banana
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Orange
+    ImageKey: Thai/Vocabulary/Fruits/Orange
+    SoundKey: Thai/Vocabulary/Fruits/Orange
+    Key: Orange
+    LearnWord: "\u0E2A\u0E49\u0E21"
+    Phonetics: "S\xF4m"
+    DefaultTranslation: Orange
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Coconut
+    ImageKey: Thai/Vocabulary/Fruits/Coconut
+    SoundKey: Thai/Vocabulary/Fruits/Coconut
+    Key: Coconut
+    LearnWord: "\u0E21\u0E30\u0E1E\u0E23\u0E49\u0E32\u0E27"
+    Phonetics: "M\xE1-pr\xE1ao"
+    DefaultTranslation: Coconut
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Durian
+    ImageKey: Thai/Vocabulary/Fruits/Durian
+    SoundKey: Thai/Vocabulary/Fruits/Durian
+    Key: Durian
+    LearnWord: "\u0E17\u0E38\u0E40\u0E23\u0E35\u0E22\u0E19"
+    Phonetics: "T\xFA-rian"
+    DefaultTranslation: Durian
+    DefaultDescription: 
+  - Language: 6
+    Section: Fruits
+    WordKey: Thai/Vocabulary/Fruits/Ripe
+    ImageKey: Thai/Vocabulary/Fruits/Ripe
+    SoundKey: Thai/Vocabulary/Fruits/Ripe
+    Key: Ripe
+    LearnWord: "\u0E2A\u0E38\u0E01"
+    Phonetics: "S\xF9k"
+    DefaultTranslation: Ripe
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/1
+    ImageKey: Thai/Vocabulary/Numbers/1
+    SoundKey: Thai/Vocabulary/Numbers/1
+    Key: 1
+    LearnWord: "\u0E2B\u0E19\u0E36\u0E48\u0E07"
+    Phonetics: "N\xE8ung"
+    DefaultTranslation: 1
+    DefaultDescription: one
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/2
+    ImageKey: Thai/Vocabulary/Numbers/2
+    SoundKey: Thai/Vocabulary/Numbers/2
+    Key: 2
+    LearnWord: "\u0E2A\u0E2D\u0E07"
+    Phonetics: "S\u01D2ng"
+    DefaultTranslation: 2
+    DefaultDescription: two
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/3
+    ImageKey: Thai/Vocabulary/Numbers/3
+    SoundKey: Thai/Vocabulary/Numbers/3
+    Key: 3
+    LearnWord: "\u0E2A\u0E32\u0E21"
+    Phonetics: "S\u0103am"
+    DefaultTranslation: 3
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/4
+    ImageKey: Thai/Vocabulary/Numbers/4
+    SoundKey: Thai/Vocabulary/Numbers/4
+    Key: 4
+    LearnWord: "\u0E2A\u0E35\u0E48"
+    Phonetics: "S\xECi"
+    DefaultTranslation: 4
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/5
+    ImageKey: Thai/Vocabulary/Numbers/5
+    SoundKey: Thai/Vocabulary/Numbers/5
+    Key: 5
+    LearnWord: "\u0E2B\u0E49\u0E32"
+    Phonetics: "H\xE2a"
+    DefaultTranslation: 5
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/6
+    ImageKey: Thai/Vocabulary/Numbers/6
+    SoundKey: Thai/Vocabulary/Numbers/6
+    Key: 6
+    LearnWord: "\u0E2B\u0E01"
+    Phonetics: "H\xF2k"
+    DefaultTranslation: 6
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/7
+    ImageKey: Thai/Vocabulary/Numbers/7
+    SoundKey: Thai/Vocabulary/Numbers/7
+    Key: 7
+    LearnWord: "\u0E40\u0E08\u0E47\u0E14"
+    Phonetics: "J\xE8t"
+    DefaultTranslation: 7
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/8
+    ImageKey: Thai/Vocabulary/Numbers/8
+    SoundKey: Thai/Vocabulary/Numbers/8
+    Key: 8
+    LearnWord: "\u0E41\u0E1B\u0E14"
+    Phonetics: "Bp\xE0et"
+    DefaultTranslation: 8
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/9
+    ImageKey: Thai/Vocabulary/Numbers/9
+    SoundKey: Thai/Vocabulary/Numbers/9
+    Key: 9
+    LearnWord: "\u0E40\u0E01\u0E49\u0E32"
+    Phonetics: "G\xE2o"
+    DefaultTranslation: 9
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/10
+    ImageKey: Thai/Vocabulary/Numbers/10
+    SoundKey: Thai/Vocabulary/Numbers/10
+    Key: 10
+    LearnWord: "\u0E2A\u0E34\u0E1A"
+    Phonetics: "S\xECp"
+    DefaultTranslation: 10
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/20
+    ImageKey: Thai/Vocabulary/Numbers/20
+    SoundKey: Thai/Vocabulary/Numbers/20
+    Key: 20
+    LearnWord: "\u0E22\u0E35\u0E48\u0E2A\u0E34\u0E1A"
+    Phonetics: "Y\xEEi-s\xECp"
+    DefaultTranslation: 20
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/30
+    ImageKey: Thai/Vocabulary/Numbers/30
+    SoundKey: Thai/Vocabulary/Numbers/30
+    Key: 30
+    LearnWord: "\u0E2A\u0E32\u0E21\u0E2A\u0E34\u0E1A"
+    Phonetics: "S\u0103am-s\xECp"
+    DefaultTranslation: 30
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/40
+    ImageKey: Thai/Vocabulary/Numbers/40
+    SoundKey: Thai/Vocabulary/Numbers/40
+    Key: 40
+    LearnWord: "\u0E2A\u0E35\u0E48\u0E2A\u0E34\u0E1A"
+    Phonetics: "S\xECi-s\xECp"
+    DefaultTranslation: 40
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/50
+    ImageKey: Thai/Vocabulary/Numbers/50
+    SoundKey: Thai/Vocabulary/Numbers/50
+    Key: 50
+    LearnWord: "\u0E2B\u0E49\u0E32\u0E2A\u0E34\u0E1A"
+    Phonetics: "H\xE2a-s\xECp"
+    DefaultTranslation: 50
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/60
+    ImageKey: Thai/Vocabulary/Numbers/60
+    SoundKey: Thai/Vocabulary/Numbers/60
+    Key: 60
+    LearnWord: "\u0E2B\u0E01\u0E2A\u0E34\u0E1A"
+    Phonetics: "H\xF2k-s\xECp"
+    DefaultTranslation: 60
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/70
+    ImageKey: Thai/Vocabulary/Numbers/70
+    SoundKey: Thai/Vocabulary/Numbers/70
+    Key: 70
+    LearnWord: "\u0E40\u0E08\u0E47\u0E14\u0E2A\u0E34\u0E1A"
+    Phonetics: "J\xE8t-s\xECp"
+    DefaultTranslation: 70
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/80
+    ImageKey: Thai/Vocabulary/Numbers/80
+    SoundKey: Thai/Vocabulary/Numbers/80
+    Key: 80
+    LearnWord: "\u0E41\u0E1B\u0E14\u0E2A\u0E34\u0E1A"
+    Phonetics: "Bp\xE0et-s\xECp"
+    DefaultTranslation: 80
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/90
+    ImageKey: Thai/Vocabulary/Numbers/90
+    SoundKey: Thai/Vocabulary/Numbers/90
+    Key: 90
+    LearnWord: "\u0E40\u0E01\u0E49\u0E32\u0E2A\u0E34\u0E1A"
+    Phonetics: "G\xE2o-s\xECp"
+    DefaultTranslation: 90
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/11
+    ImageKey: Thai/Vocabulary/Numbers/11
+    SoundKey: Thai/Vocabulary/Numbers/11
+    Key: 11
+    LearnWord: "\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "S\xECp-\xE8t"
+    DefaultTranslation: 11
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/21
+    ImageKey: Thai/Vocabulary/Numbers/21
+    SoundKey: Thai/Vocabulary/Numbers/21
+    Key: 21
+    LearnWord: "\u0E22\u0E35\u0E48\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "Y\xEEi-s\xECp-\xE8t"
+    DefaultTranslation: 21
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/31
+    ImageKey: Thai/Vocabulary/Numbers/31
+    SoundKey: Thai/Vocabulary/Numbers/31
+    Key: 31
+    LearnWord: "\u0E2A\u0E32\u0E21\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "S\u0103am-s\xECp-\xE8t"
+    DefaultTranslation: 31
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/41
+    ImageKey: Thai/Vocabulary/Numbers/41
+    SoundKey: Thai/Vocabulary/Numbers/41
+    Key: 41
+    LearnWord: "\u0E2A\u0E35\u0E48\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "S\xECi-s\xECp-\xE8t"
+    DefaultTranslation: 41
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/51
+    ImageKey: Thai/Vocabulary/Numbers/51
+    SoundKey: Thai/Vocabulary/Numbers/51
+    Key: 51
+    LearnWord: "\u0E2B\u0E49\u0E32\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "H\xE2a-s\xECp-\xE8t"
+    DefaultTranslation: 51
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/61
+    ImageKey: Thai/Vocabulary/Numbers/61
+    SoundKey: Thai/Vocabulary/Numbers/61
+    Key: 61
+    LearnWord: "\u0E2B\u0E01\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "H\xF2k-s\xECp-\xE8t"
+    DefaultTranslation: 61
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/71
+    ImageKey: Thai/Vocabulary/Numbers/71
+    SoundKey: Thai/Vocabulary/Numbers/71
+    Key: 71
+    LearnWord: "\u0E40\u0E08\u0E47\u0E14\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "J\xE8t-s\xECp-\xE8t"
+    DefaultTranslation: 71
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/81
+    ImageKey: Thai/Vocabulary/Numbers/81
+    SoundKey: Thai/Vocabulary/Numbers/81
+    Key: 81
+    LearnWord: "\u0E41\u0E1B\u0E14\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "Bp\xE0et-s\xECp-\xE8t"
+    DefaultTranslation: 81
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/91
+    ImageKey: Thai/Vocabulary/Numbers/91
+    SoundKey: Thai/Vocabulary/Numbers/91
+    Key: 91
+    LearnWord: "\u0E40\u0E01\u0E49\u0E32\u0E2A\u0E34\u0E1A\u0E40\u0E2D\u0E47\u0E14"
+    Phonetics: "G\xE2o-s\xECp-\xE8t"
+    DefaultTranslation: 91
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/100
+    ImageKey: Thai/Vocabulary/Numbers/100
+    SoundKey: Thai/Vocabulary/Numbers/100
+    Key: 100
+    LearnWord: "\u0E23\u0E49\u0E2D\u0E22"
+    Phonetics: "R\xF3i"
+    DefaultTranslation: 100
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/1_000
+    ImageKey: Thai/Vocabulary/Numbers/1_000
+    SoundKey: Thai/Vocabulary/Numbers/1_000
+    Key: 1_000
+    LearnWord: "\u0E1E\u0E31\u0E19"
+    Phonetics: Phan
+    DefaultTranslation: 1,000
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/10_000
+    ImageKey: Thai/Vocabulary/Numbers/10_000
+    SoundKey: Thai/Vocabulary/Numbers/10_000
+    Key: 10_000
+    LearnWord: "\u0E2B\u0E21\u0E37\u0E48\u0E19"
+    Phonetics: "M\xE8uen"
+    DefaultTranslation: 10,000
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/100_000
+    ImageKey: Thai/Vocabulary/Numbers/100_000
+    SoundKey: Thai/Vocabulary/Numbers/100_000
+    Key: 100_000
+    LearnWord: "\u0E41\u0E2A\u0E19"
+    Phonetics: "S\xE0en"
+    DefaultTranslation: 100,000
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/1_000_000
+    ImageKey: Thai/Vocabulary/Numbers/1_000_000
+    SoundKey: Thai/Vocabulary/Numbers/1_000_000
+    Key: 1_000_000
+    LearnWord: "\u0E25\u0E49\u0E32\u0E19"
+    Phonetics: "L\xE1an"
+    DefaultTranslation: 1,000,000
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/10_000_000
+    ImageKey: Thai/Vocabulary/Numbers/10_000_000
+    SoundKey: Thai/Vocabulary/Numbers/10_000_000
+    Key: 10_000_000
+    LearnWord: "\u0E2A\u0E34\u0E1A\u0E25\u0E49\u0E32\u0E19"
+    Phonetics: "S\xECp-l\xE1an"
+    DefaultTranslation: 10,000,000
+    DefaultDescription: 
+  - Language: 6
+    Section: Numbers
+    WordKey: Thai/Vocabulary/Numbers/0
+    ImageKey: Thai/Vocabulary/Numbers/0
+    SoundKey: Thai/Vocabulary/Numbers/0
+    Key: 0
+    LearnWord: "\u0E28\u0E39\u0E19\u0E22\u0E4C"
+    Phonetics: "S\u01D4un"
+    DefaultTranslation: 0
+    DefaultDescription: zero
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Bye_Informal_
+    ImageKey: Thai/Vocabulary/Greeting/Bye_Informal_
+    SoundKey: Thai/Vocabulary/Greeting/Bye_Informal_
+    Key: Bye_Informal_
+    LearnWord: "\u0E1A\u0E32\u0E22\u0E1A\u0E32\u0E22"
+    Phonetics: Baay baay
+    DefaultTranslation: Bye (Informal)
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I am leaving_I have to go_
+    ImageKey: Thai/Vocabulary/Greeting/I am leaving_I have to go_
+    SoundKey: Thai/Vocabulary/Greeting/I am leaving_I have to go_
+    Key: I am leaving_I have to go_
+    LearnWord: "\u0E44\u0E1B\u0E01\u0E48\u0E2D\u0E19\u0E19\u0E30"
+    Phonetics: Bpai goorn na
+    DefaultTranslation: I am leaving, I have to go.
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I went_I went to_
+    ImageKey: Thai/Vocabulary/Greeting/I went_I went to_
+    SoundKey: Thai/Vocabulary/Greeting/I went_I went to_
+    Key: I went_I went to_
+    LearnWord: "\u0E44\u0E1B...\u0E21\u0E32"
+    Phonetics: "Bp\xE0i...maa"
+    DefaultTranslation: I went... / I went to...
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Where did you go_Where are you coming from_
+    ImageKey: Thai/Vocabulary/Greeting/Where did you go_Where are you coming from_
+    SoundKey: Thai/Vocabulary/Greeting/Where did you go_Where are you coming from_
+    Key: Where did you go_Where are you coming from_
+    LearnWord: "...\u0E44\u0E1B\u0E44\u0E2B\u0E19 \u0E21\u0E32"
+    Phonetics: "...Bp\xE0i n\u0103i maa"
+    DefaultTranslation: "Where did you go? / \nWhere are you coming from?"
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/How is it going_
+    ImageKey: Thai/Vocabulary/Greeting/How is it going_
+    SoundKey: Thai/Vocabulary/Greeting/How is it going_
+    Key: How is it going_
+    LearnWord: "\u0E40\u0E1B\u0E47\u0E19\u0E44\u0E07\u0E1A\u0E49\u0E32\u0E07"
+    Phonetics: "Bpen ngai b\xE2ang"
+    DefaultTranslation: How is it going?
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Safe travel
+    ImageKey: Thai/Vocabulary/Greeting/Safe travel
+    SoundKey: Thai/Vocabulary/Greeting/Safe travel
+    Key: Safe travel
+    LearnWord: "\u0E40\u0E14\u0E34\u0E19\u0E17\u0E32\u0E07\u0E1B\u0E25\u0E2D\u0E14\u0E20\u0E31\u0E22"
+    Phonetics: Dooen taang bplort pai
+    DefaultTranslation: Safe travel
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Have you eaten yet_
+    ImageKey: Thai/Vocabulary/Greeting/Have you eaten yet_
+    SoundKey: Thai/Vocabulary/Greeting/Have you eaten yet_
+    Key: Have you eaten yet_
+    LearnWord: "\u0E01\u0E34\u0E19\u0E02\u0E49\u0E32\u0E27\u0E41\u0E25\u0E49\u0E27\u0E2B\u0E23\u0E37\u0E2D\u0E22\u0E31\u0E07"
+    Phonetics: "Gin k\xE2aw l\xE1aew r\u01D4e yang"
+    DefaultTranslation: Have you eaten yet?
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I have eaten_already_
+    ImageKey: Thai/Vocabulary/Greeting/I have eaten_already_
+    SoundKey: Thai/Vocabulary/Greeting/I have eaten_already_
+    Key: I have eaten_already_
+    LearnWord: "\u0E01\u0E34\u0E19\u0E41\u0E25\u0E49\u0E27"
+    Phonetics: "Gin l\xE1aew"
+    DefaultTranslation: I have eaten (already)
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Go home safely
+    ImageKey: Thai/Vocabulary/Greeting/Go home safely
+    SoundKey: Thai/Vocabulary/Greeting/Go home safely
+    Key: Go home safely
+    LearnWord: "\u0E01\u0E25\u0E31\u0E1A\u0E1A\u0E49\u0E32\u0E19\u0E43\u0E2B\u0E49\u0E14\u0E35\u0E14\u0E35\u0E19\u0E30"
+    Phonetics: "Gl\xE0p b\xE2an h\xE2i dii dii n\xE1"
+    DefaultTranslation: Go home safely
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I am about to go home_
+    ImageKey: Thai/Vocabulary/Greeting/I am about to go home_
+    SoundKey: Thai/Vocabulary/Greeting/I am about to go home_
+    Key: I am about to go home_
+    LearnWord: "\u0E01\u0E25\u0E31\u0E1A\u0E1A\u0E49\u0E32\u0E19\u0E01\u0E48\u0E2D\u0E19\u0E19\u0E30"
+    Phonetics: "Gl\xE0p b\xE2an g\xF2rn n\xE1"
+    DefaultTranslation: I am about to go home.
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I will go_I am going to_
+    ImageKey: Thai/Vocabulary/Greeting/I will go_I am going to_
+    SoundKey: Thai/Vocabulary/Greeting/I will go_I am going to_
+    Key: I will go_I am going to_
+    LearnWord: "\u0E1C\u0E21/\u0E09\u0E31\u0E19 \u0E08\u0E30\u0E44\u0E1B..."
+    Phonetics: "P\u01D2m/Ch\u01CEn j\xE0 bpai..."
+    DefaultTranslation: I will go / I am going to ...
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Where are you going_
+    ImageKey: Thai/Vocabulary/Greeting/Where are you going_
+    SoundKey: Thai/Vocabulary/Greeting/Where are you going_
+    Key: Where are you going_
+    LearnWord: "...(\u0E04\u0E38\u0E13) \u0E44\u0E1B\u0E44\u0E2B\u0E19"
+    Phonetics: "...(Kun) bpai n\u01CEi"
+    DefaultTranslation: Where are you going?
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Drive safe
+    ImageKey: Thai/Vocabulary/Greeting/Drive safe
+    SoundKey: Thai/Vocabulary/Greeting/Drive safe
+    Key: Drive safe
+    LearnWord: "\u0E02\u0E31\u0E1A\u0E23\u0E16\u0E43\u0E2B\u0E49\u0E14\u0E35"
+    Phonetics: "K\xE0p r\xF3t h\xE2i dii"
+    DefaultTranslation: Drive safe
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/May I be excused_Formal_
+    ImageKey: Thai/Vocabulary/Greeting/May I be excused_Formal_
+    SoundKey: Thai/Vocabulary/Greeting/May I be excused_Formal_
+    Key: May I be excused_Formal_
+    LearnWord: "\u0E02\u0E2D\u0E15\u0E31\u0E27\u0E01\u0E48\u0E2D\u0E19\u0E19\u0E30"
+    Phonetics: "K\u01D2r dtua g\xF2rn n\xE1"
+    DefaultTranslation: May I be excused? (Formal)
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/See you again_See you later
+    ImageKey: Thai/Vocabulary/Greeting/See you again_See you later
+    SoundKey: Thai/Vocabulary/Greeting/See you again_See you later
+    Key: See you again_See you later
+    LearnWord: "(\u0E41\u0E25\u0E49\u0E27)\u0E40\u0E08\u0E2D\u0E01\u0E31\u0E19\u0E43\u0E2B\u0E21\u0E48"
+    Phonetics: "(L\xE1aew) jooe gan m\xE0i"
+    DefaultTranslation: See you again, See you later
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I_m not_so_good
+    ImageKey: Thai/Vocabulary/Greeting/I_m not_so_good
+    SoundKey: Thai/Vocabulary/Greeting/I_m not_so_good
+    Key: I_m not_so_good
+    LearnWord: "\u0E44\u0E21\u0E48\u0E04\u0E48\u0E2D\u0E22\u0E14\u0E35"
+    Phonetics: "M\xE2i k\xF4i dii"
+    DefaultTranslation: I'm not (so) good
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I_m sick
+    ImageKey: Thai/Vocabulary/Greeting/I_m sick
+    SoundKey: Thai/Vocabulary/Greeting/I_m sick
+    Key: I_m sick
+    LearnWord: "\u0E44\u0E21\u0E48\u0E2A\u0E1A\u0E32\u0E22"
+    Phonetics: "M\xE2i Sabaay"
+    DefaultTranslation: I'm sick
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/So so
+    ImageKey: Thai/Vocabulary/Greeting/So so
+    SoundKey: Thai/Vocabulary/Greeting/So so
+    Key: So so
+    LearnWord: "\u0E40\u0E23\u0E37\u0E48\u0E2D\u0E22\u0E46"
+    Phonetics: "R\xFBeai r\xFBeai"
+    DefaultTranslation: So so
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I am good
+    ImageKey: Thai/Vocabulary/Greeting/I am good
+    SoundKey: Thai/Vocabulary/Greeting/I am good
+    Key: I am good
+    LearnWord: "\u0E2A\u0E1A\u0E32\u0E22\u0E14\u0E35"
+    Phonetics: Sabaay dii
+    DefaultTranslation: I am good
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/How are you_
+    ImageKey: Thai/Vocabulary/Greeting/How are you_
+    SoundKey: Thai/Vocabulary/Greeting/How are you_
+    Key: How are you_
+    LearnWord: "\u0E2A\u0E1A\u0E32\u0E22\u0E14\u0E35\u0E44\u0E2B\u0E21"
+    Phonetics: Sabaay dii mai
+    DefaultTranslation: How are you?
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Good bye_Formal_
+    ImageKey: Thai/Vocabulary/Greeting/Good bye_Formal_
+    SoundKey: Thai/Vocabulary/Greeting/Good bye_Formal_
+    Key: Good bye_Formal_
+    LearnWord: "\u0E2A\u0E27\u0E31\u0E2A\u0E14\u0E35"
+    Phonetics: Sawat dii
+    DefaultTranslation: Good bye (Formal)
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Hi
+    ImageKey: Thai/Vocabulary/Greeting/Hi
+    SoundKey: Thai/Vocabulary/Greeting/Hi
+    Key: Hi
+    LearnWord: "\u0E27\u0E48\u0E32\u0E44\u0E07"
+    Phonetics: "W\xE2a ngai"
+    DefaultTranslation: Hi
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/Not yet
+    ImageKey: Thai/Vocabulary/Greeting/Not yet
+    SoundKey: Thai/Vocabulary/Greeting/Not yet
+    Key: Not yet
+    LearnWord: "\u0E22\u0E31\u0E07"
+    Phonetics: "Y\xE0ng"
+    DefaultTranslation: Not yet
+    DefaultDescription: 
+  - Language: 6
+    Section: Greeting
+    WordKey: Thai/Vocabulary/Greeting/I haven_t eaten yet
+    ImageKey: Thai/Vocabulary/Greeting/I haven_t eaten yet
+    SoundKey: Thai/Vocabulary/Greeting/I haven_t eaten yet
+    Key: I haven_t eaten yet
+    LearnWord: "\u0E22\u0E31\u0E07\u0E44\u0E21\u0E48\u0E44\u0E14\u0E49\u0E01\u0E34\u0E19"
+    Phonetics: "Yang m\xE2i d\xE2i gin"
+    DefaultTranslation: I haven't eaten yet
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Color
+    ImageKey: Thai/Vocabulary/Colors/Color
+    SoundKey: Thai/Vocabulary/Colors/Color
+    Key: Color
+    LearnWord: "\u0E2A\u0E35"
+    Phonetics: "S\u01D0i"
+    DefaultTranslation: Color
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/White
+    ImageKey: Thai/Vocabulary/Colors/White
+    SoundKey: Thai/Vocabulary/Colors/White
+    Key: White
+    LearnWord: "\u0E02\u0E32\u0E27"
+    Phonetics: "K\u01CEaw"
+    DefaultTranslation: White
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Black
+    ImageKey: Thai/Vocabulary/Colors/Black
+    SoundKey: Thai/Vocabulary/Colors/Black
+    Key: Black
+    LearnWord: "\u0E14\u0E33"
+    Phonetics: Dam
+    DefaultTranslation: Black
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Grey
+    ImageKey: Thai/Vocabulary/Colors/Grey
+    SoundKey: Thai/Vocabulary/Colors/Grey
+    Key: Grey
+    LearnWord: "\u0E40\u0E17\u0E32"
+    Phonetics: Tao
+    DefaultTranslation: Grey
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Blue
+    ImageKey: Thai/Vocabulary/Colors/Blue
+    SoundKey: Thai/Vocabulary/Colors/Blue
+    Key: Blue
+    LearnWord: "\u0E1F\u0E49\u0E32"
+    Phonetics: "F\xE1a"
+    DefaultTranslation: Blue
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Dark blue
+    ImageKey: Thai/Vocabulary/Colors/Dark blue
+    SoundKey: Thai/Vocabulary/Colors/Dark blue
+    Key: Dark blue
+    LearnWord: "\u0E19\u0E49\u0E33\u0E40\u0E07\u0E34\u0E19"
+    Phonetics: "N\xE1m-ngoen"
+    DefaultTranslation: Dark blue
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Red
+    ImageKey: Thai/Vocabulary/Colors/Red
+    SoundKey: Thai/Vocabulary/Colors/Red
+    Key: Red
+    LearnWord: "\u0E41\u0E14\u0E07"
+    Phonetics: Daeng
+    DefaultTranslation: Red
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Green
+    ImageKey: Thai/Vocabulary/Colors/Green
+    SoundKey: Thai/Vocabulary/Colors/Green
+    Key: Green
+    LearnWord: "\u0E40\u0E02\u0E35\u0E22\u0E27"
+    Phonetics: "K\xECaw"
+    DefaultTranslation: Green
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Yellow
+    ImageKey: Thai/Vocabulary/Colors/Yellow
+    SoundKey: Thai/Vocabulary/Colors/Yellow
+    Key: Yellow
+    LearnWord: "\u0E40\u0E2B\u0E25\u0E37\u0E2D\u0E07"
+    Phonetics: "L\u01D4eang"
+    DefaultTranslation: Yellow
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Pink
+    ImageKey: Thai/Vocabulary/Colors/Pink
+    SoundKey: Thai/Vocabulary/Colors/Pink
+    Key: Pink
+    LearnWord: "\u0E0A\u0E21\u0E1E\u0E39"
+    Phonetics: Chom-pu
+    DefaultTranslation: Pink
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Purple
+    ImageKey: Thai/Vocabulary/Colors/Purple
+    SoundKey: Thai/Vocabulary/Colors/Purple
+    Key: Purple
+    LearnWord: "\u0E21\u0E48\u0E27\u0E07"
+    Phonetics: "M\xFBang"
+    DefaultTranslation: Purple
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Brown
+    ImageKey: Thai/Vocabulary/Colors/Brown
+    SoundKey: Thai/Vocabulary/Colors/Brown
+    Key: Brown
+    LearnWord: "\u0E19\u0E49\u0E33\u0E15\u0E32\u0E25"
+    Phonetics: "N\xE1m-dtaan"
+    DefaultTranslation: Brown
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Orange
+    ImageKey: Thai/Vocabulary/Colors/Orange
+    SoundKey: Thai/Vocabulary/Colors/Orange
+    Key: Orange
+    LearnWord: "\u0E2A\u0E49\u0E21"
+    Phonetics: "S\u01D2m"
+    DefaultTranslation: Orange
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Light
+    ImageKey: Thai/Vocabulary/Colors/Light
+    SoundKey: Thai/Vocabulary/Colors/Light
+    Key: Light
+    LearnWord: "\u0E2D\u0E48\u0E2D\u0E19"
+    Phonetics: "\xD4orn"
+    DefaultTranslation: Light
+    DefaultDescription: 
+  - Language: 6
+    Section: Colors
+    WordKey: Thai/Vocabulary/Colors/Dark
+    ImageKey: Thai/Vocabulary/Colors/Dark
+    SoundKey: Thai/Vocabulary/Colors/Dark
+    Key: Dark
+    LearnWord: "\u0E40\u0E02\u0E49\u0E21"
+    Phonetics: "K\xEAm"
+    DefaultTranslation: Dark
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Clothes
+    ImageKey: Thai/Vocabulary/Clothes/Clothes
+    SoundKey: Thai/Vocabulary/Clothes/Clothes
+    Key: Clothes
+    LearnWord: "\u0E40\u0E2A\u0E37\u0E49\u0E2D\u0E1C\u0E49\u0E32"
+    Phonetics: "Su\xE8a-p\xE2a"
+    DefaultTranslation: Clothes
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Top_clothes_
+    ImageKey: Thai/Vocabulary/Clothes/Top_clothes_
+    SoundKey: Thai/Vocabulary/Clothes/Top_clothes_
+    Key: Top_clothes_
+    LearnWord: "\u0E40\u0E2A\u0E37\u0E49\u0E2D"
+    Phonetics: "Su\xE8a"
+    DefaultTranslation: Top (clothes)
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Pants
+    ImageKey: Thai/Vocabulary/Clothes/Pants
+    SoundKey: Thai/Vocabulary/Clothes/Pants
+    Key: Pants
+    LearnWord: "\u0E01\u0E32\u0E07\u0E40\u0E01\u0E07"
+    Phonetics: Gaang-geeng
+    DefaultTranslation: Pants
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Skirt
+    ImageKey: Thai/Vocabulary/Clothes/Skirt
+    SoundKey: Thai/Vocabulary/Clothes/Skirt
+    Key: Skirt
+    LearnWord: "\u0E01\u0E23\u0E30\u0E42\u0E1B\u0E23\u0E07"
+    Phonetics: "Gr\xE0-bproong"
+    DefaultTranslation: Skirt
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Dress
+    ImageKey: Thai/Vocabulary/Clothes/Dress
+    SoundKey: Thai/Vocabulary/Clothes/Dress
+    Key: Dress
+    LearnWord: "\u0E0A\u0E38\u0E14\u0E01\u0E23\u0E30\u0E42\u0E1B\u0E23\u0E07 / \u0E40\u0E14\u0E23\u0E2A"
+    Phonetics: "Ch\xFAt gr\xE0-bproong / Dres"
+    DefaultTranslation: Dress
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/T_Shirt
+    ImageKey: Thai/Vocabulary/Clothes/T_Shirt
+    SoundKey: Thai/Vocabulary/Clothes/T_Shirt
+    Key: T_Shirt
+    LearnWord: "\u0E40\u0E2A\u0E37\u0E49\u0E2D\u0E22\u0E37\u0E14"
+    Phonetics: "Su\xE8a y\xFAuet"
+    DefaultTranslation: T-Shirt
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Shirt
+    ImageKey: Thai/Vocabulary/Clothes/Shirt
+    SoundKey: Thai/Vocabulary/Clothes/Shirt
+    Key: Shirt
+    LearnWord: "\u0E40\u0E2A\u0E37\u0E49\u0E2D\u0E40\u0E0A\u0E34\u0E49\u0E15"
+    Phonetics: "Su\xE8a ch\xF3ot"
+    DefaultTranslation: Shirt
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Polo shirt
+    ImageKey: Thai/Vocabulary/Clothes/Polo shirt
+    SoundKey: Thai/Vocabulary/Clothes/Polo shirt
+    Key: Polo shirt
+    LearnWord: "\u0E40\u0E2A\u0E37\u0E49\u0E2D\u0E42\u0E1B\u0E42\u0E25"
+    Phonetics: "Su\xE8a polo"
+    DefaultTranslation: Polo shirt
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Sweater
+    ImageKey: Thai/Vocabulary/Clothes/Sweater
+    SoundKey: Thai/Vocabulary/Clothes/Sweater
+    Key: Sweater
+    LearnWord: "\u0E40\u0E2A\u0E37\u0E49\u0E2D\u0E01\u0E31\u0E19\u0E2B\u0E19\u0E32\u0E27"
+    Phonetics: "S\xFBea gan n\u01CEao"
+    DefaultTranslation: Sweater
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Short pants
+    ImageKey: Thai/Vocabulary/Clothes/Short pants
+    SoundKey: Thai/Vocabulary/Clothes/Short pants
+    Key: Short pants
+    LearnWord: "\u0E01\u0E32\u0E07\u0E40\u0E01\u0E07\u0E02\u0E32\u0E2A\u0E31\u0E49\u0E19"
+    Phonetics: "Gaang-geeng k\u01CEa s\u01CEn"
+    DefaultTranslation: Short pants
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Trousers
+    ImageKey: Thai/Vocabulary/Clothes/Trousers
+    SoundKey: Thai/Vocabulary/Clothes/Trousers
+    Key: Trousers
+    LearnWord: "\u0E01\u0E32\u0E07\u0E40\u0E01\u0E07\u0E02\u0E32\u0E22\u0E32\u0E27"
+    Phonetics: "Gaang-geeng k\u01CEa yaaw"
+    DefaultTranslation: Trousers
+    DefaultDescription: 
+  - Language: 6
+    Section: Clothes
+    WordKey: Thai/Vocabulary/Clothes/Jeans
+    ImageKey: Thai/Vocabulary/Clothes/Jeans
+    SoundKey: Thai/Vocabulary/Clothes/Jeans
+    Key: Jeans
+    LearnWord: "\u0E01\u0E32\u0E07\u0E40\u0E01\u0E07\u0E22\u0E35\u0E19\u0E2A\u0E4C"
+    Phonetics: "Gaang-geeng y\xEEn"
+    DefaultTranslation: Jeans
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Size
+    ImageKey: Thai/Vocabulary/Shopping/Size
+    SoundKey: Thai/Vocabulary/Shopping/Size
+    Key: Size
+    LearnWord: "\u0E44\u0E0B\u0E2A\u0E4C"
+    Phonetics: Sai
+    DefaultTranslation: Size
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Brand
+    ImageKey: Thai/Vocabulary/Shopping/Brand
+    SoundKey: Thai/Vocabulary/Shopping/Brand
+    Key: Brand
+    LearnWord: "\u0E22\u0E35\u0E48\u0E2B\u0E49\u0E2D"
+    Phonetics: "Y\xEEi-h\xF2r"
+    DefaultTranslation: Brand
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/I_ll take_I want to buy_order
+    ImageKey: Thai/Vocabulary/Shopping/I_ll take_I want to buy_order
+    SoundKey: Thai/Vocabulary/Shopping/I_ll take_I want to buy_order
+    Key: I_ll take_I want to buy_order
+    LearnWord: "\u0E40\u0E2D\u0E32"
+    Phonetics: Ao
+    DefaultTranslation: "I\u2019ll take, I want to buy/order"
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Wear
+    ImageKey: Thai/Vocabulary/Shopping/Wear
+    SoundKey: Thai/Vocabulary/Shopping/Wear
+    Key: Wear
+    LearnWord: "\u0E43\u0E2A\u0E48"
+    Phonetics: "S\xE0i"
+    DefaultTranslation: Wear
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+    ImageKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+    SoundKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+    Key: May I_Asking permissions
+    LearnWord: "\u0E02\u0E2D"
+    Phonetics: "K\u01D2r"
+    DefaultTranslation: May I..., Asking permissions
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Try_Try on
+    ImageKey: Thai/Vocabulary/Shopping/Try_Try on
+    SoundKey: Thai/Vocabulary/Shopping/Try_Try on
+    Key: Try_Try on
+    LearnWord: "\u0E25\u0E2D\u0E07"
+    Phonetics: Loong
+    DefaultTranslation: Try, Try on
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Look_see
+    ImageKey: Thai/Vocabulary/Shopping/Look_see
+    SoundKey: Thai/Vocabulary/Shopping/Look_see
+    Key: Look_see
+    LearnWord: "\u0E14\u0E39"
+    Phonetics: Duu
+    DefaultTranslation: Look, see
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Can_
+    ImageKey: Thai/Vocabulary/Shopping/Can_
+    SoundKey: Thai/Vocabulary/Shopping/Can_
+    Key: Can_
+    LearnWord: "\u0E44\u0E14\u0E49\u0E44\u0E2B\u0E21"
+    Phonetics: "D\xE2i-m\u0103i"
+    DefaultTranslation: Can?
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Can
+    ImageKey: Thai/Vocabulary/Shopping/Can
+    SoundKey: Thai/Vocabulary/Shopping/Can
+    Key: Can
+    LearnWord: "\u0E44\u0E14\u0E49"
+    Phonetics: "D\xE2i"
+    DefaultTranslation: Can
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Cannot
+    ImageKey: Thai/Vocabulary/Shopping/Cannot
+    SoundKey: Thai/Vocabulary/Shopping/Cannot
+    Key: Cannot
+    LearnWord: "\u0E44\u0E21\u0E48\u0E44\u0E14\u0E49"
+    Phonetics: "M\xE2i d\xE2i"
+    DefaultTranslation: Cannot
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Beautiful
+    ImageKey: Thai/Vocabulary/Shopping/Beautiful
+    SoundKey: Thai/Vocabulary/Shopping/Beautiful
+    Key: Beautiful
+    LearnWord: "\u0E2A\u0E27\u0E22"
+    Phonetics: Suay
+    DefaultTranslation: Beautiful
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Fit perfect
+    ImageKey: Thai/Vocabulary/Shopping/Fit perfect
+    SoundKey: Thai/Vocabulary/Shopping/Fit perfect
+    Key: Fit perfect
+    LearnWord: "\u0E1E\u0E2D\u0E14\u0E35"
+    Phonetics: Por dii
+    DefaultTranslation: Fit perfect
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Big
+    ImageKey: Thai/Vocabulary/Shopping/Big
+    SoundKey: Thai/Vocabulary/Shopping/Big
+    Key: Big
+    LearnWord: "\u0E43\u0E2B\u0E0D\u0E48"
+    Phonetics: "Y\xE0i"
+    DefaultTranslation: Big
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Small
+    ImageKey: Thai/Vocabulary/Shopping/Small
+    SoundKey: Thai/Vocabulary/Shopping/Small
+    Key: Small
+    LearnWord: "\u0E40\u0E25\u0E47\u0E01"
+    Phonetics: "L\xE8k"
+    DefaultTranslation: Small
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Too much
+    ImageKey: Thai/Vocabulary/Shopping/Too much
+    SoundKey: Thai/Vocabulary/Shopping/Too much
+    Key: Too much
+    LearnWord: "\u0E40\u0E01\u0E34\u0E19\u0E44\u0E1B"
+    Phonetics: Gooen bpai
+    DefaultTranslation: Too much
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Change to
+    ImageKey: Thai/Vocabulary/Shopping/Change to
+    SoundKey: Thai/Vocabulary/Shopping/Change to
+    Key: Change to
+    LearnWord: "\u0E40\u0E1B\u0E25\u0E35\u0E48\u0E22\u0E19\u0E40\u0E1B\u0E47\u0E19"
+    Phonetics: "Bpl\xECang bpen"
+    DefaultTranslation: Change to
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/A classifier for clothes
+    ImageKey: Thai/Vocabulary/Shopping/A classifier for clothes
+    SoundKey: Thai/Vocabulary/Shopping/A classifier for clothes
+    Key: A classifier for clothes
+    LearnWord: "\u0E15\u0E31\u0E27"
+    Phonetics: Dtua
+    DefaultTranslation: A classifier for clothes
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Lower
+    ImageKey: Thai/Vocabulary/Shopping/Lower
+    SoundKey: Thai/Vocabulary/Shopping/Lower
+    Key: Lower
+    LearnWord: "\u0E25\u0E14"
+    Phonetics: "L\xF2t"
+    DefaultTranslation: Lower
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Pay
+    ImageKey: Thai/Vocabulary/Shopping/Pay
+    SoundKey: Thai/Vocabulary/Shopping/Pay
+    Key: Pay
+    LearnWord: "\u0E08\u0E48\u0E32\u0E22"
+    Phonetics: "J\xE0ay"
+    DefaultTranslation: Pay
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Price
+    ImageKey: Thai/Vocabulary/Shopping/Price
+    SoundKey: Thai/Vocabulary/Shopping/Price
+    Key: Price
+    LearnWord: "\u0E23\u0E32\u0E04\u0E32"
+    Phonetics: Raa-kaa
+    DefaultTranslation: Price
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/How much
+    ImageKey: Thai/Vocabulary/Shopping/How much
+    SoundKey: Thai/Vocabulary/Shopping/How much
+    Key: How much
+    LearnWord: "\u0E40\u0E17\u0E48\u0E32\u0E44\u0E2B\u0E23\u0E48"
+    Phonetics: "T\xE2o-r\xE0i"
+    DefaultTranslation: How much
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Expensive
+    ImageKey: Thai/Vocabulary/Shopping/Expensive
+    SoundKey: Thai/Vocabulary/Shopping/Expensive
+    Key: Expensive
+    LearnWord: "\u0E41\u0E1E\u0E07"
+    Phonetics: Paeng
+    DefaultTranslation: Expensive
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Cheap
+    ImageKey: Thai/Vocabulary/Shopping/Cheap
+    SoundKey: Thai/Vocabulary/Shopping/Cheap
+    Key: Cheap
+    LearnWord: "\u0E16\u0E39\u0E01"
+    Phonetics: "T\xF9uk"
+    DefaultTranslation: Cheap
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Kilogram
+    ImageKey: Thai/Vocabulary/Shopping/Kilogram
+    SoundKey: Thai/Vocabulary/Shopping/Kilogram
+    Key: Kilogram
+    LearnWord: "\u0E01\u0E34\u0E42\u0E25"
+    Phonetics: Gi-loh
+    DefaultTranslation: Kilogram
+    DefaultDescription: 
+  - Language: 6
+    Section: Shopping
+    WordKey: Thai/Vocabulary/Shopping/Bag
+    ImageKey: Thai/Vocabulary/Shopping/Bag
+    SoundKey: Thai/Vocabulary/Shopping/Bag
+    Key: Bag
+    LearnWord: "\u0E16\u0E38\u0E07"
+    Phonetics: "T\u01D4ng"
+    DefaultTranslation: Bag
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Friend
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Friend
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Friend
+    Key: Friend
+    LearnWord: "\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E19"
+    Phonetics: Puean
+    DefaultTranslation: Friend
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Colleague
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Colleague
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Colleague
+    Key: Colleague
+    LearnWord: "\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E19\u0E23\u0E48\u0E27\u0E21\u0E07\u0E32\u0E19"
+    Phonetics: Puean-ruam-ngaan
+    DefaultTranslation: Colleague
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Neighbor
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Neighbor
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Neighbor
+    Key: Neighbor
+    LearnWord: "\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E19\u0E1A\u0E49\u0E32\u0E19"
+    Phonetics: Pueanbaan
+    DefaultTranslation: Neighbor
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Friend at_from_place
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Friend at_from_place
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Friend at_from_place
+    Key: Friend at_from_place
+    LearnWord: "\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E19\u0E17\u0E35\u0E48..."
+    Phonetics: "Puean t\xEEi..."
+    DefaultTranslation: Friend at.../from... +place
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/People at_
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/People at_
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/People at_
+    Key: People at_
+    LearnWord: "\u0E04\u0E19\u0E17\u0E35\u0E48"
+    Phonetics: "Kon t\xEEi"
+    DefaultTranslation: People at...
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Girlfriend_Boyfriend
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Girlfriend_Boyfriend
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Girlfriend_Boyfriend
+    Key: Girlfriend_Boyfriend
+    LearnWord: "\u0E41\u0E1F\u0E19"
+    Phonetics: Faen
+    DefaultTranslation: Girlfriend, Boyfriend
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Husband
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Husband
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Husband
+    Key: Husband
+    LearnWord: "\u0E2A\u0E32\u0E21\u0E35"
+    Phonetics: Saamii
+    DefaultTranslation: Husband
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Wife
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Wife
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Wife
+    Key: Wife
+    LearnWord: "\u0E20\u0E23\u0E23\u0E22\u0E32"
+    Phonetics: Panrayaa
+    DefaultTranslation: Wife
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Chief
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Chief
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Chief
+    Key: Chief
+    LearnWord: "\u0E2B\u0E31\u0E27\u0E2B\u0E19\u0E49\u0E32"
+    Phonetics: Huanaa
+    DefaultTranslation: Chief
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Boss
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Boss
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Boss
+    Key: Boss
+    LearnWord: "\u0E40\u0E08\u0E49\u0E32\u0E19\u0E32\u0E22"
+    Phonetics: "J\xE2o-naai"
+    DefaultTranslation: Boss
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Younger sibling
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Younger sibling
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Younger sibling
+    Key: Younger sibling
+    LearnWord: "\u0E19\u0E49\u0E2D\u0E07"
+    Phonetics: Noong
+    DefaultTranslation: Younger sibling
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Younger brother
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Younger brother
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Younger brother
+    Key: Younger brother
+    LearnWord: "\u0E19\u0E49\u0E2D\u0E07\u0E0A\u0E32\u0E22"
+    Phonetics: Noong chaay
+    DefaultTranslation: Younger brother
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Younger sister
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Younger sister
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Younger sister
+    Key: Younger sister
+    LearnWord: "\u0E19\u0E49\u0E2D\u0E07\u0E2A\u0E32\u0E27"
+    Phonetics: Noong saaw
+    DefaultTranslation: Younger sister
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Older sibling
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Older sibling
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Older sibling
+    Key: Older sibling
+    LearnWord: "\u0E1E\u0E35\u0E48"
+    Phonetics: "P\xEEi"
+    DefaultTranslation: Older sibling
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Older brother
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Older brother
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Older brother
+    Key: Older brother
+    LearnWord: "\u0E1E\u0E35\u0E48\u0E0A\u0E32\u0E22"
+    Phonetics: "P\xEEi chaay"
+    DefaultTranslation: Older brother
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Older sister
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Older sister
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Older sister
+    Key: Older sister
+    LearnWord: "\u0E1E\u0E35\u0E48\u0E2A\u0E32\u0E27"
+    Phonetics: "P\xEEi saaw"
+    DefaultTranslation: Older sister
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Dad
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Dad
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Dad
+    Key: Dad
+    LearnWord: "\u0E1E\u0E48\u0E2D"
+    Phonetics: "P\xF2r"
+    DefaultTranslation: Dad
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Mom
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Mom
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Mom
+    Key: Mom
+    LearnWord: "\u0E41\u0E21\u0E48"
+    Phonetics: "M\xE2e"
+    DefaultTranslation: Mom
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Kid of someone
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Kid of someone
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Kid of someone
+    Key: Kid of someone
+    LearnWord: "\u0E25\u0E39\u0E01"
+    Phonetics: "L\xFBuk"
+    DefaultTranslation: Kid of someone
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Son
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Son
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Son
+    Key: Son
+    LearnWord: "\u0E25\u0E39\u0E01\u0E0A\u0E32\u0E22"
+    Phonetics: "L\xFBuk chaay"
+    DefaultTranslation: Son
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Daughter
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Daughter
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Daughter
+    Key: Daughter
+    LearnWord: "\u0E25\u0E39\u0E01\u0E2A\u0E32\u0E27"
+    Phonetics: "L\xFBuk saaw"
+    DefaultTranslation: Daughter
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Grandpa_Mom side_
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Grandpa_Mom side_
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Grandpa_Mom side_
+    Key: Grandpa_Mom side_
+    LearnWord: "\u0E15\u0E32"
+    Phonetics: Dtaa
+    DefaultTranslation: Grandpa (Mom side)
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Grandpa_Dad side_
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Grandpa_Dad side_
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Grandpa_Dad side_
+    Key: Grandpa_Dad side_
+    LearnWord: "\u0E1B\u0E39\u0E48"
+    Phonetics: Bpuu
+    DefaultTranslation: Grandpa (Dad side)
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Grandma_Mom side_
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Grandma_Mom side_
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Grandma_Mom side_
+    Key: Grandma_Mom side_
+    LearnWord: "\u0E22\u0E32\u0E22"
+    Phonetics: Yaay
+    DefaultTranslation: Grandma (Mom side)
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Grandma_Dad side_
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Grandma_Dad side_
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Grandma_Dad side_
+    Key: Grandma_Dad side_
+    LearnWord: "\u0E22\u0E48\u0E32"
+    Phonetics: "Y\xE2a"
+    DefaultTranslation: Grandma (Dad side)
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Grand children
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Grand children
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Grand children
+    Key: Grand children
+    LearnWord: "\u0E2B\u0E25\u0E32\u0E19"
+    Phonetics: "L\u01CEan"
+    DefaultTranslation: Grand children
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Younger brother_Sister of dad
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Younger brother_Sister of dad
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Younger brother_Sister of dad
+    Key: Younger brother_Sister of dad
+    LearnWord: "\u0E2D\u0E32"
+    Phonetics: Aa
+    DefaultTranslation: Younger brother - Sister of dad
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Younger brother_Sister of Mom
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Younger brother_Sister of Mom
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Younger brother_Sister of Mom
+    Key: Younger brother_Sister of Mom
+    LearnWord: "\u0E19\u0E49\u0E32"
+    Phonetics: "N\xE2a"
+    DefaultTranslation: Younger brother - Sister of Mom
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Older brother of mom_dad
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Older brother of mom_dad
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Older brother of mom_dad
+    Key: Older brother of mom_dad
+    LearnWord: "\u0E25\u0E38\u0E07"
+    Phonetics: Lung
+    DefaultTranslation: Older brother of mom & dad
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/Older sister of mom_dad
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/Older sister of mom_dad
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/Older sister of mom_dad
+    Key: Older sister of mom_dad
+    LearnWord: "\u0E1B\u0E49\u0E32"
+    Phonetics: "Bp\xE2a"
+    DefaultTranslation: Older sister of mom & dad
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/In_law_for male_
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/In_law_for male_
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/In_law_for male_
+    Key: In_law_for male_
+    LearnWord: "\u0E40\u0E02\u0E22"
+    Phonetics: Kooy
+    DefaultTranslation: In-law (for male)
+    DefaultDescription: 
+  - Language: 6
+    Section: FamilyAndPeople
+    WordKey: Thai/Vocabulary/FamilyAndPeople/In_law_for female_
+    ImageKey: Thai/Vocabulary/FamilyAndPeople/In_law_for female_
+    SoundKey: Thai/Vocabulary/FamilyAndPeople/In_law_for female_
+    Key: In_law_for female_
+    LearnWord: "\u0E2A\u0E30\u0E43\u0E20\u0E49"
+    Phonetics: "S\xE0-p\xE1i"
+    DefaultTranslation: In-law (for female)
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/Hello
+    ImageKey: Thai/Vocabulary/Introduce/Hello
+    SoundKey: Thai/Vocabulary/Introduce/Hello
+    Key: Hello
+    LearnWord: "\u0E2A\u0E27\u0E31\u0E2A\u0E14\u0E35"
+    Phonetics: Sawat dii
+    DefaultTranslation: Hello
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/Name
+    ImageKey: Thai/Vocabulary/Introduce/Name
+    SoundKey: Thai/Vocabulary/Introduce/Name
+    Key: Name
+    LearnWord: "\u0E0A\u0E37\u0E48\u0E2D"
+    Phonetics: "Ch\xFAe"
+    DefaultTranslation: Name
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/What_
+    ImageKey: Thai/Vocabulary/Introduce/What_
+    SoundKey: Thai/Vocabulary/Introduce/What_
+    Key: What_
+    LearnWord: "\u0E2D\u0E30\u0E44\u0E23"
+    Phonetics: Arai
+    DefaultTranslation: What?
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/To be_People_Person from_
+    ImageKey: Thai/Vocabulary/Introduce/To be_People_Person from_
+    SoundKey: Thai/Vocabulary/Introduce/To be_People_Person from_
+    Key: To be_People_Person from_
+    LearnWord: "\u0E40\u0E1B\u0E47\u0E19 \u0E04\u0E19"
+    Phonetics: Bpen Kon
+    DefaultTranslation: To be + People/Person from...
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/Come from
+    ImageKey: Thai/Vocabulary/Introduce/Come from
+    SoundKey: Thai/Vocabulary/Introduce/Come from
+    Key: Come from
+    LearnWord: "\u0E21\u0E32\u0E08\u0E32\u0E01"
+    Phonetics: Maa Jaak
+    DefaultTranslation: Come from
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/Where
+    ImageKey: Thai/Vocabulary/Introduce/Where
+    SoundKey: Thai/Vocabulary/Introduce/Where
+    Key: Where
+    LearnWord: "\u0E17\u0E35\u0E48\u0E44\u0E2B\u0E19"
+    Phonetics: "T\xEEi n\u0103i"
+    DefaultTranslation: Where
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/What about_
+    ImageKey: Thai/Vocabulary/Introduce/What about_
+    SoundKey: Thai/Vocabulary/Introduce/What about_
+    Key: What about_
+    LearnWord: "\u0E41\u0E25\u0E49\u0E27...\u0E25\u0E30"
+    Phonetics: Laaew...la
+    DefaultTranslation: What about...?
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/Nice to meet you
+    ImageKey: Thai/Vocabulary/Introduce/Nice to meet you
+    SoundKey: Thai/Vocabulary/Introduce/Nice to meet you
+    Key: Nice to meet you
+    LearnWord: "\u0E22\u0E34\u0E19\u0E14\u0E35\u0E17\u0E35\u0E48\u0E44\u0E14\u0E49\u0E23\u0E39\u0E49\u0E08\u0E31\u0E01"
+    Phonetics: "Yin dii t\xEEi d\xE2i r\xFAu-j\xE0k"
+    DefaultTranslation: Nice to meet you
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/_Me_you_too_
+    ImageKey: Thai/Vocabulary/Introduce/_Me_you_too_
+    SoundKey: Thai/Vocabulary/Introduce/_Me_you_too_
+    Key: _Me_you_too_
+    LearnWord: "\u0E40\u0E0A\u0E48\u0E19\u0E01\u0E31\u0E19"
+    Phonetics: "Ch\xEAn gan"
+    DefaultTranslation: (Me, you) too!
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/male_yes
+    ImageKey: Thai/Vocabulary/Introduce/male_yes
+    SoundKey: Thai/Vocabulary/Introduce/male_yes
+    Key: male_yes
+    LearnWord: "\u0E04\u0E23\u0E31\u0E1A"
+    Phonetics: Krab
+    DefaultTranslation: male, yes
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/female_yes
+    ImageKey: Thai/Vocabulary/Introduce/female_yes
+    SoundKey: Thai/Vocabulary/Introduce/female_yes
+    Key: female_yes
+    LearnWord: "\u0E04\u0E48\u0E30, \u0E08\u0E49\u0E30"
+    Phonetics: "K\xE2, j\xE2"
+    DefaultTranslation: female, yes
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/A polite particle
+    ImageKey: Thai/Vocabulary/Introduce/A polite particle
+    SoundKey: Thai/Vocabulary/Introduce/A polite particle
+    Key: A polite particle
+    LearnWord: "\u0E19\u0E30"
+    Phonetics: "N\xE1"
+    DefaultTranslation: A polite particle
+    DefaultDescription: 
+  - Language: 6
+    Section: Introduce
+    WordKey: Thai/Vocabulary/Introduce/Country
+    ImageKey: Thai/Vocabulary/Introduce/Country
+    SoundKey: Thai/Vocabulary/Introduce/Country
+    Key: Country
+    LearnWord: "\u0E1B\u0E23\u0E30\u0E40\u0E17\u0E28"
+    Phonetics: "Bpr\xE0-t\xEAet"
+    DefaultTranslation: Country
+    DefaultDescription: 
+  - Language: 6
+    Section: Ocupation
+    WordKey: Thai/Vocabulary/Ocupation/Doctor
+    ImageKey: Thai/Vocabulary/Ocupation/Doctor
+    SoundKey: Thai/Vocabulary/Ocupation/Doctor
+    Key: Doctor
+    LearnWord: "\u0E2B\u0E21\u0E2D"
+    Phonetics: "M\xF2or"
+    DefaultTranslation: Doctor
+    DefaultDescription: 
+  - Language: 6
+    Section: Ocupation
+    WordKey: Thai/Vocabulary/Ocupation/Masseuse
+    ImageKey: Thai/Vocabulary/Ocupation/Masseuse
+    SoundKey: Thai/Vocabulary/Ocupation/Masseuse
+    Key: Masseuse
+    LearnWord: "\u0E2B\u0E21\u0E2D\u0E19\u0E27\u0E14"
+    Phonetics: "M\xF2or N\xF9at"
+    DefaultTranslation: Masseuse
+    DefaultDescription: 
+  - Language: 6
+    Section: Ocupation
+    WordKey: Thai/Vocabulary/Ocupation/Dentist
+    ImageKey: Thai/Vocabulary/Ocupation/Dentist
+    SoundKey: Thai/Vocabulary/Ocupation/Dentist
+    Key: Dentist
+    LearnWord: "\u0E2B\u0E21\u0E2D\u0E1F\u0E31\u0E19"
+    Phonetics: "M\xF2or Fan"
+    DefaultTranslation: Dentist
+    DefaultDescription: 
+  - Language: 6
+    Section: Ocupation
+    WordKey: Thai/Vocabulary/Ocupation/Teacher
+    ImageKey: Thai/Vocabulary/Ocupation/Teacher
+    SoundKey: Thai/Vocabulary/Ocupation/Teacher
+    Key: Teacher
+    LearnWord: "\u0E04\u0E23\u0E39"
+    Phonetics: Kruu
+    DefaultTranslation: Teacher
+    DefaultDescription: 
+  - Language: 6
+    Section: Ocupation
+    WordKey: Thai/Vocabulary/Ocupation/Police
+    ImageKey: Thai/Vocabulary/Ocupation/Police
+    SoundKey: Thai/Vocabulary/Ocupation/Police
+    Key: Police
+    LearnWord: "\u0E15\u0E33\u0E23\u0E27\u0E08"
+    Phonetics: Dtamruat
+    DefaultTranslation: Police
+    DefaultDescription: 
+  - Language: 6
+    Section: Ocupation
+    WordKey: Thai/Vocabulary/Ocupation/Security guard
+    ImageKey: Thai/Vocabulary/Ocupation/Security guard
+    SoundKey: Thai/Vocabulary/Ocupation/Security guard
+    Key: Security guard
+    LearnWord: "\u0E23\u0E1B\u0E20."
+    Phonetics: Ror bpoor poor
+    DefaultTranslation: Security guard
+    DefaultDescription: 
+  - Language: 6
+    Section: Ocupation
+    WordKey: Thai/Vocabulary/Ocupation/Maid_Housewife
+    ImageKey: Thai/Vocabulary/Ocupation/Maid_Housewife
+    SoundKey: Thai/Vocabulary/Ocupation/Maid_Housewife
+    Key: Maid_Housewife
+    LearnWord: "\u0E41\u0E21\u0E48\u0E1A\u0E49\u0E32\u0E19"
+    Phonetics: "M\xE2e baan"
+    DefaultTranslation: Maid, Housewife
+    DefaultDescription: 
+  - Language: 6
+    Section: Ocupation
+    WordKey: Thai/Vocabulary/Ocupation/Pharmacist
+    ImageKey: Thai/Vocabulary/Ocupation/Pharmacist
+    SoundKey: Thai/Vocabulary/Ocupation/Pharmacist
+    Key: Pharmacist
+    LearnWord: "\u0E40\u0E20\u0E2A\u0E31\u0E0A\u0E01\u0E23"
+    Phonetics: Peesatchagorn
+    DefaultTranslation: Pharmacist
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/House
+    ImageKey: Thai/Vocabulary/Places/House
+    SoundKey: Thai/Vocabulary/Places/House
+    Key: House
+    LearnWord: "\u0E1A\u0E49\u0E32\u0E19"
+    Phonetics: "B\xE2an"
+    DefaultTranslation: House
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Restroom
+    ImageKey: Thai/Vocabulary/Places/Restroom
+    SoundKey: Thai/Vocabulary/Places/Restroom
+    Key: Restroom
+    LearnWord: "\u0E2B\u0E49\u0E2D\u0E07\u0E19\u0E49\u0E33"
+    Phonetics: "H\xF2rng n\xE1m"
+    DefaultTranslation: Restroom
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Kitchen
+    ImageKey: Thai/Vocabulary/Places/Kitchen
+    SoundKey: Thai/Vocabulary/Places/Kitchen
+    Key: Kitchen
+    LearnWord: "\u0E2B\u0E49\u0E2D\u0E07\u0E04\u0E23\u0E31\u0E27"
+    Phonetics: "H\xF2rng krua"
+    DefaultTranslation: Kitchen
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Bedroom
+    ImageKey: Thai/Vocabulary/Places/Bedroom
+    SoundKey: Thai/Vocabulary/Places/Bedroom
+    Key: Bedroom
+    LearnWord: "\u0E2B\u0E49\u0E2D\u0E07\u0E19\u0E2D\u0E19"
+    Phonetics: "H\xF2rng noorn"
+    DefaultTranslation: Bedroom
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Living room
+    ImageKey: Thai/Vocabulary/Places/Living room
+    SoundKey: Thai/Vocabulary/Places/Living room
+    Key: Living room
+    LearnWord: "\u0E2B\u0E49\u0E2D\u0E07\u0E19\u0E31\u0E48\u0E07\u0E40\u0E25\u0E48\u0E19"
+    Phonetics: "H\xF2rng n\xE2ng l\xEAn"
+    DefaultTranslation: Living room
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/School
+    ImageKey: Thai/Vocabulary/Places/School
+    SoundKey: Thai/Vocabulary/Places/School
+    Key: School
+    LearnWord: "\u0E42\u0E23\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19"
+    Phonetics: Roong rian
+    DefaultTranslation: School
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Hotel
+    ImageKey: Thai/Vocabulary/Places/Hotel
+    SoundKey: Thai/Vocabulary/Places/Hotel
+    Key: Hotel
+    LearnWord: "\u0E42\u0E23\u0E07\u0E41\u0E23\u0E21"
+    Phonetics: Roong raem
+    DefaultTranslation: Hotel
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/_Shop
+    ImageKey: Thai/Vocabulary/Places/_Shop
+    SoundKey: Thai/Vocabulary/Places/_Shop
+    Key: _Shop
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19 + ..."
+    Phonetics: "R\xE2an + ..."
+    DefaultTranslation: '...
+
+      Shop'
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Restaurant
+    ImageKey: Thai/Vocabulary/Places/Restaurant
+    SoundKey: Thai/Vocabulary/Places/Restaurant
+    Key: Restaurant
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E2D\u0E32\u0E2B\u0E32\u0E23"
+    Phonetics: "R\xE2an aah\u0103an"
+    DefaultTranslation: Restaurant
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Coffee shop
+    ImageKey: Thai/Vocabulary/Places/Coffee shop
+    SoundKey: Thai/Vocabulary/Places/Coffee shop
+    Key: Coffee shop
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E01\u0E32\u0E41\u0E1F"
+    Phonetics: "R\xE2an gaa-faae"
+    DefaultTranslation: Coffee shop
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Book store
+    ImageKey: Thai/Vocabulary/Places/Book store
+    SoundKey: Thai/Vocabulary/Places/Book store
+    Key: Book store
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E2B\u0E19\u0E31\u0E07\u0E2A\u0E37\u0E2D"
+    Phonetics: "R\xE2an n\u0103ng-s\u0289\u0301e"
+    DefaultTranslation: Book store
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Bakery shop
+    ImageKey: Thai/Vocabulary/Places/Bakery shop
+    SoundKey: Thai/Vocabulary/Places/Bakery shop
+    Key: Bakery shop
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E40\u0E1A\u0E40\u0E01\u0E2D\u0E23\u0E35\u0E48"
+    Phonetics: "R\xE2an beegorii"
+    DefaultTranslation: Bakery shop
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Barber
+    ImageKey: Thai/Vocabulary/Places/Barber
+    SoundKey: Thai/Vocabulary/Places/Barber
+    Key: Barber
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E15\u0E31\u0E14\u0E1C\u0E21"
+    Phonetics: "R\xE2an dt\xE0t-pohm"
+    DefaultTranslation: Barber
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Hair salon
+    ImageKey: Thai/Vocabulary/Places/Hair salon
+    SoundKey: Thai/Vocabulary/Places/Hair salon
+    Key: Hair salon
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E17\u0E33\u0E1C\u0E21"
+    Phonetics: "R\xE2an tam pohm"
+    DefaultTranslation: Hair salon
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Massage shop
+    ImageKey: Thai/Vocabulary/Places/Massage shop
+    SoundKey: Thai/Vocabulary/Places/Massage shop
+    Key: Massage shop
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E19\u0E27\u0E14"
+    Phonetics: "R\xE2an n\xF9at"
+    DefaultTranslation: Massage shop
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Nail salon
+    ImageKey: Thai/Vocabulary/Places/Nail salon
+    SoundKey: Thai/Vocabulary/Places/Nail salon
+    Key: Nail salon
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E17\u0E33\u0E40\u0E25\u0E47\u0E1A"
+    Phonetics: "R\xE2an tam l\xE8p"
+    DefaultTranslation: Nail salon
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Photo shop
+    ImageKey: Thai/Vocabulary/Places/Photo shop
+    SoundKey: Thai/Vocabulary/Places/Photo shop
+    Key: Photo shop
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E16\u0E48\u0E32\u0E22\u0E23\u0E39\u0E1B"
+    Phonetics: "R\xE2an t\u0103ay r\xFBup"
+    DefaultTranslation: Photo shop
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Tailor shop
+    ImageKey: Thai/Vocabulary/Places/Tailor shop
+    SoundKey: Thai/Vocabulary/Places/Tailor shop
+    Key: Tailor shop
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E15\u0E31\u0E14\u0E40\u0E2A\u0E37\u0E49\u0E2D"
+    Phonetics: "R\xE2an dt\xE0t s\u0289\u0301ea"
+    DefaultTranslation: Tailor shop
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Pharmacy
+    ImageKey: Thai/Vocabulary/Places/Pharmacy
+    SoundKey: Thai/Vocabulary/Places/Pharmacy
+    Key: Pharmacy
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E02\u0E32\u0E22\u0E22\u0E32"
+    Phonetics: "R\xE2an k\u0103ay yaa"
+    DefaultTranslation: Pharmacy
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Grocery store
+    ImageKey: Thai/Vocabulary/Places/Grocery store
+    SoundKey: Thai/Vocabulary/Places/Grocery store
+    Key: Grocery store
+    LearnWord: "\u0E23\u0E49\u0E32\u0E19\u0E02\u0E32\u0E22\u0E02\u0E2D\u0E07\u0E0A\u0E33"
+    Phonetics: "R\xE2an k\u01CEai k\u01D2rng cham"
+    DefaultTranslation: Grocery store
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Company
+    ImageKey: Thai/Vocabulary/Places/Company
+    SoundKey: Thai/Vocabulary/Places/Company
+    Key: Company
+    LearnWord: "\u0E1A\u0E23\u0E34\u0E29\u0E31\u0E17"
+    Phonetics: "Boorr\xE1s\xE0t"
+    DefaultTranslation: Company
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Workplace
+    ImageKey: Thai/Vocabulary/Places/Workplace
+    SoundKey: Thai/Vocabulary/Places/Workplace
+    Key: Workplace
+    LearnWord: "\u0E17\u0E35\u0E48\u0E17\u0E33\u0E07\u0E32\u0E19"
+    Phonetics: "T\xEEi tamngaan"
+    DefaultTranslation: Workplace
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Shopping mall
+    ImageKey: Thai/Vocabulary/Places/Shopping mall
+    SoundKey: Thai/Vocabulary/Places/Shopping mall
+    Key: Shopping mall
+    LearnWord: "\u0E2B\u0E49\u0E32\u0E07"
+    Phonetics: "H\xE2ang"
+    DefaultTranslation: Shopping mall
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Market
+    ImageKey: Thai/Vocabulary/Places/Market
+    SoundKey: Thai/Vocabulary/Places/Market
+    Key: Market
+    LearnWord: "\u0E15\u0E25\u0E32\u0E14"
+    Phonetics: "Dt\xE0-l\xE0at"
+    DefaultTranslation: Market
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Hospital
+    ImageKey: Thai/Vocabulary/Places/Hospital
+    SoundKey: Thai/Vocabulary/Places/Hospital
+    Key: Hospital
+    LearnWord: "\u0E42\u0E23\u0E07\u0E1E\u0E22\u0E32\u0E1A\u0E32\u0E25"
+    Phonetics: Roong-pa-yaa-baan
+    DefaultTranslation: Hospital
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Dental clinic
+    ImageKey: Thai/Vocabulary/Places/Dental clinic
+    SoundKey: Thai/Vocabulary/Places/Dental clinic
+    Key: Dental clinic
+    LearnWord: "\u0E04\u0E25\u0E34\u0E19\u0E34\u0E01\u0E17\u0E33\u0E1F\u0E31\u0E19"
+    Phonetics: Clinic tam fan
+    DefaultTranslation: Dental clinic
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Immigration
+    ImageKey: Thai/Vocabulary/Places/Immigration
+    SoundKey: Thai/Vocabulary/Places/Immigration
+    Key: Immigration
+    LearnWord: "\u0E15.\u0E21."
+    Phonetics: "Dt\xF2or moor"
+    DefaultTranslation: Immigration
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Airport
+    ImageKey: Thai/Vocabulary/Places/Airport
+    SoundKey: Thai/Vocabulary/Places/Airport
+    Key: Airport
+    LearnWord: "\u0E2A\u0E19\u0E32\u0E21\u0E1A\u0E34\u0E19"
+    Phonetics: "S\xE0naam bin"
+    DefaultTranslation: Airport
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Transportation stand_Queue
+    ImageKey: Thai/Vocabulary/Places/Transportation stand_Queue
+    SoundKey: Thai/Vocabulary/Places/Transportation stand_Queue
+    Key: Transportation stand_Queue
+    LearnWord: "\u0E27\u0E34\u0E19\u0E23\u0E16..."
+    Phonetics: "Win r\xF3t..."
+    DefaultTranslation: Transportation stand / Queue
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Motorcycle stand
+    ImageKey: Thai/Vocabulary/Places/Motorcycle stand
+    SoundKey: Thai/Vocabulary/Places/Motorcycle stand
+    Key: Motorcycle stand
+    LearnWord: "\u0E27\u0E34\u0E19\u0E21\u0E2D\u0E40\u0E15\u0E2D\u0E23\u0E4C\u0E44\u0E0B\u0E04\u0E4C"
+    Phonetics: Win mor-dtor-sai
+    DefaultTranslation: Motorcycle stand
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Minitruck stand
+    ImageKey: Thai/Vocabulary/Places/Minitruck stand
+    SoundKey: Thai/Vocabulary/Places/Minitruck stand
+    Key: Minitruck stand
+    LearnWord: "\u0E27\u0E34\u0E19\u0E23\u0E16\u0E2A\u0E2D\u0E07\u0E41\u0E16\u0E27"
+    Phonetics: "Win r\xF3t soongtaaew"
+    DefaultTranslation: Minitruck stand
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Van stand
+    ImageKey: Thai/Vocabulary/Places/Van stand
+    SoundKey: Thai/Vocabulary/Places/Van stand
+    Key: Van stand
+    LearnWord: "\u0E27\u0E34\u0E19\u0E23\u0E16\u0E15\u0E39\u0E49"
+    Phonetics: "Win r\xF3t dt\xFBu"
+    DefaultTranslation: Van stand
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Taxi stand
+    ImageKey: Thai/Vocabulary/Places/Taxi stand
+    SoundKey: Thai/Vocabulary/Places/Taxi stand
+    Key: Taxi stand
+    LearnWord: "\u0E27\u0E34\u0E19\u0E41\u0E17\u0E47\u0E01\u0E0B\u0E35\u0E48"
+    Phonetics: Win taxi
+    DefaultTranslation: Taxi stand
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Station
+    ImageKey: Thai/Vocabulary/Places/Station
+    SoundKey: Thai/Vocabulary/Places/Station
+    Key: Station
+    LearnWord: "\u0E2A\u0E16\u0E32\u0E19\u0E35"
+    Phonetics: "S\xE0taanii"
+    DefaultTranslation: Station
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Train station
+    ImageKey: Thai/Vocabulary/Places/Train station
+    SoundKey: Thai/Vocabulary/Places/Train station
+    Key: Train station
+    LearnWord: "\u0E2A\u0E16\u0E32\u0E19\u0E35\u0E23\u0E16\u0E44\u0E1F"
+    Phonetics: "S\xE0taanii r\xF3tfaai"
+    DefaultTranslation: Train station
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Sky train station
+    ImageKey: Thai/Vocabulary/Places/Sky train station
+    SoundKey: Thai/Vocabulary/Places/Sky train station
+    Key: Sky train station
+    LearnWord: "\u0E2A\u0E16\u0E32\u0E19\u0E35\u0E23\u0E16\u0E44\u0E1F\u0E1F\u0E49\u0E32"
+    Phonetics: "S\xE0-t\u01CEa-nii r\xF3t fai f\xE1a"
+    DefaultTranslation: Sky train station
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Police station
+    ImageKey: Thai/Vocabulary/Places/Police station
+    SoundKey: Thai/Vocabulary/Places/Police station
+    Key: Police station
+    LearnWord: "\u0E2A\u0E16\u0E32\u0E19\u0E35\u0E15\u0E33\u0E23\u0E27\u0E08"
+    Phonetics: "S\xE0taanii dtamr\xF9at"
+    DefaultTranslation: Police station
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Post office
+    ImageKey: Thai/Vocabulary/Places/Post office
+    SoundKey: Thai/Vocabulary/Places/Post office
+    Key: Post office
+    LearnWord: "\u0E44\u0E1B\u0E23\u0E29\u0E13\u0E35\u0E22\u0E4C"
+    Phonetics: "Bp\xE0-r\xED-s\xE0-nii"
+    DefaultTranslation: Post office
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Embassy
+    ImageKey: Thai/Vocabulary/Places/Embassy
+    SoundKey: Thai/Vocabulary/Places/Embassy
+    Key: Embassy
+    LearnWord: "\u0E2A\u0E16\u0E32\u0E19\u0E17\u0E39\u0E15"
+    Phonetics: "S\xE0-taan t\xFBut"
+    DefaultTranslation: Embassy
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Bank
+    ImageKey: Thai/Vocabulary/Places/Bank
+    SoundKey: Thai/Vocabulary/Places/Bank
+    Key: Bank
+    LearnWord: "\u0E18\u0E19\u0E32\u0E04\u0E32\u0E23"
+    Phonetics: "T\xE0-naa-kaan"
+    DefaultTranslation: Bank
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Gas station
+    ImageKey: Thai/Vocabulary/Places/Gas station
+    SoundKey: Thai/Vocabulary/Places/Gas station
+    Key: Gas station
+    LearnWord: "\u0E1B\u0E31\u0E4A\u0E21\u0E19\u0E49\u0E33\u0E21\u0E31\u0E19"
+    Phonetics: "Bp\xE1m n\xE1m-man"
+    DefaultTranslation: Gas station
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Garage
+    ImageKey: Thai/Vocabulary/Places/Garage
+    SoundKey: Thai/Vocabulary/Places/Garage
+    Key: Garage
+    LearnWord: "\u0E2D\u0E39\u0E48\u0E0B\u0E48\u0E2D\u0E21\u0E23\u0E16"
+    Phonetics: "\xD9u s\xF2rm r\xF3t"
+    DefaultTranslation: Garage
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Stadium
+    ImageKey: Thai/Vocabulary/Places/Stadium
+    SoundKey: Thai/Vocabulary/Places/Stadium
+    Key: Stadium
+    LearnWord: "\u0E2A\u0E19\u0E32\u0E21\u0E01\u0E35\u0E2C\u0E32"
+    Phonetics: "S\xE0-n\u0103am g\xEClaa"
+    DefaultTranslation: Stadium
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Sport court_field
+    ImageKey: Thai/Vocabulary/Places/Sport court_field
+    SoundKey: Thai/Vocabulary/Places/Sport court_field
+    Key: Sport court_field
+    LearnWord: "\u0E2A\u0E19\u0E32\u0E21 + sportname"
+    Phonetics: "S\xE0-n\u0103am + sportname"
+    DefaultTranslation: Sport court/field
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Swimming pool
+    ImageKey: Thai/Vocabulary/Places/Swimming pool
+    SoundKey: Thai/Vocabulary/Places/Swimming pool
+    Key: Swimming pool
+    LearnWord: "\u0E2A\u0E23\u0E30\u0E27\u0E48\u0E32\u0E22\u0E19\u0E49\u0E33"
+    Phonetics: "S\xE0 waayn\xE1m"
+    DefaultTranslation: Swimming pool
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/University
+    ImageKey: Thai/Vocabulary/Places/University
+    SoundKey: Thai/Vocabulary/Places/University
+    Key: University
+    LearnWord: "\u0E21\u0E2B\u0E32\u0E27\u0E34\u0E17\u0E22\u0E32\u0E25\u0E31\u0E22"
+    Phonetics: "Mah\u01CEaw\xEDt-t\xE1-yaa-lai"
+    DefaultTranslation: University
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Bus stop
+    ImageKey: Thai/Vocabulary/Places/Bus stop
+    SoundKey: Thai/Vocabulary/Places/Bus stop
+    Key: Bus stop
+    LearnWord: "\u0E1B\u0E49\u0E32\u0E22\u0E23\u0E16\u0E40\u0E21\u0E25\u0E4C"
+    Phonetics: "Bp\xE2ay r\xF3t mee"
+    DefaultTranslation: Bus stop
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Temple
+    ImageKey: Thai/Vocabulary/Places/Temple
+    SoundKey: Thai/Vocabulary/Places/Temple
+    Key: Temple
+    LearnWord: "\u0E27\u0E31\u0E14"
+    Phonetics: "W\xE1t"
+    DefaultTranslation: Temple
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/Church
+    ImageKey: Thai/Vocabulary/Places/Church
+    SoundKey: Thai/Vocabulary/Places/Church
+    Key: Church
+    LearnWord: "\u0E42\u0E1A\u0E2A\u0E16\u0E4C"
+    Phonetics: "B\xF2ot"
+    DefaultTranslation: Church
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/The sea_the beach
+    ImageKey: Thai/Vocabulary/Places/The sea_the beach
+    SoundKey: Thai/Vocabulary/Places/The sea_the beach
+    Key: The sea_the beach
+    LearnWord: "\u0E17\u0E30\u0E40\u0E25"
+    Phonetics: "T\xE1-lee"
+    DefaultTranslation: The sea / the beach
+    DefaultDescription: 
+  - Language: 6
+    Section: Places
+    WordKey: Thai/Vocabulary/Places/The beach_dry area_
+    ImageKey: Thai/Vocabulary/Places/The beach_dry area_
+    SoundKey: Thai/Vocabulary/Places/The beach_dry area_
+    Key: The beach_dry area_
+    LearnWord: "\u0E0A\u0E32\u0E22\u0E2B\u0E32\u0E14"
+    Phonetics: "Chaay h\xE0at"
+    DefaultTranslation: The beach (dry area)
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Alley
+    ImageKey: Thai/Vocabulary/Prepositions/Alley
+    SoundKey: Thai/Vocabulary/Prepositions/Alley
+    Key: Alley
+    LearnWord: "\u0E0B\u0E2D\u0E22"
+    Phonetics: Soi
+    DefaultTranslation: Alley
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Area_near_row
+    ImageKey: Thai/Vocabulary/Prepositions/Area_near_row
+    SoundKey: Thai/Vocabulary/Prepositions/Area_near_row
+    Key: Area_near_row
+    LearnWord: "\u0E41\u0E16\u0E27"
+    Phonetics: "T\xE0aew"
+    DefaultTranslation: Area, near, row
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Arrive
+    ImageKey: Thai/Vocabulary/Prepositions/Arrive
+    SoundKey: Thai/Vocabulary/Prepositions/Arrive
+    Key: Arrive
+    LearnWord: "\u0E16\u0E36\u0E07"
+    Phonetics: "T\u01D4eng"
+    DefaultTranslation: Arrive
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/At_at exact area
+    ImageKey: Thai/Vocabulary/Prepositions/At_at exact area
+    SoundKey: Thai/Vocabulary/Prepositions/At_at exact area
+    Key: At_at exact area
+    LearnWord: "\u0E15\u0E23\u0E07"
+    Phonetics: Dtrong
+    DefaultTranslation: At, at exact area
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Behind_After
+    ImageKey: Thai/Vocabulary/Prepositions/Behind_After
+    SoundKey: Thai/Vocabulary/Prepositions/Behind_After
+    Key: Behind_After
+    LearnWord: "\u0E2B\u0E25\u0E31\u0E07"
+    Phonetics: "L\u0103ng"
+    DefaultTranslation: Behind / After
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Beside
+    ImageKey: Thai/Vocabulary/Prepositions/Beside
+    SoundKey: Thai/Vocabulary/Prepositions/Beside
+    Key: Beside
+    LearnWord: "\u0E02\u0E49\u0E32\u0E07"
+    Phonetics: "K\xE2ang"
+    DefaultTranslation: Beside
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Between
+    ImageKey: Thai/Vocabulary/Prepositions/Between
+    SoundKey: Thai/Vocabulary/Prepositions/Between
+    Key: Between
+    LearnWord: "\u0E23\u0E30\u0E2B\u0E27\u0E48\u0E32\u0E07"
+    Phonetics: "R\xE1-w\xE0ang"
+    DefaultTranslation: Between
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Come across_find_see
+    ImageKey: Thai/Vocabulary/Prepositions/Come across_find_see
+    SoundKey: Thai/Vocabulary/Prepositions/Come across_find_see
+    Key: Come across_find_see
+    LearnWord: "\u0E40\u0E08\u0E2D"
+    Phonetics: Jooe
+    DefaultTranslation: Come across, find, see
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Drive
+    ImageKey: Thai/Vocabulary/Prepositions/Drive
+    SoundKey: Thai/Vocabulary/Prepositions/Drive
+    Key: Drive
+    LearnWord: "\u0E02\u0E31\u0E1A"
+    Phonetics: "K\xE0p"
+    DefaultTranslation: Drive
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/End of
+    ImageKey: Thai/Vocabulary/Prepositions/End of
+    SoundKey: Thai/Vocabulary/Prepositions/End of
+    Key: End of
+    LearnWord: "\u0E2A\u0E38\u0E14"
+    Phonetics: "S\xF9t"
+    DefaultTranslation: End of
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Go straight
+    ImageKey: Thai/Vocabulary/Prepositions/Go straight
+    SoundKey: Thai/Vocabulary/Prepositions/Go straight
+    Key: Go straight
+    LearnWord: "\u0E15\u0E23\u0E07\u0E44\u0E1B / \u0E15\u0E23\u0E07\u0E21\u0E32"
+    Phonetics: Dtrong bpai / Dtrong maa
+    DefaultTranslation: Go straight
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/In
+    ImageKey: Thai/Vocabulary/Prepositions/In
+    SoundKey: Thai/Vocabulary/Prepositions/In
+    Key: In
+    LearnWord: "\u0E43\u0E19"
+    Phonetics: Nai
+    DefaultTranslation: In
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/In front of
+    ImageKey: Thai/Vocabulary/Prepositions/In front of
+    SoundKey: Thai/Vocabulary/Prepositions/In front of
+    Key: In front of
+    LearnWord: "\u0E2B\u0E19\u0E49\u0E32"
+    Phonetics: "N\xE2a"
+    DefaultTranslation: In front of
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Keep at some side
+    ImageKey: Thai/Vocabulary/Prepositions/Keep at some side
+    SoundKey: Thai/Vocabulary/Prepositions/Keep at some side
+    Key: Keep at some side
+    LearnWord: "\u0E0A\u0E34\u0E14"
+    Phonetics: "Ch\xEDt"
+    DefaultTranslation: Keep at some side
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/_Keep_continue
+    ImageKey: Thai/Vocabulary/Prepositions/_Keep_continue
+    SoundKey: Thai/Vocabulary/Prepositions/_Keep_continue
+    Key: _Keep_continue
+    LearnWord: "\u0E40\u0E23\u0E37\u0E48\u0E2D\u0E22\u0E46"
+    Phonetics: "R\xFBeay r\xFBeay"
+    DefaultTranslation: (Keep) continue
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Leave from
+    ImageKey: Thai/Vocabulary/Prepositions/Leave from
+    SoundKey: Thai/Vocabulary/Prepositions/Leave from
+    Key: Leave from
+    LearnWord: "\u0E2D\u0E2D\u0E01\u0E08\u0E32\u0E01"
+    Phonetics: "\xD4rk j\xE0ak"
+    DefaultTranslation: Leave from
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Left side
+    ImageKey: Thai/Vocabulary/Prepositions/Left side
+    SoundKey: Thai/Vocabulary/Prepositions/Left side
+    Key: Left side
+    LearnWord: "\u0E0B\u0E49\u0E32\u0E22"
+    Phonetics: "S\xE1i"
+    DefaultTranslation: Left side
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Make a U_turn
+    ImageKey: Thai/Vocabulary/Prepositions/Make a U_turn
+    SoundKey: Thai/Vocabulary/Prepositions/Make a U_turn
+    Key: Make a U_turn
+    LearnWord: "\u0E01\u0E25\u0E31\u0E1A\u0E23\u0E16"
+    Phonetics: "Gl\xE0p r\xF3t"
+    DefaultTranslation: Make a U-turn
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Near
+    ImageKey: Thai/Vocabulary/Prepositions/Near
+    SoundKey: Thai/Vocabulary/Prepositions/Near
+    Key: Near
+    LearnWord: "\u0E43\u0E01\u0E25\u0E49"
+    Phonetics: "Gl\xE2i"
+    DefaultTranslation: Near
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Next to
+    ImageKey: Thai/Vocabulary/Prepositions/Next to
+    SoundKey: Thai/Vocabulary/Prepositions/Next to
+    Key: Next to
+    LearnWord: "\u0E15\u0E34\u0E14\u0E01\u0E31\u0E1A"
+    Phonetics: "Dt\xECt g\xE0p"
+    DefaultTranslation: Next to
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/On
+    ImageKey: Thai/Vocabulary/Prepositions/On
+    SoundKey: Thai/Vocabulary/Prepositions/On
+    Key: On
+    LearnWord: "\u0E1A\u0E19"
+    Phonetics: "B\xF2n"
+    DefaultTranslation: On
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Once_When
+    ImageKey: Thai/Vocabulary/Prepositions/Once_When
+    SoundKey: Thai/Vocabulary/Prepositions/Once_When
+    Key: Once_When
+    LearnWord: "\u0E1E\u0E2D"
+    Phonetics: Por
+    DefaultTranslation: Once/When
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Opposite
+    ImageKey: Thai/Vocabulary/Prepositions/Opposite
+    SoundKey: Thai/Vocabulary/Prepositions/Opposite
+    Key: Opposite
+    LearnWord: "\u0E15\u0E23\u0E07\u0E02\u0E49\u0E32\u0E21"
+    Phonetics: "Dtrong k\xE2am"
+    DefaultTranslation: Opposite
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Pass
+    ImageKey: Thai/Vocabulary/Prepositions/Pass
+    SoundKey: Thai/Vocabulary/Prepositions/Pass
+    Key: Pass
+    LearnWord: "\u0E1C\u0E48\u0E32\u0E19"
+    Phonetics: "P\xE0an"
+    DefaultTranslation: Pass
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Right side
+    ImageKey: Thai/Vocabulary/Prepositions/Right side
+    SoundKey: Thai/Vocabulary/Prepositions/Right side
+    Key: Right side
+    LearnWord: "\u0E02\u0E27\u0E32"
+    Phonetics: "Kw\u01CEa"
+    DefaultTranslation: Right side
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Road
+    ImageKey: Thai/Vocabulary/Prepositions/Road
+    SoundKey: Thai/Vocabulary/Prepositions/Road
+    Key: Road
+    LearnWord: "\u0E16\u0E19\u0E19"
+    Phonetics: "Ta-n\u01D2n"
+    DefaultTranslation: Road
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/See
+    ImageKey: Thai/Vocabulary/Prepositions/See
+    SoundKey: Thai/Vocabulary/Prepositions/See
+    Key: See
+    LearnWord: "\u0E40\u0E2B\u0E47\u0E19"
+    Phonetics: "H\u011Bn"
+    DefaultTranslation: See
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Turn
+    ImageKey: Thai/Vocabulary/Prepositions/Turn
+    SoundKey: Thai/Vocabulary/Prepositions/Turn
+    Key: Turn
+    LearnWord: "\u0E40\u0E25\u0E35\u0E49\u0E22\u0E27"
+    Phonetics: "L\xEDaw"
+    DefaultTranslation: Turn
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Under
+    ImageKey: Thai/Vocabulary/Prepositions/Under
+    SoundKey: Thai/Vocabulary/Prepositions/Under
+    Key: Under
+    LearnWord: "\u0E43\u0E15\u0E49"
+    Phonetics: "Dt\xE2i"
+    DefaultTranslation: Under
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Until
+    ImageKey: Thai/Vocabulary/Prepositions/Until
+    SoundKey: Thai/Vocabulary/Prepositions/Until
+    Key: Until
+    LearnWord: "\u0E08\u0E19"
+    Phonetics: Jon
+    DefaultTranslation: Until
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Walk
+    ImageKey: Thai/Vocabulary/Prepositions/Walk
+    SoundKey: Thai/Vocabulary/Prepositions/Walk
+    Key: Walk
+    LearnWord: "\u0E40\u0E14\u0E34\u0E19"
+    Phonetics: Dooen
+    DefaultTranslation: Walk
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Way
+    ImageKey: Thai/Vocabulary/Prepositions/Way
+    SoundKey: Thai/Vocabulary/Prepositions/Way
+    Key: Way
+    LearnWord: "\u0E17\u0E32\u0E07"
+    Phonetics: Taang
+    DefaultTranslation: Way
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/Which
+    ImageKey: Thai/Vocabulary/Prepositions/Which
+    SoundKey: Thai/Vocabulary/Prepositions/Which
+    Key: Which
+    LearnWord: "...\u0E44\u0E2B\u0E19"
+    Phonetics: "N\u01CEi"
+    DefaultTranslation: Which
+    DefaultDescription: 
+  - Language: 6
+    Section: Prepositions
+    WordKey: Thai/Vocabulary/Prepositions/With
+    ImageKey: Thai/Vocabulary/Prepositions/With
+    SoundKey: Thai/Vocabulary/Prepositions/With
+    Key: With
+    LearnWord: "\u0E01\u0E31\u0E1A"
+    Phonetics: "G\xE0b"
+    DefaultTranslation: With
+    DefaultDescription: 

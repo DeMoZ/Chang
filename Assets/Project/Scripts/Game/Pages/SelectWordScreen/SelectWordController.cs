@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Chang.Core;
 using Zenject;
 using Chang.UI;
 using UnityEngine;
@@ -22,13 +23,12 @@ namespace Chang
         }
 
         public void Init(bool isQuestInTranslation,
-            PhraseData correctWord,
-            Sprite sprite,
-            List<PhraseData> mixWords,
+            Word correctWord,
+            List<Word> mixWords,
             Action<int, bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
-            _view.Init(isQuestInTranslation, correctWord, sprite, mixWords, onToggleValueChanged, onClickPlaySound);
+            _view.Init(isQuestInTranslation, correctWord, mixWords, onToggleValueChanged, onClickPlaySound);
         }
 
         public void SetViewActive(bool active)

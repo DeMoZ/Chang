@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UnityEngine;
 
 namespace Chang.Profile
@@ -32,6 +33,14 @@ namespace Chang.Profile
         [field: SerializeField]
         public string Name { get; set; }
         
+        /// <summary>
+        /// Player gender
+        /// </summary>
+        [JsonProperty]
+        [JsonConverter(typeof(StringEnumConverter))]
+        [field: SerializeField]
+        public GenderType Gender { get; set; } = GenderType.No;
+        
         [field: SerializeField]
         public Languages LearnLanguage { get; set; } = Languages.Thai;
         public Languages NativeLanguage { get; set; } = Languages.English;
@@ -53,6 +62,11 @@ namespace Chang.Profile
         public void SetTime(DateTime utcTime)
         {
             UtcTime = utcTime;
+        }
+
+        public void SetPlayerId(string playerId)
+        {
+            UnityCloudSavePlayerId = playerId;
         }
     }
 }

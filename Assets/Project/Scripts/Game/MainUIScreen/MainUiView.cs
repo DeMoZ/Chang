@@ -12,7 +12,8 @@ namespace Chang
         [SerializeField] private ToggleGroup toggleGroup;
 
         [Space]
-        [SerializeField] private TabToggle lessonsToggle;
+        [SerializeField] private TabToggle vocabularyToggle;
+        [SerializeField] private TabToggle sentencesToggle;
         [SerializeField] private TabToggle repetitionToggle;
         [SerializeField] private TabToggle profileToggle;
 
@@ -33,7 +34,8 @@ namespace Chang
 
         private void OnEnable()
         {
-            lessonsToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Lessons));
+            vocabularyToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Vocabulary));
+            sentencesToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Sentences));
             repetitionToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Repetition));
             profileToggle.AddListener(isOn => OnTabChanged(isOn, MainTabType.Profile));
 
@@ -44,7 +46,8 @@ namespace Chang
         private void OnDisable()
         {
 
-            lessonsToggle.RemoveAllListeners();
+            vocabularyToggle.RemoveAllListeners();
+            sentencesToggle.RemoveAllListeners();
             repetitionToggle.RemoveAllListeners();
             profileToggle.RemoveAllListeners();
 
@@ -54,8 +57,11 @@ namespace Chang
 
         public void EnableToggleType(MainTabType currentTabType)
         {
-            if (currentTabType == MainTabType.Lessons)
-                lessonsToggle.Activate();
+            if (currentTabType == MainTabType.Vocabulary)
+                vocabularyToggle.Activate();
+            
+            if (currentTabType == MainTabType.Sentences)
+                sentencesToggle.Activate();
 
             if (currentTabType == MainTabType.Repetition)
                 repetitionToggle.Activate();

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Chang;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Popup;
-using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -21,7 +21,6 @@ namespace Project.Services.PagesContentProvider
         private readonly IResourcesManager _assetManager;
         private readonly WordPathHelper _wordPathHelper;
         private readonly PopupManager _popupManager;
-        private readonly ProfileService _profileService;
 
         private Action<float, float> _progress;
 
@@ -29,13 +28,11 @@ namespace Project.Services.PagesContentProvider
 
         public PagesContentProvider(IResourcesManager assetManager,
             WordPathHelper wordPathHelper,
-            PopupManager popupManager,
-            ProfileService profileService)
+            PopupManager popupManager)
         {
             _assetManager = assetManager;
             _wordPathHelper = wordPathHelper;
             _popupManager = popupManager;
-            _profileService = profileService;
 
             Content = new Dictionary<string, IDisposableAsset>();
         }
@@ -56,138 +53,44 @@ namespace Project.Services.PagesContentProvider
             // no clear cache on pages switch, so don't implement this method
         }
 
-        public async UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> progress,
+        public bool GetPhrase(string path)
+        {
+            // get from book/vocabulary
+            throw new NotImplementedException();
+        }
+
+        public async UniTask PreloadWordsContentAsync(List<Word> words, Action<float, float> progress,
             CancellationToken ct)
         {
             _progress = progress;
 
-            HashSet<string> imageKeys = new();
-            HashSet<string> soundKeys = new();
-            HashSet<string> configKeys = new();
+            HashSet<string> imageKeys = words.Select(w => _wordPathHelper.GetTexturePath(w.ImageKey)).ToHashSet();
+            HashSet<string> soundKeys = words.Select(w => _wordPathHelper.GetSoundPath(w.SoundKey)).ToHashSet();
 
             HashSet<string> totalKeys = new();
-            foreach (ISimpleQuestion quest in questions)
-            {
-                imageKeys.AddRange(quest.GetSoundKeys().Select(k => _wordPathHelper.GetTexturePath(k)));
-                configKeys.AddRange(quest.GetConfigKeys().Select(k => _wordPathHelper.GetConfigPath(k)));
-                soundKeys = GetSoundKeys(quest.GetSoundKeys().Select(k => k).ToHashSet()).ToHashSet();
-            }
-
             totalKeys.UnionWith(imageKeys);
             totalKeys.UnionWith(soundKeys);
-            totalKeys.UnionWith(configKeys);
 
             long totalToLoad = await GetDownloadSize(totalKeys, ct);
 
-            if (totalToLoad == 0)
-            {
-                Debug.Log("No assets need to be downloaded.");
-                return;
-            }
-
             Dictionary<string, IDisposableAsset> images = new();
             Dictionary<string, IDisposableAsset> sounds = new();
-            Dictionary<string, IDisposableAsset> configs = new();
 
             long currentToLoad = 0;
             long downloadSize = 0;
-
             downloadSize = await GetDownloadSize(imageKeys, ct);
-            if (downloadSize > 0)
-            {
-                currentToLoad += downloadSize;
-                images = await Preload<Sprite>(imageKeys,
-                    progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
-            }
-
+            currentToLoad += downloadSize;
+            images = await Preload<Sprite>(imageKeys,
+                progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
+           
             downloadSize = await GetDownloadSize(soundKeys, ct);
-            if (downloadSize > 0)
-            {
-                currentToLoad += downloadSize;
-                sounds = await Preload<AudioClip>(soundKeys,
-                    bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
-            }
-
-            downloadSize = await GetDownloadSize(configKeys, ct);
-            if (downloadSize > 0)
-            {
-                currentToLoad += downloadSize;
-                configs = await Preload<PhraseConfig>(configKeys,
-                    bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
-            }
+           
+            currentToLoad += downloadSize;
+            sounds = await Preload<AudioClip>(soundKeys,
+                bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
 
             Merge(Content, images);
             Merge(Content, sounds);
-            Merge(Content, configs);
-        }
-
-        public async UniTask GetContentAsync(ISimpleQuestion nextQuestion, CancellationToken ct)
-        {
-            LoadingUiModel loadingModel = new(LoadingElements.Animation);
-            LoadingUiController loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
-
-            HashSet<string> configKeys = nextQuestion.GetConfigKeys();
-            HashSet<string> imageKeys = nextQuestion.GetImageKeys();
-            HashSet<string> soundKeys = GetSoundKeys(nextQuestion.GetSoundKeys().Select(k => k).ToHashSet()).ToHashSet();
-
-            foreach (string key in configKeys)
-            {
-                string path = _wordPathHelper.GetConfigPath(key);
-
-                if (Content.TryGetValue(path, out var configAsset))
-                {
-                    if (configAsset != null)
-                    {
-                        continue;
-                    }
-                }
-
-                DisposableAsset<PhraseConfig> asset = await _assetManager.LoadAssetAsync<PhraseConfig>(path, ct);
-
-                if (asset.Item != null)
-                {
-                    Content[path] = asset;
-                }
-            }
-
-            foreach (string key in soundKeys)
-            {
-                if (Content.TryGetValue(key, out var configAsset))
-                {
-                    if (configAsset != null)
-                    {
-                        continue;
-                    }
-                }
-
-                DisposableAsset<AudioClip> asset = await _assetManager.LoadAssetAsync<AudioClip>(key, ct);
-                if (asset.Item != null)
-                {
-                    Content[key] = asset;
-                }
-            }
-
-            foreach (string key in imageKeys)
-            {
-                string path = _wordPathHelper.GetTexturePath(key);
-
-                if (Content.TryGetValue(path, out var configAsset))
-                {
-                    if (configAsset != null)
-                    {
-                        continue;
-                    }
-                }
-
-                DisposableAsset<Sprite> asset = await _assetManager.LoadAssetAsync<Sprite>(path, ct);
-
-                if (asset.Item != null)
-                {
-                    Content[path] = asset;
-                }
-            }
-
-            _popupManager.DisposePopup(loadingUiController);
         }
 
         [CanBeNull]
@@ -205,8 +108,9 @@ namespace Project.Services.PagesContentProvider
             return null;
         }
 
-        public Sprite GetCachedSprite(string path)
+        public Sprite GetCachedSprite(string key)
         {
+            string path = _wordPathHelper.GetTexturePath(key);
             Sprite sprite = GetCachedAsset<Sprite>(path);
 
             if (sprite == null)
@@ -229,27 +133,29 @@ namespace Project.Services.PagesContentProvider
             );
         }
 
-        public AudioClip GetCachedAudioClip(string name)
+        public AudioClip GetCachedAudioClip(string key)
         {
-            string path = _wordPathHelper.GetSoundPath(name);
+            string path = _wordPathHelper.GetSoundPath(key);
             return GetCachedAsset<AudioClip>(path);
         }
 
         private async UniTask<long> GetDownloadSize(HashSet<string> keys, CancellationToken ct)
         {
-            AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
+            AsyncOperationHandle<long> handle = default;
 
             try
             {
-                await getDownloadSizeHandle.ToUniTask(cancellationToken: ct);
+                handle = Addressables.GetDownloadSizeAsync(keys);
+                
+                await handle.ToUniTask(cancellationToken: ct);
 
-                if (getDownloadSizeHandle.Status == AsyncOperationStatus.Succeeded)
+                if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    return getDownloadSizeHandle.Result;
+                    return handle.Result;
                 }
 
                 Debug.LogError(
-                    $"{nameof(GetDownloadSize)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                    $"{nameof(GetDownloadSize)} failed to get download size: {handle.OperationException}");
                 return 0;
             }
             catch (OperationCanceledException)
@@ -264,7 +170,7 @@ namespace Project.Services.PagesContentProvider
             }
             finally
             {
-                getDownloadSizeHandle.Release();
+                handle.Release();
             }
         }
 
@@ -275,13 +181,12 @@ namespace Project.Services.PagesContentProvider
 
         private async UniTask<Dictionary<string, IDisposableAsset>> Preload<T>(HashSet<string> keys,
             Action<float> bytes, CancellationToken ct)
-            where T : class
+            where T : UnityEngine.Object
         {
             Debug.Log($"{nameof(Preload)}");
             Dictionary<string, IDisposableAsset> result = new();
             List<string> keysList = keys.ToList();
-            List<AsyncOperationHandle<T>> handles = new();
-            List<UniTask<T>> loadAssetTasks = new();
+            List<UniTask<DisposableAsset<T>>> loadAssetTasks = new();
 
             float[] individualProgress = new float[keysList.Count];
 
@@ -289,21 +194,19 @@ namespace Project.Services.PagesContentProvider
             {
                 string key = keysList[i];
                 int index = i;
-                AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key);
-                handles.Add(handle);
-                loadAssetTasks.Add(handle.ToUniTask(
-                    progress: Progress.Create<float>(p =>
+                loadAssetTasks.Add(_assetManager.LoadAssetAsync<T>(key, ct,
+                    Progress.Create<float>(p =>
                     {
                         individualProgress[index] = p;
                         bytes?.Invoke(individualProgress.Sum());
-                    }), cancellationToken: ct));
+                    })));
             }
 
-            T[] completedTasks = await UniTask.WhenAll(loadAssetTasks);
+            DisposableAsset<T>[] loadedAssets = await UniTask.WhenAll(loadAssetTasks);
 
-            for (int i = 0; i < completedTasks.Length; i++)
+            for (int i = 0; i < loadedAssets.Length; i++)
             {
-                result[keysList[i]] = new DisposableAsset<T>(completedTasks[i], handles[i]);
+                result[keysList[i]] = loadedAssets[i];
             }
 
             return result;
@@ -316,21 +219,6 @@ namespace Project.Services.PagesContentProvider
             {
                 toDictionary.TryAdd(pair.Key, pair.Value);
             }
-        }
-
-        private IEnumerable<string> GetSoundKeys(IEnumerable<string> keys)
-        {
-            IEnumerable<string> nativeSoundKeys = GetNativeSoundKeys(keys);
-            IEnumerable<string> soundKeys = keys;
-            soundKeys = soundKeys.Concat(nativeSoundKeys);
-
-            return soundKeys.Select(key => _wordPathHelper.GetSoundPath(key));
-        }
-
-        private IEnumerable<string> GetNativeSoundKeys(IEnumerable<string> soundKeys)
-        {
-            return new List<string>(); // todo chang disable native sound for now. Delete row on native sounds assets ready
-            return soundKeys.Select(key => _wordPathHelper.GetNativeSoundKey(key, _profileService.ProfileData.NativeLanguage));
         }
     }
 }

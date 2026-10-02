@@ -2,6 +2,14 @@ namespace Chang.Resources
 {
     public static class AssetPaths
     {
+        public static class Constants
+        {
+            public const string Vocabulary = "Vocabulary";
+            public const string Sentences = "Sentences";
+            public const string VocabularyBook = "VocabularyBook";
+            public const string SentencesBook = "SentencesBook";
+        }
+        
         public static class Utilities
         {
             public const string AssetsFolder = "Assets";
@@ -16,15 +24,46 @@ namespace Chang.Resources
             public const string Lesson = "Lesson";
 
             public const string Book = "Book";
-            public static string Sound = "Sound";
+            public const string Sound = "Sound";
+            
+            public const string Root = "Assets/Project/Configs/";
+            public const string BookConfigs = "BookConfigs/";
+            
+            public static string VocabularyPath(Languages language) =>
+                $"{Root}{BookConfigs}{language}/{Constants.Vocabulary}.asset";
+
+            public static string SentencesPath(Languages language) => 
+                $"{Root}{BookConfigs}{language}/{Constants.Sentences}.asset";
+            
+            public static string VocabularyBookPath(Languages language) =>
+                $"{Root}{BookConfigs}{language}/{Constants.VocabularyBook}.asset";
+
+            public static string SentencesBookPath(Languages language) =>
+                $"{Root}{BookConfigs}{language}/{Constants.SentencesBook}.asset";
         }
 
         public static class Addressables
         {
             public const string Root = "Assets/Project/Resources_Bundled/";
-            public static string Words = "Words/";
-            public static string SoundWords = "SoundWords/";
-            public static string ImageWords = "ImageWords/";
+            public const string Words = "Words/";
+            public const string BookConfigs = "BookConfigs/";
+            public const string SoundWords = "SoundWords/";
+            public const string ImageWords = "ImageWords/";
+
+            public const string EmptyWordPlaceHolder = "EmptyWordPlaceHolder.asset";
+            public const string EmptyWordPlaceHolderPath = Root + "EmptyWordPlaceHolder.asset";
+
+            public static string VocabularyPath(Languages language) =>
+                $"{Root}{BookConfigs}{language}/{Constants.Vocabulary}.asset";
+
+            public static string SentencesPath(Languages language) => 
+                $"{Root}{BookConfigs}{language}/{Constants.Sentences}.asset";
+            
+            public static string VocabularyBookPath(Languages language) =>
+                $"{Root}{BookConfigs}{language}/{Constants.VocabularyBook}.asset";
+
+            public static string SentencesBookPath(Languages language) =>
+                $"{Root}{BookConfigs}{language}/{Constants.SentencesBook}.asset";
         }
 
         public static class Resources

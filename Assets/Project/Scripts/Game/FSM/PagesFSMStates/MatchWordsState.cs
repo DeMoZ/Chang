@@ -1,9 +1,9 @@
 using System;
 using DMZ.FSM;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -15,19 +15,17 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class MatchWordsStateResult : IQuestionResult
+    public class MatchWordsResult : IQuestionResult
     {
-        public readonly List<SelectWordResult> Results = new();
-
-        public object[] Info { get; } = null;
-
-        public string Key { get; } = string.Empty;
-        public string Presentation { get; } = string.Empty;
-        public QuestionType Type => QuestionType.MatchWords;
-        public bool IsCorrect => true;
+        public ChangTypes Type => ChangTypes.MatchWords;
+        public List<WordResult> WordResults { get; } = new ();
+        public string Key => throw new NotImplementedException();
+        public string Presentation => throw new NotImplementedException();
+        public bool IsCorrect => throw new NotImplementedException();
+        public bool IsHintUsed => throw new NotImplementedException();
     }
 
-    public class MatchWordsState : ResultStateBase<QuestionType, PagesBus>
+    public class MatchWordsState : ResultStateBase<ChangTypes, PagesBus>
     {
         private readonly IPagesContentProvider _pagesContentProvider;
 
@@ -39,17 +37,16 @@ namespace Chang.FSM
         [Inject] private readonly PagesSoundController _pagesSoundController;
         [Inject] private readonly PopupManager _popupManager;
 
-        private List<WordData> _leftWords;
-        private List<WordData> _rightWords;
+        private List<Word> _leftWords;
+        private List<Word> _rightWords;
         private CancellationTokenSource _cts;
-
-        public override QuestionType Type => QuestionType.MatchWords;
-
         private int _correctCount;
-        private MatchWordsStateResult _result;
+        private MatchWordsResult _result;
 
-        public MatchWordsState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus,
-            onStateResult)
+        public override ChangTypes Type => ChangTypes.MatchWords;
+
+        public MatchWordsState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<ChangTypes> onStateResult)
+            : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
         }
@@ -78,42 +75,23 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
-
-            await _pagesContentProvider.GetContentAsync(question, ct);
-
-            QuestMatchWordsData questionData = new QuestMatchWordsData(new List<PhraseData>());
-            string path = string.Empty;
-            foreach (var fileName in question.GetConfigKeys())
-            {
-                path = _wordPathHelper.GetConfigPath(fileName);
-                var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
-                
-                if (!asset)
-                {
-                    Debug.LogError($"Asset not found: {path}");
-                    continue;
-                }
-
-                var data = asset.PhraseData;
-                questionData.MatchWords.Add(data);
-            }
+            QuestMatchWords question = Bus.Lesson.CurrentQuestion as  QuestMatchWords;
+            List<Word> words = Bus.Words.Where(pair => question.GetWordsKeys.Contains(pair.Key))
+                .Select(pair => pair.Value)
+                .ToList();
 
             _correctCount = 0;
-            _result = new MatchWordsStateResult();
+            _result = new MatchWordsResult();
 
             _stateController.EnableContinueButton(false);
-
-            var words = questionData.MatchWords.Select(p => p.Word);
-
+            
             foreach (var word in words)
             {
-                string key = $"{_profileService.ProfileData.LearnLanguage}/{word.LogKey}";
-                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetMark(key)));
+                word.SetShowPhonetics(WordHelper.GetShowPhonetics(_profileService.GetVocabularyMark(word.WordKey)));
             }
 
-            _leftWords = new List<WordData>(words);
-            _rightWords = new List<WordData>(words);
+            _leftWords = new List<Word>(words);
+            _rightWords = new List<Word>(words);
 
             _leftWords.Shuffle();
             _rightWords.Shuffle();
@@ -126,11 +104,11 @@ namespace Chang.FSM
 
         private void OnPlaySound(string key, bool isLearnLanguage)
         {
-            var language = isLearnLanguage?
-                _profileService.ProfileData.LearnLanguage.ToString() :
-                _profileService.ProfileData.NativeLanguage.ToString();
+            var language = isLearnLanguage 
+                ? _profileService.ProfileData.LearnLanguage.ToString() 
+                : _profileService.ProfileData.NativeLanguage.ToString();
             
-            string path = _wordPathHelper.GetSoundPath($"{language}/{key}");
+            string path = _wordPathHelper.GetSoundPath(key);
             AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
@@ -143,44 +121,21 @@ namespace Chang.FSM
         {
             var isCorrect = _leftWords[leftIndex] == _rightWords[rightIndex];
             Debug.Log($"leftIndex: {leftIndex}; rightIndex: {rightIndex}; result: {isCorrect}");
-
             _stateController.ShowCorrectAsync(leftIndex, rightIndex, isCorrect).Forget();
-            string path = Path.Combine(
-                _profileService.ProfileData.LearnLanguage.ToString(),
-                AssetPaths.Addressables.Words,
-                _leftWords[leftIndex].Section,
-                _leftWords[leftIndex].Key);
-
-            var leftResult = new SelectWordResult(
-                _wordPathHelper.NormalizePath(path),
-                _leftWords[leftIndex].LearnWord, isCorrect,
-                _leftWords[leftIndex].LearnWord, _leftWords[leftIndex].Phonetic);
-
-            _result.Results.Add(leftResult);
+            _result.WordResults.Add(new WordResult(_leftWords[leftIndex], isCorrect, false));
 
             if (!isCorrect)
             {
-                path = Path.Combine(
-                    _profileService.ProfileData.LearnLanguage.ToString(),
-                    AssetPaths.Addressables.Words,
-                    _rightWords[rightIndex].Section,
-                    _rightWords[rightIndex].Key);
-
-                var rightResult = new SelectWordResult(
-                    _wordPathHelper.NormalizePath(path),
-                    _rightWords[rightIndex].LearnWord, false,
-                    _rightWords[rightIndex].LearnWord, _rightWords[rightIndex].Phonetic);
-
-                _result.Results.Add(rightResult);
-            }
-
-            if (!isCorrect)
+                _result.WordResults.Add(new WordResult(_rightWords[rightIndex], false, false));
                 return;
-
+            }
+            
             _correctCount++;
 
             if (_correctCount == _leftWords.Count)
+            {
                 _stateController.EnableContinueButton(true);
+            }
         }
 
         private void OnContinueClicked()

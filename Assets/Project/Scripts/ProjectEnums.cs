@@ -2,18 +2,24 @@ namespace Chang
 {
     public enum GenderType
     {
-        None,
-        Male,
+        No,
         Female,
+        Male,
     }
 
-    public enum QuestionType
+    public enum ChangTypes
     {
         None,
+        Vocabulary,
+        Sentences,
+        VocabularyBook,
+        SentencesBook,
+        
         DemonstrationWord,
         SelectWord,
         MatchWords,
         DemonstrationDialogue,
+        SentenceSelectWords,
         
         Result = 100,
     }
@@ -40,7 +46,8 @@ namespace Chang
     public enum MainTabType
     {
         None,
-        Lessons,
+        Vocabulary,
+        Sentences,
         Repetition,
         Profile,
     }

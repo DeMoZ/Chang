@@ -1,4 +1,5 @@
 using System;
+using Chang.Core;
 using Zenject;
 using Chang.UI;
 using UnityEngine;
@@ -25,12 +26,11 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
-        public void Init(PhraseData correctWord,
-            Sprite sprite,
+        public void Init(Word correctWord,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
-            _view.Init(correctWord, sprite, onToggleValueChanged, onClickPlaySound);
+            _view.Init(correctWord, onToggleValueChanged, onClickPlaySound);
         }
     }
 }

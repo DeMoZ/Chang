@@ -1,6 +1,6 @@
 using System;
-using System.IO;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -13,23 +13,16 @@ using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.FSM
 {
-    public class DemonstrationWordResult : IQuestionResult
+    public class DemonstrationWordResult : WordResult
     {
-        public string Key { get; }
-        public string Presentation { get; }
-        public QuestionType Type => QuestionType.DemonstrationWord;
-        public bool IsCorrect => true;
-        public object[] Info { get; }
+        public override ChangTypes Type => ChangTypes.DemonstrationWord;
 
-        public DemonstrationWordResult(string key, string presentation, params object[] info)
+        public DemonstrationWordResult(Word word, bool isCorrect, bool isHintUsed) : base(word, isCorrect, isHintUsed)
         {
-            Key = key;
-            Presentation = presentation;
-            Info = info;
         }
     }
 
-    public class DemonstrationState : ResultStateBase<QuestionType, PagesBus>
+    public class DemonstrationState : ResultStateBase<ChangTypes, PagesBus>
     {
         private readonly IPagesContentProvider _pagesContentProvider;
 
@@ -41,13 +34,14 @@ namespace Chang.FSM
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly PopupManager _popupManager;
 
-        private PhraseData _correctWord;
+        private Word _correctWord;
         private CancellationTokenSource _cts;
 
-        public override QuestionType Type => QuestionType.DemonstrationWord;
+        public override ChangTypes Type => ChangTypes.DemonstrationWord;
 
-        public DemonstrationState(PagesBus bus, IPagesContentProvider pagesContentProvider, Action<QuestionType> onStateResult) : base(bus,
-            onStateResult)
+        public DemonstrationState(PagesBus bus, IPagesContentProvider pagesContentProvider,
+            Action<ChangTypes> onStateResult)
+            : base(bus, onStateResult)
         {
             _pagesContentProvider = pagesContentProvider;
         }
@@ -73,34 +67,27 @@ namespace Chang.FSM
 
         private async UniTask StateBodyAsync(CancellationToken ct)
         {
-            ISimpleQuestion question = Bus.CurrentLesson.CurrentSimpleQuestion;
+            QuestSelectWord question = Bus.Lesson.CurrentQuestion as QuestSelectWord;
 
-            await _pagesContentProvider.GetContentAsync(question, ct);
-
-            var path = _wordPathHelper.GetConfigPath(((SimpleQuestDemonstrationWord)question).CorrectWordFileName);
-            var asset = _pagesContentProvider.GetCachedAsset<PhraseConfig>(path);
-
-            if (!asset )
+            if (question == null)
             {
-                return;
+                throw new Exception("DemonstrateWordState: Current question is not of type QuestSelectWord.");
             }
-            
-            QuestDemonstrateWordData questionData = new QuestDemonstrateWordData(asset.PhraseData);
-            _correctWord = questionData.CorrectWord;
-            
-            string spritePath = _wordPathHelper.GetTexturePath(((SimpleQuestDemonstrationWord)question).CorrectWordFileName);
-            var sprite = _pagesContentProvider.GetCachedSprite(spritePath);
-            
-            _stateController.Init(_correctWord, sprite, OnToggleValueChanged, OnClickPlaySound);
+
+            _correctWord = Bus.Words[question.Key];
+            _correctWord.SetSprite(_pagesContentProvider.GetCachedSprite(_correctWord.ImageKey));
+            _stateController.Init(_correctWord, OnToggleValueChanged, OnClickPlaySound);
             _stateController.SetViewActive(true);
 
             OnClickPlaySound();
+            
+            await UniTask.Yield(ct);
         }
 
         private void OnClickPlaySound()
         {
-            var path = _wordPathHelper.GetSoundPath(_correctWord.LogKey);
-            var asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
+            string path = _wordPathHelper.GetSoundPath(_correctWord.WordKey);
+            AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
             {
@@ -112,16 +99,7 @@ namespace Chang.FSM
         {
             _gameOverlayController.EnableCheckButton(isOn);
             Debug.Log($"toggle isOn: {isOn}");
-            object[] info = { _correctWord.Word.LearnWord, false };
-            string path = Path.Combine(
-                _profileService.ProfileData.LearnLanguage.ToString(),
-                AssetPaths.Addressables.Words,
-                _correctWord.Word.Section,
-                _correctWord.Word.Key);
-            var result = new DemonstrationWordResult(
-                _wordPathHelper.NormalizePath(path),
-                _correctWord.Word.LearnWord,
-                info);
+            DemonstrationWordResult result = new (_correctWord, true, false);
             Bus.QuestionResult = result;
         }
     }

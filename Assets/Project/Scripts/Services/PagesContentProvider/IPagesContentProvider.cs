@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Chang;
+using Chang.Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -10,14 +10,9 @@ namespace Project.Services.PagesContentProvider
     public interface IPagesContentProvider : IDisposable
     {
         /// <summary>
-        /// Preloading all content on Enter Pages state. Content from all pages.
+        /// Preloading all content on Enter Pages state. Content from all pages. For words
         /// </summary>
-        UniTask PreloadPagesStateAsync(List<ISimpleQuestion> questions, Action<float, float> percents, CancellationToken ct);
-
-        /// <summary>
-        /// Get content on Enter Every Page. Content for current page.
-        /// </summary>
-        UniTask GetContentAsync(ISimpleQuestion question, CancellationToken ct);
+        UniTask PreloadWordsContentAsync(List<Word> words, Action<float, float> percents, CancellationToken ct);
 
         /// <summary>
         /// Get an asset from the cache by its key.
@@ -32,5 +27,7 @@ namespace Project.Services.PagesContentProvider
         /// Clears all cached content on Page Exit.
         /// </summary>
         void ClearCache();
+
+        bool GetPhrase(string path);
     }
 }

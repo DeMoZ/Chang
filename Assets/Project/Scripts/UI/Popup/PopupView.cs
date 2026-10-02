@@ -53,6 +53,39 @@ namespace Popup
             labelAndInput.gameObject.SetActive(true);
         }
 
+        public void CreateSelector(string[] options, int selectedIndex, Action<int> onSelect)
+        {
+            Transform container = Instantiate(buttonsContainerPrefab, content).transform;
+            foreach (Transform child in container)
+            {
+                Destroy(child.gameObject);
+            }
+
+            container.gameObject.SetActive(true);
+            HorizontalLayoutGroup group = container.GetOrAddComponent<HorizontalLayoutGroup>();
+            group.enabled = true;
+
+            SelectorView selector = container.gameObject.AddComponent<SelectorView>();
+            var buttons = new ButtonView[options.Length];
+            for (int i = 0; i < options.Length; i++)
+            {
+                int index = i;
+                ButtonView button = Instantiate(buttonPrefab, container);
+                button.Text = options[i];
+                button.OnClick = () =>
+                {
+                    selector.Select(index);
+                    onSelect?.Invoke(index);
+                };
+                button.OnSetInteractable = new DMZState<bool>(true);
+                button.Init();
+                button.gameObject.SetActive(true);
+                buttons[i] = button;
+            }
+
+            selector.Init(buttons, selectedIndex);
+        }
+
         public void CreateButton(string text,
             Action onClick,
             DMZState<bool> onSetInteractable)

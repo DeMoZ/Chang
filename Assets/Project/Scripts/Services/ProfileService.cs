@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Profile;
 using Chang.Services.DataProvider;
 using Cysharp.Threading.Tasks;
@@ -13,21 +13,27 @@ namespace Chang.Services
     public partial class ProfileService : IDisposable
     {
         private readonly PlayerProfile _playerProfile;
-        private readonly IDataProvider _prefsDataProvider;
-        private readonly IDataProvider _unityCloudDataProvider;
+        private readonly PrefsDataProvider _prefsDataProvider;
+        private readonly UnityCloudDataProvider _unityCloudDataProvider;
 
-        public ProgressData ProgressData => _playerProfile.ProgressData;
+        private bool _isVocabularyChanged;
+        private bool _isSentencesChanged;
+
+        public ProgressData<VocabularyQuestLog> VocabularyProgress => _playerProfile.VocabularyProgress;
+        public ProgressData<SentenceQuestLog> SentencesProgress => _playerProfile.SentencesProgress;
         public ProfileData ProfileData => _playerProfile.ProfileData;
         public string PlayerId => _unityCloudDataProvider.PlayerId;
-        public Dictionary<string, SimpleSection> ReorderedSections => _playerProfile.ReorderedSections;
-        public string ReorderedSectionKey(string section) => $"{_playerProfile.ProfileData.LearnLanguage}/{section}";
-
+        public Dictionary<string, VocabularySection> ReorderedVocabularySections => _playerProfile.ReorderedVocabularySections;
+        public Dictionary<string, SentencesSection> ReorderedSentencesSections => _playerProfile.ReorderedSentencesSections;
+        public Languages LearnLanguage => _playerProfile.ProfileData.LearnLanguage;
+        public string ReorderedSectionKey(string section) => $"{LearnLanguage}/{section}";
+        
         [Inject]
-        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler)
+        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler, AuthorizationService authorizationService)
         {
             _playerProfile = playerProfile;
             _prefsDataProvider = new PrefsDataProvider();
-            _unityCloudDataProvider = new UnityCloudDataProvider(errorHandler);
+            _unityCloudDataProvider = new UnityCloudDataProvider(errorHandler, authorizationService.RequestAuthentication);
         }
 
         public void Dispose()
@@ -36,59 +42,137 @@ namespace Chang.Services
             _unityCloudDataProvider.Dispose();
         }
 
-        public async UniTask LoadStoredData(CancellationToken ct)
+        /// <summary>
+        /// Loads the cloud and the local data, the newer one wins.
+        /// The local data of another player is ignored
+        /// </summary>
+        /// <returns>false if the player is not authenticated, authentication is requested then</returns>
+        public async UniTask<bool> LoadStoredData(CancellationToken ct)
         {
-            //var prefsProfileData = await _prefsDataProvider.LoadProfileDataAsync(_cts.Token);
-            //var prefsProgressData = await _prefsDataProvider.LoadProgressDataAsync(_cts.Token);
+            if (!_unityCloudDataProvider.CheckSession())
+            {
+                return false;
+            }
 
-            var unityProfileData = await _unityCloudDataProvider.LoadProfileDataAsync(ct);
-            var unityProgressData = await _unityCloudDataProvider.LoadProgressDataAsync(ct);
+            string playerId = _unityCloudDataProvider.PlayerId;
 
-            // todo chang merge data with prefs. But for now will use only cloud data
+            ProfileData cloudProfile = await _unityCloudDataProvider.LoadProfileDataAsync(ct);
+            ProfileData prefsProfile = await _prefsDataProvider.LoadProfileDataAsync(ct);
 
-            _playerProfile.ProfileData = unityProfileData;
-            _playerProfile.ProgressData = unityProgressData;
+            if (prefsProfile != null && prefsProfile.UnityCloudSavePlayerId != playerId)
+            {
+                Debug.LogWarning($"Local data belongs to the player: {prefsProfile.UnityCloudSavePlayerId}, it is deleted.");
+                _prefsDataProvider.Clear();
+                prefsProfile = null;
+            }
+
+            ProfileData profile = SelectNewer(cloudProfile, prefsProfile, data => data.UtcTime) ?? new ProfileData();
+            profile.SetPlayerId(playerId);
+            Languages language = profile.LearnLanguage;
+
+            ProgressData<VocabularyQuestLog> cloudVocabulary = await _unityCloudDataProvider.LoadVocabularyProgressDataAsync(language, ct);
+            ProgressData<SentenceQuestLog> cloudSentences = await _unityCloudDataProvider.LoadSentencesProgressDataAsync(language, ct);
+            ProgressData<VocabularyQuestLog> prefsVocabulary = await _prefsDataProvider.LoadVocabularyProgressDataAsync(language, ct);
+            ProgressData<SentenceQuestLog> prefsSentences = await _prefsDataProvider.LoadSentencesProgressDataAsync(language, ct);
+
+            ProgressData<VocabularyQuestLog> vocabulary = SelectNewer(cloudVocabulary, prefsVocabulary, data => data.UtcTime);
+            ProgressData<SentenceQuestLog> sentences = SelectNewer(cloudSentences, prefsSentences, data => data.UtcTime);
+
+            _playerProfile.ProfileData = profile;
+            _playerProfile.VocabularyProgressDict[language] = vocabulary ?? new ProgressData<VocabularyQuestLog>();
+            _playerProfile.SentencesProgressDict[language] = sentences ?? new ProgressData<SentenceQuestLog>();
+            _isVocabularyChanged = false;
+            _isSentencesChanged = false;
+
+            // only the local data that won goes to the cloud, the defaults never overwrite the cloud
+            if (profile == prefsProfile)
+            {
+                await _unityCloudDataProvider.SaveProfileDataAsync(profile, ct);
+            }
+
+            await _unityCloudDataProvider.SaveProgressDataAsync(language,
+                vocabulary == prefsVocabulary ? vocabulary : null,
+                sentences == prefsSentences ? sentences : null,
+                ct);
+
+            // the local data is synchronized with the cloud one and gets the player id
+            await _prefsDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData, ct);
+            await _prefsDataProvider.SaveProgressDataAsync(language, _playerProfile.VocabularyProgress, _playerProfile.SentencesProgress, ct);
+            RefreshPrefsDataView();
+
+            return true;
         }
 
-        public async UniTask SaveProfileDataAsync()
+        public async UniTask SaveProfileDataAsync(CancellationToken ct)
         {
             _playerProfile.ProfileData.SetTime(DateTime.UtcNow);
 
-            await _prefsDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData);
-            await _unityCloudDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData);
-            await SaveIntoScriptableObject();
+            await _prefsDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData, ct);
+            await _unityCloudDataProvider.SaveProfileDataAsync(_playerProfile.ProfileData, ct);
+            RefreshPrefsDataView();
         }
 
-        // todo chang use ct (SuppressCancellationThrow())?
+        /// <summary>
+        /// Saves only the progress changed since the last save, the cloud gets it in one request
+        /// </summary>
         public async UniTask SaveProgressAsync(CancellationToken ct)
         {
-            _playerProfile.ProgressData.SetTime(DateTime.UtcNow);
+            if (!_isVocabularyChanged && !_isSentencesChanged)
+            {
+                return;
+            }
 
-            await _prefsDataProvider.SaveProgressDataAsync(_playerProfile.ProgressData);
-            await _unityCloudDataProvider.SaveProgressDataAsync(_playerProfile.ProgressData);
-            await SaveIntoScriptableObject();
+            ProgressData<VocabularyQuestLog> vocabulary = _isVocabularyChanged ? _playerProfile.VocabularyProgress : null;
+            ProgressData<SentenceQuestLog> sentences = _isSentencesChanged ? _playerProfile.SentencesProgress : null;
+            _isVocabularyChanged = false;
+            _isSentencesChanged = false;
+
+            await _prefsDataProvider.SaveProgressDataAsync(LearnLanguage, vocabulary, sentences, ct);
+            await _unityCloudDataProvider.SaveProgressDataAsync(LearnLanguage, vocabulary, sentences, ct);
+            RefreshPrefsDataView();
         }
 
-        public void AddLog(string key, string presentation, QuestionType type, bool isCorrect, bool needIncrement = true)
+        public void AddVocabularyLog(string key, string presentation, ChangTypes type, bool isCorrect, bool needIncrement = true)
         {
-            Debug.LogWarning($"AddLog key: {key}, isCorrect {isCorrect}");
-            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
-            if (!logs.TryGetValue(key, out var questLog))
+            Debug.Log($"Add vocabulary Log key: {key}, isCorrect {isCorrect}");
+            Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
+
+            if (!logs.TryGetValue(key, out VocabularyQuestLog questLog))
             {
-                questLog = new QuestLog(key, presentation, type);
+                questLog = new VocabularyQuestLog(key, presentation, type);
                 logs[key] = questLog;
             }
 
-            var logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
-            _playerProfile.ProgressData.SetTime(logUnit.UtcTime);
+            LogUnit logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
+            _playerProfile.VocabularyProgress.SetTime(logUnit.UtcTime);
             questLog.SetTime(logUnit.UtcTime);
             questLog.AddLog(logUnit);
+            _isVocabularyChanged = true;
         }
 
-        public int GetMark(string key)
+        public void AddSentenceLog(string key, string presentation, ChangTypes type, bool isCorrect, bool needIncrement = true)
         {
-            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
-            if (logs.TryGetValue(key, out var questLog))
+            Debug.Log($"Add sentence Log key: {key}, isCorrect {isCorrect}");
+            Dictionary<string, SentenceQuestLog> logs = _playerProfile.SentencesProgress.Log;
+
+            if (!logs.TryGetValue(key, out SentenceQuestLog questLog))
+            {
+                questLog = new SentenceQuestLog(key, presentation, type);
+                logs[key] = questLog;
+            }
+            
+            LogUnit logUnit = new LogUnit(DateTime.UtcNow, isCorrect, needIncrement);
+            _playerProfile.SentencesProgress.SetTime(logUnit.UtcTime);
+            questLog.SetTime(logUnit.UtcTime);
+            questLog.AddLog(logUnit);
+            _isSentencesChanged = true;
+        }
+
+        public int GetVocabularyMark(string key)
+        {
+            Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
+
+            if (logs.TryGetValue(key, out VocabularyQuestLog questLog))
             {
                 return questLog.Mark;
             }
@@ -96,58 +180,33 @@ namespace Chang.Services
             return 0;
         }
 
-        public bool TryGetLog(string key, out QuestLog questLog)
+        public float GetSentencesMark(string key)
         {
-            Dictionary<string, QuestLog> logs = _playerProfile.ProgressData.GetQuestLogs(_playerProfile.ProfileData.LearnLanguage);
-            return logs.TryGetValue(key, out questLog);
+            Dictionary<string, SentenceQuestLog> logs = _playerProfile.SentencesProgress.Log;
+
+            if (logs.TryGetValue(key, out SentenceQuestLog questLog))
+            {
+                return questLog.Mark;
+            }
+
+            return 0;
+        }
+        
+        public bool TryGetVocabularyLog(string key, out VocabularyQuestLog vocabularyQuestLog)
+        {
+            Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
+            return logs.TryGetValue(key, out vocabularyQuestLog);
         }
 
-        public void ReorderSection(SimpleSection section)
+        /// <returns>the newer data, the first one on equal time</returns>
+        private static T SelectNewer<T>(T first, T second, Func<T, DateTime> getUtcTime) where T : class
         {
-            SimpleSection newSection = new SimpleSection
+            if (first == null || second == null)
             {
-                Section = section.Section,
-                Lessons = new List<SimpleLessonData>()
-            };
-            
-            string key = ReorderedSectionKey(section.Section);
-            List<ISimpleQuestion> questions = section.Lessons.SelectMany(lesson => lesson.Questions).ToList();
-            IOrderedEnumerable<ISimpleQuestion> orderedQuests = questions.OrderByDescending(GetQuestMark);
-            Queue<ISimpleQuestion> questQueue = new Queue<ISimpleQuestion>(orderedQuests);
-
-            foreach (var lesson in section.Lessons)
-            {
-                int count = lesson.Questions.Count;
-                List<ISimpleQuestion> quests = new();
-
-                for (int i = 0; i < count; i++)
-                {
-                    quests.Add(questQueue.Dequeue());
-                }
-
-                var newLesson = new SimpleLessonData
-                {
-                    Section = lesson.Section,
-                    GenerateQuestMatchWordsData = true,
-                    Questions = quests,
-                };
-
-                newSection.Lessons.Add(newLesson);
+                return first ?? second;
             }
 
-            _playerProfile.AddReorderSection(key, newSection);
-
-            return;
-
-            int GetQuestMark(ISimpleQuestion quest)
-            {
-                if (quest is SimpleQuestSelectWord selectWord)
-                {
-                    return GetMark(selectWord.CorrectWordFileName);
-                }
-
-                throw new NotImplementedException($"Question type {quest.QuestionType} is not implemented");
-            }
+            return getUtcTime(second) > getUtcTime(first) ? second : first;
         }
     }
 }

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc1a14789ab44827ad3a0f7a17b19d85, type: 3}
+  m_Name: RepetitionConfig
+  m_EditorClassIdentifier: 
+  intervalHours:
+  - 0
+  - 4
+  - 12
+  - 24
+  - 48
+  - 96
+  - 168
+  - 336
+  - 720
+  - 1440
+  - 2880
+  lessonAmount: 10
+  poolMultiplier: 3
+  mixedWordsMin: 3
+  mixedWordsMax: 7
+  minAvailableAmount: 1

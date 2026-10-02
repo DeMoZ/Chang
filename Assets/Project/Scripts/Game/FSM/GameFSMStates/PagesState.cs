@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using Chang.Resources;
 using Chang.Services;
+using Chang.Core;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
@@ -16,12 +17,13 @@ namespace Chang.FSM
 {
     public class PagesState : ResultStateBase<StateType, GameBus>, IDisposable
     {
+        private const string EmptyWordKey = "";
+
         public override StateType Type => StateType.PlayPages;
 
         [Inject] private readonly GameOverlayController _gameOverlayController;
         [Inject] private readonly ProfileService _profileService;
         [Inject] private readonly ScreenManager _screenManager;
-        [Inject] private readonly AddressablesDownloader _assetDownloader;
         [Inject] private readonly IResourcesManager _assetManager;
         [Inject] private readonly WordPathHelper _wordPathHelper;
         [Inject] private readonly DiContainer _diContainer;
@@ -50,13 +52,15 @@ namespace Chang.FSM
             base.Enter();
 
             _cts = new CancellationTokenSource();
-            _pagesContentProvider = new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager, _profileService);
+            _pagesContentProvider =
+                new PagesContentProvider(_assetManager, _wordPathHelper, _popupManager);
             EnterAsync(_cts.Token).Forget();
         }
 
         private async UniTask EnterAsync(CancellationToken ct)
         {
-            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent | LoadingElements.Bytes);
+            var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar |
+                                                  LoadingElements.Percent | LoadingElements.Bytes);
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
             loadingUiController.SetPercentsAndBytes(0, 0);
 
@@ -74,8 +78,9 @@ namespace Chang.FSM
 
             _pagesBus = new PagesBus
             {
-                CurrentLesson = Bus.CurrentLesson,
+                Lesson = Bus.Lesson,
                 GameType = Bus.GameType,
+                Words = Bus.Words,
             };
 
             _pagesFsm = new PagesFSM(_diContainer, _pagesBus, _pagesContentProvider);
@@ -97,16 +102,224 @@ namespace Chang.FSM
             _gameOverlayController.OnCheck -= OnCheck;
             _gameOverlayController.OnContinue -= OnContinue;
             _gameOverlayController.OnReturnFromGame -= ExitToLobby;
-
             _gameOverlayController.OnHint -= OnHint;
             _gameOverlayController.EnableHintButton(false);
-
             _gameOverlayController.OnExitToLobby();
         }
 
         private async UniTask PreloadContentAsync(Action<float, float> progress, CancellationToken ct)
         {
-            await _pagesContentProvider.PreloadPagesStateAsync(Bus.CurrentLesson.SimpleQuestions, progress, ct);
+            IEnumerable<IQuestion> wQuests = Bus.Lesson.Questions.Where(q => IsWordQuest(q.Type));
+            IEnumerable<IQuestion> sQuests = Bus.Lesson.Questions.Where(q => IsSentenceQuest(q.Type));
+
+            HashSet<string> wWKeys = Enumerable.ToHashSet(wQuests.Select(q => q.GetWordsKeys)
+                .SelectMany(hashSet => hashSet));
+
+            if (sQuests.Any())
+            {
+                foreach (IQuestion sQuest in sQuests)
+                {
+                    InitSentenceQuest(sQuest);
+                }
+            }
+
+            HashSet<string> sWordKeys = Enumerable.ToHashSet(sQuests.Select(q => q.GetWordsKeys)
+                .SelectMany(hashSet => hashSet));
+
+            // sentence words are shown and played as separate words, so preload them together with the words quests
+            List<Word> words = wWKeys.Union(sWordKeys).Select(key => Bus.Words[key]).ToList();
+            await _pagesContentProvider.PreloadWordsContentAsync(words, progress, ct);
+        }
+
+        private void InitSentenceQuest(IQuestion sQuest)
+        {
+            if (sQuest is SentenceSelectWords sSelectWords)
+            {
+                if (!Bus.Sentences.TryGetValue(sSelectWords.Key, out Sentence sentence))
+                {
+                    throw new Exception($"Sentence with key {sSelectWords.Key} not found in Bus.Sentences");
+                }
+
+                sSelectWords.Sentence = InitSentence(sentence);
+                sSelectWords.CompareWordsKeys = sSelectWords.Sentence.SentenceWords.Select(word => word.WordKey).ToList();
+                float sentenceMark = _profileService.GetSentencesMark(sentence.SentenceKey);
+
+                sSelectWords.DisplayWordsKeys = new List<string>();
+                sSelectWords.MixWordsKeys = new List<string>();
+                // words with display index within the sentence mark are hidden and go to the mix
+                foreach (SentenceWord sWord in sSelectWords.Sentence.SentenceWords)
+                {
+                    if (sWord.DisplayIndex <= sentenceMark)
+                    {
+                        sSelectWords.DisplayWordsKeys.Add(EmptyWordKey);
+                        sSelectWords.MixWordsKeys.Add(sWord.WordKey);
+                    }
+                    else
+                    {
+                        sSelectWords.DisplayWordsKeys.Add(sWord.WordKey);
+                    }
+                }
+
+                AddAlternativeMixWords(sSelectWords, sentenceMark);
+
+                string defaultTranslation = sSelectWords.Sentence.DefaultTranslation;
+                List<SentenceWord> dynamicWords = sSelectWords.Sentence.SentenceWords
+                    .Where(w => w.Modifiers.HasFlag(Modifier.Dynamic))
+                    .ToList();
+                    
+                object[] translationArgs = dynamicWords.Select(w => (object)Bus.Words[w.WordKey].Translation).ToArray();
+                defaultTranslation = string.Format(defaultTranslation, translationArgs);
+                sSelectWords.SetTranslation(defaultTranslation);
+            }
+        }
+
+        /// <summary>
+        /// fills the mix with not repeated alternative words, so the mix words amount is not less than the sentence mark
+        /// </summary>
+        private void AddAlternativeMixWords(SentenceSelectWords sSelectWords, float sentenceMark)
+        {
+            if (sentenceMark < ProjectConstants.SENTENCE_MIX_WORDS_FILL_MIN_MARK)
+            {
+                return;
+            }
+
+            int missingAmount = UnityEngine.Mathf.CeilToInt(sentenceMark) - sSelectWords.MixWordsKeys.Count;
+            if (missingAmount <= 0)
+            {
+                return;
+            }
+
+            HashSet<string> usedKeys = new(sSelectWords.CompareWordsKeys.Concat(sSelectWords.MixWordsKeys));
+            List<string> alternativeKeys = sSelectWords.Sentence.SentenceWords
+                .Where(w => (w.Modifiers & (Modifier.Dynamic | Modifier.Variant)) != 0)
+                .SelectMany(w => GetSectionWordKeys(Bus.Words[w.WordKey]))
+                .Where(key => !usedKeys.Contains(key) && Bus.Words.ContainsKey(key))
+                .Distinct()
+                .ToList();
+
+            alternativeKeys.Shuffle();
+            sSelectWords.MixWordsKeys.AddRange(alternativeKeys.Take(missingAmount));
+        }
+
+        private List<string> GetSectionWordKeys(Word word)
+        {
+            string section = ElementsPaths.VocabularySectionKey(_profileService.ProfileData.LearnLanguage, word.Section);
+            List<Lesson> sectionLessons = Bus.VocabularySections[section].Lessons;
+            return Enumerable.ToHashSet(sectionLessons.SelectMany(lesson => lesson.Keys)).ToList();
+        }
+
+        private Sentence InitSentence(Sentence sentence)
+        {
+            Sentence result = new(sentence);
+
+            foreach (SentenceWord sentenceWord in result.SentenceWords)
+            {
+                Debug.Log(
+                    $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with modifiers {sentenceWord.Modifiers}");
+
+                if (!Bus.Words.ContainsKey(sentenceWord.WordKey))
+                {
+                    throw new Exception(
+                        $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey}, but the word is not in the Bus.Words");
+                }
+
+                if (sentenceWord.Modifiers == Modifier.None)
+                {
+                    continue;
+                }
+
+                if (sentenceWord.Modifiers.HasFlag(Modifier.Dynamic))
+                {
+                    SetDynamicWord(sentenceWord);
+                }
+
+                if (sentenceWord.Modifiers.HasFlag(Modifier.Gender))
+                {
+                    SetGenderWord(sentenceWord);
+                }
+            }
+
+            return result;
+
+            void SetDynamicWord(SentenceWord sentenceWord)
+            {
+                Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Dynamic modifier");
+                List<string> wordKeys = GetSectionWordKeys(Bus.Words[sentenceWord.WordKey]);
+                string randomWordKey = wordKeys[UnityEngine.Random.Range(0, wordKeys.Count)];
+                sentenceWord.WordKey = randomWordKey;
+            }
+
+            void SetGenderWord(SentenceWord sentenceWord)
+            {
+                if (_profileService.LearnLanguage != Languages.Thai)
+                {
+                    Debug.LogError(
+                        $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier, but the language is not Thai");
+                    return;
+                }
+
+                Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier");
+
+                /*  phom chan ka krap
+                    Thai/Vocabulary/Gender/_Polite male_
+                    Thai/Vocabulary/Gender/_Polite female_
+                    Thai/Vocabulary/Gender/_Man I_
+                    Thai/Vocabulary/Gender/_Woman I_
+                 */
+                switch (_profileService.ProfileData.Gender)
+                {
+                    case GenderType.No:
+                    case GenderType.Female:
+                        switch (sentenceWord.WordKey)
+                        {
+                            case "Thai/Vocabulary/Gender/_Polite male_":
+                            case "Thai/Vocabulary/Gender/_Polite female_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Polite female_";
+                                break;
+                            case "Thai/Vocabulary/Gender/_Man I_":
+                            case "Thai/Vocabulary/Gender/_Woman I_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Woman I_";
+                                break;
+                            default:
+                                Debug.LogError(
+                                    $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier");
+                                break;
+                        }
+
+                        break;
+                    case GenderType.Male:
+                        switch (sentenceWord.WordKey)
+                        {
+                            case "Thai/Vocabulary/Gender/_Polite male_":
+                            case "Thai/Vocabulary/Gender/_Polite female_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Polite male_";
+                                break;
+                            case "Thai/Vocabulary/Gender/_Man I_":
+                            case "Thai/Vocabulary/Gender/_Woman I_":
+                                sentenceWord.WordKey = "Thai/Vocabulary/Gender/_Man I_";
+                                break;
+                            default:
+                                Debug.LogError(
+                                    $"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Gender modifier");
+                                break;
+                        }
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        private bool IsWordQuest(ChangTypes argType)
+        {
+            return argType == ChangTypes.DemonstrationWord || argType == ChangTypes.SelectWord ||
+                   argType == ChangTypes.MatchWords;
+        }
+
+        private bool IsSentenceQuest(ChangTypes argType)
+        {
+            return argType == ChangTypes.SentenceSelectWords;
         }
 
         private void ExitToLobby()
@@ -130,18 +343,21 @@ namespace Chang.FSM
             // get current state result, may be show the hint.... (as hint I will show the correct answer)
             Debug.Log($"{nameof(OnCheck)}");
             await UniTask.Yield(ct);
-            
+
             switch (_pagesFsm.CurrentStateType)
             {
-                case QuestionType.DemonstrationWord:
-                case QuestionType.SelectWord:
+                case ChangTypes.DemonstrationWord:
+                case ChangTypes.SelectWord:
                     OnCheckSelectWordAsync(ct).Forget();
                     break;
-                case QuestionType.MatchWords:
+                case ChangTypes.MatchWords:
                     OnCheckMatchWordsAsync(ct).Forget();
                     break;
+                case ChangTypes.SentenceSelectWords:
+                    OnCheckSentenceSelectWordsAsync(ct).Forget();
+                    break;
                 default:
-                    throw new ArgumentOutOfRangeException($"simple question not handled {_pagesFsm.CurrentStateType}");
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -151,20 +367,22 @@ namespace Chang.FSM
 
             var isCorrect = _pagesBus.QuestionResult.IsCorrect;
             var isCorrectColor = isCorrect ? "Yellow" : "Red";
-            var answer = string.Join(" / ", _pagesBus.QuestionResult.Info);
-            Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
-            var needIncrement = !(bool)_pagesBus.QuestionResult.Info[1];
-            _profileService.AddLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation, QuestionType.SelectWord, isCorrect,
+            Debug.Log(
+                $"The answer is <color={isCorrectColor}>{isCorrect}</color>; {_pagesBus.QuestionResult.Presentation}");
+            var needIncrement = !_pagesBus.QuestionResult.IsHintUsed;
+            _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation,
+                ChangTypes.SelectWord, isCorrect,
                 needIncrement);
 
             if (!isCorrect)
             {
-                _pagesBus.CurrentLesson.EnqueueCurrentQuestion();
+                _pagesBus.Lesson.EnqueueCurrentQuestion();
             }
 
             var info = new ContinueButtonInfo();
             info.IsCorrect = isCorrect;
-            info.InfoText = (string)_pagesBus.QuestionResult.Info[0];
+            Word word = _pagesBus.Words[_pagesBus.QuestionResult.Key];
+            info.InfoText = $"{word.LearnWord}\n{word.Translation}";
 
             _pagesBus.LessonLog.Add(_pagesBus.QuestionResult);
 
@@ -177,18 +395,69 @@ namespace Chang.FSM
         {
             Debug.Log($"{nameof(OnCheckMatchWordsAsync)}");
 
-            var matchWordsStateResult = _pagesBus.QuestionResult as MatchWordsStateResult;
-            if (matchWordsStateResult == null)
-                throw new NullReferenceException($"{nameof(MatchWordsStateResult)} is null");
-
-            foreach (SelectWordResult result in matchWordsStateResult.Results)
+            MatchWordsResult stateResult = _pagesBus.QuestionResult as MatchWordsResult;
+            if (stateResult == null)
             {
-                _profileService.AddLog(result.Key, result.Presentation, QuestionType.SelectWord, result.IsCorrect, false);
+                throw new NullReferenceException($"{nameof(MatchWordsResult)} is null");
+            }
+
+            foreach (WordResult result in stateResult.WordResults)
+            {
+                _profileService.AddVocabularyLog(result.Key, result.Presentation, ChangTypes.SelectWord,
+                    result.IsCorrect, false);
                 _pagesBus.LessonLog.Add(result);
             }
 
             await _profileService.SaveProgressAsync(ct);
             OnContinueAsync(ct).Forget();
+        }
+
+        private async UniTaskVoid OnCheckSentenceSelectWordsAsync(CancellationToken ct)
+        {
+            Debug.Log($"{nameof(OnCheckSentenceSelectWordsAsync)}");
+
+            var isCorrect = _pagesBus.QuestionResult.IsCorrect;
+            var isCorrectColor = isCorrect ? "Yellow" : "Red";
+            var answer = string.Join(" / ", _pagesBus.QuestionResult.Presentation);
+            Debug.Log($"The answer is <color={isCorrectColor}>{isCorrect}</color>; {answer}");
+
+            SentenceSelectWordStateResult stateResult = _pagesBus.QuestionResult as SentenceSelectWordStateResult;
+            if (stateResult == null)
+            {
+                throw new NullReferenceException($"{nameof(MatchWordsResult)} is null");
+            }
+
+            bool needIncrement = !_pagesBus.QuestionResult.IsHintUsed;
+
+            if (stateResult.Info[2] is List<WordResult> vocabularyResults)
+            {
+                foreach (WordResult vocabularyResult in vocabularyResults)
+                {
+                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation,
+                        ChangTypes.SelectWord, vocabularyResult.IsCorrect, needIncrement);
+                    _pagesBus.LessonLog.Add(vocabularyResult);
+                }
+            }
+
+            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, ChangTypes.SentenceSelectWords,
+                stateResult.IsCorrect, needIncrement);
+
+            if (!isCorrect)
+            {
+                _pagesBus.Lesson.EnqueueCurrentQuestion();
+            }
+
+            ContinueButtonInfo info = new()
+            {
+                IsCorrect = isCorrect,
+                InfoText = _pagesBus.QuestionResult.Presentation
+            };
+
+            _pagesBus.LessonLog.Add(stateResult);
+
+            _gameOverlayController.SetContinueButtonInfo(info);
+            _gameOverlayController.EnableContinueButton(true);
+            await _profileService.SaveProgressAsync(ct);
         }
 
         private void OnContinue()
@@ -200,49 +469,50 @@ namespace Chang.FSM
         {
             await UniTask.Yield(ct);
 
-            if (_pagesFsm.CurrentStateType == QuestionType.Result)
+            if (_pagesFsm.CurrentStateType == ChangTypes.Result)
             {
                 ExitToLobby();
                 return;
             }
 
-            Lesson lesson = _pagesBus.CurrentLesson;
+            Lesson lesson = _pagesBus.Lesson;
 
             // Add generated match words quest at the end of the lesson
-            if (lesson.SimpleQuestionQueue.Count == 0)
+            if (lesson.QuestionQueue.Count == 0)
             {
                 if (TryGenerateQuestMatchWordsData(lesson, out var matchWordsQuest))
                 {
-                    lesson.AddSimpleQuestion(matchWordsQuest);
+                    // queue only, lesson.Questions keeps the lesson's own questions (marks, replay init)
+                    lesson.InsertNextQuest(matchWordsQuest);
                     lesson.IsGeneratedMathWordsQuestPlayed = true;
                 }
             }
 
             // If the lesson has finished
-            if (lesson.SimpleQuestionQueue.Count == 0)
+            if (lesson.QuestionQueue.Count == 0)
             {
-                SwitchState(QuestionType.Result);
+                SwitchState(ChangTypes.Result);
                 return;
             }
 
-            ISimpleQuestion nextQuestion = lesson.PeekNextQuestion();
-            QuestionType nextQuestionType = nextQuestion.QuestionType;
+            IQuestion nextQuestion = lesson.PeekNextQuestion();
+            ChangTypes nextQuestionType = nextQuestion.Type;
 
             // If demonstration word is required
-            if (nextQuestion.QuestionType != QuestionType.DemonstrationWord)
+            if (nextQuestion.Type != ChangTypes.DemonstrationWord)
             {
-                HashSet<string> keys = nextQuestion.GetNeedDemonstrationKeys();
+                HashSet<string> keys = nextQuestion.GetNeedDemonstrationKeys;
 
-                foreach (var fileName in keys)
+                foreach (string key in keys)
                 {
-                    if (IsNeedDemonstration(fileName))
+                    if (IsNeedDemonstration(key))
                     {
-                        var demonstration = new SimpleQuestDemonstrationWord
+                        var demonstration = new QuestSelectWord
                         {
-                            CorrectWordFileName = fileName
+                            Key = key
                         };
                         lesson.InsertNextQuest(demonstration);
-                        nextQuestionType = QuestionType.DemonstrationWord;
+                        nextQuestionType = ChangTypes.DemonstrationWord;
                         break;
                     }
                 }
@@ -252,49 +522,55 @@ namespace Chang.FSM
             SwitchState(nextQuestionType);
         }
 
-        private void SwitchState(QuestionType questionType)
+        private void SwitchState(ChangTypes questionType)
         {
             _pagesFsm.SwitchState(questionType);
             _pagesBus.OnHintUsed.SetSilent(false);
         }
 
-        private bool TryGenerateQuestMatchWordsData(Lesson lesson, out SimpleQuestMatchWords matchWordsQuest)
+        private bool TryGenerateQuestMatchWordsData(Lesson lesson, out QuestMatchWords questMatchWords)
         {
-            matchWordsQuest = new SimpleQuestMatchWords();
+            questMatchWords = new QuestMatchWords();
             HashSet<string> matchWords = new();
 
-            if (!lesson.GenerateQuestMatchWordsData || lesson.IsGeneratedMathWordsQuestPlayed)
+            if (lesson.IsGeneratedMathWordsQuestPlayed)
             {
                 return false;
             }
 
-            var selectWordQuests = lesson.SimpleQuestions.OfType<SimpleQuestSelectWord>().ToList();
-            matchWords.AddRange(selectWordQuests.Select(q => q.CorrectWordFileName));
-            matchWords.AddRange(selectWordQuests.SelectMany(q => q.MixWordsFileNames));
+            // sentence keys are not words, match the words that were picked from the sentences mix instead.
+            // a repetition lesson may have both words and sentences
+            IEnumerable<string> wordKeys = lesson.Questions.OfType<QuestSelectWord>().Select(quest => quest.Key)
+                .Concat(lesson.Questions.OfType<SentenceSelectWords>().SelectMany(quest => quest.SelectWordsKeys));
+
+            matchWords.AddRange(wordKeys.Where(key => _pagesBus.Words.ContainsKey(key)));
 
             if (matchWords.Count < 2)
             {
-                Debug.LogWarning($"matchWords not generated for lesson FileName: {lesson.FileName}, count select words {matchWords.Count}");
+                string lessonPath = string.Join("/",
+                    new List<string> { lesson.Language.ToString(), "Vocabulary", lesson.Section });
+                Debug.LogWarning(
+                    $"matchWords not generated for lesson : {lessonPath}, count select words {matchWords.Count}");
                 return false;
             }
 
             matchWords = _pagesBus.GameType == GameType.Learn
-                ? matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE).ToHashSet()
-                : matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE).ToHashSet();
+                ? Enumerable.ToHashSet(matchWords.Take(ProjectConstants.MAX_WORDS_IN_LEARN_MATCH_WORD_PAGE))
+                : Enumerable.ToHashSet(matchWords.Take(ProjectConstants.MAX_WORDS_IN_REPEAT_MATCHT_WORDS_PAGE));
 
             matchWords.Shuffle();
-            matchWordsQuest.MatchWordsFileNames = matchWords.ToList();
+            questMatchWords.MatchWordsKeys = matchWords;
 
             return true;
         }
 
-        private bool IsNeedDemonstration(string fileName)
+        private bool IsNeedDemonstration(string key)
         {
-            bool logExists = _profileService.TryGetLog(fileName, out var questLog);
+            bool logExists = _profileService.TryGetVocabularyLog(key, out var questLog);
 
             if (!logExists)
             {
-                Debug.Log($"Demonstration required. No log for: {fileName}");
+                Debug.Log($"Demonstration required. No log for: {key}");
                 return true;
             }
 
@@ -302,7 +578,7 @@ namespace Chang.FSM
 
             if (isSmallMark)
             {
-                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {fileName}");
+                Debug.Log($"Demonstration required. Mark: {questLog.Mark} for: {key}");
             }
 
             return isSmallMark;

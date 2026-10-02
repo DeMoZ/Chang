@@ -12,7 +12,7 @@ namespace Chang.Resources
 
         T LoadAssetSync<T>(AssetReference key) where T : UnityEngine.Object;
         T LoadAssetSync<T>(string key) where T : UnityEngine.Object;
-        UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct = default) where T : UnityEngine.Object;
+        UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct = default, IProgress<float> progress = null) where T : UnityEngine.Object;
         Sprite LoadMissingSprite();
     }
 }

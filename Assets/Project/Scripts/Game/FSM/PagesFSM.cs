@@ -6,16 +6,16 @@ using Zenject;
 
 namespace Chang.FSM
 {
-    public class PagesFSM : FSMResultBase<QuestionType>
+    public class PagesFSM : FSMResultBase<ChangTypes>
     {
         private readonly PagesBus _pagesBus;
         private readonly DiContainer _diContainer;
         private readonly PagesSoundController _pagesSoundController;
         private readonly IPagesContentProvider _pagesContentProvider;
 
-        public QuestionType CurrentStateType => _currentState?.Value?.Type ?? QuestionType.None;
+        public ChangTypes CurrentStateType => _currentState?.Value?.Type ?? ChangTypes.None;
 
-        protected override QuestionType _defaultStateType => QuestionType.None;
+        protected override ChangTypes _defaultStateType => ChangTypes.None;
 
         public PagesFSM(DiContainer diContainer,
             PagesBus pagesBus,
@@ -47,24 +47,27 @@ namespace Chang.FSM
             var demonstrationWordState = new DemonstrationState(_pagesBus, _pagesContentProvider, OnStateResult);
             var selectWordState = new SelectWordState(_pagesBus, _pagesContentProvider, OnStateResult);
             var matchWordsState = new MatchWordsState(_pagesBus, _pagesContentProvider, OnStateResult);
+            var sentenceSelectWordsState = new SentenceSelectWordState(_pagesBus, _pagesContentProvider, OnStateResult);
 
             _diContainer.Inject(playResultState);
             _diContainer.Inject(demonstrationWordState);
             _diContainer.Inject(selectWordState);
             _diContainer.Inject(matchWordsState);
+            _diContainer.Inject(sentenceSelectWordsState);
 
-            _states = new Dictionary<QuestionType, IResultState<QuestionType>>
+            _states = new Dictionary<ChangTypes, IResultState<ChangTypes>>
             {
-                { QuestionType.Result, playResultState },
-                { QuestionType.DemonstrationWord, demonstrationWordState },
-                { QuestionType.SelectWord, selectWordState },
-                { QuestionType.MatchWords, matchWordsState },
+                { ChangTypes.Result, playResultState },
+                { ChangTypes.DemonstrationWord, demonstrationWordState },
+                { ChangTypes.SelectWord, selectWordState },
+                { ChangTypes.MatchWords, matchWordsState },
+                { ChangTypes.SentenceSelectWords, sentenceSelectWordsState },
             };
 
             _currentState.Subscribe(s => OnStateChanged(s.Type));
         }
 
-        public void SwitchState(QuestionType newStateType)
+        public void SwitchState(ChangTypes newStateType)
         {
             _pagesSoundController.UnregisterListeners();
             _currentState.Value?.Exit();

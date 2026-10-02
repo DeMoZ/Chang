@@ -2,23 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Chang.Core;
 using Chang.Resources;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.FSM;
-using Newtonsoft.Json;
 using Popup;
-using UnityEngine;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
+using SentencesBook = Chang.Core.SentencesBook;
+using VocabularyBook = Chang.Core.VocabularyBook;
 
 namespace Chang.FSM
 {
     public class LobbyState : ResultStateBase<StateType, GameBus>
     {
-        private const string BookKey = "BookJson";
-
         public override StateType Type => StateType.Lobby;
+        private Languages Language => _profileService.LearnLanguage;
+        private string VocabularyPath => AssetPaths.Addressables.VocabularyPath(Language);
+        private string SentencesPath => AssetPaths.Addressables.SentencesPath(Language);
+        private string VocabularyBookPath => AssetPaths.Addressables.VocabularyBookPath(Language);
+        private string SentencesBookPath => AssetPaths.Addressables.SentencesBookPath(Language);
 
         [Inject] private readonly LobbyController _lobbyController;
         [Inject] private readonly AddressablesAssetManager _assetManager;
@@ -51,33 +55,26 @@ namespace Chang.FSM
                 new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
             _loadingUiController.SimulateProgress(2f).Forget();
 
-            await _profileService.LoadStoredData(_cts.Token);
+            // HashSet<string> paths = new HashSet<string> { VocabularyBookPath, VocabularyPath, SentencesBookPath, SentencesPath };
+            // long downloadSize = await _assetManager.GetDownloadSize(paths, _cts.Token);
 
-            // todo chang download additional addressables related to profile?
-
-            Debug.Log("LoadGameBookConfigAsync start");
-            DisposableAsset<TextAsset> asset = await _assetManager.LoadAssetAsync<TextAsset>(BookKey, _cts.Token);
-
-            if (!asset.Item)
+            bool isLoaded = await _profileService.LoadStoredData(_cts.Token);
+            if (!isLoaded)
             {
-                Debug.LogError($"[{nameof(LobbyState)}] {nameof(EnterAsync)}() asset is null, BookKey: {BookKey}");
+                // not authenticated, the reboot scene with authorization is loading
                 return;
             }
 
-            var settings = new JsonSerializerSettings
+            List<UniTask> loads = new()
             {
-                Converters = new List<JsonConverter> { new BookConverter() }
+                LoadVocabularyBookAsync(_cts.Token),
+                LoadVocabularyAsync(_cts.Token),
+                LoadSentencesBookAsync(_cts.Token),
+                LoadSentencesAsync(_cts.Token),
             };
 
-            Bus.SimpleBookData = JsonConvert.DeserializeObject<SimpleBookData>(asset.Item.text, settings);
-            Bus.SimpleLessons = Bus.SimpleBookData.Sections
-                .SelectMany(section => section.Lessons)
-                .ToDictionary(lesson => lesson.FileName);
-
-            asset.Dispose();
-
-            Debug.Log("LoadGameBookConfigAsync end");
-
+            await UniTask.WhenAll(loads);
+            
             _loadingUiController.SetPercents(1f);
             if (_loadingUiController != null)
             {
@@ -86,6 +83,91 @@ namespace Chang.FSM
             }
 
             _lobbyController.Enter();
+        }
+
+        private async UniTask LoadVocabularyBookAsync(CancellationToken ct)
+        {
+            string methodName = nameof(LoadVocabularyBookAsync);
+            Debug.Log($"[{methodName}] Start");
+            DisposableAsset<GoogleSheets.VocabularyBook> asset = await _assetManager
+                .LoadAssetAsync<GoogleSheets.VocabularyBook>(VocabularyBookPath, ct);
+
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {VocabularyBookPath}");
+                return;
+            }
+
+            if (asset.Item.Sections == null || asset.Item.Sections.Count == 0)
+            {
+                Debug.LogError(
+                    $"[{nameof(LobbyState)}] [{methodName}] no sections in asset, BookKey: {VocabularyBookPath}");
+                return;
+            }
+
+            VocabularyBook book = GoogleSheetsToCore.GetVocabularyBook(asset.Item);
+            Bus.SetVocabularyBook(book);
+            asset.Dispose();
+            Debug.Log($"[{methodName}] End");
+        }
+
+        private async UniTask LoadVocabularyAsync(CancellationToken ct)
+        {
+            string methodName = nameof(LoadVocabularyAsync);
+            Debug.Log($"[{methodName}] Start");
+
+            DisposableAsset<Core.Vocabulary> asset =
+                await _assetManager.LoadAssetAsync<Core.Vocabulary>(VocabularyPath, ct);
+
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: " +
+                               $"{VocabularyPath}");
+                return;
+            }
+
+            Dictionary<string, Word> words = asset.Item.Words.ToDictionary(word => word.WordKey, word => word);
+            Bus.SetWords(words);
+            asset.Dispose();
+            Debug.Log($"[{methodName}] End");
+        }
+
+        private async UniTask LoadSentencesAsync(CancellationToken ct)
+        {
+            string methodName = nameof(LoadSentencesAsync);
+            Debug.Log($"[{methodName}] Start");
+            DisposableAsset<GoogleSheets.SentencesInfo> asset =
+                await _assetManager.LoadAssetAsync<GoogleSheets.SentencesInfo>(SentencesPath, ct);
+
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: " +
+                               $"{SentencesPath}");
+                return;
+            }
+
+            List<Sentence> sentences = GoogleSheetsToCore.GetSentences(asset.Item.Sentences);
+            Bus.SetSentences(sentences);
+            asset.Dispose();
+            Debug.Log($"[{methodName}] End");
+        }
+
+        private async UniTask LoadSentencesBookAsync(CancellationToken ct)
+        {
+            string methodName = nameof(LoadSentencesBookAsync);
+            Debug.Log($"[{methodName}] Start");
+            DisposableAsset<GoogleSheets.SentencesBook> asset = await _assetManager
+                .LoadAssetAsync<GoogleSheets.SentencesBook>(SentencesBookPath, ct);
+
+            if (!asset.Item)
+            {
+                Debug.LogError($"[{nameof(LobbyState)}] [{methodName}] asset is null, BookKey: {SentencesBookPath}");
+                return;
+            }
+
+            SentencesBook book = GoogleSheetsToCore.GetSentencesBook(asset.Item);
+            Bus.SetSentencesBook(book);
+            Debug.Log($"[{methodName}] End");
         }
 
         public override void Exit()

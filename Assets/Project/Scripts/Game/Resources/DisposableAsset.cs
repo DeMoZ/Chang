@@ -19,8 +19,11 @@ namespace Chang.Resources
                     return;
                 }
 
-                Addressables.Release(_handle);
-                
+                if (_handle.IsValid())
+                {
+                    Addressables.Release(_handle);
+                }
+
                 OnDispose?.Invoke();
                 OnDispose = null;
 

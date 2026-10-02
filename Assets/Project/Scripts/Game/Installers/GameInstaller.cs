@@ -5,6 +5,7 @@ using Chang.UI;
 using Chang.GameBook;
 using Chang.Resources;
 using Chang.Services;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang
 {
@@ -13,7 +14,8 @@ namespace Chang
         [SerializeField] private MainUiView mainUiScreen;
         [SerializeField] private RepetitionView repetitionScreen;
         [SerializeField] private ProfileView profileScreen;
-        [SerializeField] private GameBookView gameBookScreen;
+        [SerializeField] private BookVocabularyView bookVocabularyScreen;
+        [SerializeField] private Sentences.BookSentencesView bookSentencesScreen;
         [SerializeField] private GameOverlayView gameOverlayScreen;
 
         [Space, SerializeField] private PagesContainer pagesContainer;
@@ -23,6 +25,7 @@ namespace Chang
         [SerializeField] private DemonstrationWordView demonstrationScreen;
         [SerializeField] private MatchWordsView matchWordScreen;
         [SerializeField] private SelectWordView selectWordScreen;
+        [SerializeField] private SentenceSelectWordView sentenceSelectWordScreen;
 
         [Space, SerializeField] private AudioSource pagesAudioSource;
 
@@ -33,7 +36,10 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<Game>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
+            Container.Bind<RepetitionConfig>().FromScriptableObjectResource(RepetitionConfig.ResourcePath).AsSingle();
             Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RepetitionLessonBuilder>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SectionSortService>().AsSingle();
             Container.BindInterfacesAndSelfTo<WordPathHelper>().AsSingle();
             Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();
 
@@ -43,27 +49,35 @@ namespace Chang
 
             Container.BindInstance(mainUiScreen).AsSingle();
             Container.BindInstance(repetitionScreen).AsSingle();
-            Container.BindInstance(gameBookScreen).AsSingle();
+            Container.BindInstance(bookVocabularyScreen).AsSingle();
+            Container.BindInstance(bookSentencesScreen).AsSingle();
             Container.BindInstance(gameOverlayScreen).AsSingle();
             Container.BindInstance(pagesContainer).AsSingle();
             Container.BindInstance(playResultScreen).AsSingle();
+            Container.BindInstance(profileScreen).AsSingle();
+            
             Container.BindInstance(demonstrationScreen).AsSingle();
             Container.BindInstance(matchWordScreen).AsSingle();
             Container.BindInstance(selectWordScreen).AsSingle();
-            Container.BindInstance(profileScreen).AsSingle();
-
+            Container.BindInstance(sentenceSelectWordScreen).AsSingle();
+            
             #endregion
 
             #region Controllers
 
             Container.BindInterfacesAndSelfTo<LobbyController>().AsSingle();
+            
             Container.BindInterfacesAndSelfTo<RepetitionController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<GameBookController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<Vocabulary.VocabularyController>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<Sentences.SentencesController>().AsSingle();
+            
             Container.BindInterfacesAndSelfTo<GameOverlayController>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayResultController>().AsSingle();
             Container.BindInterfacesAndSelfTo<DemonstrationWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<MatchWordsController>().AsSingle();
             Container.BindInterfacesAndSelfTo<SelectWordController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SentenceSelectWordController>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileController>().AsSingle();
             Container.BindInterfacesAndSelfTo<PagesSoundController>().AsSingle();
 

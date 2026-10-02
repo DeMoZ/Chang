@@ -1,4 +1,5 @@
 using System;
+using Chang.Core;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,17 +16,16 @@ namespace Chang.UI
         [SerializeField] private ToggleGroup _toggleGroup;
         [SerializeField] private PlayStopButton _playStopBtn;
 
-        [ShowInInspector, ReadOnly] public override QuestionType ScreenType { get; } = QuestionType.DemonstrationWord;
-        
+        [ShowInInspector, ReadOnly] public override ChangTypes ScreenType { get; } = ChangTypes.DemonstrationWord;
+
         private Action _onClickPlaySound;
-        
-        public void Init(PhraseData correctWord,
-            Sprite sprite,
+
+        public void Init(Word correctWord,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound)
         {
             Debug.Log("Init SelectWordView");
-            
+
             _onClickPlaySound = onClickPlaySound;
 
             foreach (Transform child in _mixWordContent)
@@ -34,19 +34,19 @@ namespace Chang.UI
             }
 
             // init learning language word
-            var quesWord = correctWord.Word.LearnWord;
-            _questionWord.Set(quesWord, correctWord.Word.Phonetic);
+            var quesWord = correctWord.LearnWord;
+            _questionWord.Set(quesWord, correctWord.Phonetics);
             _questionWord.EnablePhonetic(true);
 
             // init translation words
             var mix = Instantiate(_mixWordPrefab, _mixWordContent);
-            var word = correctWord.Word.Translation;
-            mix.Set(word, correctWord.Word.Phonetic, _toggleGroup, onToggleValueChanged);
+            var word = correctWord.Translation;
+            mix.Set(word, correctWord.Phonetics, _toggleGroup, onToggleValueChanged);
             mix.EnablePhonetics(false);
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
             _playStopBtn.OnClick += OnClickPlaySound;
-            
-            _questionImage.sprite = sprite;
+
+            _questionImage.sprite = correctWord.Sprite;
         }
 
         private void OnSoundPlay(bool play)

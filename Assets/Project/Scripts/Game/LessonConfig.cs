@@ -12,15 +12,15 @@ namespace Chang
         [field: SerializeField] public string Section { get; set; } = string.Empty;
         [field: SerializeField] public bool GenerateQuestMatchWordsData { get; set; } = true;
 
-        [SerializeReference] [InlineEditor(Expanded = true)] [ListDrawerSettings(ShowIndexLabels = true)]
-        public List<QuestionConfig> Questions;
+        // [SerializeReference] [InlineEditor(Expanded = true)] [ListDrawerSettings(ShowIndexLabels = true)]
+        // public List<QuestionConfig> Questions;
 
-        public void OnValidate()
-        {
-            foreach (var question in Questions)
-            {
-                question?.Init();
-            }
-        }
+        // public void OnValidate()
+        // {
+        //     foreach (var question in Questions)
+        //     {
+        //         question?.Init();
+        //     }
+        // }
     }
 }

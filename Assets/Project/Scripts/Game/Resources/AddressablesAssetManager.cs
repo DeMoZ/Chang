@@ -56,7 +56,7 @@ namespace Chang.Resources
             throw new NotImplementedException();
         }
         
-        public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct) where T : Object
+        public async UniTask<DisposableAsset<T>> LoadAssetAsync<T>(string key, CancellationToken ct, IProgress<float> progress = null) where T : Object
         {
             bool isKeyNotFound = false;
             AsyncOperationHandle<T> handle = default;
@@ -65,7 +65,7 @@ namespace Chang.Resources
             try
             {
                 handle = Addressables.LoadAssetAsync<T>(key);
-                result = await handle.WithCancellation(ct);
+                result = await handle.ToUniTask(progress: progress, cancellationToken: ct);
             }
             catch (OperationCanceledException)
             {
@@ -85,7 +85,7 @@ namespace Chang.Resources
                 {
                     Debug.Log($"Repeat load asset from cached path '{key}':");
                     handle = Addressables.LoadAssetAsync<T>(key);
-                    result = await handle.WithCancellation(ct);
+                    result = await handle.ToUniTask(progress: progress, cancellationToken: ct);
                 }
                 catch (OperationCanceledException)
                 {
@@ -110,6 +110,39 @@ namespace Chang.Resources
             return new DisposableAsset<T>(result, handle);
         }
 
+        public async UniTask<long> GetDownloadSize(HashSet<string> keys, CancellationToken ct)
+        {
+            AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
+
+            try
+            {
+                await getDownloadSizeHandle.ToUniTask(cancellationToken: ct);
+
+                if (getDownloadSizeHandle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    return getDownloadSizeHandle.Result;
+                }
+
+                Debug.LogError(
+                    $"{nameof(GetDownloadSize)} failed to get download size: {getDownloadSizeHandle.OperationException}");
+                return 0;
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.LogWarning($"{nameof(GetDownloadSize)} operation was cancelled.");
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"{nameof(GetDownloadSize)} failed to get download size: {ex.Message}");
+                return 0;
+            }
+            finally
+            {
+                getDownloadSizeHandle.Release();
+            }
+        }
+        
         public Sprite LoadMissingSprite()
         {
             if (_missingSprite == null)
