@@ -113,15 +113,11 @@ namespace Chang.Services
             return result;
         }
 
-        /// <returns>played words logs, the most needed for repetition first</returns>
-        public List<VocabularyQuestLog> GetVocabularyLogsByPriority(int amount)
+        /// <returns>all played words and sentences that are in the book</returns>
+        public List<RepetitionCandidate> GetAllPlayed()
         {
-            Dictionary<string, VocabularyQuestLog> log = _profileService.VocabularyProgress.Log;
-
             return GetVocabularyCandidates(null)
-                .OrderByDescending(candidate => candidate.Priority)
-                .Take(amount)
-                .Select(candidate => log[candidate.Key])
+                .Concat(GetSentencesCandidates(null))
                 .ToList();
         }
 
