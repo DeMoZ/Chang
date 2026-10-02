@@ -67,10 +67,9 @@ namespace Chang
 
             Container.BindInterfacesAndSelfTo<LobbyController>().AsSingle();
             
-            Container.BindInterfacesAndSelfTo<VocabularyRepetitionController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RepetitionController>().AsSingle();
             Container.BindInterfacesAndSelfTo<Vocabulary.VocabularyController>().AsSingle();
 
-            Container.BindInterfacesAndSelfTo<SentencesRepetitionController>().AsSingle();
             Container.BindInterfacesAndSelfTo<Sentences.SentencesController>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<GameOverlayController>().AsSingle();

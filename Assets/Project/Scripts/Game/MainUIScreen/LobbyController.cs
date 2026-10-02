@@ -17,8 +17,7 @@ namespace Chang
         private readonly MainUiView _view;
         private readonly VocabularyController _vocabularyController;
         private readonly SentencesController _sentencesController;
-        private readonly VocabularyRepetitionController _vocabularyRepetitionController;
-        private readonly SentencesRepetitionController _sentencesRepetitionController;
+        private readonly RepetitionController _repetitionController;
         private readonly ProfileController _profileController;
         private readonly GameBus _gameBus;
         private readonly RepetitionService _repetitionService;
@@ -26,7 +25,6 @@ namespace Chang
 
         private Action _onExitState;
 
-        // private bool _isLoading;
         private CancellationTokenSource _cts;
         private CancellationTokenSource _tabCts;
 
@@ -40,9 +38,8 @@ namespace Chang
             MainScreenBus mainScreenBus,
             MainUiView view,
             VocabularyController vocabularyController,
-            VocabularyRepetitionController vocabularyRepetitionController,
+            RepetitionController repetitionController,
             SentencesController sentencesController,
-            SentencesRepetitionController sentencesRepetitionController,
             ProfileController profileController,
             GameBus gameBus,
             RepetitionService repetitionService,
@@ -51,9 +48,8 @@ namespace Chang
             _mainScreenBus = mainScreenBus;
             _view = view;
             _vocabularyController = vocabularyController;
-            _vocabularyRepetitionController = vocabularyRepetitionController;
+            _repetitionController = repetitionController;
             _sentencesController = sentencesController;
-            _sentencesRepetitionController = sentencesRepetitionController;
             _profileController = profileController;
             _gameBus = gameBus;
             _repetitionService = repetitionService;
@@ -76,11 +72,10 @@ namespace Chang
             _view.Init(OnToggleSelected);
             _vocabularyController.Init(onExitState);
             _sentencesController.Init(onExitState);
-            _vocabularyRepetitionController.Init(
+            _repetitionController.Init(
                 _vocabularyController.OnGeneralRepeatClicked,
                 _sentencesController.OnGeneralRepeatClicked,
                 OnMixedRepeatClicked);
-            _sentencesRepetitionController.Init();
             _profileController.Init();
         }
 
@@ -113,7 +108,7 @@ namespace Chang
         {
             _vocabularyController.SetViewActive(tabType == MainTabType.Vocabulary);
             _sentencesController.SetViewActive(tabType == MainTabType.Sentences);
-            _vocabularyRepetitionController.SetViewActive(tabType == MainTabType.Repetition);
+            _repetitionController.SetViewActive(tabType == MainTabType.Repetition);
             _profileController.SetViewActive(tabType == MainTabType.Profile);
             _currentTabType = tabType;
 
@@ -129,7 +124,7 @@ namespace Chang
                     break;
 
                 case MainTabType.Repetition:
-                    await _vocabularyRepetitionController.SetAsync(ct);
+                    await _repetitionController.SetAsync(ct);
                     break;
 
                 case MainTabType.Profile:

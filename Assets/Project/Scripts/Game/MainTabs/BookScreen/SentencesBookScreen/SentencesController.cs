@@ -258,34 +258,8 @@ namespace Chang.Sentences
                     throw new KeyNotFoundException($"Sentence with key {quest.Key} not found in Sentences.");
                 }
 
-                /*
-                                public HashSet<string> MatchWordsKeys;
-                                public string LocalizationKey { get; set; }
-                                public string DefaultTranslation { get; set; }
-                                public string ImageKey { get; set; }
-                                public List<string> CompareWordsFileNames { get; set; }
-                                public List<string> DisplayWordsFileNames { get; set; }
-                                public List<string> MixWordsFileNames { get; set; }
-                                public string LogKey { get; set; }
-                             */
-
-                // MatchWordsKeys = busSentences[sentenceKey].WordsKeys,
-
-                // LocalizationKey = busSentences[sentenceKey].Key,
-                // DefaultTranslation = busSentences[sentenceKey].DefaultTranslation,
-                // ImageKey = busSentences[sentenceKey].ImageKey,
-                // SoundKey = busSentences[sentenceKey].SoundKey,
-                // // CompareWordsKeys = busSentences[sentenceKey].CompareWordsKeys,
-                // // DisplayWordsKeys = busSentences[sentenceKey].DisplayWordsKeys,
-                // // MixWordsKeys = busSentences[sentenceKey].MixWordsKeys,
-                // Key = busSentences[sentenceKey].Key,
-                // LogKey = busSentences[sentenceKey].SentenceKey,
-
                 quest.Sentence = sentence;
                 quest.MatchWordsKeys = new HashSet<string>(sentence.SentenceWords.Select(word => word.WordKey));
-                // quest.ImageKey = sentence.ImageKey;
-                // quest.SoundKey = sentence.SoundKey;
-
             }
         }
 

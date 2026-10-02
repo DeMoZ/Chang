@@ -234,7 +234,6 @@ namespace Chang.Vocabulary
             }
             else
             {
-                // lessonKey = ElementsPaths.LessonKey(_profileService.ProfileData.LearnLanguage, sectionName, lessonIndex);
                 string sectionKey = ElementsPaths.VocabularySectionKey(_profileService.ProfileData.LearnLanguage, sectionName);
 
                 if (!_gameBus.VocabularySections.TryGetValue(sectionKey, out section))

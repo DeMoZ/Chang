@@ -14,7 +14,7 @@ namespace Chang
     /// <summary>
     /// Repetition screen: words and sentences log ordered by the last answer time, repetition buttons
     /// </summary>
-    public class VocabularyRepetitionController : IViewController
+    public class RepetitionController : IViewController
     {
         private const int ShowLogLimitAmount = 30;
 
@@ -24,7 +24,7 @@ namespace Chang
         private readonly RepetitionService _repetitionService;
 
         [Inject]
-        public VocabularyRepetitionController(
+        public RepetitionController(
             ProfileService profileService,
             GameBus gameBus,
             RepetitionView view,
