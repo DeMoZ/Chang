@@ -538,12 +538,10 @@ namespace Chang.FSM
                 return false;
             }
 
-            List<SentenceSelectWords> sentenceQuests = lesson.Questions.OfType<SentenceSelectWords>().ToList();
-
-            // sentence lesson keys are sentences, match the words that were picked from the mix instead
-            IEnumerable<string> wordKeys = sentenceQuests.Count > 0
-                ? sentenceQuests.SelectMany(quest => quest.SelectWordsKeys)
-                : lesson.Keys;
+            // sentence keys are not words, match the words that were picked from the sentences mix instead.
+            // a repetition lesson may have both words and sentences
+            IEnumerable<string> wordKeys = lesson.Questions.OfType<QuestSelectWord>().Select(quest => quest.Key)
+                .Concat(lesson.Questions.OfType<SentenceSelectWords>().SelectMany(quest => quest.SelectWordsKeys));
 
             matchWords.AddRange(wordKeys.Where(key => _pagesBus.Words.ContainsKey(key)));
 

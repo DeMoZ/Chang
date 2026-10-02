@@ -19,7 +19,8 @@ namespace Chang.Vocabulary
         private readonly MainScreenBus _mainScreenBus;
         private readonly BookVocabularyView _view;
         private readonly ProfileService _profileService;
-        private readonly VocabularyRepetitionService _repetitionService;
+        private readonly RepetitionService _repetitionService;
+        private readonly RepetitionLessonBuilder _repetitionLessonBuilder;
         private readonly SectionSortService _sectionSortService;
 
         private Dictionary<string, Lesson> _lessons = new();
@@ -33,7 +34,8 @@ namespace Chang.Vocabulary
             MainScreenBus mainScreenBus,
             BookVocabularyView view,
             ProfileService profileService,
-            VocabularyRepetitionService repetitionService,
+            RepetitionService repetitionService,
+            RepetitionLessonBuilder repetitionLessonBuilder,
             SectionSortService sectionSortService)
         {
             _gameBus = gameBus;
@@ -41,6 +43,7 @@ namespace Chang.Vocabulary
             _view = view;
             _profileService = profileService;
             _repetitionService = repetitionService;
+            _repetitionLessonBuilder = repetitionLessonBuilder;
             _sectionSortService = sectionSortService;
 
             _cts = new CancellationTokenSource();
@@ -144,18 +147,14 @@ namespace Chang.Vocabulary
             SectionBlock sectionBlock,
             CancellationToken ct)
         {
-            List<VocabularyQuestLog> repetitions = await _repetitionService
-                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData, ct);
+            await UniTask.Yield(ct);
 
-            int repetitionsCount = repetitions.Count;
             string reorderedSectionKey = _profileService.ReorderedSectionKey(sectionData.Section);
 
             bool canSort = _sectionSortService.CanSort(sectionData);
             sectionBlock.SectionView.SetSortToggle(canSort && _sectionSortService.IsSorted(sectionData), canSort);
 
-            sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >=
-                                                                 ProjectConstants
-                                                                     .SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
+            sectionBlock.SectionView.SetInteractableRepeatButton(_repetitionService.CanRepeatVocabulary(sectionData));
 
             if (_profileService.ReorderedVocabularySections.TryGetValue(reorderedSectionKey,
                     out VocabularySection reorderedSection))
@@ -258,12 +257,9 @@ namespace Chang.Vocabulary
             if (_mainScreenBus.IsLoading)
                 return;
 
-            // todo chang show loading animation ?
             VocabularySection sectionData = _gameBus.VocabularyBook.Sections.Find(s => s.Section == section);
-            List<VocabularyQuestLog> repetitions =
-                await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, sectionData,
-                    ct);
-            MakeRepetitionAsync(repetitions, _cts.Token).Forget();
+            List<RepetitionCandidate> repetitions = _repetitionService.GetVocabularyRepetition(sectionData);
+            await MakeRepetitionAsync(repetitions, ct);
         }
 
         private async UniTaskVoid OnGeneralRepeatClickedAsync(CancellationToken ct)
@@ -271,63 +267,25 @@ namespace Chang.Vocabulary
             if (_mainScreenBus.IsLoading)
                 return;
 
-            // todo chang show loading animation ?
-            List<VocabularyQuestLog> repetitions =
-                await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
-            MakeRepetitionAsync(repetitions, _cts.Token).Forget();
+            List<RepetitionCandidate> repetitions = _repetitionService.GetVocabularyRepetition();
+            await MakeRepetitionAsync(repetitions, ct);
         }
 
-        private async UniTaskVoid MakeRepetitionAsync(List<VocabularyQuestLog> repetitions, CancellationToken ct)
+        private async UniTask MakeRepetitionAsync(List<RepetitionCandidate> repetitions, CancellationToken ct)
         {
-            await UniTask.Yield(ct); // todo chang delete
-            throw new NotImplementedException();
-            /*
-            if (repetitions.Count < ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT)
+            if (repetitions.Count == 0)
             {
-                Debug.LogWarning("Not enough logs for general repetition");
+                Debug.LogWarning("No played keys for repetition");
                 return;
             }
 
             _mainScreenBus.IsLoading = true;
-            await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
+            await UniTask.Yield(ct);
 
-            List<IQuestion> questions = new List<IQuestion>();
-
-            foreach (VocabularyQuestLog questLog in repetitions)
-            {
-                switch (questLog.QuestionType)
-                {
-                    case ChangTypes.SelectWord:
-                        QuestSelectWord simpleQuest = new QuestSelectWord();
-                        simpleQuest.CorrectWordFileName = questLog.FileName;
-                        List<VocabularyQuestLog> words = repetitions
-                            .Where(r => r.QuestionType == ChangTypes.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
-                            .ToList();
-
-                        words.Shuffle();
-
-                        simpleQuest.MixWordsFileNames = words.Take(ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE)
-                            .Select(w => w.FileName)
-                            .ToList();
-
-                        questions.Add(simpleQuest);
-                        break;
-
-                    default:
-                        throw new NotImplementedException($"Not implemented simple quest generation for type: {questLog.QuestionType}");
-                }
-            }
-
-            Lesson lesson = new Lesson();
-            lesson.SetSimpleQuestions(questions);
-
-            // _gameBus.CurrentVocabularyLesson = lesson;
-            _gameBus.LessonProvider = lesson;
-            _mainScreenBus.IsLoading = false;
-
+            _gameBus.SetLesson(_repetitionLessonBuilder.Build(repetitions));
             _gameBus.GameType = GameType.Repetition;
+            _mainScreenBus.IsLoading = false;
             _onLobbyExitState?.Invoke();
-            */
         }
     }
 }

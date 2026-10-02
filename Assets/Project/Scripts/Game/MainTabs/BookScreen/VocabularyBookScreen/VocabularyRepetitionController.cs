@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -15,34 +16,38 @@ namespace Chang
         private readonly ProfileService _profileService;
         private readonly MainScreenBus _mainScreenBus;
         private readonly RepetitionView _view;
-        private readonly VocabularyRepetitionService _vocabularyRepetitionService;
+        private readonly RepetitionService _repetitionService;
 
         [Inject]
         public VocabularyRepetitionController(
             ProfileService profileService,
             MainScreenBus mainScreenBus,
             RepetitionView view,
-            VocabularyRepetitionService vocabularyRepetitionService)
+            RepetitionService repetitionService)
         {
             _profileService = profileService;
             _mainScreenBus = mainScreenBus;
             _view = view;
-            _vocabularyRepetitionService = vocabularyRepetitionService;
+            _repetitionService = repetitionService;
         }
 
         public void Dispose()
         {
         }
 
-        public void Init()
+        public void Init(Action onRepeatWordsClick, Action onRepeatSentencesClick, Action onRepeatMixedClick)
         {
-            _view.Init(_mainScreenBus.OnRepeatClicked);
+            _view.Init(onRepeatWordsClick, onRepeatSentencesClick, onRepeatMixedClick);
         }
 
         public async UniTask SetAsync(CancellationToken ct)
         {
-            var sortedList = await _vocabularyRepetitionService.GetGeneralRepetitionAsync(ShowLogLimitAmount, ct);
-            _view.Set(sortedList);
+            await UniTask.Yield(ct);
+            _view.Set(_repetitionService.GetVocabularyLogsByPriority(ShowLogLimitAmount));
+            _view.SetInteractableRepeatButtons(
+                _repetitionService.CanRepeatVocabulary(),
+                _repetitionService.CanRepeatSentences(),
+                _repetitionService.CanRepeatMixed());
         }
 
         public void SetViewActive(bool active)
@@ -50,17 +55,12 @@ namespace Chang
             _view.gameObject.SetActive(active);
         }
 
+        // todo chang implement items interacitons - show popup with word in Thai, translation, mark, info from log - marks, list when played
         // private void OnItemClick(int index)
         // {
         //     Debug.Log($"Clicked on item {index}");
         //
         //     //_mainScreenBus.OnGameBookLessonClicked?.Invoke(_lessons[index].FileName);
-        // }
-        //
-        // public int GetLogCount()
-        // {
-        //     // return _repetitionService.GetProgress().Questions;
-        //     throw new NotImplementedException("Not implemented count log");
         // }
     }
 }

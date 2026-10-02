@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Zenject;
@@ -19,6 +20,11 @@ namespace Chang
         private readonly VocabularyRepetitionController _vocabularyRepetitionController;
         private readonly SentencesRepetitionController _sentencesRepetitionController;
         private readonly ProfileController _profileController;
+        private readonly GameBus _gameBus;
+        private readonly RepetitionService _repetitionService;
+        private readonly RepetitionLessonBuilder _repetitionLessonBuilder;
+
+        private Action _onExitState;
 
         // private bool _isLoading;
         private CancellationTokenSource _cts;
@@ -29,19 +35,18 @@ namespace Chang
         /// </summary>
         private MainTabType _currentTabType = MainTabType.Vocabulary;
 
-        private IBookController _currentController;
-
         [Inject]
         public LobbyController(
             MainScreenBus mainScreenBus,
             MainUiView view,
             VocabularyController vocabularyController,
             VocabularyRepetitionController vocabularyRepetitionController,
-            VocabularyRepetitionService vocabularyRepetitionService,
             SentencesController sentencesController,
             SentencesRepetitionController sentencesRepetitionController,
-            SentencesRepetitionService sentencesRepetitionService,
-            ProfileController profileController)
+            ProfileController profileController,
+            GameBus gameBus,
+            RepetitionService repetitionService,
+            RepetitionLessonBuilder repetitionLessonBuilder)
         {
             _mainScreenBus = mainScreenBus;
             _view = view;
@@ -50,9 +55,11 @@ namespace Chang
             _sentencesController = sentencesController;
             _sentencesRepetitionController = sentencesRepetitionController;
             _profileController = profileController;
+            _gameBus = gameBus;
+            _repetitionService = repetitionService;
+            _repetitionLessonBuilder = repetitionLessonBuilder;
 
             _cts = new CancellationTokenSource();
-            _mainScreenBus.OnRepeatClicked += OnGeneralRepeatClicked;
         }
 
         public void Dispose()
@@ -61,15 +68,18 @@ namespace Chang
             _tabCts?.Dispose();
             _cts.Cancel();
             _cts.Dispose();
-            _mainScreenBus.OnRepeatClicked -= OnGeneralRepeatClicked;
         }
 
         public void Init(Action onExitState)
         {
+            _onExitState = onExitState;
             _view.Init(OnToggleSelected);
             _vocabularyController.Init(onExitState);
             _sentencesController.Init(onExitState);
-            _vocabularyRepetitionController.Init();
+            _vocabularyRepetitionController.Init(
+                _vocabularyController.OnGeneralRepeatClicked,
+                _sentencesController.OnGeneralRepeatClicked,
+                OnMixedRepeatClicked);
             _sentencesRepetitionController.Init();
             _profileController.Init();
         }
@@ -111,22 +121,18 @@ namespace Chang
             switch (tabType)
             {
                 case MainTabType.Vocabulary:
-                    _currentController = _vocabularyController;
                     await _vocabularyController.SetAsync(ct);
                     break;
 
                 case MainTabType.Sentences:
-                    _currentController = _sentencesController;
                     await _sentencesController.SetAsync(ct);
                     break;
 
                 case MainTabType.Repetition:
-                    //_currentController = null;// todo chang uncomment
                     await _vocabularyRepetitionController.SetAsync(ct);
                     break;
 
                 case MainTabType.Profile:
-                    //_currentController = null;// todo chang uncomment
                     await _profileController.SetAsync(ct);
                     break;
                 default:
@@ -134,9 +140,26 @@ namespace Chang
             }
         }
 
-        private void OnGeneralRepeatClicked()
+        /// <summary>
+        /// Repetition of words and sentences together
+        /// </summary>
+        private void OnMixedRepeatClicked()
         {
-            _currentController?.OnGeneralRepeatClicked();
+            if (_mainScreenBus.IsLoading)
+            {
+                return;
+            }
+
+            List<RepetitionCandidate> repetitions = _repetitionService.GetMixedRepetition();
+            if (repetitions.Count == 0)
+            {
+                Debug.LogWarning("No played keys for repetition");
+                return;
+            }
+
+            _gameBus.SetLesson(_repetitionLessonBuilder.Build(repetitions));
+            _gameBus.GameType = GameType.Repetition;
+            _onExitState?.Invoke();
         }
     }
 }

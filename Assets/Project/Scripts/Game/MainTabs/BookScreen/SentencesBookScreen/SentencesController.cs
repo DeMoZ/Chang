@@ -19,7 +19,8 @@ namespace Chang.Sentences
         private readonly MainScreenBus _mainScreenBus;
         private readonly BookSentencesView _view;
         private readonly ProfileService _profileService;
-        private readonly SentencesRepetitionService _repetitionService;
+        private readonly RepetitionService _repetitionService;
+        private readonly RepetitionLessonBuilder _repetitionLessonBuilder;
         private readonly SectionSortService _sectionSortService;
 
         private Dictionary<string, Lesson> _lessons = new();
@@ -33,14 +34,16 @@ namespace Chang.Sentences
             MainScreenBus mainScreenBus,
             BookSentencesView view,
             ProfileService profileService,
-            SentencesRepetitionService sentencesRepetitionService,
+            RepetitionService repetitionService,
+            RepetitionLessonBuilder repetitionLessonBuilder,
             SectionSortService sectionSortService)
         {
             _gameBus = gameBus;
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
-            _repetitionService = sentencesRepetitionService;
+            _repetitionService = repetitionService;
+            _repetitionLessonBuilder = repetitionLessonBuilder;
             _sectionSortService = sectionSortService;
 
             _cts = new CancellationTokenSource();
@@ -94,7 +97,7 @@ namespace Chang.Sentences
 
         public void OnGeneralRepeatClicked()
         {
-            throw new NotImplementedException();
+            OnGeneralRepeatClickedAsync(_cts.Token).Forget();
         }
 
         private Color GetLessonColor(Lesson lesson)
@@ -139,18 +142,14 @@ namespace Chang.Sentences
         private async UniTask PopulateSectionAsync(SentencesSection section, SectionBlock sectionBlock,
             CancellationToken ct)
         {
-            List<SentenceQuestLog> repetitions = await _repetitionService
-                .GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
+            await UniTask.Yield(ct);
 
-            int repetitionsCount = repetitions.Count;
             string reorderedSectionKey = _profileService.ReorderedSectionKey(section.Section);
 
             bool canSort = _sectionSortService.CanSort(section);
             sectionBlock.SectionView.SetSortToggle(canSort && _sectionSortService.IsSorted(section), canSort);
 
-            sectionBlock.SectionView.SetInteractableRepeatButton(repetitionsCount >=
-                                                                 ProjectConstants
-                                                                     .SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT);
+            sectionBlock.SectionView.SetInteractableRepeatButton(_repetitionService.CanRepeatSentences(section));
 
             if (_profileService.ReorderedSentencesSections.TryGetValue(reorderedSectionKey,
                     out SentencesSection reorderedSection))
@@ -297,12 +296,9 @@ namespace Chang.Sentences
                 return;
             }
 
-            await UniTask.Yield(ct); // todo chang delete
-            throw new NotImplementedException();
-            // todo chang show loading animation ?
-            // var repetitions = await _repetitionService.GetSectionRepetitionAsync(ProjectConstants.SECTION_REPETITION_AMOUNT, section, ct);
-            // MakeRepetitionAsync(repetitions, _cts.Token).Forget();
-
+            SentencesSection sectionData = _gameBus.SentencesBook.Sections.Find(s => s.Section == section);
+            List<RepetitionCandidate> repetitions = _repetitionService.GetSentencesRepetition(sectionData);
+            await MakeRepetitionAsync(repetitions, ct);
         }
 
         private async UniTaskVoid OnGeneralRepeatClickedAsync(CancellationToken ct)
@@ -312,60 +308,24 @@ namespace Chang.Sentences
                 return;
             }
 
-            await UniTask.Yield(ct); // todo chang delete
-            throw new NotImplementedException();
-            // todo chang show loading animation ?
-            // var repetitions = await _repetitionService.GetGeneralRepetitionAsync(ProjectConstants.GENERAL_REPETITION_AMOUNT, ct);
-            // MakeRepetitionAsync(repetitions, _cts.Token).Forget();
+            List<RepetitionCandidate> repetitions = _repetitionService.GetSentencesRepetition();
+            await MakeRepetitionAsync(repetitions, ct);
         }
 
-        private async UniTaskVoid MakeRepetitionAsync(List<VocabularyQuestLog> repetitions, CancellationToken ct)
+        private async UniTask MakeRepetitionAsync(List<RepetitionCandidate> repetitions, CancellationToken ct)
         {
-            throw new NotImplementedException();
-            if (repetitions.Count < ProjectConstants.SECTION_REPETITION_MIMIMUM_AVAILABLE_AMOUNT)
+            if (repetitions.Count == 0)
             {
-                Debug.LogWarning("Not enough logs for general repetition");
+                Debug.LogWarning("No played keys for repetition");
                 return;
             }
 
             _mainScreenBus.IsLoading = true;
-            await UniTask.DelayFrame(1, cancellationToken: ct); // todo chang remove delay and make method sync ?
+            await UniTask.Yield(ct);
 
-            List<IQuestion> questions = new List<IQuestion>();
-
-            foreach (VocabularyQuestLog questLog in repetitions)
-            {
-                // switch (questLog.QuestionType)
-                // {
-                //     case QuestionType.SelectWord:
-                //         var simpleQuest = new QuestSelectWord();
-                //         simpleQuest.CorrectWordFileName = questLog.FileName;
-                //         var words = repetitions
-                //             .Where(r => r.QuestionType == QuestionType.SelectWord && r.FileName != simpleQuest.CorrectWordFileName)
-                //             .ToList();
-                //
-                //         words.Shuffle();
-                //
-                //         simpleQuest.MixWordsFileNames = words.Take(ProjectConstants.MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE)
-                //             .Select(w => w.FileName)
-                //             .ToList();
-                //
-                //         questions.Add(simpleQuest);
-                //         break;
-                //
-                //     default:
-                //         throw new NotImplementedException($"Not implemented simple quest generation for type: {questLog.QuestionType}");
-                // }
-            }
-
-            // var lesson = new Lesson();
-            // lesson.GenerateQuestMatchWordsData = true;
-            // lesson.SetSimpleQuestions(questions);
-            //
-            // _gameBus.CurrentVocabularyLesson = lesson;
-            // _mainScreenBus.IsLoading = false;
-            //
-            // _gameBus.GameType = GameType.Repetition;
+            _gameBus.SetLesson(_repetitionLessonBuilder.Build(repetitions));
+            _gameBus.GameType = GameType.Repetition;
+            _mainScreenBus.IsLoading = false;
             _onLobbyExitState?.Invoke();
         }
     }

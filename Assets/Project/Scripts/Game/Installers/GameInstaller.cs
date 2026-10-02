@@ -36,8 +36,9 @@ namespace Chang
             Container.BindInterfacesAndSelfTo<Game>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameFSM>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameBus>().AsSingle();
-            Container.BindInterfacesAndSelfTo<VocabularyRepetitionService>().AsSingle();
-            Container.BindInterfacesAndSelfTo<SentencesRepetitionService>().AsSingle();
+            Container.Bind<RepetitionConfig>().FromScriptableObjectResource(RepetitionConfig.ResourcePath).AsSingle();
+            Container.BindInterfacesAndSelfTo<RepetitionService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RepetitionLessonBuilder>().AsSingle();
             Container.BindInterfacesAndSelfTo<SectionSortService>().AsSingle();
             Container.BindInterfacesAndSelfTo<WordPathHelper>().AsSingle();
             Container.BindInterfacesAndSelfTo<ScreenManager>().AsSingle();

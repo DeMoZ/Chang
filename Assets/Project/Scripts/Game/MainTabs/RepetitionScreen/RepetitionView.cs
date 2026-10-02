@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Chang.Profile;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Chang
@@ -14,8 +15,14 @@ namespace Chang
         [SerializeField] private Transform logContainer;
 
         [Space] [SerializeField] private OverviewLogItem overviewLogItemPrefab;
-        [SerializeField] private Button repeatBtn;
-        private Action _onRepeatClick;
+        [FormerlySerializedAs("repeatBtn")]
+        [SerializeField] private Button repeatWordsBtn;
+        [SerializeField] private Button repeatSentencesBtn;
+        [SerializeField] private Button repeatMixedBtn;
+
+        private Action _onRepeatWordsClick;
+        private Action _onRepeatSentencesClick;
+        private Action _onRepeatMixedClick;
 
         public void Set(List<VocabularyQuestLog> sortedList)
         {
@@ -31,19 +38,32 @@ namespace Chang
             }
         }
 
-        public void Init(Action onRepeatClick)
+        public void Init(Action onRepeatWordsClick, Action onRepeatSentencesClick, Action onRepeatMixedClick)
         {
-            _onRepeatClick = onRepeatClick;
+            _onRepeatWordsClick = onRepeatWordsClick;
+            _onRepeatSentencesClick = onRepeatSentencesClick;
+            _onRepeatMixedClick = onRepeatMixedClick;
+        }
+
+        public void SetInteractableRepeatButtons(bool words, bool sentences, bool mixed)
+        {
+            repeatWordsBtn.interactable = words;
+            repeatSentencesBtn.interactable = sentences;
+            repeatMixedBtn.interactable = mixed;
         }
 
         private void OnEnable()
         {
-            repeatBtn.onClick.AddListener(OnRepeatClick);
+            repeatWordsBtn.onClick.AddListener(OnRepeatWordsClick);
+            repeatSentencesBtn.onClick.AddListener(OnRepeatSentencesClick);
+            repeatMixedBtn.onClick.AddListener(OnRepeatMixedClick);
         }
 
         private void OnDisable()
         {
-            repeatBtn.onClick.RemoveListener(OnRepeatClick);
+            repeatWordsBtn.onClick.RemoveListener(OnRepeatWordsClick);
+            repeatSentencesBtn.onClick.RemoveListener(OnRepeatSentencesClick);
+            repeatMixedBtn.onClick.RemoveListener(OnRepeatMixedClick);
 
             foreach (Transform child in logContainer)
             {
@@ -51,9 +71,19 @@ namespace Chang
             }
         }
 
-        private void OnRepeatClick()
+        private void OnRepeatWordsClick()
         {
-            _onRepeatClick?.Invoke();
+            _onRepeatWordsClick?.Invoke();
+        }
+
+        private void OnRepeatSentencesClick()
+        {
+            _onRepeatSentencesClick?.Invoke();
+        }
+
+        private void OnRepeatMixedClick()
+        {
+            _onRepeatMixedClick?.Invoke();
         }
     }
 }
