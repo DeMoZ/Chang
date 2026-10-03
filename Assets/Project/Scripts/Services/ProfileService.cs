@@ -15,6 +15,7 @@ namespace Chang.Services
         private readonly PlayerProfile _playerProfile;
         private readonly PrefsDataProvider _prefsDataProvider;
         private readonly UnityCloudDataProvider _unityCloudDataProvider;
+        private readonly LanguagesConfig _languagesConfig;
 
         private bool _isVocabularyChanged;
         private bool _isSentencesChanged;
@@ -29,9 +30,11 @@ namespace Chang.Services
         public string ReorderedSectionKey(string section) => $"{LearnLanguage}/{section}";
         
         [Inject]
-        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler, AuthorizationService authorizationService)
+        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler, AuthorizationService authorizationService,
+            LanguagesConfig languagesConfig)
         {
             _playerProfile = playerProfile;
+            _languagesConfig = languagesConfig;
             _prefsDataProvider = new PrefsDataProvider();
             _unityCloudDataProvider = new UnityCloudDataProvider(errorHandler, authorizationService.RequestAuthentication);
         }
@@ -66,7 +69,8 @@ namespace Chang.Services
                 prefsProfile = null;
             }
 
-            ProfileData profile = SelectNewer(cloudProfile, prefsProfile, data => data.UtcTime) ?? new ProfileData();
+            ProfileData profile = SelectNewer(cloudProfile, prefsProfile, data => data.UtcTime)
+                ?? new ProfileData { NativeLanguage = _languagesConfig.GetDeviceLanguage(UnityEngine.Application.systemLanguage) };
             profile.SetPlayerId(playerId);
             Languages language = profile.LearnLanguage;
 

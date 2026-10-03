@@ -31,16 +31,27 @@ namespace Chang
         LessonData,
     }
 
-    // todo chang use system languages
+    /// <summary>
+    /// Names match the localization sheet columns and SystemLanguage where it has the language.
+    /// Serialized as int in the content assets, add new values to the end
+    /// </summary>
     public enum Languages
     {
         English,
         Spanish,
         Russian,
-        Chinese,
-        Indian,
-        Franche,
-        Thai
+        ChineseSimplified,
+        Hindi,
+        French,
+        Thai,
+        German,
+        ChineseTraditional,
+        Malay,
+        Indonesian,
+        Korean,
+        Japanese,
+        Lao,
+        Vietnamese,
     }
 
     public enum MainTabType

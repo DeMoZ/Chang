@@ -27,6 +27,7 @@ namespace Chang.FSM
         [Inject] private readonly LobbyController _lobbyController;
         [Inject] private readonly AddressablesAssetManager _assetManager;
         [Inject] private readonly ProfileService _profileService;
+        [Inject] private readonly LocalizationService _localizationService;
         [Inject] private readonly PopupManager _popupManager;
 
         private LoadingUiController _loadingUiController;
@@ -55,15 +56,14 @@ namespace Chang.FSM
                 new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar | LoadingElements.Percent));
             _loadingUiController.SimulateProgress(2f).Forget();
 
-            // HashSet<string> paths = new HashSet<string> { VocabularyBookPath, VocabularyPath, SentencesBookPath, SentencesPath };
-            // long downloadSize = await _assetManager.GetDownloadSize(paths, _cts.Token);
-
             bool isLoaded = await _profileService.LoadStoredData(_cts.Token);
             if (!isLoaded)
             {
                 // not authenticated, the reboot scene with authorization is loading
                 return;
             }
+
+            _localizationService.ApplyProfileLanguage();
 
             List<UniTask> loads = new()
             {
