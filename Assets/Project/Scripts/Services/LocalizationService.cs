@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Assets.SimpleLocalization.Scripts;
 using Cysharp.Threading.Tasks;
@@ -54,6 +55,20 @@ namespace Chang.Services
             SetLanguage(language);
             _profileService.ProfileData.NativeLanguage = language;
             await _profileService.SaveProfileDataAsync(ct);
+        }
+
+        /// <returns>the key translation in the current language, the fallback if the key is missing or its translation is empty</returns>
+        public static string Localize(string key, string fallback)
+        {
+            if (!string.IsNullOrEmpty(key)
+                && LocalizationManager.Dictionary.TryGetValue(LocalizationManager.Language, out Dictionary<string, string> translations)
+                && translations.TryGetValue(key, out string translation)
+                && !string.IsNullOrEmpty(translation))
+            {
+                return translation;
+            }
+
+            return fallback;
         }
 
         private static void SetLanguage(Languages language)

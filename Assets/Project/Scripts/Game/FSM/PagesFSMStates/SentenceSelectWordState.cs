@@ -107,10 +107,7 @@ namespace Chang.FSM
             _questionData = GetQuestionData(_sentenceQuestion);
             bool isQuestInTranslation = false; // todo chang
             
-            if (!TryGetLocalization(_sentenceQuestion.Key, out string translation))
-            {
-                translation = _sentenceQuestion.Translation;
-            }
+            string translation = _sentenceQuestion.Translation;
 
             Sprite sprite = _pagesContentProvider.GetCachedSprite(_sentenceQuestion.Sentence.ImageKey);
             
@@ -132,22 +129,6 @@ namespace Chang.FSM
             OnClickPlaySound(!isQuestInTranslation);
             
             await UniTask.Yield(ct);
-        }
-
-        // todo chang implement localization
-        private bool TryGetLocalization(string sentenceQuestionLocalizationKey, out string translation)
-        {
-            // try
-            // {
-            //     translation = localization.Get(sentenceQuestionLocalizationKey);
-            // }
-            // catch
-            // {
-            translation = string.Empty;
-            return false;
-            // }
-            //
-            // return true;
         }
 
         private QuestSentenceSelectWordData GetQuestionData(SentenceSelectWords sentenceQuestion)

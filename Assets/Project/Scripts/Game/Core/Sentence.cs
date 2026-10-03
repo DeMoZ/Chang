@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chang.Services;
+using Debug = DMZ.DebugSystem.DMZLogger;
 
 [Flags]
 public enum Modifier // M-MixFiller R-Replaceable G-Gender, the values are serialized in the sentences assets
@@ -44,6 +46,42 @@ namespace Chang.Core
             SoundKey = other.SoundKey;
             DefaultTranslation = other.DefaultTranslation;
             SentenceWords = other.SentenceWords?.Select(word => new SentenceWord(word)).ToList();
+        }
+
+        /// <summary>
+        /// The translation in the NativeLanguage with {0}, {1}... replaced by the replaceable words translations in their sentence order.
+        /// Replaceable words are taken by the current SentenceWords keys, so a copy with replaced words gets their translations
+        /// </summary>
+        public string GetTranslation(IReadOnlyDictionary<string, Word> words)
+        {
+            object[] args = SentenceWords
+                .Where(word => word.Modifiers.HasFlag(Modifier.Replaceable))
+                .Select(word => (object)words[word.WordKey].Translation)
+                .ToArray();
+
+            string translation = LocalizationService.Localize(SentenceKey, DefaultTranslation);
+
+            if (TryFormat(translation, args, out string result) || TryFormat(DefaultTranslation, args, out result))
+            {
+                return result;
+            }
+
+            return DefaultTranslation;
+        }
+
+        private bool TryFormat(string format, object[] args, out string result)
+        {
+            try
+            {
+                result = string.Format(format, args);
+                return true;
+            }
+            catch (FormatException e)
+            {
+                Debug.LogWarning($"Translation format error for sentence: {SentenceKey}, format: {format}, args: {args.Length}, {e.Message}");
+                result = null;
+                return false;
+            }
         }
     }
 

@@ -85,28 +85,7 @@ namespace Chang
             // the book sentence, not the player answer
             string learnSentence = string.Join("", sentence.SentenceWords.Select(word => _gameBus.Words[word.WordKey].LearnWord));
 
-            return new RepetitionLogItem(learnSentence, GetTranslation(sentence), log.Mark, log.Log.Count, log.UtcTime, log.SuccessSequence);
-        }
-
-        /// <summary>
-        /// Replaceable words are taken by their sentence keys, in the game they are replaced with random section words
-        /// </summary>
-        private string GetTranslation(Sentence sentence)
-        {
-            object[] args = sentence.SentenceWords
-                .Where(word => word.Modifiers.HasFlag(Modifier.Replaceable))
-                .Select(word => (object)_gameBus.Words[word.WordKey].Translation)
-                .ToArray();
-
-            try
-            {
-                return string.Format(sentence.DefaultTranslation, args);
-            }
-            catch (FormatException e)
-            {
-                Debug.LogWarning($"Translation format error for sentence: {sentence.SentenceKey}, {e.Message}");
-                return sentence.DefaultTranslation;
-            }
+            return new RepetitionLogItem(learnSentence, sentence.GetTranslation(_gameBus.Words), log.Mark, log.Log.Count, log.UtcTime, log.SuccessSequence);
         }
 
         // todo chang implement items interacitons - show popup with word in Thai, translation, mark, info from log - marks, list when played

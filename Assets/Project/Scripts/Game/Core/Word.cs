@@ -1,3 +1,4 @@
+using Chang.Services;
 using UnityEngine;
 
 namespace Chang.Core
@@ -32,14 +33,8 @@ namespace Chang.Core
             Sprite = sprite;
         }
 
-        public string Translation
-        {
-            get
-            {
-                // todo chang Get Translation from i2language
-                return DefaultTranslation;
-            }
-        }
+        // translation in the NativeLanguage, the localization key is the WordKey
+        public string Translation => LocalizationService.Localize(WordKey, DefaultTranslation);
 
         public static Word CreateEmptyPlaceholder(string replacedWord)
         {

@@ -162,14 +162,7 @@ namespace Chang.FSM
 
                 AddAlternativeMixWords(sSelectWords, sentenceMark);
 
-                string defaultTranslation = sSelectWords.Sentence.DefaultTranslation;
-                List<SentenceWord> replaceableWords = sSelectWords.Sentence.SentenceWords
-                    .Where(w => w.Modifiers.HasFlag(Modifier.Replaceable))
-                    .ToList();
-                    
-                object[] translationArgs = replaceableWords.Select(w => (object)Bus.Words[w.WordKey].Translation).ToArray();
-                defaultTranslation = string.Format(defaultTranslation, translationArgs);
-                sSelectWords.SetTranslation(defaultTranslation);
+                sSelectWords.SetTranslation(sSelectWords.Sentence.GetTranslation(Bus.Words));
             }
         }
 
