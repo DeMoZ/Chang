@@ -52,7 +52,7 @@ namespace Chang.Services
 
         private void OnLogOutClicked()
         {
-            _logInController.LogOutAsync();
+            _logInController.LogOutAsync().AsUniTask().Forget();
         }
 
         private void OnLoggedOut()

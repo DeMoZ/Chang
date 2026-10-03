@@ -57,7 +57,7 @@ namespace Chang
             
             var loginController = new LogInController(loginModel);
             Container.BindInstances(loginModel);
-            Container.BindInstance(loginController);
+            Container.BindInterfacesAndSelfTo<LogInController>().FromInstance(loginController).AsSingle();
         }
 
         private void OnApplicationPause(bool pauseStatus)
