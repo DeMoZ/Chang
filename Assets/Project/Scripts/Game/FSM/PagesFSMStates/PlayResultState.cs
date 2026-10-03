@@ -10,11 +10,15 @@ namespace Chang.FSM
     public class ResultItem
     {
         public string Presentation { get; }
+        public string Translation { get; }
+        public int Mark { get; }
         public bool IsCorrect { get; }
 
-        public ResultItem(string presentation, bool isCorrect)
+        public ResultItem(string presentation, string translation, int mark, bool isCorrect)
         {
             Presentation = presentation;
+            Translation = translation;
+            Mark = mark;
             IsCorrect = isCorrect;
         }
     }
@@ -47,14 +51,7 @@ namespace Chang.FSM
 
         private void StateBody()
         {
-            List<ResultItem> log = new();
-            
-            foreach (var result in Bus.LessonLog)
-            {
-                log.Add(new ResultItem(result.Presentation, result.IsCorrect));
-            }
-            
-            _stateController.Init(log, () => _gameOverlayController.OnContinue?.Invoke());
+            _stateController.Init(Bus.LessonLog, () => _gameOverlayController.OnContinue?.Invoke());
             _stateController.SetViewActive(true);
             _gameOverlayController.EnableReturnButton(false);
         }

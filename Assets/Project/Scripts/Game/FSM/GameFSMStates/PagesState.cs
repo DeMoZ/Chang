@@ -375,7 +375,7 @@ namespace Chang.FSM
             Word word = _pagesBus.Words[_pagesBus.QuestionResult.Key];
             info.InfoText = $"{word.LearnWord}\n{word.Translation}";
 
-            _pagesBus.LessonLog.Add(_pagesBus.QuestionResult);
+            AddWordToLessonLog(_pagesBus.QuestionResult);
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
@@ -395,7 +395,7 @@ namespace Chang.FSM
             foreach (WordResult result in stateResult.WordResults)
             {
                 _profileService.AddVocabularyLog(result.Key, result.IsCorrect, false);
-                _pagesBus.LessonLog.Add(result);
+                AddWordToLessonLog(result);
             }
 
             await _profileService.SaveProgressAsync(ct);
@@ -424,7 +424,7 @@ namespace Chang.FSM
                 foreach (WordResult vocabularyResult in vocabularyResults)
                 {
                     _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.IsCorrect, needIncrement);
-                    _pagesBus.LessonLog.Add(vocabularyResult);
+                    AddWordToLessonLog(vocabularyResult);
                 }
             }
 
@@ -441,11 +441,31 @@ namespace Chang.FSM
                 InfoText = _pagesBus.QuestionResult.Presentation
             };
 
-            _pagesBus.LessonLog.Add(stateResult);
+            AddSentenceToLessonLog(stateResult);
 
             _gameOverlayController.SetContinueButtonInfo(info);
             _gameOverlayController.EnableContinueButton(true);
             await _profileService.SaveProgressAsync(ct);
+        }
+
+        /// <summary>
+        /// Call after the profile log is added: the mark is captured after the answer
+        /// </summary>
+        private void AddWordToLessonLog(IQuestionResult result)
+        {
+            Word word = _pagesBus.Words[result.Key];
+            int mark = _profileService.GetVocabularyMark(result.Key);
+            _pagesBus.LessonLog.Add(new ResultItem(result.Presentation, word.Translation, mark, result.IsCorrect));
+        }
+
+        /// <summary>
+        /// Call after the profile log is added: the mark is captured after the answer
+        /// </summary>
+        private void AddSentenceToLessonLog(IQuestionResult result)
+        {
+            Sentence sentence = Bus.Sentences[result.Key];
+            int mark = (int)_profileService.GetSentencesMark(result.Key);
+            _pagesBus.LessonLog.Add(new ResultItem(result.Presentation, sentence.GetTranslation(Bus.Words), mark, result.IsCorrect));
         }
 
         private void OnContinue()

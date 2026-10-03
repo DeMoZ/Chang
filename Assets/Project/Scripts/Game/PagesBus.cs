@@ -12,7 +12,7 @@ namespace Chang
         public GameType GameType { get; set; }
         public Dictionary<string, Word> Words { get; set; }
         public IQuestionResult QuestionResult { get; set; }
-        public List<IQuestionResult> LessonLog { get; } = new();
+        public List<Chang.FSM.ResultItem> LessonLog { get; } = new();
         public DMZState<bool> OnHintUsed { get; set; } = new();
 
         public void Dispose()
