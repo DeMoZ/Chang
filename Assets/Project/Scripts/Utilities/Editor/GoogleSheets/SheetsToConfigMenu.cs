@@ -9,45 +9,9 @@ namespace Chang.Utilities.GoogleSheets
         private const string RootConfigPath = "Assets/Project/Configs/RootSheetsToConfig.asset";
 
         /// <summary>
-        /// Reads Google book from Google Sheet and creates JSON files for each sheet.
+        /// Selects the config with the buttons creating the configs from Google Sheets
         ///</summary>
-        [MenuItem("Chang/Utilities/Create Vocabulary Config", false, 0)]
-        public static void CreateVocabularyConfig()
-        {
-            GetOrCreateRootSheetsToConfig().CreateVocabularyConfig();
-        }
-
-        /// <summary>
-        /// Reads Google book from Google Sheet and creates JSON files for each sheet.
-        ///</summary>
-        [MenuItem("Chang/Utilities/Create Vocabulary Book Config", false, 1)]
-        public static void CreateVocabularyBookConfig()
-        {
-            GetOrCreateRootSheetsToConfig().CreateVocabularyBookConfig();
-        }
-
-        /// <summary>
-        /// Reads Google book from Google Sheet and creates JSON files for each sheet.
-        ///</summary>
-        [MenuItem("Chang/Utilities/Create Sentences Config", false, 2)]
-        public static void CreateSentencesConfig()
-        {
-            GetOrCreateRootSheetsToConfig().CreateSentencesConfig();
-        }
-
-        /// <summary>
-        /// Reads Google book from Google Sheet and creates JSON files for each sheet.
-        ///</summary>
-        [MenuItem("Chang/Utilities/Create Sentences Book Config", false, 3)]
-        public static void CreateSentencesBookConfig()
-        {
-            GetOrCreateRootSheetsToConfig().CreateSentencesBookConfig();
-        }
-
-        /// <summary>
-        /// Reads Google book from Google Sheet and creates JSON files for each sheet.
-        ///</summary>
-        [MenuItem("Chang/Utilities/Select Root Sheets To Configs", false, 3)]
+        [MenuItem("Chang/Utilities/Sheets To Configs", false, 0)]
         public static void SelectRootSheetsToConfigs()
         {
             RootSheetsToConfig config = GetOrCreateRootSheetsToConfig();

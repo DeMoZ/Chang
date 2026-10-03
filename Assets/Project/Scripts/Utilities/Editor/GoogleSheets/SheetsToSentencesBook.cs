@@ -12,7 +12,7 @@ namespace Chang.Utilities.GoogleSheets
     // get sentences book data from Google sheets (lessons)
     public class SheetsToSentencesBook
     {
-        private static string Path(Languages language) => AssetPaths.Utilities.SentencesBookPath(language);
+        private static string Path(Languages language) => AssetPaths.Addressables.SentencesBookPath(language);
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.

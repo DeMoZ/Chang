@@ -1,3 +1,4 @@
+using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Chang.GoogleSheets;
@@ -8,6 +9,27 @@ namespace Chang.Utilities.GoogleSheets
     public class RootSheetsToConfig : ScriptableObject
     {
         public Languages Language = Languages.Thai;
+
+        /// <summary>
+        /// Creates all the configs one by one, each waits for the previous one
+        ///</summary>
+        [Button, PropertySpace(SpaceBefore = 0, SpaceAfter = 20)]
+        [Tooltip("Creates all the configs one by one, each waits for the previous one.")]
+        public async void CreateAllConfigs()
+        {
+            try
+            {
+                await SheetsToVocabulary.ReadAsync(Language);
+                await SheetsToVocabularyBook.ReadAsync(Language);
+                await SheetsToSentences.ReadAsync(Language);
+                await SheetsToSentencesBook.ReadAsync(Language);
+                Debug.Log($"[{nameof(CreateAllConfigs)}] All configs are created for {Language}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[{nameof(CreateAllConfigs)}] {e}");
+            }
+        }
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates Config files for each sheet.

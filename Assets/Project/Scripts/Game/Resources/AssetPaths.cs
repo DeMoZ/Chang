@@ -25,21 +25,6 @@ namespace Chang.Resources
 
             public const string Book = "Book";
             public const string Sound = "Sound";
-            
-            public const string Root = "Assets/Project/Configs/";
-            public const string BookConfigs = "BookConfigs/";
-            
-            public static string VocabularyPath(Languages language) =>
-                $"{Root}{BookConfigs}{language}/{Constants.Vocabulary}.asset";
-
-            public static string SentencesPath(Languages language) => 
-                $"{Root}{BookConfigs}{language}/{Constants.Sentences}.asset";
-            
-            public static string VocabularyBookPath(Languages language) =>
-                $"{Root}{BookConfigs}{language}/{Constants.VocabularyBook}.asset";
-
-            public static string SentencesBookPath(Languages language) =>
-                $"{Root}{BookConfigs}{language}/{Constants.SentencesBook}.asset";
         }
 
         public static class Addressables

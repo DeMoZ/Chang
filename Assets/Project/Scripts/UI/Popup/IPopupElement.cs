@@ -67,11 +67,17 @@ namespace Popup
         public int SelectedIndex { get; set; }
         public Action<int> OnSelect { get; set; }
 
-        public PopupSelector(string[] options, int selectedIndex, Action<int> onSelect)
+        /// <summary>
+        /// Options per row, all options are in one row if 0
+        /// </summary>
+        public int Columns { get; set; }
+
+        public PopupSelector(string[] options, int selectedIndex, Action<int> onSelect, int columns = 0)
         {
             Options = options;
             SelectedIndex = selectedIndex;
             OnSelect = onSelect;
+            Columns = columns;
         }
 
         /// <summary>

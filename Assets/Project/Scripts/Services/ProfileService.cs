@@ -15,6 +15,7 @@ namespace Chang.Services
         private readonly PlayerProfile _playerProfile;
         private readonly PrefsDataProvider _prefsDataProvider;
         private readonly UnityCloudDataProvider _unityCloudDataProvider;
+        private readonly LanguagesConfig _languagesConfig;
 
         private bool _isVocabularyChanged;
         private bool _isSentencesChanged;
@@ -29,9 +30,11 @@ namespace Chang.Services
         public string ReorderedSectionKey(string section) => $"{LearnLanguage}/{section}";
         
         [Inject]
-        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler, AuthorizationService authorizationService)
+        public ProfileService(PlayerProfile playerProfile, ErrorHandler errorHandler, AuthorizationService authorizationService,
+            LanguagesConfig languagesConfig)
         {
             _playerProfile = playerProfile;
+            _languagesConfig = languagesConfig;
             _prefsDataProvider = new PrefsDataProvider();
             _unityCloudDataProvider = new UnityCloudDataProvider(errorHandler, authorizationService.RequestAuthentication);
         }
@@ -66,7 +69,8 @@ namespace Chang.Services
                 prefsProfile = null;
             }
 
-            ProfileData profile = SelectNewer(cloudProfile, prefsProfile, data => data.UtcTime) ?? new ProfileData();
+            ProfileData profile = SelectNewer(cloudProfile, prefsProfile, data => data.UtcTime)
+                ?? new ProfileData { NativeLanguage = _languagesConfig.GetDeviceLanguage(UnityEngine.Application.systemLanguage) };
             profile.SetPlayerId(playerId);
             Languages language = profile.LearnLanguage;
 
@@ -132,14 +136,14 @@ namespace Chang.Services
             RefreshPrefsDataView();
         }
 
-        public void AddVocabularyLog(string key, string presentation, ChangTypes type, bool isCorrect, bool needIncrement = true)
+        public void AddVocabularyLog(string key, bool isCorrect, bool needIncrement = true)
         {
             Debug.Log($"Add vocabulary Log key: {key}, isCorrect {isCorrect}");
             Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
 
             if (!logs.TryGetValue(key, out VocabularyQuestLog questLog))
             {
-                questLog = new VocabularyQuestLog(key, presentation, type);
+                questLog = new VocabularyQuestLog(key);
                 logs[key] = questLog;
             }
 
@@ -150,14 +154,14 @@ namespace Chang.Services
             _isVocabularyChanged = true;
         }
 
-        public void AddSentenceLog(string key, string presentation, ChangTypes type, bool isCorrect, bool needIncrement = true)
+        public void AddSentenceLog(string key, bool isCorrect, bool needIncrement = true)
         {
             Debug.Log($"Add sentence Log key: {key}, isCorrect {isCorrect}");
             Dictionary<string, SentenceQuestLog> logs = _playerProfile.SentencesProgress.Log;
 
             if (!logs.TryGetValue(key, out SentenceQuestLog questLog))
             {
-                questLog = new SentenceQuestLog(key, presentation, type);
+                questLog = new SentenceQuestLog(key);
                 logs[key] = questLog;
             }
             

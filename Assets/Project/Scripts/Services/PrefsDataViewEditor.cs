@@ -45,11 +45,11 @@ namespace Chang.Services.DataProvider
 
             ProgressData<VocabularyQuestLog> vocabulary = Deserialize<ProgressData<VocabularyQuestLog>>(VocabularyJson.Json);
             VocabularyUtcTime = vocabulary?.UtcTime.ToString("O");
-            Vocabulary = ToViews(vocabulary, log => new QuestLogView(log.FileName, log.Presentation, log.Mark, log.SuccessSequence, log.UtcTime));
+            Vocabulary = ToViews(vocabulary, log => new QuestLogView(log.FileName, log.Mark, log.SuccessSequence, log.UtcTime));
 
             ProgressData<SentenceQuestLog> sentences = Deserialize<ProgressData<SentenceQuestLog>>(SentencesJson.Json);
             SentencesUtcTime = sentences?.UtcTime.ToString("O");
-            Sentences = ToViews(sentences, log => new QuestLogView(log.FileName, log.Presentation, log.Mark, log.SuccessSequence, log.UtcTime));
+            Sentences = ToViews(sentences, log => new QuestLogView(log.FileName, log.Mark, log.SuccessSequence, log.UtcTime));
         }
 
         private static T Deserialize<T>(string json) where T : class
@@ -84,17 +84,15 @@ namespace Chang.Services.DataProvider
     public struct QuestLogView
     {
         public string Key;
-        public string Presentation;
         public int Mark;
         public int SuccessSequence;
         public string UtcTime;
 
         [NonSerialized] public DateTime SortTime;
 
-        public QuestLogView(string key, string presentation, int mark, int successSequence, DateTime utcTime)
+        public QuestLogView(string key, int mark, int successSequence, DateTime utcTime)
         {
             Key = key;
-            Presentation = presentation;
             Mark = mark;
             SuccessSequence = successSequence;
             UtcTime = utcTime.ToString("O");

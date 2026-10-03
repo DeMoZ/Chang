@@ -28,6 +28,8 @@ namespace Chang
 
             Container.BindInterfacesAndSelfTo<AuthorizationService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProfileService>().AsSingle();
+            Container.Bind<LanguagesConfig>().FromScriptableObjectResource(LanguagesConfig.ResourcePath).AsSingle();
+            Container.BindInterfacesAndSelfTo<LocalizationService>().AsSingle();
         }
 
         private void BingPopupManager()

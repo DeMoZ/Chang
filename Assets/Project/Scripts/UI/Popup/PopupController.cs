@@ -40,7 +40,7 @@ namespace Popup
                 }
                 else if (element is PopupSelector selector)
                 {
-                    _view.CreateSelector(selector.Options, selector.SelectedIndex, selector.OnSelect);
+                    _view.CreateSelector(selector.Options, selector.SelectedIndex, selector.OnSelect, selector.Columns);
                 }
                 else if (element is PopupButton button)
                 {
