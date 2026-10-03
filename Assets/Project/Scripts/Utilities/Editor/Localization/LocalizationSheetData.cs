@@ -9,16 +9,19 @@ namespace Chang.Utilities.Localization
     /// </summary>
     public class LocalizationSheetData
     {
-        public const char KeySeparator = '.';
-
         public readonly List<string> Languages = new();
         public readonly List<LocalizationEntry> Entries = new();
         public readonly List<string> Errors = new();
-        public readonly LocalizationKeyNode Root = new(string.Empty, string.Empty);
+        public readonly LocalizationKeyNode Root;
 
-        public static LocalizationSheetData Parse(string csv)
+        private LocalizationSheetData(char separator)
         {
-            var data = new LocalizationSheetData();
+            Root = new LocalizationKeyNode(string.Empty, string.Empty, separator);
+        }
+
+        public static LocalizationSheetData Parse(string csv, char separator)
+        {
+            var data = new LocalizationSheetData(separator);
             List<string> lines = LocalizationManager.GetLines(csv);
 
             if (lines.Count == 0)
@@ -94,10 +97,13 @@ namespace Chang.Utilities.Localization
         public LocalizationEntry Entry;
         public int KeysCount;
 
-        public LocalizationKeyNode(string name, string path)
+        private readonly char _separator;
+
+        public LocalizationKeyNode(string name, string path, char separator)
         {
             Name = name;
             Path = path;
+            _separator = separator;
         }
 
         public void Add(LocalizationEntry entry)
@@ -105,14 +111,14 @@ namespace Chang.Utilities.Localization
             LocalizationKeyNode node = this;
             node.KeysCount++;
 
-            foreach (string part in entry.Key.Split(LocalizationSheetData.KeySeparator))
+            foreach (string part in entry.Key.Split(_separator))
             {
                 LocalizationKeyNode child = node.Children.Find(c => c.Name == part);
 
                 if (child == null)
                 {
-                    string path = node.Path == string.Empty ? part : node.Path + LocalizationSheetData.KeySeparator + part;
-                    child = new LocalizationKeyNode(part, path);
+                    string path = node.Path == string.Empty ? part : node.Path + _separator + part;
+                    child = new LocalizationKeyNode(part, path, _separator);
                     node.Children.Add(child);
                 }
 

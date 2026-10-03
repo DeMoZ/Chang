@@ -21,6 +21,7 @@ namespace Chang.Utilities.Localization
 
         private TextAsset _parsedCsv;
         private Hash128 _parsedHash;
+        private char _parsedSeparator;
         private LocalizationSheetData _data;
 
         private string _selectedPath = string.Empty;
@@ -40,10 +41,10 @@ namespace Chang.Utilities.Localization
                 return;
             }
 
-            RefreshData(view.Csv, false);
+            RefreshData(view, false);
 
             EditorGUILayout.Space();
-            DrawSummary(view.Csv);
+            DrawSummary(view);
 
             foreach (string error in _data.Errors)
             {
@@ -58,22 +59,26 @@ namespace Chang.Utilities.Localization
             DrawKeys();
         }
 
-        private void RefreshData(TextAsset csv, bool force)
+        private void RefreshData(LocalizationSheetView view, bool force)
         {
+            TextAsset csv = view.Csv;
+            char separator = view.KeySeparatorChar;
             Hash128 hash = AssetDatabase.GetAssetDependencyHash(AssetDatabase.GetAssetPath(csv));
 
-            if (!force && _data != null && _parsedCsv == csv && _parsedHash == hash)
+            if (!force && _data != null && _parsedCsv == csv && _parsedHash == hash && _parsedSeparator == separator)
             {
                 return;
             }
 
-            bool isFirstParse = _data == null || _parsedCsv != csv;
+            // tree paths are built with the separator, so the expanded and selected paths are stale after its change
+            bool isNewTree = _data == null || _parsedCsv != csv || _parsedSeparator != separator;
 
             _parsedCsv = csv;
             _parsedHash = hash;
-            _data = LocalizationSheetData.Parse(csv.text);
+            _parsedSeparator = separator;
+            _data = LocalizationSheetData.Parse(csv.text, separator);
 
-            if (isFirstParse)
+            if (isNewTree)
             {
                 _expanded.Clear();
                 _expanded.Add(_data.Root.Path);
@@ -81,7 +86,7 @@ namespace Chang.Utilities.Localization
             }
         }
 
-        private void DrawSummary(TextAsset csv)
+        private void DrawSummary(LocalizationSheetView view)
         {
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -89,7 +94,7 @@ namespace Chang.Utilities.Localization
 
                 if (GUILayout.Button("Reload", GUILayout.Width(70)))
                 {
-                    RefreshData(csv, true);
+                    RefreshData(view, true);
                 }
             }
 
