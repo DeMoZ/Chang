@@ -163,11 +163,11 @@ namespace Chang.FSM
                 AddAlternativeMixWords(sSelectWords, sentenceMark);
 
                 string defaultTranslation = sSelectWords.Sentence.DefaultTranslation;
-                List<SentenceWord> dynamicWords = sSelectWords.Sentence.SentenceWords
-                    .Where(w => w.Modifiers.HasFlag(Modifier.Dynamic))
+                List<SentenceWord> replaceableWords = sSelectWords.Sentence.SentenceWords
+                    .Where(w => w.Modifiers.HasFlag(Modifier.Replaceable))
                     .ToList();
                     
-                object[] translationArgs = dynamicWords.Select(w => (object)Bus.Words[w.WordKey].Translation).ToArray();
+                object[] translationArgs = replaceableWords.Select(w => (object)Bus.Words[w.WordKey].Translation).ToArray();
                 defaultTranslation = string.Format(defaultTranslation, translationArgs);
                 sSelectWords.SetTranslation(defaultTranslation);
             }
@@ -191,7 +191,7 @@ namespace Chang.FSM
 
             HashSet<string> usedKeys = new(sSelectWords.CompareWordsKeys.Concat(sSelectWords.MixWordsKeys));
             List<string> alternativeKeys = sSelectWords.Sentence.SentenceWords
-                .Where(w => (w.Modifiers & (Modifier.Dynamic | Modifier.Variant)) != 0)
+                .Where(w => (w.Modifiers & (Modifier.Replaceable | Modifier.MixFiller)) != 0)
                 .SelectMany(w => GetSectionWordKeys(Bus.Words[w.WordKey]))
                 .Where(key => !usedKeys.Contains(key) && Bus.Words.ContainsKey(key))
                 .Distinct()
@@ -228,9 +228,9 @@ namespace Chang.FSM
                     continue;
                 }
 
-                if (sentenceWord.Modifiers.HasFlag(Modifier.Dynamic))
+                if (sentenceWord.Modifiers.HasFlag(Modifier.Replaceable))
                 {
-                    SetDynamicWord(sentenceWord);
+                    SetReplaceableWord(sentenceWord);
                 }
 
                 if (sentenceWord.Modifiers.HasFlag(Modifier.Gender))
@@ -241,9 +241,9 @@ namespace Chang.FSM
 
             return result;
 
-            void SetDynamicWord(SentenceWord sentenceWord)
+            void SetReplaceableWord(SentenceWord sentenceWord)
             {
-                Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Dynamic modifier");
+                Debug.Log($"Sentence {sentence.SentenceKey} has word {sentenceWord.WordKey} with Replaceable modifier");
                 List<string> wordKeys = GetSectionWordKeys(Bus.Words[sentenceWord.WordKey]);
                 string randomWordKey = wordKeys[UnityEngine.Random.Range(0, wordKeys.Count)];
                 sentenceWord.WordKey = randomWordKey;

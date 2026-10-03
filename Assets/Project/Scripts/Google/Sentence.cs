@@ -34,14 +34,14 @@ namespace Chang.GoogleSheets
                 return;
             }
 
-            if (value.Contains('V'))
+            if (value.Contains('M'))
             {
-                Modifiers |= Modifier.Variant;
+                Modifiers |= Modifier.MixFiller;
             }
 
-            if (value.Contains('D'))
+            if (value.Contains('R'))
             {
-                Modifiers |= Modifier.Dynamic;
+                Modifiers |= Modifier.Replaceable;
             }
 
             if (value.Contains('G'))

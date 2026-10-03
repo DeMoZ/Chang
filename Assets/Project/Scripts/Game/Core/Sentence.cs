@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 [Flags]
-public enum Modifier // V-Variant D-Dynamic G-Gender
+public enum Modifier // M-MixFiller R-Replaceable G-Gender, the values are serialized in the sentences assets
 {
     None,
-    Variant = 1 << 0, // variants words are for add into mix words. they not supposed to be chosen by the player, and if he do - that is his fault
-    Dynamic = 1 << 1, // dynamic words are for different forms of the same word. for example: apple and banana are dynamic words of fruit. In the sentence it will be replaced with the same word as in the question.
+    MixFiller = 1 << 0, // the word section words are added into the mix words. they not supposed to be chosen by the player, and if he do - that is his fault
+    Replaceable = 1 << 1, // the word is replaced with a random word of its section. for example: apple may be replaced with banana from the fruits section.
     Gender = 1 << 2
 }
 

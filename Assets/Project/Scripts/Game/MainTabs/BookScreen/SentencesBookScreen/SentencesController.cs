@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Chang.Core;
 using Chang.Services;
@@ -262,7 +261,6 @@ namespace Chang.Sentences
                 }
 
                 quest.Sentence = sentence;
-                quest.MatchWordsKeys = new HashSet<string>(sentence.SentenceWords.Select(word => word.WordKey));
             }
         }
 

@@ -89,12 +89,12 @@ namespace Chang
         }
 
         /// <summary>
-        /// Dynamic words are taken by their sentence keys, in the game they may be replaced with variants
+        /// Replaceable words are taken by their sentence keys, in the game they are replaced with random section words
         /// </summary>
         private string GetTranslation(Sentence sentence)
         {
             object[] args = sentence.SentenceWords
-                .Where(word => word.Modifiers.HasFlag(Modifier.Dynamic))
+                .Where(word => word.Modifiers.HasFlag(Modifier.Replaceable))
                 .Select(word => (object)_gameBus.Words[word.WordKey].Translation)
                 .ToArray();
 

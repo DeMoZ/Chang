@@ -43,9 +43,8 @@ namespace Chang.Core
 
         public string Key { get; set; }
 
-        public HashSet<string> MatchWordsKeys;
-
-        public HashSet<string> GetNeedDemonstrationKeys => new(MatchWordsKeys);
+        // the actual sentence words after the Replaceable and Gender words are resolved on the pages start
+        public HashSet<string> GetNeedDemonstrationKeys => new(CompareWordsKeys);
 
         public string Translation {get; private set;}
 

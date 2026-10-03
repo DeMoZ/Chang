@@ -12,7 +12,7 @@ public static class ProjectConstants
     public const int MIX_WORDS_AMOUNT_IN_LEARN_SELECT_WORD_PAGE = 3;
     public const int MIX_WORDS_AMOUNT_IN_REPEAT_SELECT_WORD_PAGE = 5;
 
-    // from this sentence mark the mix is filled up with random alternative words (of Dynamic and Variant sentence words),
+    // from this sentence mark the mix is filled up with random alternative words (of Replaceable and MixFiller sentence words),
     // so the mix words amount is not less than the mark
     public const int SENTENCE_MIX_WORDS_FILL_MIN_MARK = 5;
 

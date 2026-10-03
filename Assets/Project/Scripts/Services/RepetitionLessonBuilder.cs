@@ -65,7 +65,6 @@ namespace Chang.Services
             {
                 Key = key,
                 Sentence = sentence,
-                MatchWordsKeys = sentence.SentenceWords.Select(word => word.WordKey).ToHashSet(),
             };
         }
 
