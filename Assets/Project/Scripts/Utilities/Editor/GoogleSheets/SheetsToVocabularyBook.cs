@@ -12,7 +12,7 @@ namespace Chang.Utilities.GoogleSheets
     // get vocabulary book data from Google sheets (lessons)
     public class SheetsToVocabularyBook
     {
-        private static string Path(Languages language) => AssetPaths.Utilities.VocabularyBookPath(language);
+        private static string Path(Languages language) => AssetPaths.Addressables.VocabularyBookPath(language);
 
         /// <summary>
         /// Reads Google book from Google Sheet and creates JSON files for each sheet.
