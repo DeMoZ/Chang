@@ -4,11 +4,17 @@ using System.Collections.Generic;
 
 namespace Chang.UI
 {
+    /// <summary>
+    /// Places children in rows, a child that does not fit the row width is wrapped to the next row
+    /// </summary>
     [AddComponentMenu("Layout/Flow Layout Group")]
     public class FlowLayoutGroup : LayoutGroup
     {
         [SerializeField] private float _horizontalSpacing;
         [SerializeField] private float _verticalSpacing;
+
+        // the row index of each child, rows are calculated by the children preferred widths
+        private readonly List<int> _childRows = new();
 
         public float HorizontalSpacing
         {
@@ -46,146 +52,70 @@ namespace Chang.UI
         {
             base.CalculateLayoutInputHorizontal();
         }
-        
-        public void _CalculateLayoutInputHorizontal()
-        {
-            base.CalculateLayoutInputHorizontal();
 
-            float containerWidth = rectTransform.rect.width;
-            float currentX = padding.left;
-            float currentY = padding.top;
-            float rowHeight = 0f;
-
-            for (int i = 0; i < rectChildren.Count; i++)
-            {
-                RectTransform child = rectChildren[i];
-                float childWidth = child.rect.width;
-                float childHeight = child.rect.height;
-
-                if (currentX + childWidth > containerWidth - padding.right)
-                {
-                    currentX = padding.left;
-                    currentY += rowHeight + VerticalSpacing;
-                    rowHeight = 0f;
-                }
-
-                rowHeight = Mathf.Max(rowHeight, childHeight);
-                currentX += childWidth + HorizontalSpacing;
-            }
-        }
-
+        // the children preferred heights are calculated by the layout system before this call
         public override void CalculateLayoutInputVertical()
         {
-            float containerWidth = rectTransform.rect.width;
-            float currentX = padding.left;
-            float currentY = padding.top;
-            float rowHeight = 0f;
+            CalculateRows();
 
-            // If the container is too small, we can't calculate anything.
-            if (containerWidth <= 0)
+            float totalHeight = padding.top + padding.bottom;
+            int rowsCount = 0;
+            for (int row = 0; GetRowHeight(row, out float rowHeight); row++)
             {
-                SetLayoutInputForAxis(padding.top + padding.bottom, padding.top + padding.bottom, -1, 1);
-                return;
+                totalHeight += rowHeight;
+                rowsCount++;
             }
 
-            for (int i = 0; i < rectChildren.Count; i++)
+            if (rowsCount > 1)
             {
-                RectTransform child = rectChildren[i];
-                float childWidth = LayoutUtility.GetPreferredWidth(child);
-                float childHeight = LayoutUtility.GetPreferredHeight(child);
-
-                // Check if the element needs to wrap to the next line.
-                if (currentX + childWidth > containerWidth - padding.right && currentX > padding.left)
-                {
-                    currentY += rowHeight + VerticalSpacing;
-                    currentX = padding.left;
-                    rowHeight = 0f;
-                }
-
-                rowHeight = Mathf.Max(rowHeight, childHeight);
-                currentX += childWidth + HorizontalSpacing;
+                totalHeight += (rowsCount - 1) * VerticalSpacing;
             }
 
-            float totalHeight = currentY + rowHeight + padding.bottom;
-            SetLayoutInputForAxis(totalHeight, totalHeight, -1, 1);
-        }
-        
-        public void _CalculateLayoutInputVertical()
-        {
-            float containerWidth = rectTransform.rect.width;
-            float currentY = padding.top;
-            float rowHeight = 0f;
-
-            for (int i = 0; i < rectChildren.Count; i++)
-            {
-                RectTransform child = rectChildren[i];
-                float childWidth = child.rect.width;
-                float childHeight = child.rect.height;
-
-                if (padding.left + childWidth > containerWidth - padding.right)
-                {
-                    currentY += rowHeight + VerticalSpacing;
-                    rowHeight = 0f;
-                }
-
-                rowHeight = Mathf.Max(rowHeight, childHeight);
-            }
-
-            float totalHeight = currentY + rowHeight + padding.bottom;
             SetLayoutInputForAxis(totalHeight, totalHeight, -1, 1);
         }
 
+        // the vertical positions are set in SetLayoutVertical, the children preferred heights are not calculated yet here
         public override void SetLayoutHorizontal()
         {
-            float containerWidth = rectTransform.rect.width;
-            float currentX = padding.left;
-            float currentY = padding.top;
-            float rowHeight = 0f;
+            CalculateRows();
 
-            List<RectTransform> rowChildren = new List<RectTransform>();
+            float currentX = padding.left;
+            int currentRow = 0;
 
             for (int i = 0; i < rectChildren.Count; i++)
             {
-                RectTransform child = rectChildren[i];
-                float childWidth = LayoutUtility.GetPreferredWidth(child);
-                float childHeight = LayoutUtility.GetPreferredHeight(child);
-
-                if (currentX + childWidth > containerWidth - padding.right && rowChildren.Count > 0)
+                if (_childRows[i] != currentRow)
                 {
-                    PositionRow(rowChildren, currentY, rowHeight);
-                    rowChildren.Clear();
-
+                    currentRow = _childRows[i];
                     currentX = padding.left;
-                    currentY += rowHeight + VerticalSpacing;
-                    rowHeight = 0f;
                 }
 
-                rowHeight = Mathf.Max(rowHeight, childHeight);
+                RectTransform child = rectChildren[i];
+                float childWidth = LayoutUtility.GetPreferredWidth(child);
+                SetChildAlongAxis(child, 0, currentX, childWidth);
                 currentX += childWidth + HorizontalSpacing;
-                rowChildren.Add(child);
             }
-
-            PositionRow(rowChildren, currentY, rowHeight);
         }
 
         public override void SetLayoutVertical()
         {
-            // The vertical layout is handled by SetLayoutHorizontal
-        }
+            float currentY = padding.top;
+            int currentRow = 0;
+            GetRowHeight(currentRow, out float rowHeight);
 
-        private void PositionRow(List<RectTransform> children, float y, float rowHeight)
-        {
-            float currentX = padding.left;
-            foreach (var child in children)
+            for (int i = 0; i < rectChildren.Count; i++)
             {
-                float childWidth = LayoutUtility.GetPreferredWidth(child);
+                if (_childRows[i] != currentRow)
+                {
+                    currentY += rowHeight + VerticalSpacing;
+                    currentRow = _childRows[i];
+                    GetRowHeight(currentRow, out rowHeight);
+                }
+
+                RectTransform child = rectChildren[i];
                 float childHeight = LayoutUtility.GetPreferredHeight(child);
-                float yPos = y + (rowHeight - childHeight) * 0.5f; // Align center vertically in row
-
-                SetChildAlongAxis(child, 0, currentX, childWidth);
+                float yPos = currentY + (rowHeight - childHeight) * 0.5f; // Align center vertically in row
                 SetChildAlongAxis(child, 1, yPos, childHeight);
-
-                currentX += childWidth + HorizontalSpacing;
             }
         }
 
@@ -193,6 +123,47 @@ namespace Chang.UI
         {
             base.OnTransformChildrenChanged();
             LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
+        }
+
+        private void CalculateRows()
+        {
+            _childRows.Clear();
+
+            float maxX = rectTransform.rect.width - padding.right;
+            float currentX = padding.left;
+            int row = 0;
+
+            for (int i = 0; i < rectChildren.Count; i++)
+            {
+                float childWidth = LayoutUtility.GetPreferredWidth(rectChildren[i]);
+
+                // a child wider than the container takes the whole row
+                if (currentX + childWidth > maxX && currentX > padding.left)
+                {
+                    row++;
+                    currentX = padding.left;
+                }
+
+                _childRows.Add(row);
+                currentX += childWidth + HorizontalSpacing;
+            }
+        }
+
+        private bool GetRowHeight(int row, out float rowHeight)
+        {
+            rowHeight = 0f;
+            bool exists = false;
+
+            for (int i = 0; i < rectChildren.Count; i++)
+            {
+                if (_childRows[i] == row)
+                {
+                    rowHeight = Mathf.Max(rowHeight, LayoutUtility.GetPreferredHeight(rectChildren[i]));
+                    exists = true;
+                }
+            }
+
+            return exists;
         }
     }
 }
