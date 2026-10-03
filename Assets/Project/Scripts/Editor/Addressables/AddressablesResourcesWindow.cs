@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
@@ -7,6 +8,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 namespace Chang.Editor.Addressables
@@ -27,54 +29,105 @@ namespace Chang.Editor.Addressables
         [PropertySpace(5f)]
         [FoldoutGroup("Cache")]
         [HorizontalGroup("Cache/Line1")]
-        [InfoBox("Open Cache Folder")]
+        [InfoBox("Open downloaded asset bundles folder")]
         [Button(ButtonSizes.Medium, Name = "Open Cache"), GUIColor(1f, 1f, 1f)]
         public void OpenCacheFolder()
         {
-            OpenFolder(GetCachePath()); // todo chang open cache
+            OpenFolder(GetCachePath());
         }
 
         [PropertySpace(5f)]
         [FoldoutGroup("Cache")]
         [HorizontalGroup("Cache/Line1")]
-        [InfoBox("Open Catalog Folder")]
+        [InfoBox("Open downloaded catalogs folder")]
         [Button(ButtonSizes.Medium, Name = "Open Catalog"), GUIColor(1f, 1f, 1f)]
         public void OpenCatalogFolder()
         {
-            OpenFolder(GetCatalogPath()); // todo chang open catalog
+            OpenFolder(GetCatalogPath());
         }
 
         [PropertySpace(5f)]
         [FoldoutGroup("Cache")]
         [HorizontalGroup("Cache/Line1")]
-        [InfoBox("Clear Cache Folder")]
+        [InfoBox("Delete downloaded asset bundles")]
         [Button(ButtonSizes.Medium, Name = "Clear Cache"), GUIColor(1f, 1f, 1f)]
         public void ClearCache()
         {
-            Caching.ClearCache(); // todo chang clear cache only
-            Debug.Log("Cache cleared");
+            if (!CanClear("asset bundles cache", GetCachePath()))
+            {
+                return;
+            }
+
+            if (Caching.ClearCache())
+            {
+                Debug.Log($"Asset bundles cache cleared: {GetCachePath()}");
+            }
+            else
+            {
+                Debug.LogError($"Asset bundles cache was not cleared, some bundles may be in use: {GetCachePath()}");
+            }
         }
 
         [PropertySpace(5f)]
         [FoldoutGroup("Cache")]
         [HorizontalGroup("Cache/Line1")]
-        [InfoBox("Clear Catalog Folder")]
+        [InfoBox("Delete downloaded catalogs")]
         [Button(ButtonSizes.Medium, Name = "Clear Catalog"), GUIColor(1f, 1f, 1f)]
         public void ClearCatalogFolder()
         {
-            Caching.ClearCache(); // todo chang clear catalog
-            Debug.Log("Cache cleared");
+            var path = GetCatalogPath();
+            if (!CanClear("catalogs cache", path))
+            {
+                return;
+            }
+
+            if (!Directory.Exists(path))
+            {
+                Debug.Log($"Catalogs cache is already empty: {path}");
+                return;
+            }
+
+            try
+            {
+                Directory.Delete(path, true);
+                Debug.Log($"Catalogs cache cleared: {path}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Catalogs cache was not cleared: {path}\n{e}");
+            }
         }
 
-        private void OpenFolder(string path)
+        private static bool CanClear(string cacheName, string path)
         {
-            if (Directory.Exists(path))
+            if (EditorApplication.isPlaying)
             {
-                EditorUtility.RevealInFinder(path);
+                Debug.LogError($"Can't clear {cacheName} in play mode, Addressables may be using it.");
+                return false;
             }
-            else
+
+            return EditorUtility.DisplayDialog("Clear Addressables cache", $"Delete {cacheName}?\n{path}", "Delete", "Cancel");
+        }
+
+        private static void OpenFolder(string path)
+        {
+            if (!Directory.Exists(path))
             {
-                Debug.LogError($"Cache folder not found at path: {path}");
+                Debug.LogError($"Folder not found at path: {path}");
+                return;
+            }
+
+            switch (Application.platform)
+            {
+                case RuntimePlatform.OSXEditor:
+                    Process.Start("open", $"\"{path}\"");
+                    break;
+                case RuntimePlatform.WindowsEditor:
+                    Process.Start("explorer.exe", $"\"{path.Replace('/', '\\')}\"");
+                    break;
+                default:
+                    EditorUtility.RevealInFinder(path);
+                    break;
             }
         }
 
@@ -221,34 +274,16 @@ namespace Chang.Editor.Addressables
             Debug.LogWarning("Labels check finished;");
         }
         
-        private string GetCachePath()
+        // downloaded remote asset bundles, the same folder is used by Addressables.ClearDependencyCacheAsync
+        private static string GetCachePath()
         {
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            return Path.Combine(Environment.GetFolderPath(
-                    Environment.SpecialFolder.UserProfile), 
-                "Library", "Application Support", "Unity", 
-                Application.companyName, Application.productName, "UnityAddressablesAssetCache");
-#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
-                    "Low", Application.companyName, Application.productName, "UnityAddressablesAssetCache");
-#else
-                return Application.persistentDataPath;
-#endif
+            return Caching.defaultCache.path;
         }
-        
-        private string GetCatalogPath()
+
+        // downloaded remote catalogs, see AddressablesImpl.kCacheDataFolder
+        private static string GetCatalogPath()
         {
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            return Path.Combine(Environment.GetFolderPath(
-                    Environment.SpecialFolder.UserProfile), 
-                "Library", "Application Support", "Unity", 
-                Application.companyName, Application.productName, "UnityAddressablesAssetCache");
-#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
-                    "Low", Application.companyName, Application.productName, "UnityAddressablesAssetCache");
-#else
-                return Application.persistentDataPath;
-#endif
+            return Path.Combine(Application.persistentDataPath, "com.unity.addressables");
         }
     }
 }
