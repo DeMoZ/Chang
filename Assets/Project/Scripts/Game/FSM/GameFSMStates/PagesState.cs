@@ -363,9 +363,7 @@ namespace Chang.FSM
             Debug.Log(
                 $"The answer is <color={isCorrectColor}>{isCorrect}</color>; {_pagesBus.QuestionResult.Presentation}");
             var needIncrement = !_pagesBus.QuestionResult.IsHintUsed;
-            _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, _pagesBus.QuestionResult.Presentation,
-                ChangTypes.SelectWord, isCorrect,
-                needIncrement);
+            _profileService.AddVocabularyLog(_pagesBus.QuestionResult.Key, isCorrect, needIncrement);
 
             if (!isCorrect)
             {
@@ -396,8 +394,7 @@ namespace Chang.FSM
 
             foreach (WordResult result in stateResult.WordResults)
             {
-                _profileService.AddVocabularyLog(result.Key, result.Presentation, ChangTypes.SelectWord,
-                    result.IsCorrect, false);
+                _profileService.AddVocabularyLog(result.Key, result.IsCorrect, false);
                 _pagesBus.LessonLog.Add(result);
             }
 
@@ -426,14 +423,12 @@ namespace Chang.FSM
             {
                 foreach (WordResult vocabularyResult in vocabularyResults)
                 {
-                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.Presentation,
-                        ChangTypes.SelectWord, vocabularyResult.IsCorrect, needIncrement);
+                    _profileService.AddVocabularyLog(vocabularyResult.Key, vocabularyResult.IsCorrect, needIncrement);
                     _pagesBus.LessonLog.Add(vocabularyResult);
                 }
             }
 
-            _profileService.AddSentenceLog(stateResult.Key, stateResult.Presentation, ChangTypes.SentenceSelectWords,
-                stateResult.IsCorrect, needIncrement);
+            _profileService.AddSentenceLog(stateResult.Key, stateResult.IsCorrect, needIncrement);
 
             if (!isCorrect)
             {

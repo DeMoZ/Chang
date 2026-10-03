@@ -46,15 +46,9 @@ namespace Chang.Profile
 
             foreach (var pair in log)
             {
-                if (pair.Value.QuestionType == ChangTypes.None)
+                if (pair.Value == null || string.IsNullOrEmpty(pair.Value.FileName))
                 {
-                    DMZLogger.LogWarning($"ValidateQuestion: QuestionType is None for {pair.Key}");
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(pair.Value.Section))
-                {
-                    DMZLogger.LogWarning($"ValidateQuestion: Section is null for {pair.Key}");
+                    DMZLogger.LogWarning($"ValidateQuestion: log is empty for {pair.Key}");
                     continue;
                 }
 

@@ -136,14 +136,14 @@ namespace Chang.Services
             RefreshPrefsDataView();
         }
 
-        public void AddVocabularyLog(string key, string presentation, ChangTypes type, bool isCorrect, bool needIncrement = true)
+        public void AddVocabularyLog(string key, bool isCorrect, bool needIncrement = true)
         {
             Debug.Log($"Add vocabulary Log key: {key}, isCorrect {isCorrect}");
             Dictionary<string, VocabularyQuestLog> logs = _playerProfile.VocabularyProgress.Log;
 
             if (!logs.TryGetValue(key, out VocabularyQuestLog questLog))
             {
-                questLog = new VocabularyQuestLog(key, presentation, type);
+                questLog = new VocabularyQuestLog(key);
                 logs[key] = questLog;
             }
 
@@ -154,14 +154,14 @@ namespace Chang.Services
             _isVocabularyChanged = true;
         }
 
-        public void AddSentenceLog(string key, string presentation, ChangTypes type, bool isCorrect, bool needIncrement = true)
+        public void AddSentenceLog(string key, bool isCorrect, bool needIncrement = true)
         {
             Debug.Log($"Add sentence Log key: {key}, isCorrect {isCorrect}");
             Dictionary<string, SentenceQuestLog> logs = _playerProfile.SentencesProgress.Log;
 
             if (!logs.TryGetValue(key, out SentenceQuestLog questLog))
             {
-                questLog = new SentenceQuestLog(key, presentation, type);
+                questLog = new SentenceQuestLog(key);
                 logs[key] = questLog;
             }
             

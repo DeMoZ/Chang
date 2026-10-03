@@ -9,11 +9,7 @@ namespace Chang.Profile
     {
         private readonly (int min, int max) _successSequenceRange = (0, 10);
 
-        public Languages Language { get; set; }
-        public string Section { get; set; }
-        public string FileName { get; set; } // key: "Thai/Market/By_This_Watermelon" is not the file name but log key
-        public string Presentation { get; set; }
-        public ChangTypes QuestionType { get; set; }
+        public string FileName { get; set; } // key: "Thai/Sentences/Market/Do_not_add_sugar" is not the file name but log key
         public Queue<LogUnit> Log { get; set; }
 
         /// <summary>
@@ -33,16 +29,9 @@ namespace Chang.Profile
         /// </summary>
         public DateTime UtcTime { get; set; }
 
-        public SentenceQuestLog(string key, string presentation, ChangTypes type)
+        public SentenceQuestLog(string key)
         {
             FileName = key;
-            Presentation = presentation;
-            QuestionType = type;
-
-            string[] parts = key.Split('/');
-            Language = parts[0].ToEnum<Languages>();
-            Section = parts[1];
-
             Mark = ProjectConstants.DEFAULT_MARK;
             SuccessSequence = ProjectConstants.DEFAULT_SUCCESS;
             Log = new Queue<LogUnit>();
@@ -51,19 +40,11 @@ namespace Chang.Profile
         [JsonConstructor]
         public SentenceQuestLog(
             string fileName,
-            string presentation,
-            ChangTypes type,
-            Languages language,
-            string section,
             int mark,
             int successSequence,
             Queue<LogUnit> log)
         {
             FileName = fileName;
-            Presentation = presentation;
-            QuestionType = type;
-            Language = language;
-            Section = section;
             Mark = mark;
             SuccessSequence = successSequence;
             Log = log ?? new Queue<LogUnit>();
