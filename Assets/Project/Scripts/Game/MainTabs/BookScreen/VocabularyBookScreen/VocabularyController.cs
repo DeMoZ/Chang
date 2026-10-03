@@ -224,30 +224,35 @@ namespace Chang.Vocabulary
             }
 
             _mainScreenBus.IsLoading = true;
-
-            Lesson lesson;
-            string key = _profileService.ReorderedSectionKey(sectionName);
-
-            if (_profileService.ReorderedVocabularySections.TryGetValue(key, out VocabularySection section))
+            try
             {
-                lesson = section.Lessons[lessonIndex - 1];
-            }
-            else
-            {
-                string sectionKey = ElementsPaths.VocabularySectionKey(_profileService.ProfileData.LearnLanguage, sectionName);
+                Lesson lesson;
+                string key = _profileService.ReorderedSectionKey(sectionName);
 
-                if (!_gameBus.VocabularySections.TryGetValue(sectionKey, out section))
+                if (_profileService.ReorderedVocabularySections.TryGetValue(key, out VocabularySection section))
                 {
-                    throw new IndexOutOfRangeException($"Section not found with key: {sectionKey}");
+                    lesson = section.Lessons[lessonIndex - 1];
+                }
+                else
+                {
+                    string sectionKey = ElementsPaths.VocabularySectionKey(_profileService.ProfileData.LearnLanguage, sectionName);
+
+                    if (!_gameBus.VocabularySections.TryGetValue(sectionKey, out section))
+                    {
+                        throw new IndexOutOfRangeException($"Section not found with key: {sectionKey}");
+                    }
+
+                    lesson = section.Lessons[lessonIndex - 1];
                 }
 
-                lesson = section.Lessons[lessonIndex - 1];
+                _gameBus.SetLesson(lesson);
+                _gameBus.GameType = GameType.Learn;
+            }
+            finally
+            {
+                _mainScreenBus.IsLoading = false;
             }
 
-            _gameBus.SetLesson(lesson); 
-            _mainScreenBus.IsLoading = false;
-
-            _gameBus.GameType = GameType.Learn;
             _onLobbyExitState?.Invoke();
         }
 
@@ -279,11 +284,18 @@ namespace Chang.Vocabulary
             }
 
             _mainScreenBus.IsLoading = true;
-            await UniTask.Yield(ct);
+            try
+            {
+                await UniTask.Yield(ct);
 
-            _gameBus.SetLesson(_repetitionLessonBuilder.Build(repetitions));
-            _gameBus.GameType = GameType.Repetition;
-            _mainScreenBus.IsLoading = false;
+                _gameBus.SetLesson(_repetitionLessonBuilder.Build(repetitions));
+                _gameBus.GameType = GameType.Repetition;
+            }
+            finally
+            {
+                _mainScreenBus.IsLoading = false;
+            }
+
             _onLobbyExitState?.Invoke();
         }
     }

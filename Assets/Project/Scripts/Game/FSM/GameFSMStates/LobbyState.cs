@@ -172,7 +172,7 @@ namespace Chang.FSM
 
         public override void Exit()
         {
-            _lobbyController.SetViewActive(false);
+            _lobbyController.Exit();
             _cts?.Cancel();
         }
 

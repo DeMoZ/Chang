@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Zenject;
-using Chang.GameBook;
 using Chang.Services;
 using Chang.Vocabulary;
 using Chang.Sentences;
@@ -60,8 +59,7 @@ namespace Chang
 
         public void Dispose()
         {
-            _tabCts?.Cancel();
-            _tabCts?.Dispose();
+            CancelTabLoading();
             _cts.Cancel();
             _cts.Dispose();
         }
@@ -87,6 +85,12 @@ namespace Chang
             OnToggleSelected(true, _currentTabType);
         }
 
+        public void Exit()
+        {
+            CancelTabLoading();
+            SetViewActive(false);
+        }
+
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
@@ -94,14 +98,20 @@ namespace Chang
 
         private void OnToggleSelected(bool isOn, MainTabType tabType)
         {
-            if (_mainScreenBus.IsLoading || !isOn)
+            if (!isOn)
                 return;
 
-            _tabCts?.Cancel();
-            _tabCts?.Dispose();
+            CancelTabLoading();
             _tabCts = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token);
 
             OnToggleSelectedAsync(tabType, _tabCts.Token).Forget();
+        }
+
+        private void CancelTabLoading()
+        {
+            _tabCts?.Cancel();
+            _tabCts?.Dispose();
+            _tabCts = null;
         }
 
         private async UniTaskVoid OnToggleSelectedAsync(MainTabType tabType, CancellationToken ct)
@@ -112,7 +122,6 @@ namespace Chang
             _profileController.SetViewActive(tabType == MainTabType.Profile);
             _currentTabType = tabType;
 
-            // todo chang show loading animation ?
             switch (tabType)
             {
                 case MainTabType.Vocabulary:
