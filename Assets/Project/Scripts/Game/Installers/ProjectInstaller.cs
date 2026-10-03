@@ -15,6 +15,9 @@ namespace Chang
         {
             Debug.Log($"{nameof(InstallBindings)}");
             Container.BindInterfacesAndSelfTo<ErrorHandler>().AsSingle();
+#if UNITY_EDITOR
+            Container.BindInterfacesAndSelfTo<EditorRestartTrigger>().AsSingle();
+#endif
             Container.BindInterfacesAndSelfTo<MainScreenBus>().AsSingle();
             Container.BindInterfacesAndSelfTo<AddressablesAssetManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<AddressablesDownloader>().AsSingle();

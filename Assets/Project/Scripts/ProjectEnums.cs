@@ -24,7 +24,6 @@ namespace Chang
         Result = 100,
     }
 
-    // todo chang use system languages
     public enum PreloadType
     {
         None,
@@ -32,6 +31,7 @@ namespace Chang
         LessonData,
     }
 
+    // todo chang use system languages
     public enum Languages
     {
         English,
