@@ -75,9 +75,9 @@ namespace Chang.FSM
 
             await UniTask.WhenAll(loads);
             
-            _loadingUiController.SetPercents(1f);
             if (_loadingUiController != null)
             {
+                _loadingUiController.SetPercents(1f);
                 _popupManager.DisposePopup(_loadingUiController);
                 _loadingUiController = null;
             }

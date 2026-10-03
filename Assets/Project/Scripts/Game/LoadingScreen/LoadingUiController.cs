@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using DMZ.Events;
 using Popup;
 using UnityEngine;
 
@@ -10,37 +8,34 @@ namespace Chang
 {
     public class LoadingUiController : IViewController
     {
+        public event Action OnDispose;
+
         private readonly LoadingUiView _view;
-        private readonly LoadingUiModel _model;
 
-        private CancellationTokenSource _cts;
-        private DMZState<float> _percents = new();
-        private DMZState<string> _bytes = new();
+        private CancellationTokenSource _simulationCts;
+        private bool _isDisposed;
 
-        public LoadingUiModel Model => _model;
-        public Action OnDispose;
+        public LoadingUiModel Model { get; private set; }
 
         public LoadingUiController(LoadingUiView view, LoadingUiModel model)
         {
             _view = view;
-            _model = model;
 
             _view.EnableBlocker(true);
-            Update(_model);
-
-            _percents.Subscribe(SetViewProgress);
+            Update(model);
         }
 
         public void Dispose()
         {
-            _cts?.Cancel();
-            _cts?.Dispose();
+            if (_isDisposed)
+            {
+                return;
+            }
 
-            _percents.Unsubscribe(SetViewProgress);
-            _percents.Dispose();
-            _percents = null;
+            _isDisposed = true;
+            StopSimulation();
 
-            _model.Dispose();
+            Model.Dispose();
             UnityEngine.Object.Destroy(_view.gameObject);
 
             OnDispose?.Invoke();
@@ -49,87 +44,66 @@ namespace Chang
 
         public void Update(LoadingUiModel model)
         {
-            // _view.name = $"Loading_{string.Join("", GetFlags(model.Elements))}";
-            _view.EnableBackground((model.Elements & LoadingElements.Background) == LoadingElements.Background);
-            _view.EnableProgressSlider((model.Elements & LoadingElements.Bar) == LoadingElements.Bar);
-            _view.EnablePercents((model.Elements & LoadingElements.Percent) == LoadingElements.Percent);
-            _view.EnableLoadingAnimation((model.Elements & LoadingElements.Animation) == LoadingElements.Animation);
+            Model = model;
+
+            _view.EnableBackground(model.Elements.HasFlag(LoadingElements.Background));
+            _view.EnableProgressSlider(model.Elements.HasFlag(LoadingElements.Bar));
+            _view.EnablePercents(model.Elements.HasFlag(LoadingElements.Percent));
+            _view.EnableBytes(model.Elements.HasFlag(LoadingElements.Bytes));
+            _view.SetBytes(0, 0);
+            _view.EnableLoadingAnimation(model.Elements.HasFlag(LoadingElements.Animation));
         }
 
         public void SetViewActive(bool active)
         {
-            _view.gameObject.SetActive(true);
+            _view.gameObject.SetActive(active);
         }
 
+        /// <param name="progress">0..1</param>
         public void SetPercents(float progress)
         {
-            _cts?.Cancel();
-            _percents.Value = progress;
+            StopSimulation();
+            _view.SetProgress(Mathf.Clamp01(progress));
         }
 
-        public void SetBytes(float current, float total)
+        /// <param name="current">downloaded bytes</param>
+        /// <param name="total">total bytes to download</param>
+        public void SetProgress(float current, float total)
         {
-            _cts?.Cancel();
-            _bytes.Value = $"{current}/{total}";
+            SetPercents(total > 0 ? current / total : 0);
+            _view.SetBytes(current, total);
         }
 
-        public void SetPercentsAndBytes(float current, float total)
-        {
-            _cts?.Cancel();
-            SetPercents(current / total);
-            SetBytes(current, total);
-        }
-
+        /// <summary>
+        /// Fake progress for operations without real progress reporting. Stops on any Set* call or on Dispose.
+        /// </summary>
         public async UniTaskVoid SimulateProgress(float duration, float from = 0, float to = 1)
         {
-            _cts?.Cancel();
-            _cts = new CancellationTokenSource();
+            StopSimulation();
+            _simulationCts = new CancellationTokenSource();
+            var ct = _simulationCts.Token;
 
-            if (from < 0)
+            _view.SetProgress(from);
+
+            for (float elapsed = 0f; elapsed < duration; elapsed += Time.deltaTime)
             {
-                from = _percents.Value;
-            }
-
-            _percents.Value = from;
-            float elapsed = 0f;
-
-            try
-            {
-                while (elapsed < duration)
+                // cancellation is the expected way to stop the simulation, no exception needed
+                if (await UniTask.Yield(PlayerLoopTiming.Update, ct).SuppressCancellationThrow())
                 {
-                    if (_cts.Token.IsCancellationRequested)
-                    {
-                        return;
-                    }
-
-                    await UniTask.Yield(PlayerLoopTiming.Update, _cts.Token);
-                    elapsed += Time.deltaTime;
-                    _percents.Value = Mathf.Lerp(from, to, elapsed / duration);
+                    return;
                 }
 
-                _percents.Value = to;
+                _view.SetProgress(Mathf.Lerp(from, to, elapsed / duration));
             }
-            catch (OperationCanceledException e)
-            {
-                // todo chang handle?
-                Debug.Log($"cancel operation {e}");
-            }
+
+            _view.SetProgress(to);
         }
 
-        private void SetViewProgress(float value)
+        private void StopSimulation()
         {
-            _view.SetProgress(value);
-        }
-
-        private static IEnumerable<LoadingElements> GetFlags(LoadingElements elements)
-        {
-            foreach (LoadingElements value in Enum.GetValues(typeof(LoadingElements)))
-            {
-                if (value != 0 && elements.HasFlag(value))
-                {
-                    yield return value;
-                }
-            }
+            _simulationCts?.Cancel();
+            _simulationCts?.Dispose();
+            _simulationCts = null;
         }
     }
 }

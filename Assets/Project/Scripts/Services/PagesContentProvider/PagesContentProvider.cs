@@ -22,8 +22,6 @@ namespace Project.Services.PagesContentProvider
         private readonly WordPathHelper _wordPathHelper;
         private readonly PopupManager _popupManager;
 
-        private Action<float, float> _progress;
-
         private Dictionary<string, IDisposableAsset> Content { get; set; }
 
         public PagesContentProvider(IResourcesManager assetManager,
@@ -59,11 +57,10 @@ namespace Project.Services.PagesContentProvider
             throw new NotImplementedException();
         }
 
+        /// <param name="progress">downloaded bytes and total bytes to download, not called if everything is cached</param>
         public async UniTask PreloadWordsContentAsync(List<Word> words, Action<float, float> progress,
             CancellationToken ct)
         {
-            _progress = progress;
-
             HashSet<string> imageKeys = words.Select(w => _wordPathHelper.GetTexturePath(w.ImageKey)).ToHashSet();
             HashSet<string> soundKeys = words.Select(w => _wordPathHelper.GetSoundPath(w.SoundKey)).ToHashSet();
 
@@ -71,23 +68,11 @@ namespace Project.Services.PagesContentProvider
             totalKeys.UnionWith(imageKeys);
             totalKeys.UnionWith(soundKeys);
 
-            long totalToLoad = await GetDownloadSize(totalKeys, ct);
+            // download bundles first to report real bytes, then the assets load from the cache
+            await DownloadDependenciesAsync(totalKeys, progress, ct);
 
-            Dictionary<string, IDisposableAsset> images = new();
-            Dictionary<string, IDisposableAsset> sounds = new();
-
-            long currentToLoad = 0;
-            long downloadSize = 0;
-            downloadSize = await GetDownloadSize(imageKeys, ct);
-            currentToLoad += downloadSize;
-            images = await Preload<Sprite>(imageKeys,
-                progress => { CountProgress(progress, currentToLoad, totalToLoad); }, ct);
-           
-            downloadSize = await GetDownloadSize(soundKeys, ct);
-           
-            currentToLoad += downloadSize;
-            sounds = await Preload<AudioClip>(soundKeys,
-                bytes => { CountProgress(bytes, currentToLoad, totalToLoad); }, ct);
+            Dictionary<string, IDisposableAsset> images = await Preload<Sprite>(imageKeys, ct);
+            Dictionary<string, IDisposableAsset> sounds = await Preload<AudioClip>(soundKeys, ct);
 
             Merge(Content, images);
             Merge(Content, sounds);
@@ -174,13 +159,43 @@ namespace Project.Services.PagesContentProvider
             }
         }
 
-        private void CountProgress(float bytes, long currentLoad, long totalToLoad)
+        private async UniTask DownloadDependenciesAsync(HashSet<string> keys, Action<float, float> progress,
+            CancellationToken ct)
         {
-            _progress?.Invoke(currentLoad + bytes, totalToLoad);
+            long totalBytes = await GetDownloadSize(keys, ct);
+            if (totalBytes == 0)
+            {
+                return;
+            }
+
+            AsyncOperationHandle handle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
+
+            try
+            {
+                while (!handle.IsDone)
+                {
+                    DownloadStatus status = handle.GetDownloadStatus();
+                    progress?.Invoke(status.DownloadedBytes, status.TotalBytes);
+                    await UniTask.Yield(ct);
+                }
+
+                if (handle.Status != AsyncOperationStatus.Succeeded)
+                {
+                    // the assets will try to download again on load
+                    Debug.LogError($"{nameof(DownloadDependenciesAsync)} failed: {handle.OperationException}");
+                    return;
+                }
+
+                progress?.Invoke(totalBytes, totalBytes);
+            }
+            finally
+            {
+                handle.Release();
+            }
         }
 
         private async UniTask<Dictionary<string, IDisposableAsset>> Preload<T>(HashSet<string> keys,
-            Action<float> bytes, CancellationToken ct)
+            CancellationToken ct)
             where T : UnityEngine.Object
         {
             Debug.Log($"{nameof(Preload)}");
@@ -188,18 +203,9 @@ namespace Project.Services.PagesContentProvider
             List<string> keysList = keys.ToList();
             List<UniTask<DisposableAsset<T>>> loadAssetTasks = new();
 
-            float[] individualProgress = new float[keysList.Count];
-
             for (int i = 0; i < keysList.Count; i++)
             {
-                string key = keysList[i];
-                int index = i;
-                loadAssetTasks.Add(_assetManager.LoadAssetAsync<T>(key, ct,
-                    Progress.Create<float>(p =>
-                    {
-                        individualProgress[index] = p;
-                        bytes?.Invoke(individualProgress.Sum());
-                    })));
+                loadAssetTasks.Add(_assetManager.LoadAssetAsync<T>(keysList[i], ct));
             }
 
             DisposableAsset<T>[] loadedAssets = await UniTask.WhenAll(loadAssetTasks);

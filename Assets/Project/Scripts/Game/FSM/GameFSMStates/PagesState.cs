@@ -62,9 +62,9 @@ namespace Chang.FSM
             var loadingModel = new LoadingUiModel(LoadingElements.Background | LoadingElements.Bar |
                                                   LoadingElements.Percent | LoadingElements.Bytes);
             var loadingUiController = _popupManager.ShowLoadingUi(loadingModel);
-            loadingUiController.SetPercentsAndBytes(0, 0);
+            loadingUiController.SetPercents(0);
 
-            await PreloadContentAsync(loadingUiController.SetPercentsAndBytes, ct);
+            await PreloadContentAsync(loadingUiController.SetProgress, ct);
 
             _screenManager.SetActivePagesContainer(true);
 
