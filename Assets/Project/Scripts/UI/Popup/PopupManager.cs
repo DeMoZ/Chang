@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Assets.SimpleLocalization.Scripts;
 using Chang;
 using DMZ.Events;
 using UnityEngine;
@@ -8,8 +10,10 @@ namespace Popup
 {
     public partial class PopupManager : MonoBehaviour
     {
+        private const int LanguageSelectorColumns = 3;
+
         [SerializeField] private PopupView popupPrefab;
-        
+
         private Stack<IViewController> _popupStack = new();
 
         public PopupController<ChangeNamePopupModel> ShowChangeNamePopup(ChangeNamePopupModel model)
@@ -57,6 +61,32 @@ namespace Popup
                 {
                     Debug.Log($"{model.GetType()} Submitted");
                     model.OnChangeGenderSubmit?.Invoke();
+                }, new DMZState<bool>()));
+
+            _popupStack.Push(popupController);
+            return popupController;
+        }
+
+        public PopupController<ChangeLanguagePopupModel> ShowChangeLanguagePopup(ChangeLanguagePopupModel model)
+        {
+            PopupView popupView = Instantiate(popupPrefab, transform);
+            PopupController<ChangeLanguagePopupModel> popupController = new(popupView, model);
+
+            popupController.CreatePopup(
+                new PopupHeader(LocalizationManager.Localize("Lobby.Popup.ChangeLanguage.Title")),
+                new PopupSelector(model.OptionNames,
+                    Array.IndexOf(model.Options, model.Language.Value),
+                    index => model.Language.Value = model.Options[index],
+                    LanguageSelectorColumns),
+                new PopupButton(LocalizationManager.Localize("Lobby.Popup.Cancel"), () =>
+                {
+                    Debug.Log($"{model.GetType()} Cancelled");
+                    model.OnChangeLanguageCancel?.Invoke();
+                }, new DMZState<bool>()),
+                new PopupButton(LocalizationManager.Localize("Lobby.Popup.Submit"), () =>
+                {
+                    Debug.Log($"{model.GetType()} Submitted");
+                    model.OnChangeLanguageSubmit?.Invoke();
                 }, new DMZState<bool>()));
 
             _popupStack.Push(popupController);

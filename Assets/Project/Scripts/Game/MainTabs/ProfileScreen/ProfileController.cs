@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
@@ -13,9 +14,12 @@ namespace Chang
         private readonly ProfileView _view;
         private readonly ProfileService _profileService;
         private readonly PopupManager _popupManager;
+        private readonly LocalizationService _localizationService;
+        private readonly LanguagesConfig _languagesConfig;
 
         private PopupController<ChangeNamePopupModel> _changeNameController;
         private PopupController<ChangeGenderPopupModel> _changeGenderController;
+        private PopupController<ChangeLanguagePopupModel> _changeLanguageController;
         private LoadingUiController _loadingUiController;
         private CancellationTokenSource _cts = new();
 
@@ -24,12 +28,16 @@ namespace Chang
             MainScreenBus mainScreenBus,
             ProfileView view,
             ProfileService profileService,
-            PopupManager popupManager)
+            PopupManager popupManager,
+            LocalizationService localizationService,
+            LanguagesConfig languagesConfig)
         {
             _mainScreenBus = mainScreenBus;
             _view = view;
             _profileService = profileService;
             _popupManager = popupManager;
+            _localizationService = localizationService;
+            _languagesConfig = languagesConfig;
         }
 
         public void Dispose()
@@ -51,11 +59,17 @@ namespace Chang
                 _popupManager.DisposePopup(_changeGenderController);
                 _changeGenderController = null;
             }
+
+            if (_changeLanguageController != null)
+            {
+                _popupManager.DisposePopup(_changeLanguageController);
+                _changeLanguageController = null;
+            }
         }
 
         public void Init()
         {
-            _view.Init(_mainScreenBus.OnLogOutClicked, OnChangeNameClicked, OnChangeGenderClicked);
+            _view.Init(_mainScreenBus.OnLogOutClicked, OnChangeNameClicked, OnChangeGenderClicked, OnChangeLanguageClicked);
         }
 
         private void OnChangeNameClicked()
@@ -153,6 +167,53 @@ namespace Chang
             }
         }
 
+        private void OnChangeLanguageClicked()
+        {
+            ChangeLanguagePopupModel model = new();
+            model.Options = _languagesConfig.EnabledLanguages.ToArray();
+            model.OptionNames = Array.ConvertAll(model.Options, _languagesConfig.GetDisplayName);
+            model.Language.Value = _profileService.ProfileData.NativeLanguage;
+            model.OnChangeLanguageCancel += OnChangeLanguageCancel;
+            model.OnChangeLanguageSubmit += OnChangeLanguageSubmit;
+
+            _changeLanguageController = _popupManager.ShowChangeLanguagePopup(model);
+        }
+
+        private void OnChangeLanguageCancel()
+        {
+            _popupManager.DisposePopup(_changeLanguageController);
+            _changeLanguageController = null;
+        }
+
+        private void OnChangeLanguageSubmit()
+        {
+            OnChangeLanguageSubmitAsync(_cts.Token).Forget();
+        }
+
+        private async UniTaskVoid OnChangeLanguageSubmitAsync(CancellationToken ct)
+        {
+            Languages language = _changeLanguageController.Model.Language.Value;
+
+            try
+            {
+                _loadingUiController = _popupManager.ShowLoadingUi(new LoadingUiModel(LoadingElements.Animation));
+                await _localizationService.SelectLanguageAsync(language, ct);
+
+                if (_changeLanguageController != null)
+                {
+                    _popupManager.DisposePopup(_changeLanguageController);
+                    _changeLanguageController = null;
+                }
+
+                UpdateScreen();
+            }
+            finally
+            {
+                _popupManager.DisposePopup(_loadingUiController);
+                _loadingUiController = null;
+            }
+        }
+
         public void SetViewActive(bool active)
         {
             _view.gameObject.SetActive(active);
@@ -170,6 +231,7 @@ namespace Chang
             _view.SetUserId(_profileService.PlayerId);
             _view.SetUserName(_profileService.ProfileData.Name);
             _view.SetGender(_profileService.ProfileData.Gender);
+            _view.SetLanguage(_languagesConfig.GetDisplayName(_profileService.ProfileData.NativeLanguage));
         }
 
         public async UniTask SetAsync(CancellationToken ct)

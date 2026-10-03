@@ -657,6 +657,7 @@ GameObject:
   - component: {fileID: 1234444003448830163}
   - component: {fileID: 3116049569926951724}
   - component: {fileID: 1927127443577557143}
+  - component: {fileID: 7258097623064488944}
   m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
@@ -749,6 +750,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -782,6 +784,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7258097623064488944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4471699252166711954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Tab.Words
 --- !u!1 &5147425033215981496
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,6 +808,7 @@ GameObject:
   - component: {fileID: 6878411871691900691}
   - component: {fileID: 6506137076282190517}
   - component: {fileID: 6698854667857311302}
+  - component: {fileID: 3118095154367409870}
   m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
@@ -885,6 +901,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -918,6 +935,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3118095154367409870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5147425033215981496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Tab.Profile
 --- !u!1 &5164803489166651587
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,6 +1742,7 @@ GameObject:
   - component: {fileID: 1215177450793331384}
   - component: {fileID: 7339012307502777757}
   - component: {fileID: 3396686885729703887}
+  - component: {fileID: 8056359671287862349}
   m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
@@ -1804,6 +1835,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1837,6 +1869,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8056359671287862349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6356570179479816030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Tab.Repeat
 --- !u!1 &6481035080591872645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2132,6 +2177,7 @@ GameObject:
   - component: {fileID: 281305470515021973}
   - component: {fileID: 7615344631982157901}
   - component: {fileID: 8577243729562430318}
+  - component: {fileID: 5369585178519114489}
   m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
@@ -2224,6 +2270,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2257,6 +2304,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5369585178519114489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7942249925386100302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Tab.Sentences
 --- !u!1 &8222651016993951668
 GameObject:
   m_ObjectHideFlags: 0

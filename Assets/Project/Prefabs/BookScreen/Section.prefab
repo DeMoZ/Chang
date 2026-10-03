@@ -605,6 +605,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -649,6 +650,7 @@ GameObject:
   - component: {fileID: 3044439154852658341}
   - component: {fileID: 5199920342522631556}
   - component: {fileID: 7359949910167273031}
+  - component: {fileID: 50396635882263941}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -741,6 +743,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -774,6 +777,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &50396635882263941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5552687032712183431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Section.RepeatShort
 --- !u!1 &8079299704357387962
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,6 +891,7 @@ GameObject:
   - component: {fileID: 8249671115582292667}
   - component: {fileID: 4857926759362129835}
   - component: {fileID: 6232345446057678554}
+  - component: {fileID: 5972277255237080047}
   m_Layer: 0
   m_Name: Label
   m_TagString: Untagged
@@ -967,6 +984,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1000,6 +1018,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5972277255237080047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9020457911140150508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Section.SortShort
 --- !u!1 &9176534174263359929
 GameObject:
   m_ObjectHideFlags: 0

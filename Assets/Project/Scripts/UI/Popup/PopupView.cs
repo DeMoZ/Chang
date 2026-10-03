@@ -53,22 +53,23 @@ namespace Popup
             labelAndInput.gameObject.SetActive(true);
         }
 
-        public void CreateSelector(string[] options, int selectedIndex, Action<int> onSelect)
+        /// <param name="columns">options per row, all options are in one row if 0</param>
+        public void CreateSelector(string[] options, int selectedIndex, Action<int> onSelect, int columns = 0)
         {
-            Transform container = Instantiate(buttonsContainerPrefab, content).transform;
-            foreach (Transform child in container)
-            {
-                Destroy(child.gameObject);
-            }
-
-            container.gameObject.SetActive(true);
-            HorizontalLayoutGroup group = container.GetOrAddComponent<HorizontalLayoutGroup>();
-            group.enabled = true;
-
-            SelectorView selector = container.gameObject.AddComponent<SelectorView>();
+            int rowSize = columns > 0 ? columns : options.Length;
+            Transform container = null;
+            SelectorView selector = null;
             var buttons = new ButtonView[options.Length];
+
             for (int i = 0; i < options.Length; i++)
             {
+                if (i % rowSize == 0)
+                {
+                    container = CreateSelectorRow();
+                    // the first row holds the selector, all rows buttons are highlighted by it
+                    selector ??= container.gameObject.AddComponent<SelectorView>();
+                }
+
                 int index = i;
                 ButtonView button = Instantiate(buttonPrefab, container);
                 button.Text = options[i];
@@ -83,7 +84,22 @@ namespace Popup
                 buttons[i] = button;
             }
 
-            selector.Init(buttons, selectedIndex);
+            selector?.Init(buttons, selectedIndex);
+        }
+
+        private Transform CreateSelectorRow()
+        {
+            Transform container = Instantiate(buttonsContainerPrefab, content).transform;
+            foreach (Transform child in container)
+            {
+                Destroy(child.gameObject);
+            }
+
+            container.gameObject.SetActive(true);
+            HorizontalLayoutGroup group = container.GetOrAddComponent<HorizontalLayoutGroup>();
+            group.enabled = true;
+
+            return container;
         }
 
         public void CreateButton(string text,
