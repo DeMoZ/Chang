@@ -5,7 +5,6 @@ using Chang.Services;
 using Cysharp.Threading.Tasks;
 using DMZ.DebugSystem;
 using Popup;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -18,6 +17,7 @@ namespace Chang
         private readonly PopupManager _popupManager;
 
         private CancellationTokenSource _cts;
+        private PopupController<RetryPopupModel> _retryPopupController;
 
         [Inject]
         public Reboot(AddressablesDownloader addressablesDownloader, AuthorizationService authorizationService, PopupManager popupManager)
@@ -36,6 +36,7 @@ namespace Chang
         {
             _cts?.Cancel();
             _cts?.Dispose();
+            CloseRetryPopup();
         }
 
         public async UniTaskVoid LoadingSequenceAsync()
@@ -67,10 +68,40 @@ namespace Chang
                 SceneManager.LoadScene(ProjectConstants.GAME_SCENE);
                 _popupManager.DisposePopup(loadingUiController);
             }
+            catch (OperationCanceledException)
+            {
+                DMZLogger.Log($"{nameof(LoadingSequenceAsync)}: Cancelled");
+            }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                DMZLogger.LogError(e, $"{nameof(LoadingSequenceAsync)}: Failed");
+                ShowRetryPopup();
             }
+        }
+
+        private void ShowRetryPopup()
+        {
+            var model = new RetryPopupModel();
+            model.LabelText.Value = "Failed to load the game. Check the internet connection and try again.";
+            model.OnRetryClicked += OnRetryClicked;
+            _retryPopupController = _popupManager.ShowRetryPopup(model);
+        }
+
+        private void OnRetryClicked()
+        {
+            CloseRetryPopup();
+            LoadingSequenceAsync().Forget();
+        }
+
+        private void CloseRetryPopup()
+        {
+            if (_retryPopupController == null)
+            {
+                return;
+            }
+
+            _popupManager.DisposePopup(_retryPopupController);
+            _retryPopupController = null;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
@@ -21,108 +22,126 @@ namespace Chang.Resources
     /// <summary>
     /// Downloads addressables assets from the server.
     /// </summary>
-    public class AddressablesDownloader : IDisposable
+    public class AddressablesDownloader
     {
-        private bool _isInitialized;
-        
-        public async UniTask PreloadAtGameStartAsync(Action<float> percents, CancellationToken ct)
+        private AsyncLazy _initialization;
+
+        public UniTask PreloadAtGameStartAsync(Action<float> percents, CancellationToken ct)
         {
-            await PreloadLabelsAsync(BundleLabels.Labels.Base, percents, ct);
+            return PreloadLabelsAsync(BundleLabels.Labels.Base, percents, ct);
         }
 
-        public async UniTask PreloadLabelsAsync(BundleLabels.Labels labels, Action<float> percents, CancellationToken ct)
+        public UniTask PreloadLabelsAsync(BundleLabels.Labels labels, Action<float> percents, CancellationToken ct)
         {
-            Debug.Log($"{nameof(PreloadLabelsAsync)}");
+            var keys = Enum.GetValues(typeof(BundleLabels.Labels))
+                .Cast<BundleLabels.Labels>()
+                .Where(label => labels.HasFlag(label))
+                .Select(label => label.ToString())
+                .ToList();
 
-            if (labels == 0)
+            if (keys.Count == 0)
             {
-                Debug.LogError("No labels provided for preloading assets.");
-                return;
+                throw new ArgumentException("No labels provided for preloading assets.", nameof(labels));
             }
 
-            var keys = labels.ToString().Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-            await PreloadLabelsAsync(keys, percents, ct);
+            return PreloadLabelsAsync(keys, percents, ct);
         }
 
-        public async UniTask PreloadLabelsAsync(IEnumerable<string> keys, Action<float> percents, CancellationToken ct)
+        /// <summary>
+        /// Downloads all assets that have any of the labels. Throws if the download failed.
+        /// </summary>
+        /// <param name="percents">download progress 0..1</param>
+        public async UniTask PreloadLabelsAsync(IReadOnlyCollection<string> keys, Action<float> percents, CancellationToken ct)
         {
-            await InitializationGuard();
-            Debug.Log($"{nameof(PreloadLabelsAsync)}");
-            AsyncOperationHandle<long> getDownloadSizeHandle = Addressables.GetDownloadSizeAsync(keys);
-            await getDownloadSizeHandle.Task;
+            await EnsureInitializedAsync();
 
-            if (getDownloadSizeHandle.Status != AsyncOperationStatus.Succeeded)
-            {
-                Debug.LogError($"{nameof(PreloadLabelsAsync)} failed to get download size: {getDownloadSizeHandle.OperationException}");
-                getDownloadSizeHandle.Release();
-                return;
-            }
-
-            long totalDownloadSize = getDownloadSizeHandle.Result;
-            Debug.Log($"Total download size: {totalDownloadSize} bytes");
-            getDownloadSizeHandle.Release();
+            long totalDownloadSize = await GetDownloadSizeAsync(keys, ct);
+            Debug.Log($"{nameof(PreloadLabelsAsync)} [{string.Join(", ", keys)}], download size: {totalDownloadSize} bytes");
 
             if (totalDownloadSize == 0)
             {
-                Debug.Log("No assets need to be downloaded.");
+                percents?.Invoke(1);
                 return;
             }
 
-            AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Intersection);
-            while (!downloadHandle.IsDone && !ct.IsCancellationRequested)
+            // Union to match GetDownloadSizeAsync, which sums the bundles of all keys
+            var handle = Addressables.DownloadDependenciesAsync(keys, Addressables.MergeMode.Union);
+
+            try
             {
-                Debug.Log($"Download progress: {downloadHandle.PercentComplete * 100}%");
-                percents?.Invoke(downloadHandle.PercentComplete);
-                await UniTask.Yield(ct);
-            }
-
-            if (downloadHandle.Status != AsyncOperationStatus.Succeeded)
-            {
-                Debug.LogError($"{nameof(PreloadLabelsAsync)} download failed: {downloadHandle.OperationException}");
-            }
-
-            downloadHandle.Release();
-        }
-
-        private async UniTask InitializationGuard()
-        {
-            if (!_isInitialized)
-            {
-                await InitializeAsync();
-            }
-        }
-
-        private async UniTask InitializeAsync()
-        {
-            AsyncOperationHandle<IResourceLocator> handle = Addressables.InitializeAsync();
-            await handle.Task;
-
-            // todo chang Check handle validity
-            if (!handle.IsValid())
-            {
-                Debug.LogWarning("Handle is invalid, skipping further operations.");
-                return;
-            }
-
-            if (handle.Status != AsyncOperationStatus.Succeeded)
-            {
-                string errorMessage = handle.OperationException?.Message;
-                Debug.LogError($"Initialization failed: {errorMessage}");
-
-                if (handle.IsValid())
+                while (!handle.IsDone)
                 {
-                    handle.Release();
+                    percents?.Invoke(handle.GetDownloadStatus().Percent);
+                    await UniTask.Yield(ct);
                 }
 
-                return;
-            }
+                if (handle.Status != AsyncOperationStatus.Succeeded)
+                {
+                    throw new Exception($"{nameof(PreloadLabelsAsync)} download failed", handle.OperationException);
+                }
 
-            _isInitialized = true;
-            handle.Release();
+                percents?.Invoke(1);
+            }
+            finally
+            {
+                handle.Release();
+            }
         }
 
-        public void Dispose()
+        private async UniTask EnsureInitializedAsync()
         {
+            _initialization ??= UniTask.Lazy(InitializeAsync);
+
+            try
+            {
+                await _initialization;
+            }
+            catch
+            {
+                // allow retry on the next call
+                _initialization = null;
+                throw;
+            }
+        }
+
+        private static async UniTask InitializeAsync()
+        {
+            AsyncOperationHandle<IResourceLocator> handle = Addressables.InitializeAsync(false);
+
+            try
+            {
+                await handle;
+
+                if (handle.Status != AsyncOperationStatus.Succeeded)
+                {
+                    throw new Exception("Addressables initialization failed", handle.OperationException);
+                }
+            }
+            finally
+            {
+                handle.Release();
+            }
+        }
+
+        private static async UniTask<long> GetDownloadSizeAsync(IReadOnlyCollection<string> keys, CancellationToken ct)
+        {
+            AsyncOperationHandle<long> handle = Addressables.GetDownloadSizeAsync(keys);
+
+            try
+            {
+                await handle.ToUniTask(cancellationToken: ct);
+
+                if (handle.Status != AsyncOperationStatus.Succeeded)
+                {
+                    throw new Exception("Failed to get download size", handle.OperationException);
+                }
+
+                return handle.Result;
+            }
+            finally
+            {
+                handle.Release();
+            }
         }
     }
 }

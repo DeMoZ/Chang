@@ -83,6 +83,26 @@ namespace Popup
             return popupController;
         }
 
+        public PopupController<RetryPopupModel> ShowRetryPopup(RetryPopupModel model)
+        {
+            PopupView popupView = Instantiate(popupPrefab, transform);
+            PopupController<RetryPopupModel> popupController = new(popupView, model);
+
+            popupController.CreatePopup(
+                new PopupHeader("Error"),
+                new PopupLabel(model.LabelText),
+                new PopupButton("Retry", () =>
+                    {
+                        Debug.Log($"{model.GetType()} Retry clicked");
+                        model.OnRetryClicked?.Invoke();
+                    }
+                    , new DMZState<bool>())
+            );
+
+            _popupStack.Push(popupController);
+            return popupController;
+        }
+
         public PopupController<YesNoPopupModel> ShowYesNoPopup(YesNoPopupModel model)
         {
             PopupView popupView = Instantiate(popupPrefab, transform);
