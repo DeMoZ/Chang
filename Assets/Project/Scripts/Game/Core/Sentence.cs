@@ -50,13 +50,14 @@ namespace Chang.Core
 
         /// <summary>
         /// The translation in the NativeLanguage with {0}, {1}... replaced by the replaceable words translations in their sentence order.
-        /// Replaceable words are taken by the current SentenceWords keys, so a copy with replaced words gets their translations
+        /// Replaceable words are taken by the current SentenceWords keys, so a copy with replaced words gets their translations.
+        /// Replaceable translations are wrapped in [] to show the word form (case, number...) may not match the sentence. Display only
         /// </summary>
         public string GetTranslation(IReadOnlyDictionary<string, Word> words)
         {
             object[] args = SentenceWords
                 .Where(word => word.Modifiers.HasFlag(Modifier.Replaceable))
-                .Select(word => (object)words[word.WordKey].Translation)
+                .Select(word => (object)$"[{words[word.WordKey].Translation}]")
                 .ToArray();
 
             string translation = LocalizationService.Localize(SentenceKey, DefaultTranslation);
