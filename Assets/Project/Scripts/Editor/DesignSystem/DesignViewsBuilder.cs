@@ -25,10 +25,28 @@ namespace Chang.Editor.DesignSystem
         public const string PopupRoot = ViewsRoot + "/Popup";
 
         // Space under scrolled content so the last item is not hidden by the tab bar.
-        private const float TabBarClearance = 120f;
+        private static float TabBarClearance => DesignSize(Component("TabBar/Words")).y + 24f;
 
-        // Zig-zag of the lesson path in "Words · Section open": node centers relative to the section center.
-        private static readonly float[] LessonPathOffsets = { 0f, 112f, 187f, 112f, 0f, -112f, -187f, -112f };
+        // Zig-zag of the lesson path in "Words · Section open": node centers relative to the section center,
+        // in units of the free half-width (section half-width minus half a node).
+        private static readonly float[] LessonPathPattern = { 0f, 0.6f, 1f, 0.6f, 0f, -0.6f, -1f, -0.6f };
+
+        private const float SectionHalfWidth = 224f;
+
+        private static Vector2 LessonNodeSize => DesignSize(Component("LessonNode/Score 25pct"));
+
+        /// <summary>Horizontal offsets of consecutive lessons, scaled to the node size so nodes stay inside the section.</summary>
+        private static float[] LessonPathOffsets
+        {
+            get
+            {
+                var reach = SectionHalfWidth - LessonNodeSize.x * 0.5f;
+                return LessonPathPattern.Select(k => Mathf.Round(k * reach)).ToArray();
+            }
+        }
+
+        /// <summary>Vertical step of the lesson path: the score badge of a node may overlap the next row a little.</summary>
+        private static float LessonStep => Mathf.Round(LessonNodeSize.y * 0.87f);
 
         /// <summary>Runs the build on the next editor update (for calls from tools that can't block the main thread).</summary>
         public static void BuildAllDeferred()
@@ -95,16 +113,16 @@ namespace Chang.Editor.DesignSystem
         {
             return new Items
             {
-                Option = BuildToggle("OptionToggle", "OptionCard", "Correct", 228f, 120f,
+                Option = BuildToggle("OptionToggle", "OptionCard", "Correct", true,
                     new[] { "Default", "Selected", "Correct", "Wrong" }, "Default", "Selected", "Correct", "Wrong", "Default",
                     word: "Thai", phonetics: "Phonetics"),
-                Match = BuildToggle("MatchToggle", "MatchTile", "Default", -1f, 84f,
+                Match = BuildToggle("MatchToggle", "MatchTile", "Default", false,
                     new[] { "Default", "Selected", "Matched", "Wrong" }, "Default", "Selected", "Matched", "Wrong", "Matched",
                     word: "Text", phonetics: null),
-                Chip = BuildToggle("ChipToggle", "WordChip", "Default", -1f, 80f,
+                Chip = BuildToggle("ChipToggle", "WordChip", "Default", false,
                     new[] { "Default", "Placed" }, "Default", "Default", "Default", "Default", "Placed",
                     word: "Thai", phonetics: "Phonetics"),
-                ChipFixed = BuildToggle("ChipFixedToggle", "WordChip", "Default", -1f, 80f,
+                ChipFixed = BuildToggle("ChipFixedToggle", "WordChip", "Default", false,
                     new[] { "Default", "Fixed" }, "Default", "Default", "Default", "Default", "Fixed",
                     word: "Thai", phonetics: "Phonetics"),
                 Lesson = BuildLessonItem(),
@@ -117,9 +135,12 @@ namespace Chang.Editor.DesignSystem
         }
 
         /// <summary>A CToggle on a component whose variants are the toggle states.</summary>
-        private static CToggle BuildToggle(string name, string group, string baseVariant, float width, float height, string[] variants,
+        private static CToggle BuildToggle(string name, string group, string baseVariant, bool fixedWidth, string[] variants,
             string normal, string selected, string correct, string wrong, string inactive, string word, string phonetics)
         {
+            var size = DesignSize(Component($"{group}/{baseVariant}"));
+            var width = fixedWidth ? size.x : -1f;
+            var height = size.y;
             var prefab = BuildVariant(Component($"{group}/{baseVariant}"), $"{ItemsRoot}/{name}.prefab", root =>
             {
                 // Lets states with opacity (Matched) fade the whole element.
@@ -144,8 +165,9 @@ namespace Chang.Editor.DesignSystem
                 var wordText = Q<TMP_Text>(root, word);
                 if (width > 0f)
                 {
+                    var source = PrefabUtility.GetCorrespondingObjectFromSource(wordText);
                     wordText.enableAutoSizing = true;
-                    wordText.fontSizeMax = wordText.fontSize;
+                    wordText.fontSizeMax = source != null && !source.enableAutoSizing ? source.fontSize : wordText.fontSizeMax;
                     wordText.fontSizeMin = 16f;
                     wordText.textWrappingMode = TextWrappingModes.Normal;
                     var wordLayout = GetOrAdd<LayoutElement>(wordText.gameObject);
@@ -179,14 +201,14 @@ namespace Chang.Editor.DesignSystem
             var prefab = BuildPrefab($"{ItemsRoot}/LessonItem.prefab", root =>
             {
                 var le = GetOrAdd<LayoutElement>(root);
-                le.minHeight = le.preferredHeight = 76f;
+                le.minHeight = le.preferredHeight = LessonStep;
                 le.flexibleWidth = 1f;
 
                 var node = Instance(Component("LessonNode/Score 25pct"), root.transform, "LessonNode");
                 node.anchorMin = node.anchorMax = new Vector2(0.5f, 1f);
                 node.pivot = new Vector2(0.5f, 1f);
                 node.anchoredPosition = Vector2.zero;
-                node.sizeDelta = new Vector2(72f, 84f);
+                node.sizeDelta = LessonNodeSize;
 
                 var scoreText = Q<TMP_Text>(node.gameObject, "Score|ScoreText");
                 var states = States(node.gameObject, "LessonNode",
@@ -224,7 +246,7 @@ namespace Chang.Editor.DesignSystem
             var prefab = BuildVariant(Component("SectionHeader/Expanded"), $"{ItemsRoot}/SectionHeader.prefab", root =>
             {
                 var le = GetOrAdd<LayoutElement>(root);
-                le.minHeight = le.preferredHeight = 84f;
+                le.minHeight = le.preferredHeight = DesignSize(Component("SectionHeader/Expanded")).y;
 
                 // No data for the Thai title and the section progress yet.
                 Hide(root, "Titles|TitleRow|Thai");

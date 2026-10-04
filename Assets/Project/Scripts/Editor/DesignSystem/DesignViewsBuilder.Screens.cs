@@ -35,7 +35,7 @@ namespace Chang.Editor.DesignSystem
                 }
 
                 var tabBar = Instance(Component("TabBar/Words"), content, "TabBar");
-                AnchorBottom(tabBar, 96f, 0f);
+                AnchorBottom(tabBar, DesignSize(Component("TabBar/Words")).y, 0f);
                 var group = GetOrAdd<ToggleGroup>(tabBar);
                 group.allowSwitchOff = false;
                 var states = States(tabBar.gameObject, "TabBar", new[] { "Words", "Sentences", "Repeat", "Profile" }, "Words");
@@ -47,6 +47,7 @@ namespace Chang.Editor.DesignSystem
                     toggle.group = group;
                     var label = Q(t, "Label");
                     Localize(label, key);
+                    FitWidth(label, DesignSize(Component("TabBar/Words")).x / 4f - 12f);
                     var tabToggle = GetOrAdd<TabToggle>(t);
                     Set(tabToggle, ("_toggle", toggle), ("_word", label.GetComponent<TMP_Text>()));
                     return tabToggle;
@@ -253,7 +254,7 @@ namespace Chang.Editor.DesignSystem
 
                 var topBar = Instance(Component("LessonTopBar/LessonTopBar"), column, "TopBar");
                 topBar.SetSiblingIndex(0);
-                AnchorTop(topBar, 72f, 8f);
+                AnchorTop(topBar, DesignSize(Component("LessonTopBar/LessonTopBar")).y, 8f);
                 // No lesson progress data yet.
                 Hide(topBar.gameObject, "Progress|Value");
 
@@ -264,7 +265,7 @@ namespace Chang.Editor.DesignSystem
                 blocker.transform.SetSiblingIndex(check.GetSiblingIndex() + 1);
 
                 var sheet = Instance(Component("FeedbackSheet/Wrong"), column, "Feedback");
-                AnchorBottom(sheet, 260f, 0f);
+                AnchorBottom(sheet, DesignSize(Component("FeedbackSheet/Wrong")).y, 0f);
                 var title = Q<TMP_Text>(sheet.gameObject, "Head|Title");
                 var states = States(sheet.gameObject, "FeedbackSheet", new[] { "Correct", "Wrong" }, "Correct", stateTexts: new[] { title });
                 var continueView = GetOrAdd<PagesContinueView>(sheet);
@@ -447,6 +448,30 @@ namespace Chang.Editor.DesignSystem
         }
 
         private static void Hide(Transform root, string path) => Hide(Q(root, path));
+
+        /// <summary>One-line text that shrinks (down from its design size) to fit the given width: long words and translations.</summary>
+        private static void FitWidth(Transform text, float width)
+        {
+            var tmp = text.GetComponent<TMP_Text>();
+            // Auto-size rewrites the current size, so the design size is read from the generated prefab.
+            var source = UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(tmp);
+            var designSize = source != null && !source.enableAutoSizing ? source.fontSize : tmp.fontSizeMax;
+            tmp.enableAutoSizing = true;
+            tmp.fontSizeMax = designSize;
+            tmp.fontSizeMin = Mathf.Min(14f, designSize);
+            // With wrapping on and the height of one line, a word that is too wide makes TMP shrink the size.
+            tmp.textWrappingMode = TextWrappingModes.Normal;
+            tmp.overflowMode = TextOverflowModes.Overflow;
+            tmp.alignment = TextAlignmentOptions.Center;
+            var le = GetOrAdd<LayoutElement>(text);
+            le.minWidth = le.preferredWidth = width;
+            le.minHeight = le.preferredHeight = Mathf.Ceil(designSize * 1.3f);
+            var noShrink = text.GetComponent<LayoutNoShrink>();
+            if (noShrink != null)
+            {
+                noShrink.enabled = false;
+            }
+        }
 
         /// <summary>A design text with a fixed width that should grow with its content instead of wrapping.</summary>
         private static void SingleLine(Transform text)

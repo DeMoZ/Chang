@@ -31,6 +31,9 @@ namespace Chang.Editor.DesignSystem
 
         private static GameObject Component(string name) => LoadPrefab($"{PenpotImporter.ComponentsRoot}/{name}.prefab");
 
+        /// <summary>Size of a component as drawn in Penpot (its prefab root).</summary>
+        private static Vector2 DesignSize(GameObject prefab) => ((RectTransform)prefab.transform).sizeDelta;
+
         private static GameObject Screen(string name) => LoadPrefab($"{PenpotImporter.ScreensRoot}/{name}.prefab");
 
         /// <summary>Builds a prefab variant of <paramref name="basePrefab"/> at <paramref name="path"/>, or updates it in place when it exists.</summary>
@@ -338,6 +341,15 @@ namespace Chang.Editor.DesignSystem
             if (bg != null)
             {
                 toggle.targetGraphic = bg.GetComponent<Graphic>();
+            }
+
+            // the background can be missing or hidden by a state (TabBar: only the selected tab has one),
+            // a transparent image on the toggle itself catches touches in any state
+            if (t.GetComponent<Graphic>() == null)
+            {
+                var hitArea = GetOrAdd<Image>(t);
+                hitArea.color = new Color(0f, 0f, 0f, 0f);
+                hitArea.raycastTarget = true;
             }
 
             return toggle;

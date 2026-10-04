@@ -231,6 +231,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5561209608679446274, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 145319838629925823}
+    - targetCorrespondingSourceObject: {fileID: 5561209608679446274, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7775821168392483384}
+    - targetCorrespondingSourceObject: {fileID: 5561209608679446274, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2185304835224244030}
     - targetCorrespondingSourceObject: {fileID: 5316412945201585795, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6681576986917483498}
@@ -356,6 +362,44 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!222 &7775821168392483384
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3705857743575489990}
+  m_CullTransparentMesh: 1
+--- !u!114 &2185304835224244030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3705857743575489990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &4001177998994052167 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5316412945201585795, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
@@ -434,9 +478,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 84
+  m_MinHeight: 120
   m_PreferredWidth: -1
-  m_PreferredHeight: 84
+  m_PreferredHeight: 120
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
