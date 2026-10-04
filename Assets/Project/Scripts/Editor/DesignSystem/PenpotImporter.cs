@@ -34,7 +34,7 @@ namespace Chang.Editor.DesignSystem
         public const string ScreensRoot = UiRoot + "/Screens";
         public const string MascotRoot = UiRoot + "/Mascot";
         public const string PreviewScene = UiRoot + "/DesignPreview.unity";
-        public const string ThemePath = "Assets/Project/Resources/" + DesignTheme.ResourcesPath + ".asset";
+        public const string ThemePath = DesignTheme.AssetPath;
         public const string FontsRoot = "Assets/Project/Fonts";
 
         // TMP looks up <font="…"> rich text tags in Resources/Fonts & Materials.
@@ -222,6 +222,15 @@ namespace Chang.Editor.DesignSystem
                         asset.isMultiAtlasTexturesEnabled = true;
                         asset.ClearFontAssetData(true);
                         EditorUtility.SetDirty(asset);
+                    }
+
+                    // Glyphs added while working in the Editor are not shipped; they are added again at runtime.
+                    var so = new SerializedObject(asset);
+                    var clear = so.FindProperty("m_ClearDynamicDataOnBuild");
+                    if (clear != null && !clear.boolValue)
+                    {
+                        clear.boolValue = true;
+                        so.ApplyModifiedPropertiesWithoutUndo();
                     }
 
                     result[$"{family}/{weight}"] = asset;
@@ -643,7 +652,10 @@ namespace Chang.Editor.DesignSystem
                 }, go => builder.BuildRoot(entry.Shape, go, options));
             }
 
-            return SaveWith(entry.PrefabPath, true, NewRoot, go => builder.BuildRoot(entry.Shape, go, options));
+            // A former variant that became a base is rebuilt as a plain prefab.
+            var current = AssetDatabase.LoadAssetAtPath<GameObject>(entry.PrefabPath);
+            var plain = current == null || PrefabUtility.GetPrefabAssetType(current) != PrefabAssetType.Variant;
+            return SaveWith(entry.PrefabPath, plain, NewRoot, go => builder.BuildRoot(entry.Shape, go, options));
         }
 
         private static GameObject BuildScreen(PenpotUiBuilder builder, JObject shape, string path, bool isScreen = true)

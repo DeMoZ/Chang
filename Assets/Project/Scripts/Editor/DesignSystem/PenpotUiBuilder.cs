@@ -952,14 +952,14 @@ namespace Chang.Editor.DesignSystem
             var fitter = go.GetComponent<ContentSizeFitter>();
             if (!inFlex && grow is "auto-width" or "auto-height")
             {
-                if (fitter == null) fitter = go.AddComponent<ContentSizeFitter>();
+                fitter = GetOrAdd<ContentSizeFitter>(go);
                 var h = grow == "auto-width" ? ContentSizeFitter.FitMode.PreferredSize : ContentSizeFitter.FitMode.Unconstrained;
                 if (fitter.horizontalFit != h) fitter.horizontalFit = h;
                 if (fitter.verticalFit != ContentSizeFitter.FitMode.PreferredSize) fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             }
-            else if (fitter != null && !PrefabUtility.IsPartOfPrefabInstance(fitter))
+            else
             {
-                Object.DestroyImmediate(fitter);
+                RemoveComponent<ContentSizeFitter>(go);
             }
         }
 
@@ -1055,6 +1055,11 @@ namespace Chang.Editor.DesignSystem
             var c = go.GetComponent<T>();
             if (c != null)
             {
+                if (c is Behaviour { enabled: false } behaviour)
+                {
+                    behaviour.enabled = true;
+                }
+
                 return c;
             }
 
@@ -1067,12 +1072,29 @@ namespace Chang.Editor.DesignSystem
             return go.AddComponent<T>();
         }
 
+        /// <summary>Components inherited from a prefab can't be removed in an instance or variant: they are switched off instead.</summary>
         private static void RemoveComponent<T>(GameObject go) where T : Component
         {
             var c = go.GetComponent<T>();
-            if (c != null && !PrefabUtility.IsPartOfPrefabInstance(c))
+            if (c == null)
+            {
+                return;
+            }
+
+            if (!PrefabUtility.IsPartOfPrefabInstance(c))
             {
                 Object.DestroyImmediate(c);
+                return;
+            }
+
+            if (c is ThemeColor themeColor && !string.IsNullOrEmpty(themeColor.Token))
+            {
+                themeColor.Token = "";
+            }
+
+            if (c is Behaviour behaviour && behaviour.enabled)
+            {
+                behaviour.enabled = false;
             }
         }
 
