@@ -14,6 +14,7 @@ This folder holds the development documentation: how the project is built, where
 | [Architecture](architecture.md) | Scenes, Zenject, FSMs, UI pattern, async, logging |
 | [Learning logic](learning-logic.md) | Marks, question types, lesson flow, repetition, section sorting |
 | [Content pipeline](content-pipeline.md) | Google Sheets → configs, keys, images, sounds, Addressables/CCD |
+| [UI design system](ui-design-system.md) | Penpot redesign → theme tokens, component prefabs, screens; importer |
 | [Localization](localization.md) | SimpleLocalization, CSV files, languages |
 | [Profile, saves, auth](save-and-auth.md) | Player data, PlayerPrefs, Unity Cloud Save, login |
 | [Build and deploy](build-and-deploy.md) | Platforms, WebGL, Unity Play, building bundles |
