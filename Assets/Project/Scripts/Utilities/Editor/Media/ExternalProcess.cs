@@ -63,9 +63,12 @@ namespace Chang.Utilities.Media
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 
+            // the StandardInput writer of Mono isn't UTF-8, Thai text would become "?"
             if (!string.IsNullOrEmpty(standardInput))
             {
-                await process.StandardInput.WriteAsync(standardInput);
+                byte[] bytes = new UTF8Encoding(false).GetBytes(standardInput);
+                await process.StandardInput.BaseStream.WriteAsync(bytes, 0, bytes.Length);
+                await process.StandardInput.BaseStream.FlushAsync();
             }
 
             process.StandardInput.Close();
