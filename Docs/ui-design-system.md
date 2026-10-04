@@ -11,7 +11,7 @@ Penpot is the source of truth for the look. Unity gets prefabs that keep Penpot'
 
 | What | Path |
 |---|---|
-| Theme (color and font tokens) | `Assets/Project/Resources/DesignTheme.asset` |
+| Theme (color and font tokens, editor-only) | `Assets/Project/UI/DesignTheme.asset` |
 | Component prefabs | `Assets/Project/UI/Components/<Group>/<Name>.prefab` |
 | Screen prefabs | `Assets/Project/UI/Screens/*.prefab` |
 | Mascot presets | `Assets/Project/UI/Mascot/*.prefab` |
@@ -27,7 +27,8 @@ Three layers, from smallest to biggest:
 
 1. **Tokens.** `DesignTheme` holds named colors (the Penpot library: *Ink*, *Royal indigo*, *Rice paper*…, plus *White* and the tone colors) and fonts per family/weight (`Prompt/SemiBold`, `NotoSansThaiLooped/Medium`…).
    Graphics reference a token through `ThemeColor` (token + alpha); texts reference a font through `ThemeFont`.
-   Change a token in the theme asset and every element using it updates, in the Editor and at runtime.
+   Change a token in the theme asset and every element using it updates in the Editor.
+   The theme is editor-only: the resolved color and font are baked into the `Graphic`/`TMP_Text` of the prefab, so at runtime the theme is not loaded and not included in the build. `ThemeColor`/`ThemeFont` stay on the objects only as token markers.
 2. **Components.** Every Penpot main component is a prefab. Within a group (`Button`, `IconButton`, `OptionCard`, `LessonNode`, `TabBar`…) the first component is the **base** and the others are **prefab variants** of it: `Button/Secondary`, `Ghost`, `Success`, `Danger` and `Primary Disabled` are variants of `Button/Primary`. A variant overrides what differs: colors, texts, sizes, extra layers (added objects) and missing layers (disabled objects).
    A component used inside another component is a **nested prefab** (e.g. `IconButton/Hint` inside `LessonTopBar`).
 3. **Screens.** Screens contain nested instances of the components with overrides (texts, colors, visibility), just like instances in Penpot.
