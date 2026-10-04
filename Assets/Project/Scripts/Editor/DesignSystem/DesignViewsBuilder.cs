@@ -170,6 +170,8 @@ namespace Chang.Editor.DesignSystem
                     wordText.fontSizeMax = source != null && !source.enableAutoSizing ? source.fontSize : wordText.fontSizeMax;
                     wordText.fontSizeMin = 16f;
                     wordText.textWrappingMode = TextWrappingModes.Normal;
+                    // The text box is as wide as the card now, so center the word like the design does.
+                    wordText.alignment = TextAlignmentOptions.Center;
                     var wordLayout = GetOrAdd<LayoutElement>(wordText.gameObject);
                     wordLayout.preferredWidth = width - 24f;
                     wordLayout.minWidth = -1f;
@@ -254,18 +256,18 @@ namespace Chang.Editor.DesignSystem
 
                 var sort = Q(root, "Sort");
                 var sortToggle = ToggleOn(sort);
-                var on = Child(sort, "SortOn", 1);
-                Stretch(on, 3f, 3f, 3f, 3f);
-                GetOrAdd<LayoutElement>(on).ignoreLayout = true;
-                var onImage = GetOrAdd<UnityEngine.UI.ProceduralImage.ProceduralImage>(on);
-                GetOrAdd<FreeModifier>(on).Radius = Vector4.one * 15f;
-                onImage.color = new Color(1f, 1f, 1f, 0.45f);
-                onImage.raycastTarget = false;
-                sortToggle.graphic = onImage;
+                // The sorted look comes from the Sorted variant; the old overlay is not used any more.
+                var oldOverlay = sort.Find("SortOn");
+                if (oldOverlay != null)
+                {
+                    Object.DestroyImmediate(oldOverlay.gameObject);
+                }
 
                 var repeat = ButtonOn(Q(root, "RepeatSection"));
-                var collapse = ButtonOn(Q(root, "Chevron"));
-                var states = States(root, "SectionHeader", new[] { "Expanded", "Collapsed" }, "Expanded",
+                // The whole header collapses and expands the section.
+                var collapse = ButtonOn(root.transform);
+                collapse.transition = Selectable.Transition.None;
+                var states = States(root, "SectionHeader", new[] { "Expanded", "Collapsed", "Sorted" }, "Expanded",
                     codeVisibility: new[] { Q(root, "Titles|TitleRow|Thai").gameObject, Q(root, "Titles|Meta").gameObject });
 
                 var section = GetOrAdd<GameBookSection>(root);

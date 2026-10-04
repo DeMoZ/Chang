@@ -13,13 +13,15 @@ namespace Chang.GameBook
         [SerializeField] private Button repeatSectionButton;
 
         [Header("Design (optional)")]
-        [Tooltip("SectionHeader variants: Expanded, Collapsed")]
+        [Tooltip("SectionHeader variants: Expanded, Collapsed, Sorted (expanded with the sort switched on)")]
         [SerializeField] private DesignStates states;
+        [Tooltip("Pressing it collapses or expands the section (the whole header)")]
         [SerializeField] private Button collapseButton;
 
         private bool _isCollapsed;
+        private bool _isSorted;
 
-        /// <summary>Raised with the new collapsed value when the header chevron is pressed.</summary>
+        /// <summary>Raised with the new collapsed value when the header is pressed.</summary>
         public event Action<bool> CollapseToggled;
 
         public bool IsCollapsed => _isCollapsed;
@@ -35,13 +37,20 @@ namespace Chang.GameBook
         public void SetCollapsed(bool collapsed)
         {
             _isCollapsed = collapsed;
-            if (states != null)
+            ShowState();
+            CollapseToggled?.Invoke(collapsed);
+        }
+
+        /// <summary>The sort button is shown only while the section is expanded; its look tells whether the section is sorted.</summary>
+        private void ShowState()
+        {
+            if (states == null)
             {
-                states.Apply(collapsed ? "Collapsed" : "Expanded");
-                ReapplyBaseColor();
+                return;
             }
 
-            CollapseToggled?.Invoke(collapsed);
+            states.Apply(_isCollapsed ? "Collapsed" : _isSorted ? "Sorted" : "Expanded");
+            ReapplyBaseColor();
         }
         
         public void Init(string key, Action onSectionSortClick, Action onSectionRepetitionClick)
@@ -49,7 +58,12 @@ namespace Chang.GameBook
             label.text = key;
             
             sortSectionToggle.onValueChanged.RemoveAllListeners();
-            sortSectionToggle.onValueChanged.AddListener(_ => onSectionSortClick.Invoke());
+            sortSectionToggle.onValueChanged.AddListener(isOn =>
+            {
+                _isSorted = isOn;
+                ShowState();
+                onSectionSortClick.Invoke();
+            });
             
             repeatSectionButton.onClick.RemoveAllListeners();
             repeatSectionButton.onClick.AddListener(onSectionRepetitionClick.Invoke);
@@ -69,6 +83,8 @@ namespace Chang.GameBook
         {
             sortSectionToggle.SetIsOnWithoutNotify(isOn);
             sortSectionToggle.interactable = isInteractable;
+            _isSorted = isOn;
+            ShowState();
             
             // Debug.Log($"SetSortToggle, isOn: {isOn}, interactable: {isInteractable}");
         }

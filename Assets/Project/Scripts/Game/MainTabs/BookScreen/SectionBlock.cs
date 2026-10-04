@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Chang.GameBook
 {
@@ -28,9 +29,15 @@ namespace Chang.GameBook
             }
         }
 
-        /// <summary>Collapsing a section hides its lesson rows, the header stays.</summary>
+        /// <summary>Collapsing a section hides its lesson rows and the card background, the header stays.</summary>
         private void OnCollapseToggled(bool collapsed)
         {
+            var background = GetComponent<Graphic>();
+            if (background != null)
+            {
+                background.enabled = !collapsed;
+            }
+
             foreach (Transform child in container)
             {
                 if (_sectionView == null || child != _sectionView.transform)

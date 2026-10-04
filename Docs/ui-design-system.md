@@ -47,6 +47,23 @@ flowchart LR
     V1 --> S2[Screen: Lesson · Select — correct]
 ```
 
+### Type scale
+
+The design board is 540 units wide; a 6–6.1″ phone is about 393 pt wide, so 1 pt ≈ 1.37 design units.
+Text sizes follow Apple HIG / Material minimums converted to design units:
+
+| Role | Design units | ≈ pt on a 6″ phone |
+|---|---|---|
+| Caption, badge (smallest allowed) | 18 | 13 |
+| Secondary text, labels | 20–21 | 15 |
+| Phonetics, list rows | 22–23 | 16–17 |
+| Body | 24 | 17.5 |
+| Buttons, card titles | 26–28 | 19–20 |
+| Screen titles | 30–38 | 22–28 |
+| Large Thai words | 40–58 | 29–42 |
+
+Don't use text smaller than 18 units. The lobby (section headers, lesson nodes, tab labels) is larger on purpose.
+
 ### Mapping Penpot → uGUI
 
 | Penpot | Unity |

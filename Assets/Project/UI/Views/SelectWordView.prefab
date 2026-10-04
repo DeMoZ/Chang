@@ -287,6 +287,17 @@ MonoBehaviour:
   _mixWordContent: {fileID: 1065796708128658736}
   _toggleGroup: {fileID: 7606631793396336834}
   _playStopBtn: {fileID: 0}
+--- !u!114 &4082724662887199136 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8640674095235526018, guid: b65f1b8a76cd9405b8133db661b0e652, type: 3}
+  m_PrefabInstance: {fileID: 5710871349710347298}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &4689495058573285812 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1032865644401722774, guid: b65f1b8a76cd9405b8133db661b0e652, type: 3}
@@ -310,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chang.ChangText
   _word: {fileID: 6241534749798237263}
-  _phonetic: {fileID: 0}
+  _phonetic: {fileID: 4082724662887199136}
 --- !u!114 &6241534749798237263 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1864338465941608557, guid: b65f1b8a76cd9405b8133db661b0e652, type: 3}

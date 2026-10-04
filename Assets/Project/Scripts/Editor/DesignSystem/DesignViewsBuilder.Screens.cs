@@ -348,7 +348,7 @@ namespace Chang.Editor.DesignSystem
             {
                 var prompt = Q(content, "Prompt");
                 var questionWord = GetOrAdd<ChangText>(prompt);
-                Set(questionWord, ("_word", Q<TMP_Text>(prompt.gameObject, "Title")), ("_phonetic", null));
+                Set(questionWord, ("_word", Q<TMP_Text>(prompt.gameObject, "Title")), ("_phonetic", Q<TMP_Text>(prompt.gameObject, "Phonetics")));
 
                 var options = Q(content, "Options");
                 HideAll(options.Cast<Transform>());
