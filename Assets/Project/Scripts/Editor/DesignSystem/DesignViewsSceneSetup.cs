@@ -67,6 +67,7 @@ namespace Chang.Editor.DesignSystem
             so.FindProperty("bookSentencesScreen").objectReferenceValue = main.GetComponentInChildren<BookSentencesView>(true);
             so.FindProperty("repetitionScreen").objectReferenceValue = main.GetComponentInChildren<RepetitionView>(true);
             so.FindProperty("profileScreen").objectReferenceValue = main.GetComponentInChildren<ProfileView>(true);
+            so.FindProperty("mascotEditorScreen").objectReferenceValue = main.GetComponentInChildren<MascotEditorView>(true);
 
             // Lesson overlay.
             var overlayCanvas = Root("OverlayUI");

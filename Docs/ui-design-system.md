@@ -136,7 +136,20 @@ Penpot draws element states as component variants. `DesignStates` switches an el
 | Feedback sheet (`GameOverlay`) | FeedbackSheet Correct, Wrong | `PagesContinueView` |
 | Result row (`Items/ResultRow`) | ResultRow Up, Down | `ResultItem` |
 
-Groups without variants (Repeat mode segments, politeness options) use `DesignSelection`: it takes the look of the item drawn as selected and of an item drawn as normal and paints the selection.
+Groups without variants (Repeat mode segments, politeness options, mascot editor tabs and tiles) use `DesignSelection`: it takes the look of the item drawn as selected and of an item drawn as normal and paints the selection.
+Helper layers (`#bg`, `#stroke`…) are matched by name and content layers by order, and a layer the look doesn't have is hidden — so the selected tab loses its outline and only the selected tile shows the check mark.
+
+### Mascot
+
+The mascot is drawn at runtime, not from the imported SVG sprites, because the player combines 9 parts × 20 options (`Scripts/Game/Mascot`):
+
+- `MascotLook` (in `ProfileData`) is an option index per part (`MascotPart`: head colour, ears, eyes, tusks, tusk colour, forehead mark, blush, blush colour, hat).
+- `MascotCatalog` holds the option names and colors; `MascotSvg` is a C# port of the generator the Penpot page "Redesign · Mascot" was drawn with, so the game draws exactly the design's options.
+- `MascotRenderer` turns the SVG into a texture with Unity's built-in vector graphics module (tessellation → antialiased render texture → `Texture2D`, ~10–20 ms per picture). `MascotImage` shows it on a `RawImage` at the pixel size of its rect and renders again only when the look or the size changes, at most 3 pictures per frame.
+
+To change the options, change the generator in Penpot and `MascotSvg`/`MascotCatalog` together.
+
+**Mascot editor** (`MascotEditorController` / `MascotEditorView`) is built from the screen "Profile · Mascot — Hat" (the other tab screens only show other grids) and lives in `MainUI` over the tabs. The profile opens it with the pencil on the avatar or the "My mascot" row. Tabs switch the part (the row swipes sideways, `HorizontalDragScroll`), the grid shows 20 options of the part (color parts as swatches), the preview follows every change, Random rolls a full combination. Save writes the look to the profile (`ProfileService.SaveProfileDataAsync`), Back drops the changes. The profile header shows the saved mascot.
 
 ### Screen size
 
@@ -146,7 +159,8 @@ The new canvases are 540×1080 design units in *Expand* mode: the whole design a
 
 The design shows these, the game has no data or logic for them yet (step 3). They are hidden or left static in the views:
 
-- Section progress bar and Thai section title, streak chip, daily goal, mascot editor, "phrase of the day".
+- Section progress bar and Thai section title, streak chip, daily goal, "phrase of the day".
+- Mascot name (the "Chang" chip in the mascot editor is static, its pencil is hidden). Texts of the mascot editor are English · Thai from the design, without localization keys.
 - Lesson progress in the top bar, totals on the result screen, counters of the repetition screen, "next batch in" time.
 - Slow sound, word detail sheet, dialogues, alphabet.
 - New design texts have no localization keys yet ("Review now", "Check", "Continue", "Match the pairs", row labels…). Existing keys are used where they fit (tabs, repeat modes, log out).

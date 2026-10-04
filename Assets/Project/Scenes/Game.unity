@@ -1337,6 +1337,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &744222089 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1400767860294407445, guid: f6d38cc0021794da58cc25697151789e, type: 3}
+  m_PrefabInstance: {fileID: 965122997}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fa3530310d644bcb81b5a2ca2f2ad90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.MascotEditorView
 --- !u!1 &792353253
 GameObject:
   m_ObjectHideFlags: 0
@@ -2125,6 +2136,7 @@ MonoBehaviour:
   mainUiScreen: {fileID: 965122998}
   repetitionScreen: {fileID: 965123000}
   profileScreen: {fileID: 965122999}
+  mascotEditorScreen: {fileID: 744222089}
   bookVocabularyScreen: {fileID: 965123002}
   bookSentencesScreen: {fileID: 965123001}
   gameOverlayScreen: {fileID: 524042477}

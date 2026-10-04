@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using Chang.Profile;
 using Chang.Services;
 using Cysharp.Threading.Tasks;
 using Popup;
@@ -16,6 +17,7 @@ namespace Chang
         private readonly PopupManager _popupManager;
         private readonly LocalizationService _localizationService;
         private readonly LanguagesConfig _languagesConfig;
+        private readonly MascotEditorController _mascotEditorController;
 
         private PopupController<ChangeNamePopupModel> _changeNameController;
         private PopupController<ChangeGenderPopupModel> _changeGenderController;
@@ -30,7 +32,8 @@ namespace Chang
             ProfileService profileService,
             PopupManager popupManager,
             LocalizationService localizationService,
-            LanguagesConfig languagesConfig)
+            LanguagesConfig languagesConfig,
+            MascotEditorController mascotEditorController)
         {
             _mainScreenBus = mainScreenBus;
             _view = view;
@@ -38,6 +41,7 @@ namespace Chang
             _popupManager = popupManager;
             _localizationService = localizationService;
             _languagesConfig = languagesConfig;
+            _mascotEditorController = mascotEditorController;
         }
 
         public void Dispose()
@@ -69,7 +73,13 @@ namespace Chang
 
         public void Init()
         {
-            _view.Init(_mainScreenBus.OnLogOutClicked, OnChangeNameClicked, OnChangeGenderClicked, OnChangeLanguageClicked);
+            _view.Init(_mainScreenBus.OnLogOutClicked, OnChangeNameClicked, OnChangeGenderClicked, OnChangeLanguageClicked,
+                OnEditMascotClicked);
+        }
+
+        private void OnEditMascotClicked()
+        {
+            _mascotEditorController.Open(UpdateScreen);
         }
 
         private void OnChangeNameClicked()
@@ -232,6 +242,7 @@ namespace Chang
             _view.SetUserName(_profileService.ProfileData.Name);
             _view.SetGender(_profileService.ProfileData.Gender);
             _view.SetLanguage(_languagesConfig.GetDisplayName(_profileService.ProfileData.NativeLanguage));
+            _view.SetMascot(_profileService.ProfileData.Mascot ?? new MascotLook());
         }
 
         public async UniTask SetAsync(CancellationToken ct)

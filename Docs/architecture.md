@@ -112,6 +112,7 @@ How questions are queued and how marks change is described in [learning-logic.md
 | Word / sentence book | `VocabularyController` / `BookVocabularyView`, `SentencesController` / `BookSentencesView` |
 | Repetition | `RepetitionController` / `RepetitionView` |
 | Profile | `ProfileController` / `ProfileView` |
+| Mascot editor (over the profile) | `MascotEditorController` / `MascotEditorView` |
 | Lesson overlay (Check, Continue, Hint, Return) | `GameOverlayController` / `GameOverlayView` |
 | Lesson pages | `*Controller` / `*View` in `Scripts/Game/Pages/*` |
 | Loading | `LoadingUiController` / `LoadingUiView` (through `PopupManager.ShowLoadingUi`) |

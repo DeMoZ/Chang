@@ -40,7 +40,14 @@ namespace Chang.Profile
         [JsonConverter(typeof(StringEnumConverter))]
         [field: SerializeField]
         public GenderType Gender { get; set; } = GenderType.No;
-        
+
+        /// <summary>
+        /// The player's mascot (profile → mascot editor)
+        /// </summary>
+        [JsonProperty]
+        [field: SerializeField]
+        public MascotLook Mascot { get; set; } = new();
+
         [field: SerializeField]
         public Languages LearnLanguage { get; set; } = Languages.Thai;
         public Languages NativeLanguage { get; set; } = Languages.English;

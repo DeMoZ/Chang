@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using Chang.Mascot;
 using Chang.GameBook;
 using Chang.Sentences;
 using Chang.UI;
@@ -22,6 +24,7 @@ namespace Chang.Editor.DesignSystem
             var sentences = BuildBook<BookSentencesView>("Sentences - Book", "BookSentencesView", items, "Lobby.Tab.Sentences", "Content|Preview");
             var repetition = BuildRepetition(items);
             var profile = BuildProfile();
+            var mascotEditor = BuildMascotEditor();
 
             BuildPrefab($"{ViewsRoot}/MainUI.prefab", root =>
             {
@@ -36,6 +39,12 @@ namespace Chang.Editor.DesignSystem
 
                 var tabBar = Instance(Component("TabBar/Words"), content, "TabBar");
                 AnchorBottom(tabBar, DesignSize(Component("TabBar/Words")).y, 0f);
+
+                // Full screen over the tabs and the tab bar, opened from the profile.
+                var editor = Instance(mascotEditor, content, mascotEditor.name);
+                Stretch(editor);
+                editor.SetAsLastSibling();
+                Hide(editor);
                 var group = GetOrAdd<ToggleGroup>(tabBar);
                 group.allowSwitchOff = false;
                 var states = States(tabBar.gameObject, "TabBar", new[] { "Words", "Sentences", "Repeat", "Profile" }, "Words");
@@ -204,13 +213,16 @@ namespace Chang.Editor.DesignSystem
             {
                 var content = (RectTransform)Q(root, "Content");
                 Hide(root, "Chang DS / TabBar / Profile");
-                // No data for streak, daily goal and the mascot editor yet.
+                // No data for streak and daily goal yet.
                 Hide(root, "Content|Cards");
-                Hide(root, "Content|Hero|Avatar|EditMascot");
+                var editMascot = Q(root, "Content|Hero|Avatar|EditMascot");
+                editMascot.gameObject.SetActive(true);
+                var avatar = MascotPicture(Q(root, "Content|Hero|Avatar|Circle|Mascot / Chang"), MascotFraming.Face);
                 var rows = Q(root, "Content|Rows");
                 var nameRows = Children(rows, "Chang DS / ProfileRow / Name").ToList();
                 // The first "Name" row of the design is "My mascot", the second one is the name.
-                Hide(nameRows[0]);
+                var mascotRow = nameRows[0];
+                mascotRow.gameObject.SetActive(true);
                 var nameRow = nameRows[1];
                 var languageRow = Q(rows, "Chang DS / ProfileRow / Language");
                 Scroll(root, content, TabBarClearance);
@@ -237,8 +249,102 @@ namespace Chang.Editor.DesignSystem
                     ("changeGenderBtn", ButtonOn(card)),
                     ("languageText", Q<TMP_Text>(languageRow.gameObject, "Value")),
                     ("changeLanguageBtn", ButtonOn(languageRow)),
-                    ("genderSelection", selection));
+                    ("genderSelection", selection),
+                    ("mascotImage", avatar),
+                    ("editMascotBtns", Objects(new[] { ButtonOn(editMascot), ButtonOn(mascotRow) })));
             });
+        }
+
+        /// <summary>The mascot editor, built from the design screen of its Hat tab (every tab looks the same, only the grid differs).</summary>
+        private static GameObject BuildMascotEditor()
+        {
+            return BuildVariant(Screen("Profile - Mascot - Hat"), $"{ViewsRoot}/MascotEditorView.prefab", root =>
+            {
+                foreach (var part in new[] { "Top", "Preview", "Tabs", "Caption", "Grid" })
+                {
+                    RemoveStatusBarOffset((RectTransform)Q(root, part));
+                }
+
+                // The mascot name is not editable yet.
+                Hide(root, "Preview|Name|icon / edit");
+                var preview = MascotPicture(Q(root, "Preview|Mascot"), MascotFraming.Full);
+
+                // Tabs in the order of MascotPart; the design draws the Hat tab selected.
+                var tabs = Q(root, "Tabs");
+                var tabItems = new[] { "head", "ears", "eyes", "tusks", "tuskColor", "mark", "blush", "blushColor", "hat" }
+                    .Select(n => (RectTransform)Q(tabs, $"Tab / {n}"))
+                    .ToList();
+                var stroke = Q(tabItems[0], PenpotUiBuilder.StrokeName);
+                foreach (var tab in tabItems)
+                {
+                    // The selected tab is drawn without the outline, it needs one when it is not selected.
+                    if (tab.Find(PenpotUiBuilder.StrokeName) == null)
+                    {
+                        var copy = Object.Instantiate(stroke.gameObject, tab, false);
+                        copy.name = PenpotUiBuilder.StrokeName;
+                        copy.transform.SetSiblingIndex(stroke.GetSiblingIndex());
+                        copy.SetActive(false);
+                    }
+
+                    ButtonOn(tab);
+                }
+
+                var partSelection = GetOrAdd<DesignSelection>(tabs);
+                Set(partSelection, ("_items", Objects(tabItems)), ("_designSelectedIndex", tabItems.Count - 1), ("_designNormalIndex", 0));
+                var partsScroll = GetOrAdd<HorizontalDragScroll>(tabs);
+
+                // Option tiles; the design draws the second one selected, only it has the check mark.
+                var grid = Q(root, "Grid");
+                var options = Children(grid, "Option ").OrderBy(t => int.Parse(t.name.Substring("Option ".Length))).Cast<RectTransform>().ToList();
+                var check = Q(options[1], "Check");
+                var images = new List<MascotImage>();
+                foreach (var option in options)
+                {
+                    ButtonOn(option);
+                    if (option.Find("Check") == null)
+                    {
+                        // Hidden like on the tile drawn as normal; DesignSelection shows it on the selected tile.
+                        var copy = Object.Instantiate(check.gameObject, option, false);
+                        copy.name = "Check";
+                        copy.SetActive(false);
+                    }
+
+                    images.Add(MascotPicture(Q(option, "Mascot"), MascotFraming.Face));
+                }
+
+                var optionSelection = GetOrAdd<DesignSelection>(grid);
+                Set(optionSelection, ("_items", Objects(options)), ("_designSelectedIndex", 1), ("_designNormalIndex", 0));
+
+                // Taps must not reach the profile under the editor.
+                Q<Graphic>(root, PenpotUiBuilder.BackgroundName).raycastTarget = true;
+
+                var view = GetOrAdd<MascotEditorView>(root);
+                Set(view,
+                    ("backBtn", Q<Button>(root, "Top|Chang DS / IconButton / Back")),
+                    ("randomBtn", ButtonOn(Q(root, "Top|Random"))),
+                    ("saveBtn", Q<Button>(root, "Chang DS / Button / Primary")),
+                    ("preview", preview),
+                    ("partSelection", partSelection),
+                    ("partsScroll", partsScroll),
+                    ("partText", Q<TMP_Text>(root, "Caption|Hat · หมวก")),
+                    ("optionText", Q<TMP_Text>(root, "Caption|2 / 20 · Ngob · Thailand")),
+                    ("optionSelection", optionSelection),
+                    ("optionImages", Objects(images)));
+            });
+        }
+
+        /// <summary>A runtime-rendered mascot in place of the design's mascot picture (the frame keeps its size, its SVG sprite is hidden).</summary>
+        private static MascotImage MascotPicture(Transform frame, MascotFraming framing)
+        {
+            Hide(Q(frame, PenpotUiBuilder.ImageName));
+            var rt = Child(frame, "MascotImage");
+            Stretch(rt);
+            GetOrAdd<LayoutElement>(rt).ignoreLayout = true;
+            var image = GetOrAdd<RawImage>(rt);
+            image.raycastTarget = false;
+            var mascot = GetOrAdd<MascotImage>(rt);
+            Set(mascot, ("framing", (int)framing));
+            return mascot;
         }
 
         // ---- lesson ---------------------------------------------------------------------------------------

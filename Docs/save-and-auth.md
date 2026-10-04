@@ -3,7 +3,7 @@
 ## Player data (`Scripts/Profile/`)
 
 - `PlayerProfile`:
-  - `ProfileData`: `Name`, `Gender`, `LearnLanguage` (Thai by default), `NativeLanguage`, `UnityCloudSavePlayerId`, `UtcTime`;
+  - `ProfileData`: `Name`, `Gender`, `Mascot` (`MascotLook`: an option index per mascot part, see [ui-design-system.md](ui-design-system.md#mascot)), `LearnLanguage` (Thai by default), `NativeLanguage`, `UnityCloudSavePlayerId`, `UtcTime`;
   - per language, `ProgressData<VocabularyQuestLog>` and `ProgressData<SentenceQuestLog>`, with a log per word or sentence key (see [learning-logic.md](learning-logic.md#mark)).
 
 ## Storage (`Scripts/Services/SaveLoad/`)

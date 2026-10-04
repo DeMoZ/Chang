@@ -1,4 +1,6 @@
 using System;
+using Chang.Mascot;
+using Chang.Profile;
 using Chang.UI;
 using Chang.UI.DesignSystem;
 using TMPro;
@@ -24,18 +26,27 @@ namespace Chang
 
         [Tooltip("Politeness options in order: Male, Female")]
         [SerializeField] private DesignSelection genderSelection;
+
+        [Tooltip("The player's mascot in the profile header")]
+        [SerializeField] private MascotImage mascotImage;
+
+        [Tooltip("Buttons that open the mascot editor (the pencil on the avatar, the \"My mascot\" row)")]
+        [SerializeField] private Button[] editMascotBtns = Array.Empty<Button>();
         
         private Action _onLogOutClick;
         private Action _onChangeNameClick;
         private Action _onChangeGenderClick;
         private Action _onChangeLanguageClick;
+        private Action _onEditMascotClick;
 
-        public void Init(Action onLogOutClick, Action onChangeNameClick, Action onChangeGenderClick, Action onChangeLanguageClick)
+        public void Init(Action onLogOutClick, Action onChangeNameClick, Action onChangeGenderClick, Action onChangeLanguageClick,
+            Action onEditMascotClick)
         {
             _onLogOutClick = onLogOutClick;
             _onChangeNameClick = onChangeNameClick;
             _onChangeGenderClick = onChangeGenderClick;
             _onChangeLanguageClick = onChangeLanguageClick;
+            _onEditMascotClick = onEditMascotClick;
         }
         
         public void SetUserName(string userName)
@@ -77,6 +88,14 @@ namespace Chang
             }
         }
 
+        public void SetMascot(MascotLook look)
+        {
+            if (mascotImage != null)
+            {
+                mascotImage.Show(look);
+            }
+        }
+
         public void SetUserId(string userId)
         {
             if (userIdText != null)
@@ -91,6 +110,10 @@ namespace Chang
             changeNameBtn.onClick.AddListener(OnChangeNameClick);
             changeGenderBtn.onClick.AddListener(OnChangeGenderClick);
             changeLanguageBtn.onClick.AddListener(OnChangeLanguageClick);
+            foreach (var button in editMascotBtns)
+            {
+                button.onClick.AddListener(OnEditMascotClick);
+            }
         }
 
         private void OnDisable()
@@ -99,6 +122,10 @@ namespace Chang
             changeNameBtn.onClick.RemoveListener(OnChangeNameClick);
             changeGenderBtn.onClick.RemoveListener(OnChangeGenderClick);
             changeLanguageBtn.onClick.RemoveListener(OnChangeLanguageClick);
+            foreach (var button in editMascotBtns)
+            {
+                button.onClick.RemoveListener(OnEditMascotClick);
+            }
         }
 
         private void OnLogOutClick()
@@ -119,6 +146,11 @@ namespace Chang
         private void OnChangeLanguageClick()
         {
             _onChangeLanguageClick?.Invoke();
+        }
+
+        private void OnEditMascotClick()
+        {
+            _onEditMascotClick?.Invoke();
         }
     }
 }
