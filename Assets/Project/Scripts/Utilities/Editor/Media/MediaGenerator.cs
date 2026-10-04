@@ -47,12 +47,13 @@ namespace Chang.Utilities.Media
             public string Path;
         }
 
-        public static void GenerateAllMissing(MediaPromptsConfig config)
+        /// <param name="confirm">false runs without the confirmation dialog, e.g. from a script</param>
+        public static void GenerateAllMissing(MediaPromptsConfig config, bool confirm = true)
         {
             List<MediaPromptItem> images = config.Items.Where(item => !HasImage(item)).ToList();
             List<SoundJob> sounds = config.Items.SelectMany(item => GetSoundJobs(config, item)).Where(job => !File.Exists(job.Path)).ToList();
 
-            if (!EditorUtility.DisplayDialog(Title,
+            if (confirm && !EditorUtility.DisplayDialog(Title,
                     $"Pictures to draw: {images.Count}\nSounds to voice: {sounds.Count}", "Generate", "Cancel"))
             {
                 return;
