@@ -1,7 +1,9 @@
 """Regenerate every svg/<Category>/<Key>.svg by running all generator scripts.
 
 Each generator writes its own set of keys (no overlaps), so the order does not matter.
+gen/auto/<Category>/<Key>.py are one-picture generators made from the Unity prompts config.
 """
+import glob
 import os
 import subprocess
 import sys
@@ -26,8 +28,10 @@ GENERATORS = [
     "gen/places_run.py",  # Places (optionally: keys as args)
 ]
 
+AUTO_GENERATORS = sorted(os.path.relpath(p, ROOT) for p in glob.glob(os.path.join(ROOT, "gen", "auto", "*", "*.py")))
+
 if __name__ == "__main__":
-    for script in GENERATORS:
+    for script in GENERATORS + AUTO_GENERATORS:
         path = os.path.join(ROOT, script)
         print(script)
         subprocess.run([sys.executable, os.path.basename(path)], cwd=os.path.dirname(path), check=True,

@@ -4,10 +4,10 @@ namespace Chang.Resources
 {
     public class WordPathHelper
     {
-        public string GetSoundPath(string key)
+        public string GetSoundPath(string key, SoundVoices voice = SoundVoices.Female)
         {
-            // key = Thai/Words/Fruits/Coconut
-            // result Assets/Project/Resources_Bundled/SoundWords/Thai/Fruits/Coconut.mp3
+            // key = Thai/Vocabulary/Fruits/Coconut
+            // result Assets/Project/Resources_Bundled/SoundWords/Thai/Female/Fruits/Coconut.mp3
             
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -15,6 +15,10 @@ namespace Chang.Resources
             }
             
             key =  key.Replace("Vocabulary/", "");
+
+            // the voice folder goes after the language
+            int languageEnd = key.IndexOf('/');
+            key = languageEnd < 0 ? $"{voice}/{key}" : key.Insert(languageEnd + 1, $"{voice}/");
             
             string path = Path.Combine(
                 AssetPaths.Addressables.Root,

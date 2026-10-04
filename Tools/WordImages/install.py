@@ -1,5 +1,7 @@
 """Copy rendered PNGs from png/<Category>/ into the Unity project, create .meta files
-for new files/folders and register new category folders in the Addressables image group."""
+for new files/folders and register new category folders in the Addressables image group.
+
+An argument is a category (all its rendered pictures) or Category/Key (one picture)."""
 import os
 import re
 import shutil
@@ -40,11 +42,12 @@ def sprite_meta_template():
     return text
 
 
-def main(categories):
+def main(targets):
     template = sprite_meta_template()
     group = open(GROUP).read()
     added_files = replaced_files = 0
-    for category in categories:
+    for target in targets:
+        category, _, key = target.partition("/")
         src = os.path.join(ROOT, "png", category)
         dst = os.path.join(IMAGES, category)
         if not os.path.isdir(dst):
@@ -57,7 +60,7 @@ def main(categories):
         if folder_guid not in group:
             group = group.replace("  m_ReadOnly: 0\n  m_Settings:",
                                   GROUP_ENTRY.format(guid=folder_guid, category=category) + "  m_ReadOnly: 0\n  m_Settings:", 1)
-        for name in sorted(os.listdir(src)):
+        for name in [key + ".png"] if key else sorted(os.listdir(src)):
             if not name.endswith(".png") or name == "_contact.png":
                 continue
             target = os.path.join(dst, name)

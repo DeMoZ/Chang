@@ -36,7 +36,7 @@ Useful in the Editor:
 
 - **Space** in Play Mode restarts the game through the Reboot scene (`EditorRestartTrigger`), unless an input field has focus.
 - `Assets/Project/EditorCheckSaveLoad.asset` shows the current player data from PlayerPrefs. It refreshes after every save.
-- **Chang/Content/Addressables/Addressables Resources Window** clears the downloaded bundle cache.
+- **Chang/Content/Addressables/Addressables Resources** selects the config with buttons that clear the downloaded bundle cache.
 
 `UITest.unity` is a sandbox for UI and popups (`PopupTester`). It is not part of the build.
 

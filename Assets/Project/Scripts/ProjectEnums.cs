@@ -54,6 +54,15 @@ namespace Chang
         Vietnamese,
     }
 
+    /// <summary>
+    /// Voice of the word sounds, the name is the folder in SoundWords/{Language}/{Voice}/
+    /// </summary>
+    public enum SoundVoices
+    {
+        Female,
+        Male,
+    }
+
     public enum MainTabType
     {
         None,

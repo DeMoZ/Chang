@@ -137,10 +137,7 @@ namespace Chang.Utilities
         }
 
         private const string ApiFileName = "api_textToSpeech.json";
-        private const string LanguageCode = "th-TH";
-        private const string VoiceName = "th-TH-Chirp3-HD-Aoede";
 
-        private SsmlVoiceGender _ssmlVoiceGender = SsmlVoiceGender.Female;
         private bool _isInitialized;
         private IpiData _apiData;
 
@@ -183,7 +180,7 @@ namespace Chang.Utilities
             return true;
         }
 
-        public async UniTask<AudioContent> GetAudioAsync(string text)
+        public async UniTask<AudioContent> GetAudioAsync(string text, string languageCode, string voiceName)
         {
             var isInitialized = await CheckInit();
 
@@ -199,7 +196,7 @@ namespace Chang.Utilities
                 return null;
             }
 
-            var jsonBody = CreateJsonBody(text);
+            var jsonBody = CreateJsonBody(text, languageCode, voiceName);
 
             using UnityWebRequest request = new UnityWebRequest($"{_apiData.Url}?key={_apiData.ApiKey}", "POST");
 
@@ -208,7 +205,7 @@ namespace Chang.Utilities
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
 
-            Debug.Log($"Send request for text: {text}");
+            Debug.Log($"Send request for text: {text}; voice: {voiceName}");
             try
             {
                 await request.SendWebRequest();
@@ -236,16 +233,15 @@ namespace Chang.Utilities
                           "\"audioConfig\":{\"audioEncoding\":\"MP3\"}}";
 
      */
-        private string CreateJsonBody(string text)
+        private string CreateJsonBody(string text, string languageCode, string voiceName)
         {
             var request = new SpeechRequest
             {
                 input = new SynthesisInput { text = text },
                 voice = new VoiceSelectionParams
                 {
-                    languageCode = LanguageCode,
-                    name = VoiceName,
-                    ssmlGender = _ssmlVoiceGender.ToString()
+                    languageCode = languageCode,
+                    name = voiceName
                 },
                 audioConfig = new AudioConfig
                 {

@@ -4,7 +4,8 @@
 flowchart LR
     GS[Google Sheets<br/>ThaiVocabularyAndSentences] -->|Chang/Utilities/Sheets To Configs| SO[ScriptableObject configs<br/>Resources_Bundled/BookConfigs/Thai]
     PY[Tools/WordImages<br/>Python → SVG → PNG] -->|install.py| IMG[Resources_Bundled/ImageWords]
-    TTS[Google Cloud TTS] -->|Chang/Utilities/Word Sounds| SND[Resources_Bundled/SoundWords]
+    MP[Media Prompts config] -->|Claude Code CLI| PY
+    TTS[Google Cloud TTS] -->|Chang/Utilities/Media Prompts| SND[Resources_Bundled/SoundWords]
     SO --> AA[Addressables groups]
     IMG --> AA
     SND --> AA
@@ -52,21 +53,34 @@ Keys are path-like: `{Language}/{Type}/{Section}/{Key}`.
 > **Rule.** The last part of a key may contain only Latin letters, digits and spaces. Brackets, commas, apostrophes, question marks, slashes, hyphens and any other punctuation become `_`.
 > Otherwise those characters end up in file names and Addressables addresses.
 
-## Word images
+## Word images and sounds: Media Prompts config
+
+**Chang/Utilities/Media Prompts** selects `Assets/Project/Configs/MediaPrompts.asset`. It holds a picture prompt for every word and generates the missing pictures and sounds.
+
+- **Sync With Vocabulary** adds the new words of the `Vocabulary` configs, removes the deleted ones and updates the learn words and translations. Prompts are kept.
+- **Generate All Missing** draws every missing picture and voices every missing sound. **Log Missing** only lists them.
+- Each word has its own **Image** and **Sound** buttons. **Sound** replaces the existing files.
+- **Languages** (foldout) selects the sound languages and their Google TTS voices. The book language (Thai) is voiced with the learn word, the other languages with the word translation from the localization CSV. **Female voice** / **Male voice** select the voices.
+- **Settings**: paths to the Claude Code CLI, Python and ffmpeg (empty = found automatically), the Claude model, extra picture instructions.
+
+### Word images
 
 - Path: `Assets/Project/Resources_Bundled/ImageWords/Thai/<Section>/<Key>.png`.
-- Generators: `Tools/WordImages` (Python). The style is described in `Tools/WordImages/STYLE.md`.
-  1. `generate.py` generates SVGs;
-  2. `render.py` renders PNGs and a contact sheet (needs `cairosvg`, `Pillow` and brew `cairo`);
-  3. `install.py` copies the PNGs into the project, keeps the GUIDs in existing `.meta` files and registers new folders in the `Remote_Thai_Image_Words` group.
+- Sources: `Tools/WordImages` (Python → SVG → PNG). The style is described in `Tools/WordImages/STYLE.md`. A prompt in the config describes what its picture shows.
+- **Image** for a word without an SVG (or **Draw again**) runs the Claude Code CLI (`claude -p`) in `Tools/WordImages` with the prompt. Claude writes the generator `gen/auto/<Section>/<Key>.py` and renders it. Then `render.py <Section>/<Key>` and `install.py <Section>/<Key>` put the PNG into the project.
+- A word that already has an SVG is only rendered and installed.
+- Setup once: `Tools/WordImages/README.md` (Python venv with cairosvg, brew `cairo`), and the Claude Code CLI signed in.
 
-## Word sounds
+### Word sounds
 
-- Path: `Assets/Project/Resources_Bundled/SoundWords/Thai/<Section>/<Key>.mp3`.
-- Generation: **Chang/Utilities/Word Sounds/Generate Missing Sounds** uses Google Cloud TTS with the `th-TH-Chirp3-HD-Aoede` voice. It only generates sounds for words that don't have one yet. **Log Missing Sounds** only lists those words.
+- Path: `Assets/Project/Resources_Bundled/SoundWords/<Language>/<Voice>/<Section>/<Key>.mp3`, `<Voice>` is `Female` or `Male` (`SoundVoices`).
+- Learn-language sounds use the word's `SoundKey` (`Thai/...`). A translation sound uses `WordPathHelper.GetNativeSoundKey`, i.e. `SoundWords/English/Female/<Section>/<Key>.mp3`.
+- `WordPathHelper.GetSoundPath(key, voice)` builds the path, the default voice is `Female`.
+- Generation: Google Cloud TTS (the key is in `ChangExternal`), voices: Chirp3-HD Aoede (female) and Charon (male) by default. The Google Cloud project must have billing enabled.
+- New sound folders are added to `Remote_<Language>_Sound_Words` Addressables groups (created from `Remote_Thai_Sound_Words`).
 
 > **Rule.** Word sounds must have no silence at the start or end: sentence audio is assembled from individual words.
-> Format: mp3, 24 kHz, mono, 32 kbps. ffmpeg filter for trimming silence:
+> The generator trims it with ffmpeg: mp3, 24 kHz, mono, 32 kbps, filter
 > `silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.02:detection=rms:window=0.02,areverse,` (repeat), then `areverse`.
 > The old Google recordings have a noise floor around −50 dB, so a −50 dB threshold won't trim them.
 
@@ -78,20 +92,19 @@ Content is downloaded from **Unity Cloud Content Delivery**: environment `dev`, 
 |---|---|---|---|
 | `Remote_Thai_Book` | the 4 book configs | together | `Base` (downloaded at startup) |
 | `Remote_Thai_Image_Words` | `ImageWords/Thai/*` folders | by label | — |
-| `Remote_Thai_Sound_Words` | `SoundWords/Thai/*` folders | separately | — |
+| `Remote_Thai_Sound_Words` | `SoundWords/Thai/<Voice>/*` folders | separately | — |
 
-- An asset's address is its full path. `WordPathHelper` builds the image and sound paths from a word key by removing `Vocabulary/`, giving e.g. `SoundWords/Thai/<Section>/<Key>.mp3`.
+- An asset's address is its full path. `WordPathHelper` builds the image and sound paths from a word key by removing `Vocabulary/`, giving e.g. `SoundWords/Thai/Female/<Section>/<Key>.mp3`.
 - The `Base` label is downloaded in the Reboot scene.
 - `PagesContentProvider` downloads the lesson's images and sounds before the lesson starts and shows the progress in bytes.
 - Built bundles are kept in the `CCDBuildData` submodule (`DeMoZ/ChangBundlesBuilds`).
-- In the Editor, **Chang/Content/Addressables/Addressables Resources Window** clears the bundle and catalog cache.
+- In the Editor, **Chang/Content/Addressables/Addressables Resources** selects the config with buttons that clear the bundle and catalog cache.
 
 ## Editor menus
 
 | Menu | Purpose |
 |---|---|
 | Chang/Utilities/Sheets To Configs | Import content from Google Sheets |
-| Chang/Utilities/Word Sounds/Log Missing Sounds | List words without a sound |
-| Chang/Utilities/Word Sounds/Generate Missing Sounds | Generate the missing sounds |
+| Chang/Utilities/Media Prompts | Word picture prompts, generate missing pictures and sounds |
 | Chang/Utilities/Localization/Create Sheet View | Create a localization CSV viewer asset |
-| Chang/Content/Addressables/Addressables Resources Window | Cache, catalogs, empty label check |
+| Chang/Content/Addressables/Addressables Resources | Cache, catalogs, empty label check |
