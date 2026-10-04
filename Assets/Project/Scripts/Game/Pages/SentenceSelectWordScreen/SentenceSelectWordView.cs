@@ -42,13 +42,19 @@ namespace Chang.UI
             UpdateMixSequence(mixWords);
 
             SetSoundPlaying(false);
-            _playStopBtn.OnClick -= OnClickPlaySound;
-            _playStopBtn.OnClick += OnClickPlaySound;
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.OnClick -= OnClickPlaySound;
+                _playStopBtn.OnClick += OnClickPlaySound;
+            }
         }
 
         public void SetSoundPlaying(bool isPlaying)
         {
-            _playStopBtn.SetPlay(!isPlaying);
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.SetPlay(!isPlaying);
+            }
         }
 
         private void OnClickPlaySound()
@@ -58,7 +64,10 @@ namespace Chang.UI
 
         private void OnDisable()
         {
-            _playStopBtn.OnClick -= OnClickPlaySound;
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.OnClick -= OnClickPlaySound;
+            }
         }
 
         private void Clear(Transform parent)

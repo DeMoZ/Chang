@@ -1,5 +1,6 @@
 using System;
 using Chang.UI;
+using Chang.UI.DesignSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,13 @@ namespace Chang
         [SerializeField] private Button changeGenderBtn;
         [SerializeField] private TMP_Text languageText;
         [SerializeField] private Button changeLanguageBtn;
+
+        [Header("Design (optional)")]
+        [Tooltip("Second place where the name is shown (the profile header)")]
+        [SerializeField] private TMP_Text userNameTitle;
+
+        [Tooltip("Politeness options in order: Male, Female")]
+        [SerializeField] private DesignSelection genderSelection;
         
         private Action _onLogOutClick;
         private Action _onChangeNameClick;
@@ -32,22 +40,49 @@ namespace Chang
         
         public void SetUserName(string userName)
         {
-            userNameText.text = userName;
+            if (userNameText != null)
+            {
+                userNameText.text = userName;
+            }
+
+            if (userNameTitle != null)
+            {
+                userNameTitle.text = userName;
+            }
         }
         
         public void SetGender(GenderType gender)
         {
-            genderText.GetComponent<LocalizedTMPText>().LocalizationKey = $"Lobby.Profile.Gender.{gender}";
+            if (genderText != null)
+            {
+                genderText.GetComponent<LocalizedTMPText>().LocalizationKey = $"Lobby.Profile.Gender.{gender}";
+            }
+
+            if (genderSelection != null)
+            {
+                genderSelection.Select(gender switch
+                {
+                    GenderType.Male => 0,
+                    GenderType.Female => 1,
+                    _ => -1
+                });
+            }
         }
         
         public void SetLanguage(string languageName)
         {
-            languageText.text = languageName;
+            if (languageText != null)
+            {
+                languageText.text = languageName;
+            }
         }
 
         public void SetUserId(string userId)
         {
-            userIdText.text = userId;
+            if (userIdText != null)
+            {
+                userIdText.text = userId;
+            }
         }
 
         private void OnEnable()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Chang.UI.DesignSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -21,6 +22,14 @@ namespace Chang
         [SerializeField] private Button repeatWordsBtn;
         [SerializeField] private Button repeatSentencesBtn;
         [SerializeField] private Button repeatMixedBtn;
+
+        [Header("Design (optional): a segmented mode switch + one review button instead of three buttons")]
+        [Tooltip("Items in order: Words, Sentences, Mixed")]
+        [SerializeField] private DesignSelection modeSelection;
+        [SerializeField] private Button reviewBtn;
+
+        private readonly bool[] _canRepeat = { true, true, true };
+        private int _mode = -1;
 
         private Action _onRepeatWordsClick;
         private Action _onRepeatSentencesClick;
@@ -59,23 +68,71 @@ namespace Chang
 
         public void SetInteractableRepeatButtons(bool words, bool sentences, bool mixed)
         {
-            repeatWordsBtn.interactable = words;
-            repeatSentencesBtn.interactable = sentences;
-            repeatMixedBtn.interactable = mixed;
+            if (repeatWordsBtn != null) repeatWordsBtn.interactable = words;
+            if (repeatSentencesBtn != null) repeatSentencesBtn.interactable = sentences;
+            if (repeatMixedBtn != null) repeatMixedBtn.interactable = mixed;
+
+            _canRepeat[0] = words;
+            _canRepeat[1] = sentences;
+            _canRepeat[2] = mixed;
+
+            // Keep the chosen mode while it can be repeated, otherwise switch to the first available one.
+            var mode = _mode >= 0 && _canRepeat[_mode] ? _mode : Array.IndexOf(_canRepeat, true);
+            SelectMode(mode < 0 ? 0 : mode);
+        }
+
+        private void SelectMode(int mode)
+        {
+            _mode = mode;
+            if (modeSelection != null)
+            {
+                modeSelection.Select(mode);
+            }
+
+            if (reviewBtn != null)
+            {
+                reviewBtn.interactable = _canRepeat[mode];
+            }
+        }
+
+        private void OnReviewClick()
+        {
+            switch (_mode)
+            {
+                case 0:
+                    OnRepeatWordsClick();
+                    break;
+                case 1:
+                    OnRepeatSentencesClick();
+                    break;
+                case 2:
+                    OnRepeatMixedClick();
+                    break;
+            }
         }
 
         private void OnEnable()
         {
-            repeatWordsBtn.onClick.AddListener(OnRepeatWordsClick);
-            repeatSentencesBtn.onClick.AddListener(OnRepeatSentencesClick);
-            repeatMixedBtn.onClick.AddListener(OnRepeatMixedClick);
+            if (repeatWordsBtn != null) repeatWordsBtn.onClick.AddListener(OnRepeatWordsClick);
+            if (repeatSentencesBtn != null) repeatSentencesBtn.onClick.AddListener(OnRepeatSentencesClick);
+            if (repeatMixedBtn != null) repeatMixedBtn.onClick.AddListener(OnRepeatMixedClick);
+            if (reviewBtn != null) reviewBtn.onClick.AddListener(OnReviewClick);
+            if (modeSelection != null)
+            {
+                modeSelection.Clicked += SelectMode;
+            }
         }
 
         private void OnDisable()
         {
-            repeatWordsBtn.onClick.RemoveListener(OnRepeatWordsClick);
-            repeatSentencesBtn.onClick.RemoveListener(OnRepeatSentencesClick);
-            repeatMixedBtn.onClick.RemoveListener(OnRepeatMixedClick);
+            if (repeatWordsBtn != null) repeatWordsBtn.onClick.RemoveListener(OnRepeatWordsClick);
+            if (repeatSentencesBtn != null) repeatSentencesBtn.onClick.RemoveListener(OnRepeatSentencesClick);
+            if (repeatMixedBtn != null) repeatMixedBtn.onClick.RemoveListener(OnRepeatMixedClick);
+            if (reviewBtn != null) reviewBtn.onClick.RemoveListener(OnReviewClick);
+            if (modeSelection != null)
+            {
+                modeSelection.Clicked -= SelectMode;
+            }
 
             foreach (Transform child in logContainer)
             {

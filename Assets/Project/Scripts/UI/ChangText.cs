@@ -11,7 +11,10 @@ namespace Chang
         public void Set(string word, string phonetic, Sprite sprite = null, AudioClip audioClip = null)
         {
             _word.text = word;
-            _phonetic.text = phonetic;
+            if (_phonetic != null)
+            {
+                _phonetic.text = phonetic;
+            }
 
             if (sprite != null)
             {
@@ -24,7 +27,10 @@ namespace Chang
 
         public void EnablePhonetic(bool enable)
         {
-            _phonetic.gameObject.SetActive(enable);
+            if (_phonetic != null)
+            {
+                _phonetic.gameObject.SetActive(enable);
+            }
         }
     }
 }

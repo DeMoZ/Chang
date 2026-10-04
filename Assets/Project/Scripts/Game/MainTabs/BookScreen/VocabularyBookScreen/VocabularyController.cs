@@ -102,7 +102,8 @@ namespace Chang.Vocabulary
             OnGeneralRepeatClickedAsync(_cts.Token).Forget();
         }
 
-        private Color GetLessonColor(Lesson lessonData)
+        /// <summary>Sum of the question marks ÷ (questions × max mark), 0…1.</summary>
+        private float GetLessonProgress(Lesson lessonData)
         {
             float sum = 0;
 
@@ -119,8 +120,8 @@ namespace Chang.Vocabulary
                 }
             }
 
-            // Debug.Log($"GetLessonColor for {lessonData.Section}, {lessonData.Name} sum: {sum}");
-            return _view.GetLessonColor(sum);
+            // Debug.Log($"GetLessonProgress for {lessonData.Section}, {lessonData.Name} sum: {sum}");
+            return sum;
         }
 
         private void OnSectionSortClick(string key)
@@ -183,8 +184,9 @@ namespace Chang.Vocabulary
 
                 lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
                 lessonItem.name = $"Item {key}";
-                Color color = GetLessonColor(sectionData.Lessons[m]);
-                lessonItem.SetColor(color);
+                float progress = GetLessonProgress(sectionData.Lessons[m]);
+                lessonItem.SetColor(_view.GetLessonColor(progress));
+                lessonItem.SetProgress(progress);
             }
         }
 

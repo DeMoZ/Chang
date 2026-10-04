@@ -20,6 +20,11 @@ namespace Chang.UI
             _toggle.isOn = true;
         }
 
+        public void SetIsOnWithoutNotify(bool isOn)
+        {
+            _toggle.SetIsOnWithoutNotify(isOn);
+        }
+
         public void AddListener(Action<bool> onValueChanged)
         {
             _toggle.onValueChanged.AddListener(isOn => onValueChanged?.Invoke(isOn));

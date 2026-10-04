@@ -116,7 +116,7 @@ How questions are queued and how marks change is described in [learning-logic.md
 | Lesson pages | `*Controller` / `*View` in `Scripts/Game/Pages/*` |
 | Loading | `LoadingUiController` / `LoadingUiView` (through `PopupManager.ShowLoadingUi`) |
 
-The redesigned UI (prefabs generated from Penpot, not wired to controllers yet) is described in [ui-design-system.md](ui-design-system.md).
+The UI is built from the Penpot redesign: views in `Assets/Project/UI/Views` are generated screens with these View scripts attached. See [ui-design-system.md](ui-design-system.md).
 
 **Popups.** `PopupManager` is a persistent `MonoBehaviour`. Its `Show*Popup(model)` methods build a popup from `IPopupElement` parts (header, label, button, input field, selector) and push it onto a stack.
 

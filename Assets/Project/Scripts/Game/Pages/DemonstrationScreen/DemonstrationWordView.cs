@@ -16,6 +16,9 @@ namespace Chang.UI
         [SerializeField] private ToggleGroup _toggleGroup;
         [SerializeField] private PlayStopButton _playStopBtn;
 
+        [Tooltip("A toggle placed in the screen (the design's reveal chip). When set, it is used instead of instantiating Mix Word Prefab")]
+        [SerializeField] private CToggle _translationToggle;
+
         [ShowInInspector, ReadOnly] public override ChangTypes ScreenType { get; } = ChangTypes.DemonstrationWord;
 
         private Action _onClickPlaySound;
@@ -28,9 +31,12 @@ namespace Chang.UI
 
             _onClickPlaySound = onClickPlaySound;
 
-            foreach (Transform child in _mixWordContent)
+            if (_translationToggle == null)
             {
-                Destroy(child.gameObject);
+                foreach (Transform child in _mixWordContent)
+                {
+                    Destroy(child.gameObject);
+                }
             }
 
             // init learning language word
@@ -39,19 +45,26 @@ namespace Chang.UI
             _questionWord.EnablePhonetic(true);
 
             // init translation words
-            var mix = Instantiate(_mixWordPrefab, _mixWordContent);
+            var mix = _translationToggle != null ? _translationToggle : Instantiate(_mixWordPrefab, _mixWordContent);
             var word = correctWord.Translation;
             mix.Set(word, correctWord.Phonetics, _toggleGroup, onToggleValueChanged);
             mix.EnablePhonetics(false);
+            mix.SetIsOnWithoutNotify(false);
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
-            _playStopBtn.OnClick += OnClickPlaySound;
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.OnClick += OnClickPlaySound;
+            }
 
             _questionImage.sprite = correctWord.Sprite;
         }
 
         private void OnSoundPlay(bool play)
         {
-            _playStopBtn.SetPlay(!play);
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.SetPlay(!play);
+            }
         }
 
         private void OnClickPlaySound()
@@ -61,7 +74,10 @@ namespace Chang.UI
 
         private void OnDisable()
         {
-            _playStopBtn.OnClick -= OnClickPlaySound;
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.OnClick -= OnClickPlaySound;
+            }
         }
     }
 }

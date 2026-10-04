@@ -99,7 +99,8 @@ namespace Chang.Sentences
             OnGeneralRepeatClickedAsync(_cts.Token).Forget();
         }
 
-        private Color GetLessonColor(Lesson lesson)
+        /// <summary>Sum of the question marks ÷ (questions × max mark), 0…1.</summary>
+        private float GetLessonProgress(Lesson lesson)
         {
             float sum = 0;
 
@@ -116,7 +117,7 @@ namespace Chang.Sentences
                 }
             }
 
-            return _view.GetLessonColor(sum);
+            return sum;
         }
 
         private void OnSectionSortClick(string key)
@@ -177,8 +178,9 @@ namespace Chang.Sentences
 
                 lessonItem.Init((m + 1).ToString(), 0, () => OnLessonClick(sectionName, lessonIndex));
                 lessonItem.name = $"Item {key}";
-                Color color = GetLessonColor(section.SectionLessons[m]);
-                lessonItem.SetColor(color);
+                float progress = GetLessonProgress(section.SectionLessons[m]);
+                lessonItem.SetColor(_view.GetLessonColor(progress));
+                lessonItem.SetProgress(progress);
             }
         }
 

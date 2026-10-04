@@ -9,8 +9,15 @@ namespace Chang.UI
 
         public void SetPlay(bool isPlay)
         {
-            playObject.SetActive(isPlay);
-            stopObject.SetActive(!isPlay);
+            if (playObject != null)
+            {
+                playObject.SetActive(isPlay);
+            }
+
+            if (stopObject != null)
+            {
+                stopObject.SetActive(!isPlay);
+            }
         }
     }
 }

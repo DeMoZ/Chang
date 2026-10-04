@@ -3,9 +3,9 @@
 The redesigned UI is generated from the Penpot file **"New File 1"**, pages `Redesign · Foundations`, `Redesign · Components`, `Redesign · Screens` and `Redesign · Mascot`.
 Penpot is the source of truth for the look. Unity gets prefabs that keep Penpot's component structure, so a change in one place reaches every screen that uses it.
 
-> Status: **step 1 of 3 — design only.** The new prefabs have no game logic yet.
-> Step 2 connects the existing controllers/views to them; step 3 implements the logic that the design adds (mascot editor, dialogues, alphabet, word detail…).
-> The old UI in `Assets/Project/Prefabs` still runs the game until step 2.
+> Status: **step 2 of 3 — the existing logic runs on the new UI** (lobby tabs, books, repetition, profile, lesson pages, overlay, popups, loading).
+> Step 3 implements the logic that the design adds (mascot editor, dialogues, alphabet, word detail…) and the data the screens show but the game doesn't provide yet (see [Not connected yet](#not-connected-yet)).
+> The login screen still uses the old prefab. The old UI prefabs stay in `Assets/Project/Prefabs` but are not in the scenes any more.
 
 ## Where things are
 
@@ -18,8 +18,9 @@ Penpot is the source of truth for the look. Unity gets prefabs that keep Penpot'
 | Vector art (SVG → sprite) | `Assets/Project/UI/Vectors/{Icons,Art,Mascot,Strokes}` |
 | Preview scene, every screen under a 540×1080 canvas | `Assets/Project/UI/DesignPreview.unity` |
 | TMP fonts (Prompt, Noto Sans Thai Looped, Charmonman) | `Assets/Project/Fonts/Resources/Fonts & Materials` |
+| Views: generated screens/components with the game's View scripts | `Assets/Project/UI/Views` (items in `Views/Items`, popup parts in `Views/Popup`) |
 | Runtime scripts | `Assets/Project/Scripts/UI/DesignSystem` |
-| Importer | `Assets/Project/Scripts/Editor/DesignSystem` |
+| Importer and views builder | `Assets/Project/Scripts/Editor/DesignSystem` |
 
 ## How the "constructor" works
 
@@ -88,6 +89,51 @@ Rules for the Penpot file that keep the import clean:
 - Keep variants of one component in one group (`Chang DS / Button / …`) with the same layer structure, so they become prefab variants.
 - Use library colors. Other colors stay raw values and are not themeable.
 - Name icons `icon / <name>`: they get stable file names in `Vectors/Icons`.
+
+## Views: the game logic on the design
+
+Generated prefabs (`Components`, `Screens`) are never edited by hand. The game uses **views**: prefab variants of them in `Assets/Project/UI/Views` with the existing View scripts (`BookVocabularyView`, `SelectWordView`, `CToggle`, `GameBookItem`…) attached and wired. A design re-import changes the look of the views; their scripts and references stay.
+
+The views are built by **Chang → Design System → Build Views** (`DesignViewsBuilder`). It is repeatable: run it again after a re-import, or after changing the builder. Things the builder does to a design screen:
+
+- hides the parts that the game draws elsewhere (the tab bar is one for all tabs in `MainUI`, the lesson top bar and Check button are in `GameOverlay`) and the sample content of lists;
+- makes long screens scrollable (`ScrollRect` on the screen, content grows with `ContentSizeFitter`);
+- puts runtime content in place of design placeholders (a sprite `Image` over the sample illustration);
+- adds `Button`/`Toggle` to the design frames the user taps;
+- hides parts that have no data yet (see below).
+
+**Use Views In Scenes** (`DesignViewsSceneSetup`) put the views into `Game.unity` and `Bootstrap.unity` and rewired `GameInstaller` and `PopupManager`. It was a one-time step; the scenes reference the view prefabs, so rebuilding the views needs no scene changes.
+
+### Element states come from the design
+
+Penpot draws element states as component variants. `DesignStates` switches an element between them at runtime: each state references its variant prefab and `Apply(state)` copies the look (colors, sprites, borders, opacity, visibility) from it. So a state changed in Penpot changes the game after a re-import, without code.
+
+| Element | States (variants) | Switched by |
+|---|---|---|
+| Answer option (`Items/OptionToggle`) | OptionCard Default, Selected, Correct, Wrong | `CToggle` |
+| Match tile (`Items/MatchToggle`) | MatchTile Default, Selected, Matched, Wrong | `CToggle` |
+| Sentence chips (`Items/ChipToggle`, `ChipFixedToggle`) | WordChip Default, Placed / Fixed | `CToggle` |
+| Lesson in the book (`Items/LessonItem`) | LessonNode New, Score 0…100pct | `GameBookItem.SetProgress` (mark sum of the lesson) |
+| Section header (`Items/SectionHeader`) | SectionHeader Expanded, Collapsed | the chevron; collapsing hides the lessons |
+| Tab bar (`MainUI`) | TabBar Words, Sentences, Repeat, Profile | `MainUiView` |
+| Feedback sheet (`GameOverlay`) | FeedbackSheet Correct, Wrong | `PagesContinueView` |
+| Result row (`Items/ResultRow`) | ResultRow Up, Down | `ResultItem` |
+
+Groups without variants (Repeat mode segments, politeness options) use `DesignSelection`: it takes the look of the item drawn as selected and of an item drawn as normal and paints the selection.
+
+### Screen size
+
+The new canvases are 540×1080 design units in *Expand* mode: the whole design always fits, a taller phone gets more height. On wide screens (landscape, tablets, WebGL) `WidthLimiter` keeps the column centered and at most 600 units wide.
+
+### Not connected yet
+
+The design shows these, the game has no data or logic for them yet (step 3). They are hidden or left static in the views:
+
+- Section progress bar and Thai section title, streak chip, daily goal, mascot editor, "phrase of the day".
+- Lesson progress in the top bar, totals on the result screen, counters of the repetition screen, "next batch in" time.
+- Slow sound, word detail sheet, dialogues, alphabet.
+- New design texts have no localization keys yet ("Review now", "Check", "Continue", "Match the pairs", row labels…). Existing keys are used where they fit (tabs, repeat modes, log out).
+- Login screen (the old prefab is used).
 
 ## Fonts
 

@@ -17,6 +17,9 @@ namespace Chang.UI
         [SerializeField] private Button _checkBtn;
         [SerializeField] private PagesContinueView _continue;
 
+        [Tooltip("Panel holding the return and hint buttons; shown while one of them is. Optional.")]
+        [SerializeField] private GameObject _topBar;
+
         private UnityAction _checkBtnListener;
         private UnityAction _continueBtnListener;
         private UnityAction _returnBtnListener;
@@ -35,7 +38,7 @@ namespace Chang.UI
             _returnBtn.onClick.AddListener(_returnBtnListener);
             _checkBtn.onClick.AddListener(_checkBtnListener);
             _hintBtn.onClick.AddListener(_hintBtnListener);
-            _continue.ContinueBtn.onClick.AddListener(_continueBtnListener);
+            _continue.AddContinueListener(_continueBtnListener);
         }
 
         public void Clean()
@@ -43,7 +46,7 @@ namespace Chang.UI
             _returnBtn.onClick.RemoveListener(_returnBtnListener);
             _checkBtn.onClick.RemoveListener(_checkBtnListener);
             _hintBtn.onClick.RemoveListener(_hintBtnListener);
-            _continue.ContinueBtn.onClick.RemoveListener(_continueBtnListener);
+            _continue.RemoveContinueListener(_continueBtnListener);
         }
 
         public void EnableBlocker(bool enable)
@@ -54,6 +57,7 @@ namespace Chang.UI
         public void EnableReturnButton(bool enable)
         {
             _returnBtn.gameObject.SetActive(enable);
+            UpdateTopBar();
         }
 
         public void EnableCheckButton(bool enable)
@@ -74,6 +78,15 @@ namespace Chang.UI
         public void EnableHintButton(bool enable)
         {
             _hintBtn.gameObject.SetActive(enable);
+            UpdateTopBar();
+        }
+
+        private void UpdateTopBar()
+        {
+            if (_topBar != null)
+            {
+                _topBar.SetActive(_returnBtn.gameObject.activeSelf || _hintBtn.gameObject.activeSelf);
+            }
         }
     }
 }

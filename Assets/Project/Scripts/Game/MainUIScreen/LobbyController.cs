@@ -81,6 +81,7 @@ namespace Chang
         {
             SetViewActive(true);
             _view.Enter();
+            _view.ShowTab(_currentTabType);
 
             OnToggleSelected(true, _currentTabType);
         }

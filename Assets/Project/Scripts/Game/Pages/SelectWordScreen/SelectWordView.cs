@@ -60,12 +60,18 @@ namespace Chang.UI
             _questionImage.sprite = correctWord.Sprite;
             
             PagesSoundController.RegisterListener(correctWord.Key, OnSoundPlay);
-            _playStopBtn.OnClick += OnClickPlaySound;
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.OnClick += OnClickPlaySound;
+            }
         }
 
         private void OnSoundPlay(bool play)
         {
-            _playStopBtn.SetPlay(!play);
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.SetPlay(!play);
+            }
         }
 
         private void OnClickPlaySound()
@@ -75,7 +81,10 @@ namespace Chang.UI
         
         private void OnDisable()
         {
-            _playStopBtn.OnClick -= OnClickPlaySound;
+            if (_playStopBtn != null)
+            {
+                _playStopBtn.OnClick -= OnClickPlaySound;
+            }
             
             foreach(var toggle in _mixWordToggles)
             {

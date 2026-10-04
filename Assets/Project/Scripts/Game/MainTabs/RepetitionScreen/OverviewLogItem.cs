@@ -24,11 +24,19 @@ namespace Chang
         string date,
         string timeStep)
         {
-            this.text.text = text;
-            this.mark.text = mark;
-            this.totalShown.text = totalShown;
-            this.date.text = date;
-            this.timeStep.text = timeStep;
+            SetText(this.text, text);
+            SetText(this.mark, mark);
+            SetText(this.totalShown, totalShown);
+            SetText(this.date, date);
+            SetText(this.timeStep, timeStep);
+        }
+
+        private static void SetText(TMP_Text target, string value)
+        {
+            if (target != null)
+            {
+                target.text = value;
+            }
         }
     }
 }

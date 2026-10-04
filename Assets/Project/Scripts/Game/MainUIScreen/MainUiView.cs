@@ -1,5 +1,6 @@
 using System;
 using Chang.UI;
+using Chang.UI.DesignSystem;
 using UnityEngine;
 using UnityEngine.UI;
 using Debug = DMZ.DebugSystem.DMZLogger;
@@ -16,6 +17,9 @@ namespace Chang
         [SerializeField] private TabToggle sentencesToggle;
         [SerializeField] private TabToggle repetitionToggle;
         [SerializeField] private TabToggle profileToggle;
+
+        [Tooltip("Tab bar look per tab (TabBar variants Words, Sentences, Repeat, Profile). Optional.")]
+        [SerializeField] private DesignStates tabBarStates;
 
         // [SerializeField] private Button settingsButton;
         // [SerializeField] private Button exitButton;
@@ -70,9 +74,44 @@ namespace Chang
                 profileToggle.Activate();
         }
 
+        /// <summary>Marks the tab as selected (toggle and tab bar look) without raising the tab changed callback.</summary>
+        public void ShowTab(MainTabType tabType)
+        {
+            var toggle = tabType switch
+            {
+                MainTabType.Sentences => sentencesToggle,
+                MainTabType.Repetition => repetitionToggle,
+                MainTabType.Profile => profileToggle,
+                _ => vocabularyToggle
+            };
+            toggle.SetIsOnWithoutNotify(true);
+            ShowSelectedTab(tabType);
+        }
+
         private void OnTabChanged(bool isOn, MainTabType tabType)
         {
+            if (isOn)
+            {
+                ShowSelectedTab(tabType);
+            }
+
             _onTabChanged?.Invoke(isOn, tabType);
+        }
+
+        private void ShowSelectedTab(MainTabType tabType)
+        {
+            if (tabBarStates == null)
+            {
+                return;
+            }
+
+            tabBarStates.Apply(tabType switch
+            {
+                MainTabType.Sentences => "Sentences",
+                MainTabType.Repetition => "Repeat",
+                MainTabType.Profile => "Profile",
+                _ => "Words"
+            });
         }
 
         private void OnStartButtonClicked()

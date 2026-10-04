@@ -7,11 +7,23 @@ namespace Chang.GameBook
     {
         [SerializeField] private Image[] baseColors;
 
+        private Color? _baseColor;
+
         public void SetBaseColor(Color baseColor)
         {
+            _baseColor = baseColor;
             foreach (var image in baseColors)
             {
                 image.color = baseColor;
+            }
+        }
+
+        /// <summary>Paints the base color again after something else (a design state) recolored the images.</summary>
+        protected void ReapplyBaseColor()
+        {
+            if (_baseColor.HasValue)
+            {
+                SetBaseColor(_baseColor.Value);
             }
         }
     }
