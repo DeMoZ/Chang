@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace Chang.GoogleSheets
 {
+    [Serializable]
     public class Sentence
     {
         public Languages Language;
@@ -19,6 +21,7 @@ namespace Chang.GoogleSheets
     /// <summary>
     /// the word in the sentence with additional info
     /// </summary>
+    [Serializable]
     public class SentenceWord
     {
         public Modifier Modifiers;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Chang.Core;
-using Sirenix.OdinInspector;
+using TriInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using Debug = DMZ.DebugSystem.DMZLogger;

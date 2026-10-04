@@ -9,7 +9,6 @@ using Cysharp.Threading.Tasks;
 using DMZ.FSM;
 using Popup;
 using Project.Services.PagesContentProvider;
-using Sirenix.Utilities;
 using Zenject;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
@@ -551,7 +550,7 @@ namespace Chang.FSM
             IEnumerable<string> wordKeys = lesson.Questions.OfType<QuestSelectWord>().Select(quest => quest.Key)
                 .Concat(lesson.Questions.OfType<SentenceSelectWords>().SelectMany(quest => quest.SelectWordsKeys));
 
-            matchWords.AddRange(wordKeys.Where(key => _pagesBus.Words.ContainsKey(key)));
+            matchWords.UnionWith(wordKeys.Where(key => _pagesBus.Words.ContainsKey(key)));
 
             if (matchWords.Count < 2)
             {

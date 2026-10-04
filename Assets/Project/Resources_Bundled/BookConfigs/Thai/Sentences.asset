@@ -12,2821 +12,565 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5dca98a52564b9b8314407aa31b60ac, type: 3}
   m_Name: Sentences
   m_EditorClassIdentifier: Assembly-CSharp::Chang.GoogleSheets.SentencesInfo
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: Sentences
-      Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[Chang.GoogleSheets.Sentence, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 29
-    - Name: 
-      Entry: 7
-      Data: 1|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Do not add sugar
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Do not add sugar
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Do not add sugar
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Do not add sugar
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Do not add sugar
-    - Name: SentenceWords
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 3|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/No_Not_Don_t
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 7
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 4|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Put_Add
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 5|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Sweetnes/Sugar
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 6|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: I want to buy fruit
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to buy fruit
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to buy fruit
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to buy fruit
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: I want to buy {0}
-    - Name: SentenceWords
-      Entry: 7
-      Data: 7|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 8|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Want
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 7
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 9|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Buy
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 10|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 3
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Fruits/Fruit
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 11|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 12|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Iced coffee less sweet
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Iced coffee less sweet
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Iced coffee less sweet
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Iced coffee less sweet
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Iced coffee, less sweet
-    - Name: SentenceWords
-      Entry: 7
-      Data: 13|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 14|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Beverages/Coffee
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 15|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Beverages/Cold_for drink_with ice
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 16|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Sweetnes/Less sweet
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 17|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 18|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: No ice please
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/No ice please
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/No ice please
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/No ice please
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: No ice, please
-    - Name: SentenceWords
-      Entry: 7
-      Data: 19|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 20|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Sweetnes/No added_not put_without
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 21|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Beverages/Ice
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 22|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 23|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Can I have water
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I have water
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I have water
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I have water
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Can I have water?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 24|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 25|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/May I_Asking permissions
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 26|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Beverages/Water_Normal_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 27|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 28|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Stir fried basil with pork and fried egg
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Stir fried basil with pork and fried egg
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Stir fried basil with pork and fried egg
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Stir fried basil with pork and fried egg
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Stir fried basil with pork and fried egg
-    - Name: SentenceWords
-      Entry: 7
-      Data: 29|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 30|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Food/Stir fried basil
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 31|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Food/Pork
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 32|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Food/Fried egg
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 33|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Do not add chili
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Do not add chili
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Do not add chili
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Do not add chili
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Do not add chili
-    - Name: SentenceWords
-      Entry: 7
-      Data: 34|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 35|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/No_Not_Don_t
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 7
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 36|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Put_Add
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 37|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Food/Chili
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 38|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 39|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Not spicy please
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Not spicy please
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Not spicy please
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Not spicy please
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Not spicy, please
-    - Name: SentenceWords
-      Entry: 7
-      Data: 40|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 41|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Food/Not spicy
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 42|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 43|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: I want to eat fried rice
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to eat fried rice
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to eat fried rice
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to eat fried rice
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: I want to eat fried rice
-    - Name: SentenceWords
-      Entry: 7
-      Data: 44|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 45|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Want
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 46|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Eat
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 47|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Food/Fried rice
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 48|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 49|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: I want to drink Thai tea
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to drink Thai tea
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to drink Thai tea
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/I want to drink Thai tea
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: I want to drink Thai tea
-    - Name: SentenceWords
-      Entry: 7
-      Data: 50|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 51|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Want
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 52|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Drink
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 53|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Beverages/Thai tea
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 54|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 55|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: This one is delicious
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/This one is delicious
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/This one is delicious
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/This one is delicious
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: This one is delicious
-    - Name: SentenceWords
-      Entry: 7
-      Data: 56|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 57|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/PointThings/This one
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 58|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Food/Delicious
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 59|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 60|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: How much is the fruit
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/How much is the fruit
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/How much is the fruit
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/How much is the fruit
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: How much is {0}?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 61|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 62|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 3
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Fruits/Fruit
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 63|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Price
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 64|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/How much
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 65|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 66|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: One kilo of fruit
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/One kilo of fruit
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/One kilo of fruit
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/One kilo of fruit
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: One kilo of {0}, please
-    - Name: SentenceWords
-      Entry: 7
-      Data: 67|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 5
-    - Name: 
-      Entry: 7
-      Data: 68|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/May I_Asking permissions
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 69|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 3
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Fruits/Fruit
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 70|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Numbers/1
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 71|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Kilogram
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 72|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 73|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Half a kilo please
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Half a kilo please
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Half a kilo please
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Half a kilo please
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Half a kilo, please
-    - Name: SentenceWords
-      Entry: 7
-      Data: 74|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 75|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/May I_Asking permissions
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 76|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Half
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 77|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Kilogram
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 78|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 79|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Is the fruit sweet
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Is the fruit sweet
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Is the fruit sweet
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Is the fruit sweet
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Is the {0} sweet?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 80|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 81|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 3
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Fruits/Fruit
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 82|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Sweetnes/Sweet
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 83|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Question particle
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 84|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 85|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Is it ripe
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Is it ripe
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Is it ripe
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Is it ripe
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Is it ripe?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 86|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 87|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Fruits/Ripe
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 88|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Question particle
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 89|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 90|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Can I taste it
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I taste it
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I taste it
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I taste it
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Can I taste it?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 91|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 92|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/May I_Asking permissions
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 93|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Food/Taste
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 94|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Can_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 95|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 96|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: The fruit is very sweet
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/The fruit is very sweet
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/The fruit is very sweet
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/The fruit is very sweet
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: The {0} is very sweet
-    - Name: SentenceWords
-      Entry: 7
-      Data: 97|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 98|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 3
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Fruits/Fruit
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 99|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Sweetnes/Sweet
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 100|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Very
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 101|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 102|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Food Market
-    - Name: Key
-      Entry: 1
-      Data: Can I have a bag
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I have a bag
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I have a bag
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Food Market/Can I have a bag
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Can I have a bag?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 103|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 104|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/May I_Asking permissions
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 105|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Bag
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 106|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 107|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: Can I try it on
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I try it on
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I try it on
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I try it on
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Can I try it on?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 108|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 109|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/May I_Asking permissions
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 110|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Try_Try on
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 111|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Can_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 112|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 113|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: Can I look at that one
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I look at that one
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I look at that one
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I look at that one
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Can I look at that one?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 114|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 5
-    - Name: 
-      Entry: 7
-      Data: 115|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/May I_Asking permissions
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 116|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Look_see
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 117|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/PointThings/That one
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 118|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Can_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 119|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 120|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: I want to buy this one
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to buy this one
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to buy this one
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to buy this one
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: I want to buy this one
-    - Name: SentenceWords
-      Entry: 7
-      Data: 121|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 122|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Want
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 123|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Buy
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 124|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/PointThings/This one
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 125|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 126|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: I want to buy clothes
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to buy clothes
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to buy clothes
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to buy clothes
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: I want to buy {0}
-    - Name: SentenceWords
-      Entry: 7
-      Data: 127|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 128|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Want
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 129|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Buy
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 130|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 3
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Clothes/Clothes
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 131|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 132|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: I want to try on clothes
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to try on clothes
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to try on clothes
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/I want to try on clothes
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: I want to try on {0}
-    - Name: SentenceWords
-      Entry: 7
-      Data: 133|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 5
-    - Name: 
-      Entry: 7
-      Data: 134|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Mix/Want
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 135|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Try_Try on
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 136|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Wear
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 137|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 3
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Clothes/Clothes
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 138|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 139|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: Can I change to a big size
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I change to a big size
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I change to a big size
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can I change to a big size
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Can I change to a big size?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 140|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 6
-    - Name: 
-      Entry: 7
-      Data: 141|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/May I_Asking permissions
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 7
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 142|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Change to
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 143|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Size
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 144|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Big
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 145|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Can_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 146|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 147|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: This one is beautiful
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/This one is beautiful
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/This one is beautiful
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/This one is beautiful
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: This one is beautiful
-    - Name: SentenceWords
-      Entry: 7
-      Data: 148|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 149|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/PointThings/This one
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 150|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Beautiful
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 151|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 152|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: Can you give a discount
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can you give a discount
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can you give a discount
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Can you give a discount
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Can you give a discount?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 153|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 154|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Lower
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 155|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Can_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 156|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 157|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: How much is this one
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/How much is this one
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/How much is this one
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/How much is this one
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: How much is this one?
-    - Name: SentenceWords
-      Entry: 7
-      Data: 158|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 7
-      Data: 159|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/PointThings/This one
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 160|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Price
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 161|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/How much
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 162|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 163|Chang.GoogleSheets.Sentence, Assembly-CSharp
-    - Name: Language
-      Entry: 3
-      Data: 6
-    - Name: Section
-      Entry: 1
-      Data: Cloths Market
-    - Name: Key
-      Entry: 1
-      Data: Too expensive
-    - Name: SentenceKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Too expensive
-    - Name: ImageKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Too expensive
-    - Name: SoundKey
-      Entry: 1
-      Data: Thai/Sentences/Cloths Market/Too expensive
-    - Name: DefaultTranslation
-      Entry: 1
-      Data: Too expensive
-    - Name: SentenceWords
-      Entry: 7
-      Data: 164|System.Collections.Generic.List`1[[Chang.GoogleSheets.SentenceWord,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 165|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Expensive
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 166|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 0
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Shopping/Too much
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 167|Chang.GoogleSheets.SentenceWord, Assembly-CSharp
-    - Name: Modifiers
-      Entry: 3
-      Data: 4
-    - Name: WordKey
-      Entry: 1
-      Data: Thai/Vocabulary/Gender/_Polite male_
-    - Name: DisplayIndex
-      Entry: 3
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
   Language: 6
+  Sentences:
+  - Language: 6
+    Section: Food Market
+    Key: Do not add sugar
+    SentenceKey: Thai/Sentences/Food Market/Do not add sugar
+    ImageKey: Thai/Sentences/Food Market/Do not add sugar
+    SoundKey: Thai/Sentences/Food Market/Do not add sugar
+    DefaultTranslation: Do not add sugar
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/No_Not_Don_t
+      DisplayIndex: 7
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Put_Add
+      DisplayIndex: 5
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Sweetnes/Sugar
+      DisplayIndex: 0
+  - Language: 6
+    Section: Food Market
+    Key: I want to buy fruit
+    SentenceKey: Thai/Sentences/Food Market/I want to buy fruit
+    ImageKey: Thai/Sentences/Food Market/I want to buy fruit
+    SoundKey: Thai/Sentences/Food Market/I want to buy fruit
+    DefaultTranslation: I want to buy {0}
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Want
+      DisplayIndex: 7
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Buy
+      DisplayIndex: 5
+    - Modifiers: 3
+      WordKey: Thai/Vocabulary/Fruits/Fruit
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Iced coffee less sweet
+    SentenceKey: Thai/Sentences/Food Market/Iced coffee less sweet
+    ImageKey: Thai/Sentences/Food Market/Iced coffee less sweet
+    SoundKey: Thai/Sentences/Food Market/Iced coffee less sweet
+    DefaultTranslation: Iced coffee, less sweet
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Beverages/Coffee
+      DisplayIndex: 5
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Beverages/Cold_for drink_with ice
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Sweetnes/Less sweet
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: No ice please
+    SentenceKey: Thai/Sentences/Food Market/No ice please
+    ImageKey: Thai/Sentences/Food Market/No ice please
+    SoundKey: Thai/Sentences/Food Market/No ice please
+    DefaultTranslation: No ice, please
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Sweetnes/No added_not put_without
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Beverages/Ice
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Can I have water
+    SentenceKey: Thai/Sentences/Food Market/Can I have water
+    ImageKey: Thai/Sentences/Food Market/Can I have water
+    SoundKey: Thai/Sentences/Food Market/Can I have water
+    DefaultTranslation: Can I have water?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Beverages/Water_Normal_
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Stir fried basil with pork and fried egg
+    SentenceKey: Thai/Sentences/Food Market/Stir fried basil with pork and fried
+      egg
+    ImageKey: Thai/Sentences/Food Market/Stir fried basil with pork and fried egg
+    SoundKey: Thai/Sentences/Food Market/Stir fried basil with pork and fried egg
+    DefaultTranslation: Stir fried basil with pork and fried egg
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Food/Stir fried basil
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Food/Pork
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Food/Fried egg
+      DisplayIndex: 5
+  - Language: 6
+    Section: Food Market
+    Key: Do not add chili
+    SentenceKey: Thai/Sentences/Food Market/Do not add chili
+    ImageKey: Thai/Sentences/Food Market/Do not add chili
+    SoundKey: Thai/Sentences/Food Market/Do not add chili
+    DefaultTranslation: Do not add chili
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/No_Not_Don_t
+      DisplayIndex: 7
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Put_Add
+      DisplayIndex: 5
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Food/Chili
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Not spicy please
+    SentenceKey: Thai/Sentences/Food Market/Not spicy please
+    ImageKey: Thai/Sentences/Food Market/Not spicy please
+    SoundKey: Thai/Sentences/Food Market/Not spicy please
+    DefaultTranslation: Not spicy, please
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Food/Not spicy
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: I want to eat fried rice
+    SentenceKey: Thai/Sentences/Food Market/I want to eat fried rice
+    ImageKey: Thai/Sentences/Food Market/I want to eat fried rice
+    SoundKey: Thai/Sentences/Food Market/I want to eat fried rice
+    DefaultTranslation: I want to eat fried rice
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Want
+      DisplayIndex: 6
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Eat
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Food/Fried rice
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: I want to drink Thai tea
+    SentenceKey: Thai/Sentences/Food Market/I want to drink Thai tea
+    ImageKey: Thai/Sentences/Food Market/I want to drink Thai tea
+    SoundKey: Thai/Sentences/Food Market/I want to drink Thai tea
+    DefaultTranslation: I want to drink Thai tea
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Want
+      DisplayIndex: 6
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Drink
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Beverages/Thai tea
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: This one is delicious
+    SentenceKey: Thai/Sentences/Food Market/This one is delicious
+    ImageKey: Thai/Sentences/Food Market/This one is delicious
+    SoundKey: Thai/Sentences/Food Market/This one is delicious
+    DefaultTranslation: This one is delicious
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/PointThings/This one
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Food/Delicious
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: How much is the fruit
+    SentenceKey: Thai/Sentences/Food Market/How much is the fruit
+    ImageKey: Thai/Sentences/Food Market/How much is the fruit
+    SoundKey: Thai/Sentences/Food Market/How much is the fruit
+    DefaultTranslation: How much is {0}?
+    SentenceWords:
+    - Modifiers: 3
+      WordKey: Thai/Vocabulary/Fruits/Fruit
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Price
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/How much
+      DisplayIndex: 5
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: One kilo of fruit
+    SentenceKey: Thai/Sentences/Food Market/One kilo of fruit
+    ImageKey: Thai/Sentences/Food Market/One kilo of fruit
+    SoundKey: Thai/Sentences/Food Market/One kilo of fruit
+    DefaultTranslation: One kilo of {0}, please
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+      DisplayIndex: 6
+    - Modifiers: 3
+      WordKey: Thai/Vocabulary/Fruits/Fruit
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Numbers/1
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Kilogram
+      DisplayIndex: 5
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Half a kilo please
+    SentenceKey: Thai/Sentences/Food Market/Half a kilo please
+    ImageKey: Thai/Sentences/Food Market/Half a kilo please
+    SoundKey: Thai/Sentences/Food Market/Half a kilo please
+    DefaultTranslation: Half a kilo, please
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+      DisplayIndex: 5
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Half
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Kilogram
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Is the fruit sweet
+    SentenceKey: Thai/Sentences/Food Market/Is the fruit sweet
+    ImageKey: Thai/Sentences/Food Market/Is the fruit sweet
+    SoundKey: Thai/Sentences/Food Market/Is the fruit sweet
+    DefaultTranslation: Is the {0} sweet?
+    SentenceWords:
+    - Modifiers: 3
+      WordKey: Thai/Vocabulary/Fruits/Fruit
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Sweetnes/Sweet
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Question particle
+      DisplayIndex: 5
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Is it ripe
+    SentenceKey: Thai/Sentences/Food Market/Is it ripe
+    ImageKey: Thai/Sentences/Food Market/Is it ripe
+    SoundKey: Thai/Sentences/Food Market/Is it ripe
+    DefaultTranslation: Is it ripe?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Fruits/Ripe
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Question particle
+      DisplayIndex: 3
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Can I taste it
+    SentenceKey: Thai/Sentences/Food Market/Can I taste it
+    ImageKey: Thai/Sentences/Food Market/Can I taste it
+    SoundKey: Thai/Sentences/Food Market/Can I taste it
+    DefaultTranslation: Can I taste it?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+      DisplayIndex: 5
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Food/Taste
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Can_
+      DisplayIndex: 3
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: The fruit is very sweet
+    SentenceKey: Thai/Sentences/Food Market/The fruit is very sweet
+    ImageKey: Thai/Sentences/Food Market/The fruit is very sweet
+    SoundKey: Thai/Sentences/Food Market/The fruit is very sweet
+    DefaultTranslation: The {0} is very sweet
+    SentenceWords:
+    - Modifiers: 3
+      WordKey: Thai/Vocabulary/Fruits/Fruit
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Sweetnes/Sweet
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Very
+      DisplayIndex: 5
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Food Market
+    Key: Can I have a bag
+    SentenceKey: Thai/Sentences/Food Market/Can I have a bag
+    ImageKey: Thai/Sentences/Food Market/Can I have a bag
+    SoundKey: Thai/Sentences/Food Market/Can I have a bag
+    DefaultTranslation: Can I have a bag?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Bag
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: Can I try it on
+    SentenceKey: Thai/Sentences/Cloths Market/Can I try it on
+    ImageKey: Thai/Sentences/Cloths Market/Can I try it on
+    SoundKey: Thai/Sentences/Cloths Market/Can I try it on
+    DefaultTranslation: Can I try it on?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+      DisplayIndex: 5
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Try_Try on
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Can_
+      DisplayIndex: 3
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: Can I look at that one
+    SentenceKey: Thai/Sentences/Cloths Market/Can I look at that one
+    ImageKey: Thai/Sentences/Cloths Market/Can I look at that one
+    SoundKey: Thai/Sentences/Cloths Market/Can I look at that one
+    DefaultTranslation: Can I look at that one?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+      DisplayIndex: 6
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Look_see
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/PointThings/That one
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Can_
+      DisplayIndex: 5
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: I want to buy this one
+    SentenceKey: Thai/Sentences/Cloths Market/I want to buy this one
+    ImageKey: Thai/Sentences/Cloths Market/I want to buy this one
+    SoundKey: Thai/Sentences/Cloths Market/I want to buy this one
+    DefaultTranslation: I want to buy this one
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Want
+      DisplayIndex: 6
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Buy
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/PointThings/This one
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: I want to buy clothes
+    SentenceKey: Thai/Sentences/Cloths Market/I want to buy clothes
+    ImageKey: Thai/Sentences/Cloths Market/I want to buy clothes
+    SoundKey: Thai/Sentences/Cloths Market/I want to buy clothes
+    DefaultTranslation: I want to buy {0}
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Want
+      DisplayIndex: 6
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Buy
+      DisplayIndex: 3
+    - Modifiers: 3
+      WordKey: Thai/Vocabulary/Clothes/Clothes
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: I want to try on clothes
+    SentenceKey: Thai/Sentences/Cloths Market/I want to try on clothes
+    ImageKey: Thai/Sentences/Cloths Market/I want to try on clothes
+    SoundKey: Thai/Sentences/Cloths Market/I want to try on clothes
+    DefaultTranslation: I want to try on {0}
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Mix/Want
+      DisplayIndex: 6
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Try_Try on
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Wear
+      DisplayIndex: 5
+    - Modifiers: 3
+      WordKey: Thai/Vocabulary/Clothes/Clothes
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: Can I change to a big size
+    SentenceKey: Thai/Sentences/Cloths Market/Can I change to a big size
+    ImageKey: Thai/Sentences/Cloths Market/Can I change to a big size
+    SoundKey: Thai/Sentences/Cloths Market/Can I change to a big size
+    DefaultTranslation: Can I change to a big size?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/May I_Asking permissions
+      DisplayIndex: 7
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Change to
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Size
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Big
+      DisplayIndex: 5
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Can_
+      DisplayIndex: 6
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: This one is beautiful
+    SentenceKey: Thai/Sentences/Cloths Market/This one is beautiful
+    ImageKey: Thai/Sentences/Cloths Market/This one is beautiful
+    SoundKey: Thai/Sentences/Cloths Market/This one is beautiful
+    DefaultTranslation: This one is beautiful
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/PointThings/This one
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Beautiful
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: Can you give a discount
+    SentenceKey: Thai/Sentences/Cloths Market/Can you give a discount
+    ImageKey: Thai/Sentences/Cloths Market/Can you give a discount
+    SoundKey: Thai/Sentences/Cloths Market/Can you give a discount
+    DefaultTranslation: Can you give a discount?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Lower
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Can_
+      DisplayIndex: 3
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: How much is this one
+    SentenceKey: Thai/Sentences/Cloths Market/How much is this one
+    ImageKey: Thai/Sentences/Cloths Market/How much is this one
+    SoundKey: Thai/Sentences/Cloths Market/How much is this one
+    DefaultTranslation: How much is this one?
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/PointThings/This one
+      DisplayIndex: 5
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Price
+      DisplayIndex: 3
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/How much
+      DisplayIndex: 0
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4
+  - Language: 6
+    Section: Cloths Market
+    Key: Too expensive
+    SentenceKey: Thai/Sentences/Cloths Market/Too expensive
+    ImageKey: Thai/Sentences/Cloths Market/Too expensive
+    SoundKey: Thai/Sentences/Cloths Market/Too expensive
+    DefaultTranslation: Too expensive
+    SentenceWords:
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Expensive
+      DisplayIndex: 0
+    - Modifiers: 0
+      WordKey: Thai/Vocabulary/Shopping/Too much
+      DisplayIndex: 3
+    - Modifiers: 4
+      WordKey: Thai/Vocabulary/Gender/_Polite male_
+      DisplayIndex: 4

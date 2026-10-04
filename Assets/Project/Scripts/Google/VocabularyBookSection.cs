@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace Chang.GoogleSheets
 {
+    [Serializable]
     public class VocabularyBookSection
     {
         public Languages Language;

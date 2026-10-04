@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Chang.GoogleSheets
 {
-    public class VocabularyBook : SerializedScriptableObject
+    public class VocabularyBook : ScriptableObject
     {
         public Languages Language;
         public List<VocabularyBookSection> Sections;

@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Chang;
-using Sirenix.OdinInspector;
+using TriInspector;
 using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PromptsBank", menuName = "Chang/PromptsBank")]
+[DeclareVerticalGroup("Folders")]
 public class PromptsBank : ScriptableObject
 {
     [SerializeField, FolderPath] private string CreateImagesPath;
 
-    [SerializeField, FolderPath, VerticalGroup("Folders")]
+    [SerializeField, FolderPath, Group("Folders")]
     private List<string> _folders;
 
     // [SerializeField, TableList] private List<PromptItem> _promptItems;
 
-    [Button, VerticalGroup("Folders")]
+    [Button, Group("Folders")]
     private void PrepareWithWordsInFolders()
     {
         AssetDatabase.StartAssetEditing();
@@ -70,7 +71,6 @@ public class PromptsBank : ScriptableObject
                     .Select(x => new WordEntry
                     {
                         Value = x.Meaning.Meaning,
-                        Owner = prompt,
                         Name = x.Word.Key
                     })
                     .ToList();
@@ -108,9 +108,10 @@ public class PromptsBank : ScriptableObject
 }
 
 [Serializable]
+[DeclareVerticalGroup("Section")]
 public class PromptItem
 {
-    [TableColumnWidth(100, Resizable = false)] [HideLabel, VerticalGroup("Section")]
+    [HideLabel, Group("Section")]
     public string Section;
 
     [HideLabel, Multiline(4)] public string Text;
@@ -119,7 +120,7 @@ public class PromptItem
 
     public List<WordEntry> Words;
 
-    [Button, VerticalGroup("Section")]
+    [Button, Group("Section")]
     public void MakeImages()
     {
         Debug.Log($"Section: {Section}");
@@ -214,52 +215,69 @@ public class PromptItem
         GUIUtility.systemCopyBuffer = name;
         Debug.Log($"Name {index} created with Section: {Section}, Word: {Words[index].Value}, Name:\n{name}");
     }
-
-    public void OnValidate()
-    {
-        if (Words == null) return;
-        for (int i = 0; i < Words.Count; i++)
-        {
-            if (Words[i] != null) Words[i].Owner = this;
-        }
-    }
 }
 
 [Serializable]
 public class WordEntry
 {
-    [HideInInspector] public string Value;
-    [HideInInspector] public string Name;
-    [NonSerialized] public PromptItem Owner;
+    public string Value;
+    public string Name;
+}
 
-#if UNITY_EDITOR
-    [OnInspectorGUI, PropertyOrder(-1)]
-    private void DrawInline()
+/// <summary>
+/// Draws a word in one line with buttons that copy its prompt or file name.
+/// </summary>
+[CustomPropertyDrawer(typeof(WordEntry))]
+public class WordEntryDrawer : PropertyDrawer
+{
+    private const string WordsPath = ".Words.Array.data[";
+
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        EditorGUILayout.BeginHorizontal();
-        var buttonContent = new GUIContent("Prompt", "Make a prompt for this word");
-        if (GUILayout.Button(buttonContent, GUILayout.Width(52)))
+        SerializedProperty value = property.FindPropertyRelative(nameof(WordEntry.Value));
+        SerializedProperty name = property.FindPropertyRelative(nameof(WordEntry.Name));
+
+        Rect promptRect = new(position.x, position.y, 52, position.height);
+        Rect nameRect = new(promptRect.xMax + 2, position.y, 45, position.height);
+        float fieldWidth = (position.xMax - nameRect.xMax - 4) / 2;
+        Rect valueFieldRect = new(nameRect.xMax + 2, position.y, fieldWidth, position.height);
+        Rect nameFieldRect = new(valueFieldRect.xMax + 2, position.y, fieldWidth, position.height);
+
+        if (GUI.Button(promptRect, new GUIContent("Prompt", "Make a prompt for this word")))
         {
-            if (Owner?.Words != null)
-            {
-                int idx = Owner.Words.IndexOf(this);
-                if (idx >= 0) Owner.MakePrompt(idx);
-            }
+            if (TryGetOwner(property, out PromptItem owner, out int index)) owner.MakePrompt(index);
         }
 
-        buttonContent = new GUIContent("Name", "Make a file name for this word");
-        if (GUILayout.Button(buttonContent, GUILayout.Width(45)))
+        if (GUI.Button(nameRect, new GUIContent("Name", "Make a file name for this word")))
         {
-            if (Owner?.Words != null)
-            {
-                int idx = Owner.Words.IndexOf(this);
-                if (idx >= 0) Owner.MakeName(idx);
-            }
+            if (TryGetOwner(property, out PromptItem owner, out int index)) owner.MakeName(index);
         }
 
-        Value = EditorGUILayout.TextField(Value);
-        Name = EditorGUILayout.TextField(Name);
-        EditorGUILayout.EndHorizontal();
+        EditorGUI.PropertyField(valueFieldRect, value, GUIContent.none);
+        EditorGUI.PropertyField(nameFieldRect, name, GUIContent.none);
     }
-#endif
+
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    {
+        return EditorGUIUtility.singleLineHeight;
+    }
+
+    // the word is an element of PromptItem.Words, the owner is found by the property path
+    private static bool TryGetOwner(SerializedProperty property, out PromptItem owner, out int index)
+    {
+        owner = null;
+        index = -1;
+
+        string path = property.propertyPath;
+        int wordsIndex = path.LastIndexOf(WordsPath, StringComparison.Ordinal);
+        if (wordsIndex < 0)
+        {
+            return false;
+        }
+
+        string indexString = path.Substring(wordsIndex + WordsPath.Length).TrimEnd(']');
+        SerializedProperty ownerProperty = property.serializedObject.FindProperty(path.Substring(0, wordsIndex));
+        owner = ownerProperty?.boxedValue as PromptItem;
+        return owner != null && int.TryParse(indexString, out index);
+    }
 }

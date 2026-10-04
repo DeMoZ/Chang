@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Chang.GoogleSheets
@@ -5,6 +6,7 @@ namespace Chang.GoogleSheets
     /// <summary>
     /// Book contanis lessons that determined by sections in Google Sheets page.
     /// </summary>
+    [Serializable]
     public class Lesson
     {
         public Languages Language;

@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
+using TriInspector;
 using UnityEngine;
 
 namespace Chang.Utilities.GoogleSheets
@@ -8,11 +9,12 @@ namespace Chang.Utilities.GoogleSheets
     /// Contains information about the book obtained from Google Sheets.
     /// </summary>
     [CreateAssetMenu(fileName = "BookInfo", menuName = "Chang/Utilities/Google Sheets/Book Info", order = 0)]
-    public class BookInfo : SerializedScriptableObject
+    public class BookInfo : ScriptableObject
     {
         public List<SpreadSheetInfo> SpreadsheetInfos = new();
     }
 
+    [Serializable]
     public class SpreadSheetInfo
     {
         [ReadOnly] public string Title;
@@ -20,6 +22,7 @@ namespace Chang.Utilities.GoogleSheets
         [ReadOnly] public List<SheetInfo> Sheets = new();
     }
 
+    [Serializable]
     public class SheetInfo
     {
         [ReadOnly] public string Title;

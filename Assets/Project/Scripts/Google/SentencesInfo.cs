@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Chang.GoogleSheets
 {
-    public class SentencesInfo : SerializedScriptableObject
+    public class SentencesInfo : ScriptableObject
     {
         public Languages Language;
         public List<Sentence> Sentences;
