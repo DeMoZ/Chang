@@ -75,6 +75,7 @@ Keys are path-like: `{Language}/{Type}/{Section}/{Key}`.
 
 - Path: `Assets/Project/Resources_Bundled/SoundWords/<Language>/<Voice>/<Section>/<Key>.mp3`, `<Voice>` is `Female` or `Male` (`SoundVoices`).
 - Learn-language sounds use the word's `SoundKey` (`Thai/...`). A translation sound uses `WordPathHelper.GetNativeSoundKey`, i.e. `SoundWords/English/Female/<Section>/<Key>.mp3`.
+- A lesson preloads only the translation sounds that exist in the Addressables catalog. A question shown in the native language without its sound stays silent and logs an error (`Item of type UnityEngine.AudioClip not found…`) as a reminder to voice it. As of 2026-10 only Thai is voiced.
 - `WordPathHelper.GetSoundPath(key, voice)` builds the path, the default voice is `Female`.
 - Generation: Google Cloud TTS (the key is in `ChangExternal`), voices: Chirp3-HD Aoede (female) and Charon (male) by default. The Google Cloud project must have billing enabled.
 - New sound folders are added to `Remote_<Language>_Sound_Words` Addressables groups (created from `Remote_Thai_Sound_Words`).

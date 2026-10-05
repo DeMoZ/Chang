@@ -129,6 +129,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &3831952684082209101 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7731985543995508642, guid: 25b7c963cfdb74d0694817a5ad626c37, type: 3}
+  m_PrefabInstance: {fileID: 6800527019128776431}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7246005665238443597 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4246516809208725666, guid: 25b7c963cfdb74d0694817a5ad626c37, type: 3}
+  m_PrefabInstance: {fileID: 6800527019128776431}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831952684082209101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &7981487145517156911 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3504824217352301760, guid: 25b7c963cfdb74d0694817a5ad626c37, type: 3}
@@ -216,7 +232,8 @@ MonoBehaviour:
   - Name: Wrong
     Prefab: {fileID: 8625570824935897944, guid: 20d1cc976cba14515bb213d748d7a8a8, type: 3}
   _stateTexts: []
-  _codeVisibility: []
+  _codeVisibility:
+  - {fileID: 3831952684082209101}
   _initialState: Default
 --- !u!114 &7070550303729297883
 MonoBehaviour:
@@ -232,9 +249,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 84
+  m_MinHeight: 96
   m_PreferredWidth: -1
-  m_PreferredHeight: 84
+  m_PreferredHeight: 96
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -256,7 +273,7 @@ MonoBehaviour:
   _correct: {fileID: 0}
   _inactive: {fileID: 0}
   _word: {fileID: 1976161167903452261}
-  _phonetics: {fileID: 0}
+  _phonetics: {fileID: 7246005665238443597}
   _states: {fileID: 1556772904539924269}
   _stateNormal: Default
   _stateSelected: Selected

@@ -127,7 +127,7 @@ namespace Chang.FSM
 
             // sentence words are shown and played as separate words, so preload them together with the words quests
             List<Word> words = wWKeys.Union(sWordKeys).Select(key => Bus.Words[key]).ToList();
-            await _pagesContentProvider.PreloadWordsContentAsync(words, progress, ct);
+            await _pagesContentProvider.PreloadWordsContentAsync(words, _profileService.ProfileData.NativeLanguage, progress, ct);
         }
 
         private void InitSentenceQuest(IQuestion sQuest)

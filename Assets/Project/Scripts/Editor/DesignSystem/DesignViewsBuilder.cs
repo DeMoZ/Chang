@@ -118,7 +118,7 @@ namespace Chang.Editor.DesignSystem
                     word: "Thai", phonetics: "Phonetics"),
                 Match = BuildToggle("MatchToggle", "MatchTile", "Default", false,
                     new[] { "Default", "Selected", "Matched", "Wrong" }, "Default", "Selected", "Matched", "Wrong", "Matched",
-                    word: "Text", phonetics: null),
+                    word: "Text", phonetics: "Phonetics"),
                 Chip = BuildToggle("ChipToggle", "WordChip", "Default", false,
                     new[] { "Default", "Placed" }, "Default", "Default", "Default", "Default", "Placed",
                     word: "Thai", phonetics: "Phonetics"),

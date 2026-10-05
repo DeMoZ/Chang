@@ -73,7 +73,7 @@ namespace Chang
                         onPlaySound?.Invoke(left[index].WordKey, _isLeftLearnLanguage);
                     }
                 });
-                toggle.EnablePhonetics(_isLeftLearnLanguage && right[i].IsShowPhonetics);
+                toggle.EnablePhonetics(_isLeftLearnLanguage && left[i].IsShowPhonetics);
             }
 
             for (int i = 0; i < right.Count; i++)

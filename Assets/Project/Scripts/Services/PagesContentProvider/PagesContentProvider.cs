@@ -58,11 +58,17 @@ namespace Project.Services.PagesContentProvider
         }
 
         /// <param name="progress">downloaded bytes and total bytes to download, not called if everything is cached</param>
-        public async UniTask PreloadWordsContentAsync(List<Word> words, Action<float, float> progress,
+        public async UniTask PreloadWordsContentAsync(List<Word> words, Languages nativeLanguage, Action<float, float> progress,
             CancellationToken ct)
         {
             HashSet<string> imageKeys = words.Select(w => _wordPathHelper.GetTexturePath(w.ImageKey)).ToHashSet();
             HashSet<string> soundKeys = words.Select(w => _wordPathHelper.GetSoundPath(w.SoundKey)).ToHashSet();
+
+            // translation sounds are played when the question is shown in the native language; not every language is voiced yet,
+            // so only existing ones are loaded (a missing one is logged as an error when played)
+            soundKeys.UnionWith(words
+                .Select(w => _wordPathHelper.GetSoundPath(_wordPathHelper.GetNativeSoundKey(w.WordKey, nativeLanguage)))
+                .Where(path => !string.IsNullOrEmpty(path) && _assetManager.IsAssetExists(path)));
 
             HashSet<string> totalKeys = new();
             totalKeys.UnionWith(imageKeys);
