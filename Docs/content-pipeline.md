@@ -79,6 +79,7 @@ Keys are path-like: `{Language}/{Type}/{Section}/{Key}`.
 - `WordPathHelper.GetSoundPath(key, voice)` builds the path, the default voice is `Female`.
 - Generation: Google Cloud TTS (the key is in `ChangExternal`), voices: Chirp3-HD Aoede (female) and Charon (male) by default. The Google Cloud project must have billing enabled.
 - New sound folders are added to `Remote_<Language>_Sound_Words` Addressables groups (created from `Remote_Thai_Sound_Words`).
+- **Thai male voice (since 2026-10):** `SoundWords/Thai/Male` is voiced by the macOS Siri voice *Voice 1* (`com.apple.ttsbundle.gryphon-neural_th-TH-A_th-TH_premium`), not by Media Prompts. Download it in System Settings → Accessibility → Spoken Content → System voice → Manage Voices → Thai. Siri voices are not available to `say -v`, so `Tools/ThaiVoice/revoice.py` renders them with `AVSpeechSynthesizer` (`tts.swift`) and trims them with the same ffmpeg filter. Run it from the project root after adding words (it overwrites the files, the `.meta` files are kept): `python3 Tools/ThaiVoice/revoice.py` (`--only <key part>` for a subset, `--voice Female` for Siri *Voice 2*). New folders still need an Addressables entry.
 
 > **Rule.** Word sounds must have no silence at the start or end: sentence audio is assembled from individual words.
 > The generator trims it with ffmpeg: mp3, 24 kHz, mono, 32 kbps, filter
