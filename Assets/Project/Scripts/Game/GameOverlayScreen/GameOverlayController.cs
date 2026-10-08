@@ -56,6 +56,12 @@ namespace Chang
             _view.EnableHintButton(enable);
         }
 
+        /// <param name="value">part of the lesson questions answered correctly, 0…1</param>
+        public void SetLessonProgress(float value)
+        {
+            _view.SetProgress(value);
+        }
+
         public void SetContinueButtonInfo(ContinueButtonInfo info)
         {
             _view.SetContinueButtonInfo(info);
@@ -83,7 +89,7 @@ namespace Chang
         {
             var yesModel = new YesNoPopupModel();
             yesModel.HeaderText.Value = string.Empty;
-            yesModel.LabelText.Value = "Are you sure want to exit the lesson";
+            yesModel.LabelText.Value = Chang.Services.LocalizationService.Localize("Lesson.ExitConfirm", "Are you sure you want to exit the lesson?");
             yesModel.OnOkClicked += () => OnConfirmReturn(true);
             yesModel.OnCancelClicked += () => OnConfirmReturn(false);
             _exitPopupController = _popupManager.ShowYesNoPopup(yesModel);

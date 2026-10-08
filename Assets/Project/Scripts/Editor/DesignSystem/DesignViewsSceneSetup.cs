@@ -158,8 +158,61 @@ namespace Chang.Editor.DesignSystem
             var canvas = manager.GetComponentInParent<Canvas>(true);
             DesignViewsBuilder.ConfigureScaler(canvas.GetComponent<CanvasScaler>());
 
+            ReplaceLogin();
+
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
+        }
+
+        [MenuItem("Chang/Design System/Use Login View In Bootstrap", false, 22)]
+        public static void SetupLogin()
+        {
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
+                return;
+            }
+
+            var scene = EditorSceneManager.OpenScene(BootstrapScene, OpenSceneMode.Single);
+            ReplaceLogin();
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log($"[{nameof(DesignViewsSceneSetup)}] [{nameof(SetupLogin)}] Bootstrap uses the redesigned login view");
+        }
+
+        /// <summary>The login view in place of the old LoginScreen (ProjectInstaller finds the LogInView in the scene).</summary>
+        private static void ReplaceLogin()
+        {
+            var old = Object.FindFirstObjectByType<DMZ.Legacy.LoginScreen.LogInView>(FindObjectsInactive.Include);
+            if (old == null)
+            {
+                Debug.LogError($"[{nameof(DesignViewsSceneSetup)}] [{nameof(ReplaceLogin)}] No LogInView in the scene");
+                return;
+            }
+
+            var canvas = old.GetComponentInParent<Canvas>(true);
+            DesignViewsBuilder.ConfigureScaler(canvas.GetComponent<CanvasScaler>());
+
+            var prefab = View("LoginView");
+            if (PrefabUtility.GetCorrespondingObjectFromSource(old.gameObject) == prefab)
+            {
+                return;
+            }
+
+            var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, old.transform.parent);
+            go.name = prefab.name;
+            var rt = (RectTransform)go.transform;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = rt.offsetMax = Vector2.zero;
+            go.transform.SetSiblingIndex(old.transform.GetSiblingIndex());
+            go.SetActive(old.gameObject.activeSelf);
+
+            // the scene switches the login background with the view
+            var view = new SerializedObject(go.GetComponent<DMZ.Legacy.LoginScreen.LogInView>());
+            view.CopyFromSerializedProperty(new SerializedObject(old).FindProperty("_onEnable"));
+            view.ApplyModifiedPropertiesWithoutUndo();
+
+            Object.DestroyImmediate(old.gameObject);
         }
     }
 }

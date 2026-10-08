@@ -159,6 +159,7 @@ namespace Chang.Sentences
 
             RectTransform row = null;
             int count = -1;
+            float progressSum = 0;
             for (int m = 0; m < section.SectionLessons.Count; m++)
             {
                 if (m / 6 > count)
@@ -181,7 +182,11 @@ namespace Chang.Sentences
                 float progress = GetLessonProgress(section.SectionLessons[m]);
                 lessonItem.SetColor(_view.GetLessonColor(progress));
                 lessonItem.SetProgress(progress);
+                progressSum += progress;
             }
+
+            int lessonsCount = section.SectionLessons.Count;
+            sectionBlock.SectionView.SetProgress(lessonsCount > 0 ? progressSum / lessonsCount : 0, lessonsCount);
         }
 
         private void OnSectionRepetitionClick(string key)

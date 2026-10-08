@@ -23,8 +23,8 @@ Key,English,Russian,German,French,ChineseSimplified,ChineseTraditional,Malay,Ind
 ## At runtime
 
 - `LocalizationService` (`Scripts/Services/`) uses the device language at startup and `ProfileData.NativeLanguage` once the profile is loaded. If the CSV has no column for that language, it falls back to English.
-- `LocalizationService.Localize(key, fallback)` is called by `Word.Translation` and `Sentence.GetTranslation`. A missing key falls back to `DefaultTranslation` from the content sheet.
-- UI texts are translated by the `LocalizedTMPText` component.
+- `LocalizationService.Localize(key, fallback)` returns the translation in the current language, else the English one, else the fallback. It is called by `Word.Translation` and `Sentence.GetTranslation` (fallback: `DefaultTranslation` from the content sheet) and by the views for formatted texts.
+- UI texts are translated by the `LocalizedTMPText` component; its fallback is the text the prefab has, so a key that is not in the sheet yet shows the design text.
 - The available UI languages are listed in `Assets/Project/Resources/LanguagesConfig.asset`: display name, `SystemLanguage` mapping and the default language.
 
 ## The `Languages` enum

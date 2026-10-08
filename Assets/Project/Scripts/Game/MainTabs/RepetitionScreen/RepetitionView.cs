@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Chang.Services;
 using Chang.UI.DesignSystem;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -28,6 +30,16 @@ namespace Chang
         [SerializeField] private DesignSelection modeSelection;
         [SerializeField] private Button reviewBtn;
 
+        [Header("Design (optional): counters")]
+        [SerializeField] private TMP_Text wordsValue;
+        [SerializeField] private TMP_Text sentencesValue;
+        [SerializeField] private TMP_Text questionsValue;
+        [Tooltip("\"18 words · 4 sentences\" due now")]
+        [SerializeField] private TMP_Text dueTitle;
+        [Tooltip("\"next batch in 4 h\", the root is hidden when nothing is waiting")]
+        [SerializeField] private TMP_Text nextDueText;
+        [SerializeField] private GameObject nextDueRoot;
+
         private readonly bool[] _canRepeat = { true, true, true };
         private int _mode = -1;
 
@@ -46,6 +58,50 @@ namespace Chang
                     item.AnswersCount.ToString(),
                     FormatDate(item.UtcTime),
                     item.SuccessSequence.ToString());
+            }
+        }
+
+        public void SetSummary(RepetitionSummary summary)
+        {
+            SetText(wordsValue, summary.PlayedWords.ToString());
+            SetText(sentencesValue, summary.PlayedSentences.ToString());
+            SetText(questionsValue, summary.Answers.ToString());
+            SetText(dueTitle, string.Format(LocalizationService.Localize("Lobby.Repetition.Due", "{0} words · {1} sentences"),
+                summary.DueWords, summary.DueSentences));
+
+            if (nextDueRoot != null)
+            {
+                nextDueRoot.SetActive(summary.NextDueIn.HasValue);
+            }
+
+            if (summary.NextDueIn.HasValue)
+            {
+                SetText(nextDueText, string.Format(LocalizationService.Localize("Lobby.Repetition.NextIn", "next batch in {0}"),
+                    FormatDuration(summary.NextDueIn.Value)));
+            }
+        }
+
+        /// <summary>"25 min", "4 h", "2 d"</summary>
+        private static string FormatDuration(TimeSpan time)
+        {
+            if (time.TotalHours < 1)
+            {
+                return string.Format(LocalizationService.Localize("Lobby.Time.Minutes", "{0} min"), Math.Max(1, (int)Math.Ceiling(time.TotalMinutes)));
+            }
+
+            if (time.TotalDays < 1)
+            {
+                return string.Format(LocalizationService.Localize("Lobby.Time.Hours", "{0} h"), (int)Math.Ceiling(time.TotalHours));
+            }
+
+            return string.Format(LocalizationService.Localize("Lobby.Time.Days", "{0} d"), (int)Math.Ceiling(time.TotalDays));
+        }
+
+        private static void SetText(TMP_Text text, string value)
+        {
+            if (text != null)
+            {
+                text.text = value;
             }
         }
 

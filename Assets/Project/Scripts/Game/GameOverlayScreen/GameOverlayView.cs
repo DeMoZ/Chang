@@ -20,6 +20,9 @@ namespace Chang.UI
         [Tooltip("Panel holding the return and hint buttons; shown while one of them is. Optional.")]
         [SerializeField] private GameObject _topBar;
 
+        [Tooltip("Lesson progress in the top bar. Optional.")]
+        [SerializeField] private LoadingFillBar _progress;
+
         private UnityAction _checkBtnListener;
         private UnityAction _continueBtnListener;
         private UnityAction _returnBtnListener;
@@ -73,6 +76,15 @@ namespace Chang.UI
         public void SetContinueButtonInfo(ContinueButtonInfo info)
         {
             _continue.Set(info);
+        }
+
+        /// <param name="value">0…1</param>
+        public void SetProgress(float value)
+        {
+            if (_progress != null)
+            {
+                _progress.SetProgress(value);
+            }
         }
 
         public void EnableHintButton(bool enable)

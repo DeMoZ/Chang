@@ -9,13 +9,17 @@ namespace Chang.FSM
 {
     public class ResultItem
     {
+        public string Key { get; }
+        public bool IsSentence { get; }
         public string Presentation { get; }
         public string Translation { get; }
         public int Mark { get; }
         public bool IsCorrect { get; }
 
-        public ResultItem(string presentation, string translation, int mark, bool isCorrect)
+        public ResultItem(string key, bool isSentence, string presentation, string translation, int mark, bool isCorrect)
         {
+            Key = key;
+            IsSentence = isSentence;
             Presentation = presentation;
             Translation = translation;
             Mark = mark;

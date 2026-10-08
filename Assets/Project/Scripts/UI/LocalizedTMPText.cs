@@ -11,6 +11,9 @@ namespace Chang.UI
 
         private TMP_Text _text;
 
+        // the design text is shown while the key is not in the sheet yet
+        private string _fallback;
+
         public string LocalizationKey
         {
             get => _localizationKey;
@@ -24,6 +27,7 @@ namespace Chang.UI
         private void Awake()
         {
             _text = GetComponent<TMP_Text>();
+            _fallback = _text.text;
         }
 
         private void OnEnable()
@@ -41,7 +45,7 @@ namespace Chang.UI
         {
             if (_text == null || string.IsNullOrEmpty(_localizationKey)) return;
 
-            _text.text = LocalizationManager.Localize(_localizationKey);
+            _text.text = Chang.Services.LocalizationService.Localize(_localizationKey, _fallback);
         }
     }
 }

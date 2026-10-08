@@ -17,6 +17,11 @@ namespace Chang.Services.DataProvider
         public string Name;
         public GenderType Gender;
         public Languages LearnLanguage;
+        public Languages NativeLanguage;
+
+        [Tooltip("Drawn by the inspector as a picture and a list of the chosen options")]
+        public MascotLook Mascot;
+
         public string ProfileUtcTime;
         public string VocabularyUtcTime;
         public string SentencesUtcTime;
@@ -41,6 +46,8 @@ namespace Chang.Services.DataProvider
             Name = profile?.Name;
             Gender = profile?.Gender ?? GenderType.No;
             LearnLanguage = language;
+            NativeLanguage = profile?.NativeLanguage ?? Languages.English;
+            Mascot = profile?.Mascot;
             ProfileUtcTime = profile?.UtcTime.ToString("O");
 
             ProgressData<VocabularyQuestLog> vocabulary = Deserialize<ProgressData<VocabularyQuestLog>>(VocabularyJson.Json);

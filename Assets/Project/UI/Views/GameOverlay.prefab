@@ -130,6 +130,7 @@ MonoBehaviour:
   _checkBtn: {fileID: 2844096499458558369}
   _continue: {fileID: 2859214928991603039}
   _topBar: {fileID: 8586645083218776024}
+  _progress: {fileID: 2569468374658417807}
 --- !u!1 &8313462910906957552
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,6 +290,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8330099202961295763, guid: 56f55edbde00844eab3f1f9567c9de0b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2859214928991603039}
+    - targetCorrespondingSourceObject: {fileID: 4966270756031852319, guid: 56f55edbde00844eab3f1f9567c9de0b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 316766510065755273}
+    - targetCorrespondingSourceObject: {fileID: 8500826688963921021, guid: 56f55edbde00844eab3f1f9567c9de0b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1535179825247684801}
   m_SourcePrefab: {fileID: 100100000, guid: 56f55edbde00844eab3f1f9567c9de0b, type: 3}
 --- !u!114 &29282009988188771 stripped
 MonoBehaviour:
@@ -345,6 +352,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &6574955228352600448 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8500826688963921021, guid: 56f55edbde00844eab3f1f9567c9de0b, type: 3}
+  m_PrefabInstance: {fileID: 3370924685651287549}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1535179825247684801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6574955228352600448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.Continue
 --- !u!1 &6727704063394370670 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8330099202961295763, guid: 56f55edbde00844eab3f1f9567c9de0b, type: 3}
@@ -391,6 +416,24 @@ MonoBehaviour:
   _states: {fileID: 5179722886164507620}
   _wrongContinueBtn: {fileID: 29282009988188771}
   _infoTitle: {fileID: 435294808679332586}
+--- !u!1 &7650580941431599842 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4966270756031852319, guid: 56f55edbde00844eab3f1f9567c9de0b, type: 3}
+  m_PrefabInstance: {fileID: 3370924685651287549}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &316766510065755273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7650580941431599842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.Continue
 --- !u!224 &8190956394845909885 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6875854606863576704, guid: 56f55edbde00844eab3f1f9567c9de0b, type: 3}
@@ -495,7 +538,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8709424245690401339, guid: b0af6964de7414b97b18b5fff0d0b3fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1818389795014182564}
   m_SourcePrefab: {fileID: 100100000, guid: b0af6964de7414b97b18b5fff0d0b3fe, type: 3}
 --- !u!114 &2844096499458558369 stripped
 MonoBehaviour:
@@ -513,6 +559,24 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2229630235415057280, guid: b0af6964de7414b97b18b5fff0d0b3fe, type: 3}
   m_PrefabInstance: {fileID: 3882666411778470683}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5565349298262536480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8709424245690401339, guid: b0af6964de7414b97b18b5fff0d0b3fe, type: 3}
+  m_PrefabInstance: {fileID: 3882666411778470683}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1818389795014182564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5565349298262536480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.Check
 --- !u!1001 &6230986728583128205
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -531,7 +595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3039722757555392737, guid: fb659304a25fd4f65a3e2ffac7853ccc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3300046945267271958, guid: fb659304a25fd4f65a3e2ffac7853ccc, type: 3}
       propertyPath: m_Pivot.x
@@ -616,7 +680,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2618912571551774942, guid: fb659304a25fd4f65a3e2ffac7853ccc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2569468374658417807}
   m_SourcePrefab: {fileID: 100100000, guid: fb659304a25fd4f65a3e2ffac7853ccc, type: 3}
 --- !u!114 &4440976338073568589 stripped
 MonoBehaviour:
@@ -629,6 +696,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!224 &6500386378979199491 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 886905188945309326, guid: fb659304a25fd4f65a3e2ffac7853ccc, type: 3}
+  m_PrefabInstance: {fileID: 6230986728583128205}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7255567513477735716 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3659206980929225129, guid: fb659304a25fd4f65a3e2ffac7853ccc, type: 3}
@@ -640,6 +712,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!1 &8223808701077331027 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2618912571551774942, guid: fb659304a25fd4f65a3e2ffac7853ccc, type: 3}
+  m_PrefabInstance: {fileID: 6230986728583128205}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2569468374658417807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8223808701077331027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d71c801f6194943c683ea17349e37862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.LoadingFillBar
+  _fill: {fileID: 6500386378979199491}
 --- !u!1 &8586645083218776024 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2400714778319448917, guid: fb659304a25fd4f65a3e2ffac7853ccc, type: 3}

@@ -1,4 +1,5 @@
 using System;
+using Chang.Services;
 using Chang.UI.DesignSystem;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,11 @@ namespace Chang.GameBook
         [SerializeField] private DesignStates states;
         [Tooltip("Pressing it collapses or expands the section (the whole header)")]
         [SerializeField] private Button collapseButton;
+        [Tooltip("Section title in the learn language, hidden when the sheet has no Section.<Key>.Learn")]
+        [SerializeField] private TMP_Text learnLabel;
+        [Tooltip("\"62% · 6 lessons\"")]
+        [SerializeField] private TMP_Text progressText;
+        [SerializeField] private LoadingFillBar progressBar;
 
         private bool _isCollapsed;
         private bool _isSorted;
@@ -55,7 +61,14 @@ namespace Chang.GameBook
         
         public void Init(string key, Action onSectionSortClick, Action onSectionRepetitionClick)
         {
-            label.text = key;
+            label.text = LocalizationService.Localize($"Section.{key}", key);
+
+            if (learnLabel != null)
+            {
+                string learnTitle = LocalizationService.Localize($"Section.{key}.Learn", null);
+                learnLabel.text = learnTitle;
+                learnLabel.gameObject.SetActive(!string.IsNullOrEmpty(learnTitle));
+            }
             
             sortSectionToggle.onValueChanged.RemoveAllListeners();
             sortSectionToggle.onValueChanged.AddListener(isOn =>
@@ -89,6 +102,21 @@ namespace Chang.GameBook
             // Debug.Log($"SetSortToggle, isOn: {isOn}, interactable: {isInteractable}");
         }
         
+        /// <param name="progress">mean lesson progress, 0…1</param>
+        public void SetProgress(float progress, int lessonsCount)
+        {
+            if (progressText != null)
+            {
+                progressText.text = string.Format(LocalizationService.Localize("Lobby.Section.Progress", "{0}% · {1} lessons"),
+                    Mathf.RoundToInt(progress * 100f), lessonsCount);
+            }
+
+            if (progressBar != null)
+            {
+                progressBar.SetProgress(progress);
+            }
+        }
+
         public void SetInteractableRepeatButton(bool isOn)
         {
             repeatSectionButton.interactable = isOn;

@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1052833618579115297, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1216637931232714715, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+      propertyPath: m_text
+      value: Lesson complete
       objectReference: {fileID: 0}
     - target: {fileID: 2390347137093266515, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
       propertyPath: m_Pivot.x
@@ -126,7 +130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6737774030669685815, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6799686135484548391, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
       propertyPath: m_IsActive
@@ -145,12 +149,85 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5537656122152176634, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6936750531964794624}
+    - targetCorrespondingSourceObject: {fileID: 6737774030669685815, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6420223049911544094}
+    - targetCorrespondingSourceObject: {fileID: 6565171131099126080, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6532763623066271750}
+    - targetCorrespondingSourceObject: {fileID: 5439418826132704937, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2507053015322264177}
+    - targetCorrespondingSourceObject: {fileID: 3035249302133364388, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3003851253169263183}
+    - targetCorrespondingSourceObject: {fileID: 693106238909855875, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4846394810496057588}
   m_SourcePrefab: {fileID: 100100000, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
 --- !u!224 &1630768124004206141 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2390347137093266515, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
   m_PrefabInstance: {fileID: 4003030438403500654}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2130978677636512970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3035249302133364388, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+  m_PrefabInstance: {fileID: 4003030438403500654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3003851253169263183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130978677636512970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.Mastery
+--- !u!114 &3162086901808765782 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2048121543097577784, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+  m_PrefabInstance: {fileID: 4003030438403500654}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &4473189928343818989 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 693106238909855875, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+  m_PrefabInstance: {fileID: 4003030438403500654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4846394810496057588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4473189928343818989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.Continue
+--- !u!114 &5368872373542257499 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9011577526811158837, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+  m_PrefabInstance: {fileID: 4003030438403500654}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!114 &6077506043364600428 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7195130916276305922, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
@@ -162,11 +239,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &6548953197296440498 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7885539913622273756, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+  m_PrefabInstance: {fileID: 4003030438403500654}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &7057649700998144021 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6231946123309681275, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
   m_PrefabInstance: {fileID: 4003030438403500654}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7641763257165205081 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6737774030669685815, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+  m_PrefabInstance: {fileID: 4003030438403500654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6420223049911544094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7641763257165205081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.Complete
+--- !u!1 &7823230452357788462 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6565171131099126080, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+  m_PrefabInstance: {fileID: 4003030438403500654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6532763623066271750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7823230452357788462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Repetition.Words
 --- !u!1 &7880770388061067220 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6544715491767877050, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
@@ -187,6 +311,9 @@ MonoBehaviour:
   _contentParent: {fileID: 7057649700998144021}
   _itemPrefab: {fileID: 4302340101280890236, guid: f003ac8a46b4349d9be15d3a04b6cbfb, type: 3}
   _continuteBtn: {fileID: 6077506043364600428}
+  _wordsValue: {fileID: 6548953197296440498}
+  _masteryValue: {fileID: 3162086901808765782}
+  _accuracyValue: {fileID: 5368872373542257499}
 --- !u!114 &2454822444244232000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,3 +368,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!1 &9003025937799554247 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5439418826132704937, guid: 13d07a6df3a444434b4194679f937b5b, type: 3}
+  m_PrefabInstance: {fileID: 4003030438403500654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2507053015322264177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9003025937799554247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.Accuracy

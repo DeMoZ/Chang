@@ -266,12 +266,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8522669457837250386, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6412684322869530025}
+    - targetCorrespondingSourceObject: {fileID: 4514576488716747010, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4187677414926876797}
     - targetCorrespondingSourceObject: {fileID: 7194748243589512594, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7558797673482552693}
     - targetCorrespondingSourceObject: {fileID: 8934200082886470599, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8304378707126041671}
+    - targetCorrespondingSourceObject: {fileID: 6851148940462669014, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2733039929600520547}
     - targetCorrespondingSourceObject: {fileID: 2807497753403806707, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2172281121956904193}
@@ -304,6 +310,24 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4365084130099531895, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
   m_PrefabInstance: {fileID: 2997651330164547334}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1675114095686557188 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4514576488716747010, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
+  m_PrefabInstance: {fileID: 2997651330164547334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4187677414926876797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675114095686557188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.TranslateSentence
 --- !u!114 &2998660003881145644 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1316538127649322, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
@@ -400,3 +424,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!1 &8542738782124598224 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6851148940462669014, guid: dc9da17e18c65459f98f9cd866119bb3, type: 3}
+  m_PrefabInstance: {fileID: 2997651330164547334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2733039929600520547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8542738782124598224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.TapWords

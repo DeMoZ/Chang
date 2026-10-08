@@ -58,6 +58,7 @@ namespace Chang
                 .ToList();
 
             _view.Set(items);
+            _view.SetSummary(_repetitionService.GetSummary());
             _view.SetInteractableRepeatButtons(
                 _repetitionService.CanRepeatVocabulary(),
                 _repetitionService.CanRepeatSentences(),

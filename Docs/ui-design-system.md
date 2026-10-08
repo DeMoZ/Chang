@@ -3,9 +3,8 @@
 The redesigned UI is generated from the Penpot file **"New File 1"**, pages `Redesign · Foundations`, `Redesign · Components`, `Redesign · Screens` and `Redesign · Mascot`.
 Penpot is the source of truth for the look. Unity gets prefabs that keep Penpot's component structure, so a change in one place reaches every screen that uses it.
 
-> Status: **step 2 of 3 — the existing logic runs on the new UI** (lobby tabs, books, repetition, profile, lesson pages, overlay, popups, loading).
-> Step 3 implements the logic that the design adds (mascot editor, dialogues, alphabet, word detail…) and the data the screens show but the game doesn't provide yet (see [Not connected yet](#not-connected-yet)).
-> The login screen still uses the old prefab. The old UI prefabs stay in `Assets/Project/Prefabs` but are not in the scenes any more.
+> Status: **step 3 of 3** — every screen, the login included, runs on the new UI; the data the design shows is connected except the parts in [Not connected yet](#not-connected-yet).
+> The old UI prefabs stay in `Assets/Project/Prefabs` but are not in the scenes any more.
 
 ## Where things are
 
@@ -119,7 +118,26 @@ The views are built by **Chang → Design System → Build Views** (`DesignViews
 - adds `Button`/`Toggle` to the design frames the user taps;
 - hides parts that have no data yet (see below).
 
-**Use Views In Scenes** (`DesignViewsSceneSetup`) put the views into `Game.unity` and `Bootstrap.unity` and rewired `GameInstaller` and `PopupManager`. It was a one-time step; the scenes reference the view prefabs, so rebuilding the views needs no scene changes.
+**Use Views In Scenes** (`DesignViewsSceneSetup`) put the views into `Game.unity` and `Bootstrap.unity` and rewired `GameInstaller` and `PopupManager`. It was a one-time step; the scenes reference the view prefabs, so rebuilding the views needs no scene changes. **Use Login View In Bootstrap** did the same for the login (`ProjectInstaller` finds the `LogInView` in the scene).
+
+### Screen data
+
+| Where | Shows | Source |
+|---|---|---|
+| Lesson top bar | progress | lesson questions answered correctly ÷ lesson questions (`PagesState`); demonstrations and the generated match words don't count |
+| Section header | `62% · 6 lessons`, bar | mean lesson progress of the section (the book controllers) |
+| Section header | title, Thai title | localization keys `Section.<Key>` and `Section.<Key>.Learn`; without them the raw key is shown and the Thai title is hidden |
+| Lesson complete | Words · Mastery · Accuracy | from the lesson log: played word keys; mean mark of the played keys after the lesson ÷ max mark; correct answers ÷ answers |
+| Repeat | Words · Sentences · Answers | played words and sentences; answers kept in their logs (the last `LOG_LIMIT` of each key, so not the all-time total) |
+| Repeat due card | `18 words · 4 sentences`, `next batch in 4 h` | `RepetitionService.GetSummary`: due keys, time until the next not-due key becomes due (hidden when every key is due) |
+
+### Login
+
+`LoginView` (built by `BuildLogin`) carries `LogInView` of the `DMZ.Legacy.LoginScreen` submodule. The design draws only the first step (sign in with a name / continue as a guest); the name and password form and the signed-in panel (log out, delete account) are cards made of the design components: the Dialog card, TextField, the Segmented control (Log in / Sign up, painted after the toggles by `ToggleSelection`) and buttons. The validation and server messages are still the submodule's English texts.
+
+### Texts
+
+Design texts are localized with `LocalizedTMPText` and keys in the `Lobby` sheet (`Lobby.*`, `Lesson.*`, `Login.*`, `Section.*`). A key that is not in the sheet yet shows the English text from the builder or the design, so new keys can be added to the sheet later.
 
 ### Element states come from the design
 
@@ -159,12 +177,10 @@ The new canvases are 540×1080 design units in *Expand* mode: the whole design a
 
 The design shows these, the game has no data or logic for them yet (step 3). They are hidden or left static in the views:
 
-- Section progress bar and Thai section title, streak chip, daily goal, "phrase of the day".
-- Mascot name (the "Chang" chip in the mascot editor is static, its pencil is hidden). Texts of the mascot editor are English · Thai from the design, without localization keys.
-- Lesson progress in the top bar, totals on the result screen, counters of the repetition screen, "next batch in" time.
-- Slow sound, word detail sheet, dialogues, alphabet.
-- New design texts have no localization keys yet ("Review now", "Check", "Continue", "Match the pairs", row labels…). Existing keys are used where they fit (tabs, repeat modes, log out).
-- Login screen (the old prefab is used).
+- Streak chip, daily goal, "phrase of the day" (#86).
+- Word detail sheet (#85), dialogues (#88), alphabet (#89), slow sound.
+- The "Chang" chip in the mascot editor is static: the mascot is the player, it has no own name. Texts of the mascot editor are English · Thai from the design, without localization keys.
+- The lesson number on the result screen ("Lesson complete" is shown).
 
 ## Fonts
 

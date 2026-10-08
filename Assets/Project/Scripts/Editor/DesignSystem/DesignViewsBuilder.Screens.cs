@@ -160,10 +160,20 @@ namespace Chang.Editor.DesignSystem
                 var content = (RectTransform)Q(root, "Content");
                 Hide(root, "Chang DS / TabBar / Repeat");
                 HideAll(Children(content, "Chang DS / LogItem"));
-                // Counters have no data source yet (the old view never filled them).
-                Hide(root, "Content|Stats");
-                Hide(root, "Content|Chang DS / DueCard|Title");
-                Hide(root, "Content|Chang DS / DueCard|Next");
+                var stats = Q(root, "Content|Stats");
+                Show(stats);
+                var dueCard = Q(root, "Content|Chang DS / DueCard");
+                Show(Q(dueCard, "Title"));
+                Show(Q(dueCard, "Next"));
+
+                Localize(Q(root, "Content|Header|Titles|Title"), "Lobby.Repetition.Title");
+                Localize(Q(root, "Content|Recent answers"), "Lobby.Repetition.RecentAnswers");
+                Localize(Q(stats, "Chang DS / StatTile / Words|Label"), "Lobby.Repetition.Words");
+                Localize(Q(stats, "Chang DS / StatTile / Sentences|Label"), "Lobby.Repetition.Sentences");
+                // The value is the answers kept in the logs (the recent ones of every key), not the questions.
+                Localize(Q(stats, "Chang DS / StatTile / Questions|Label"), "Lobby.Repetition.Answers", "Answers");
+                Localize(Q(dueCard, "Caption"), "Lobby.Repetition.ReadyToReview");
+                Localize(Q(dueCard, "Start|Label"), "Lobby.Repetition.ReviewNow");
 
                 var log = Child(content, "Log");
                 var logLayout = GetOrAdd<VerticalLayoutGroup>(log);
@@ -203,7 +213,13 @@ namespace Chang.Editor.DesignSystem
                     ("repeatSentencesBtn", null),
                     ("repeatMixedBtn", null),
                     ("modeSelection", selection),
-                    ("reviewBtn", review));
+                    ("reviewBtn", review),
+                    ("wordsValue", Q<TMP_Text>(stats.gameObject, "Chang DS / StatTile / Words|Value")),
+                    ("sentencesValue", Q<TMP_Text>(stats.gameObject, "Chang DS / StatTile / Sentences|Value")),
+                    ("questionsValue", Q<TMP_Text>(stats.gameObject, "Chang DS / StatTile / Questions|Value")),
+                    ("dueTitle", Q<TMP_Text>(dueCard.gameObject, "Title")),
+                    ("nextDueText", Q<TMP_Text>(dueCard.gameObject, "Next|Next")),
+                    ("nextDueRoot", Q(dueCard, "Next").gameObject));
             });
         }
 
@@ -229,9 +245,15 @@ namespace Chang.Editor.DesignSystem
 
                 var logout = Q(root, "Content|Chang DS / Button / Ghost");
                 Localize(Q(logout, "Label"), "Lobby.Profile.LogOut");
+                Localize(Q(mascotRow, "Label"), "Lobby.Profile.MyMascot");
+                Localize(Q(mascotRow, "Value"), "Lobby.Profile.Customize");
+                Localize(Q(nameRow, "Label"), "Lobby.Profile.Name");
+                Localize(Q(languageRow, "Label"), "Lobby.Profile.InterfaceLanguage");
 
                 var card = Q(root, "Content|Chang DS / PolitenessCard");
                 var options = Q(card, "Options");
+                Localize(Q(card, "Caption"), "Lobby.Profile.SpeakingAs");
+                Localize(Q(card, "Hint"), "Lobby.Profile.PolitenessHint");
                 var selection = GetOrAdd<DesignSelection>(card);
                 Set(selection, ("_items", Objects(new[] { (RectTransform)Q(options, "Male"), (RectTransform)Q(options, "Female") })),
                     ("_designSelectedIndex", 0), ("_designNormalIndex", 1));
@@ -361,11 +383,11 @@ namespace Chang.Editor.DesignSystem
                 var topBar = Instance(Component("LessonTopBar/LessonTopBar"), column, "TopBar");
                 topBar.SetSiblingIndex(0);
                 AnchorTop(topBar, DesignSize(Component("LessonTopBar/LessonTopBar")).y, 8f);
-                // No lesson progress data yet.
-                Hide(topBar.gameObject, "Progress|Value");
+                var progress = FillBar(Q(topBar, "Progress"));
 
                 var check = Instance(Component("Button/Primary"), column, "Check");
                 AnchorBottom(check, 64f, 24f, 440f);
+                Localize(Q(check, "Label"), "Lesson.Check", "Check");
 
                 var blocker = Blocker(column, "Blocker");
                 blocker.transform.SetSiblingIndex(check.GetSiblingIndex() + 1);
@@ -374,6 +396,8 @@ namespace Chang.Editor.DesignSystem
                 AnchorBottom(sheet, DesignSize(Component("FeedbackSheet/Wrong")).y, 0f);
                 var title = Q<TMP_Text>(sheet.gameObject, "Head|Title");
                 var states = States(sheet.gameObject, "FeedbackSheet", new[] { "Correct", "Wrong" }, "Correct", stateTexts: new[] { title });
+                Localize(Q(sheet, "Chang DS / Button / Success|Label"), "Lesson.Continue", "Continue");
+                Localize(Q(sheet, "Chang DS / Button / Danger|Label"), "Lesson.Continue", "Continue");
                 var continueView = GetOrAdd<PagesContinueView>(sheet);
                 Set(continueView,
                     ("_continueBtn", Q<Button>(sheet.gameObject, "Chang DS / Button / Success")),
@@ -395,6 +419,7 @@ namespace Chang.Editor.DesignSystem
                     ("_blocker", blocker.gameObject),
                     ("_returnBtn", Q<Button>(topBar.gameObject, "Chang DS / IconButton / Close")),
                     ("_hintBtn", Q<Button>(topBar.gameObject, "Chang DS / IconButton / Hint")),
+                    ("_progress", progress),
                     ("_checkBtn", check.GetComponent<Button>()),
                     ("_continue", continueView));
             });
@@ -425,6 +450,7 @@ namespace Chang.Editor.DesignSystem
             {
                 var card = Q(content, "Chang DS / WordCard");
                 SingleLine(Q(card, "Phonetics"));
+                Localize(Q(content, "Tag|New word · คำใหม่"), "Lesson.NewWord");
                 var questionWord = GetOrAdd<ChangText>(card);
                 Set(questionWord, ("_word", Q<TMP_Text>(card.gameObject, "Thai")), ("_phonetic", Q<TMP_Text>(card.gameObject, "Phonetics")));
 
@@ -486,7 +512,8 @@ namespace Chang.Editor.DesignSystem
                 // The design has no button on this page; the view shows Continue when all pairs are matched.
                 var continueButton = Instance(Component("Button/Primary"), root.transform, "Continue");
                 AnchorBottom(continueButton, 64f, 24f, 440f);
-                Q<TMP_Text>(continueButton.gameObject, "Label").text = "Continue";
+                Localize(Q(continueButton, "Label"), "Lesson.Continue", "Continue");
+                Localize(Q(content, "Match the pairs"), "Lesson.MatchPairs");
 
                 var view = GetOrAdd<MatchWordsView>(root);
                 Set(view,
@@ -511,6 +538,8 @@ namespace Chang.Editor.DesignSystem
                 poolGroup.allowSwitchOff = true;
 
                 var translation = card.Cast<Transform>().First(t => t.GetComponent<TMP_Text>() != null);
+                Localize(Q(content, "Translate the sentence"), "Lesson.TranslateSentence");
+                Localize(Q(content, "Tap the words"), "Lesson.TapWords");
 
                 var view = GetOrAdd<SentenceSelectWordView>(root);
                 Set(view,
@@ -529,19 +558,29 @@ namespace Chang.Editor.DesignSystem
             {
                 var content = (RectTransform)Q(root, "Content");
                 RemoveStatusBarOffset(content);
-                // Totals and the lesson number have no data source yet.
-                Hide(content, "Stats");
-                Hide(content, "Lesson 4 complete");
+                var stats = Q(content, "Stats");
+                Show(stats);
+                var title = Q(content, "Lesson 4 complete");
+                Show(title);
+                Localize(title, "Lesson.Complete", "Lesson complete");
+                // The design labels the tiles Words, Mastery and Accuracy.
+                Localize(Q(stats, "Chang DS / StatTile / Words|Label"), "Lobby.Repetition.Words");
+                Localize(Q(stats, "Chang DS / StatTile / Sentences|Label"), "Lesson.Mastery");
+                Localize(Q(stats, "Chang DS / StatTile / Questions|Label"), "Lesson.Accuracy");
                 var list = Q(content, "List");
                 HideAll(list.Cast<Transform>());
                 Scroll(root, content, 120f);
 
                 var continueButton = root.transform.Cast<Transform>().First(t => t.name.StartsWith("Chang DS / Button /"));
+                Localize(Q(continueButton, "Label"), "Lesson.Continue", "Continue");
                 var view = GetOrAdd<PlayResultView>(root);
                 Set(view,
                     ("_contentParent", list),
                     ("_itemPrefab", items.ResultRow),
-                    ("_continuteBtn", continueButton.GetComponent<Button>()));
+                    ("_continuteBtn", continueButton.GetComponent<Button>()),
+                    ("_wordsValue", Q<TMP_Text>(stats.gameObject, "Chang DS / StatTile / Words|Value")),
+                    ("_masteryValue", Q<TMP_Text>(stats.gameObject, "Chang DS / StatTile / Sentences|Value")),
+                    ("_accuracyValue", Q<TMP_Text>(stats.gameObject, "Chang DS / StatTile / Questions|Value")));
             });
         }
 

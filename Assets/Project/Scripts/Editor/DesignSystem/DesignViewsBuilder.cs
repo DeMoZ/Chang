@@ -83,6 +83,7 @@ namespace Chang.Editor.DesignSystem
                 EditorUtility.DisplayProgressBar("Build views", "Popups", 0.85f);
                 BuildPopup();
                 BuildLoading();
+                BuildLogin();
 
                 AssetDatabase.SaveAssets();
                 Debug.Log($"[{nameof(DesignViewsBuilder)}] [{nameof(BuildAll)}] Views built in {ViewsRoot}");
@@ -250,9 +251,9 @@ namespace Chang.Editor.DesignSystem
                 var le = GetOrAdd<LayoutElement>(root);
                 le.minHeight = le.preferredHeight = DesignSize(Component("SectionHeader/Expanded")).y;
 
-                // No data for the Thai title and the section progress yet.
-                Hide(root, "Titles|TitleRow|Thai");
-                Hide(root, "Titles|Meta");
+                // The code hides the learn-language title when the sheet has no Section.<Key>.Learn.
+                Show(Q(root, "Titles|Meta"));
+                var progressBar = FillBar(Q(root, "Titles|Meta|Bar"));
 
                 var sort = Q(root, "Sort");
                 var sortToggle = ToggleOn(sort);
@@ -268,7 +269,7 @@ namespace Chang.Editor.DesignSystem
                 var collapse = ButtonOn(root.transform);
                 collapse.transition = Selectable.Transition.None;
                 var states = States(root, "SectionHeader", new[] { "Expanded", "Collapsed", "Sorted" }, "Expanded",
-                    codeVisibility: new[] { Q(root, "Titles|TitleRow|Thai").gameObject, Q(root, "Titles|Meta").gameObject });
+                    codeVisibility: new[] { Q(root, "Titles|TitleRow|Thai").gameObject });
 
                 var section = GetOrAdd<GameBookSection>(root);
                 Set(section,
@@ -277,7 +278,10 @@ namespace Chang.Editor.DesignSystem
                     ("sortSectionToggle", sortToggle),
                     ("repeatSectionButton", repeat),
                     ("states", states),
-                    ("collapseButton", collapse));
+                    ("collapseButton", collapse),
+                    ("learnLabel", Q<TMP_Text>(root, "Titles|TitleRow|Thai")),
+                    ("progressText", Q<TMP_Text>(root, "Titles|Meta|Progress")),
+                    ("progressBar", progressBar));
             });
             return prefab.GetComponent<GameBookSection>();
         }

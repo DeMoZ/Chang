@@ -33,6 +33,31 @@ namespace Chang.Services
         }
     }
 
+    public readonly struct RepetitionSummary
+    {
+        public readonly int PlayedWords;
+        public readonly int PlayedSentences;
+
+        /// <summary>Answers kept in the logs: the recent ones, the log of a key is limited</summary>
+        public readonly int Answers;
+
+        public readonly int DueWords;
+        public readonly int DueSentences;
+
+        /// <summary>Time until the next not due key becomes due, null when every played key is due</summary>
+        public readonly TimeSpan? NextDueIn;
+
+        public RepetitionSummary(int playedWords, int playedSentences, int answers, int dueWords, int dueSentences, TimeSpan? nextDueIn)
+        {
+            PlayedWords = playedWords;
+            PlayedSentences = playedSentences;
+            Answers = answers;
+            DueWords = dueWords;
+            DueSentences = dueSentences;
+            NextDueIn = nextDueIn;
+        }
+    }
+
     /// <summary>
     /// Selects played keys for repetition lessons. The weak and the long ago repeated keys come first:
     /// a low mark gives a short interval from the config, so the key becomes due sooner
@@ -119,6 +144,36 @@ namespace Chang.Services
             return GetVocabularyCandidates(null)
                 .Concat(GetSentencesCandidates(null))
                 .ToList();
+        }
+
+        /// <summary>
+        /// Counters of the repetition screen
+        /// </summary>
+        public RepetitionSummary GetSummary()
+        {
+            DateTime now = DateTime.UtcNow;
+            List<RepetitionCandidate> words = GetVocabularyCandidates(null);
+            List<RepetitionCandidate> sentences = GetSentencesCandidates(null);
+
+            int answers = words.Sum(word => _profileService.VocabularyProgress.Log[word.Key].Log.Count)
+                          + sentences.Sum(sentence => _profileService.SentencesProgress.Log[sentence.Key].Log.Count);
+
+            IEnumerable<DateTime> dueTimes = words
+                .Where(word => !word.IsDue)
+                .Select(word => GetDueTime(_profileService.VocabularyProgress.Log[word.Key].Mark, _profileService.VocabularyProgress.Log[word.Key].UtcTime))
+                .Concat(sentences
+                    .Where(sentence => !sentence.IsDue)
+                    .Select(sentence => GetDueTime(_profileService.SentencesProgress.Log[sentence.Key].Mark, _profileService.SentencesProgress.Log[sentence.Key].UtcTime)));
+
+            TimeSpan? nextDueIn = dueTimes.Any() ? dueTimes.Min() - now : null;
+
+            return new RepetitionSummary(words.Count, sentences.Count, answers,
+                words.Count(word => word.IsDue), sentences.Count(sentence => sentence.IsDue), nextDueIn);
+        }
+
+        private DateTime GetDueTime(int mark, DateTime lastAnswerUtcTime)
+        {
+            return lastAnswerUtcTime.AddHours(Math.Max(_config.GetIntervalHours(mark), MinIntervalHours));
         }
 
         /// <summary>

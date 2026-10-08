@@ -99,7 +99,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8709424245690401339, guid: b0af6964de7414b97b18b5fff0d0b3fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3774978631060623725}
   m_SourcePrefab: {fileID: 100100000, guid: b0af6964de7414b97b18b5fff0d0b3fe, type: 3}
 --- !u!224 &90936268065749468 stripped
 RectTransform:
@@ -117,6 +120,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!1 &7452395100374411367 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8709424245690401339, guid: b0af6964de7414b97b18b5fff0d0b3fe, type: 3}
+  m_PrefabInstance: {fileID: 2283939565081242204}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3774978631060623725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7452395100374411367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.Continue
 --- !u!1001 &6870201152764860617
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -271,6 +292,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 274395964283253577, guid: bb9cd10ad07ee4239bcd6c1fb505491f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4590696167784378742}
+    - targetCorrespondingSourceObject: {fileID: 5287935295839877247, guid: bb9cd10ad07ee4239bcd6c1fb505491f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 588566709976408480}
     - targetCorrespondingSourceObject: {fileID: 7054075794595214912, guid: bb9cd10ad07ee4239bcd6c1fb505491f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4080505051851442445}
@@ -278,6 +302,24 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3726686041661964792}
   m_SourcePrefab: {fileID: 100100000, guid: bb9cd10ad07ee4239bcd6c1fb505491f, type: 3}
+--- !u!1 &1600289347940016310 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5287935295839877247, guid: bb9cd10ad07ee4239bcd6c1fb505491f, type: 3}
+  m_PrefabInstance: {fileID: 6870201152764860617}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &588566709976408480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600289347940016310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lesson.MatchPairs
 --- !u!1 &2843638198631184214 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8656334565023149983, guid: bb9cd10ad07ee4239bcd6c1fb505491f, type: 3}

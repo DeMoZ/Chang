@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6176527868757378389, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9012303997912315396, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
       propertyPath: m_Pivot.x
@@ -116,6 +116,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3341935948510180033, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8187047250973255430}
+    - targetCorrespondingSourceObject: {fileID: 674509711193837727, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4670995298635391433}
     - targetCorrespondingSourceObject: {fileID: 5561209608679446274, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 145319838629925823}
@@ -140,11 +143,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41f1c5417c9d7ab4b84e531f83f60a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RR.External.ProceduralUI::UnityEngine.UI.ProceduralImage.ProceduralImage
---- !u!1 &3168233994470084497 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6176527868757378389, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
+--- !u!114 &2090430230177263636 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7152288431426861776, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
   m_PrefabInstance: {fileID: 9097477230013008580}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5357647140742398661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &3705857743575489990 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5561209608679446274, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
@@ -290,6 +299,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3754476959912413185, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
   m_PrefabInstance: {fileID: 9097477230013008580}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5458175624562859038 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3891090942909912794, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
+  m_PrefabInstance: {fileID: 9097477230013008580}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &5773696493738260485 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3341935948510180033, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
@@ -309,9 +329,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 120
+  m_MinHeight: 150
   m_PreferredWidth: -1
-  m_PreferredHeight: 120
+  m_PreferredHeight: 150
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -337,7 +357,6 @@ MonoBehaviour:
   _stateTexts: []
   _codeVisibility:
   - {fileID: 5357647140742398661}
-  - {fileID: 3168233994470084497}
   _initialState: Expanded
 --- !u!114 &7386463104310703658
 MonoBehaviour:
@@ -358,6 +377,9 @@ MonoBehaviour:
   repeatSectionButton: {fileID: 6681576986917483498}
   states: {fileID: 2486035051122074578}
   collapseButton: {fileID: 8187047250973255430}
+  learnLabel: {fileID: 2090430230177263636}
+  progressText: {fileID: 5458175624562859038}
+  progressBar: {fileID: 4670995298635391433}
 --- !u!114 &8187047250973255430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,6 +446,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!224 &8436369357968831737 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 816482408174566973, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
+  m_PrefabInstance: {fileID: 9097477230013008580}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8582994840254667355 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 674509711193837727, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}
+  m_PrefabInstance: {fileID: 9097477230013008580}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4670995298635391433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8582994840254667355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d71c801f6194943c683ea17349e37862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.LoadingFillBar
+  _fill: {fileID: 8436369357968831737}
 --- !u!114 &8638049008789394063 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 693616575456991307, guid: 7ca9960b4bb7e449cb90cf85b4cd445e, type: 3}

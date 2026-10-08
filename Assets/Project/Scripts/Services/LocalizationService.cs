@@ -57,18 +57,22 @@ namespace Chang.Services
             await _profileService.SaveProfileDataAsync(ct);
         }
 
-        /// <returns>the key translation in the current language, the fallback if the key is missing or its translation is empty</returns>
+        /// <returns>the key translation in the current language, else in English, else the fallback</returns>
         public static string Localize(string key, string fallback)
         {
-            if (!string.IsNullOrEmpty(key)
-                && LocalizationManager.Dictionary.TryGetValue(LocalizationManager.Language, out Dictionary<string, string> translations)
-                && translations.TryGetValue(key, out string translation)
-                && !string.IsNullOrEmpty(translation))
-            {
-                return translation;
-            }
+            return TryGetTranslation(LocalizationManager.Language, key, out string translation)
+                   || TryGetTranslation(nameof(Languages.English), key, out translation)
+                ? translation
+                : fallback;
+        }
 
-            return fallback;
+        private static bool TryGetTranslation(string language, string key, out string translation)
+        {
+            translation = null;
+            return !string.IsNullOrEmpty(key)
+                   && LocalizationManager.Dictionary.TryGetValue(language, out Dictionary<string, string> translations)
+                   && translations.TryGetValue(key, out translation)
+                   && !string.IsNullOrEmpty(translation);
         }
 
         private static void SetLanguage(Languages language)

@@ -260,19 +260,55 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1297174754377525448, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5185636463417477162}
+    - targetCorrespondingSourceObject: {fileID: 6653499087481575936, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8546563904802346493}
+    - targetCorrespondingSourceObject: {fileID: 7016392503661838060, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 353682172895044152}
     - targetCorrespondingSourceObject: {fileID: 1571662178136589227, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7664282531505291614}
+    - targetCorrespondingSourceObject: {fileID: 8029626171006812829, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6597383924092731272}
+    - targetCorrespondingSourceObject: {fileID: 1196500241075081818, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4216257908637765808}
     - targetCorrespondingSourceObject: {fileID: 4516757386248899377, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 200601518927665686}
+    - targetCorrespondingSourceObject: {fileID: 4904388040980023815, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 145579622198909714}
     - targetCorrespondingSourceObject: {fileID: 1078102909271563427, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2811848545147252434}
+    - targetCorrespondingSourceObject: {fileID: 8383289058591726997, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 23263084331891084}
     - targetCorrespondingSourceObject: {fileID: 8388286550667545187, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8118125351502375656}
   m_SourcePrefab: {fileID: 100100000, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+--- !u!1 &47035399511664833 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7016392503661838060, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+  m_PrefabInstance: {fileID: 7059429509769516589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &353682172895044152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47035399511664833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Profile.PolitenessHint
 --- !u!224 &83681494000738865 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6976474243467375644, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
@@ -349,6 +385,24 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7840732906531830685, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
   m_PrefabInstance: {fileID: 7059429509769516589}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1051264821941654704 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8029626171006812829, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+  m_PrefabInstance: {fileID: 7059429509769516589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6597383924092731272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051264821941654704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Profile.MyMascot
 --- !u!1 &1349716978373629103 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8305492910753628802, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
@@ -386,6 +440,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
   _localizationKey: Lobby.Profile.LogOut
+--- !u!1 &1562552566892432312 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8383289058591726997, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+  m_PrefabInstance: {fileID: 7059429509769516589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &23263084331891084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562552566892432312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Profile.InterfaceLanguage
 --- !u!114 &1748879634902757954 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8772279247603754095, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
@@ -408,6 +480,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41f1c5417c9d7ab4b84e531f83f60a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RR.External.ProceduralUI::UnityEngine.UI.ProceduralImage.ProceduralImage
+--- !u!1 &2735870033492253738 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4904388040980023815, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+  m_PrefabInstance: {fileID: 7059429509769516589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &145579622198909714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2735870033492253738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Profile.Name
 --- !u!114 &2890689496935146960 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5324921021012997117, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
@@ -479,6 +569,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41f1c5417c9d7ab4b84e531f83f60a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RR.External.ProceduralUI::UnityEngine.UI.ProceduralImage.ProceduralImage
+--- !u!1 &4444449851018660909 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6653499087481575936, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+  m_PrefabInstance: {fileID: 7059429509769516589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8546563904802346493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4444449851018660909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Profile.SpeakingAs
 --- !u!114 &5204211601297557324 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3008742497396855137, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
@@ -615,6 +723,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &8170359983444837495 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1196500241075081818, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}
+  m_PrefabInstance: {fileID: 7059429509769516589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4216257908637765808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170359983444837495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe549436c44449c9d6303259386ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chang.UI.LocalizedTMPText
+  _localizationKey: Lobby.Profile.Customize
 --- !u!1 &8356530454395764453 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1297174754377525448, guid: 88ddf4375a0b94649aa7a31878def71f, type: 3}

@@ -33,6 +33,11 @@ namespace Chang.FSM
         private IPagesContentProvider _pagesContentProvider;
         private CancellationTokenSource _cts;
 
+        /// <summary>
+        /// Lesson questions answered correctly: the top bar progress. Demonstrations and the generated match words are not lesson questions
+        /// </summary>
+        private readonly HashSet<IQuestion> _doneQuestions = new();
+
         public PagesState(GameBus gameBus, Action<StateType> onStateResult) : base(gameBus, onStateResult)
         {
         }
@@ -74,6 +79,8 @@ namespace Chang.FSM
 
             _gameOverlayController.EnableReturnButton(true);
             _gameOverlayController.EnableHintButton(true);
+            _doneQuestions.Clear();
+            _gameOverlayController.SetLessonProgress(0);
 
             _pagesBus = new PagesBus
             {
@@ -369,6 +376,8 @@ namespace Chang.FSM
                 _pagesBus.Lesson.EnqueueCurrentQuestion();
             }
 
+            UpdateLessonProgress(isCorrect);
+
             var info = new ContinueButtonInfo();
             info.IsCorrect = isCorrect;
             Word word = _pagesBus.Words[_pagesBus.QuestionResult.Key];
@@ -434,6 +443,8 @@ namespace Chang.FSM
                 _pagesBus.Lesson.EnqueueCurrentQuestion();
             }
 
+            UpdateLessonProgress(isCorrect);
+
             ContinueButtonInfo info = new()
             {
                 IsCorrect = isCorrect,
@@ -447,6 +458,18 @@ namespace Chang.FSM
             await _profileService.SaveProgressAsync(ct);
         }
 
+        private void UpdateLessonProgress(bool isCorrect)
+        {
+            Lesson lesson = _pagesBus.Lesson;
+            if (!isCorrect || !lesson.Questions.Contains(lesson.CurrentQuestion))
+            {
+                return;
+            }
+
+            _doneQuestions.Add(lesson.CurrentQuestion);
+            _gameOverlayController.SetLessonProgress((float)_doneQuestions.Count / lesson.Questions.Count);
+        }
+
         /// <summary>
         /// Call after the profile log is added: the mark is captured after the answer
         /// </summary>
@@ -454,7 +477,7 @@ namespace Chang.FSM
         {
             Word word = _pagesBus.Words[result.Key];
             int mark = _profileService.GetVocabularyMark(result.Key);
-            _pagesBus.LessonLog.Add(new ResultItem(result.Presentation, word.Translation, mark, result.IsCorrect));
+            _pagesBus.LessonLog.Add(new ResultItem(result.Key, false, result.Presentation, word.Translation, mark, result.IsCorrect));
         }
 
         /// <summary>
@@ -464,7 +487,7 @@ namespace Chang.FSM
         {
             Sentence sentence = Bus.Sentences[result.Key];
             int mark = (int)_profileService.GetSentencesMark(result.Key);
-            _pagesBus.LessonLog.Add(new ResultItem(result.Presentation, sentence.GetTranslation(Bus.Words), mark, result.IsCorrect));
+            _pagesBus.LessonLog.Add(new ResultItem(result.Key, true, result.Presentation, sentence.GetTranslation(Bus.Words), mark, result.IsCorrect));
         }
 
         private void OnContinue()
@@ -498,6 +521,7 @@ namespace Chang.FSM
             // If the lesson has finished
             if (lesson.QuestionQueue.Count == 0)
             {
+                _gameOverlayController.SetLessonProgress(1);
                 SwitchState(ChangTypes.Result);
                 return;
             }

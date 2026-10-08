@@ -514,6 +514,12 @@ namespace Chang.Editor.DesignSystem
             var ai = (string)s["layoutAlignItems"] ?? "start";
             var alignment = Alignment(row, jc, ai);
 
+            var groupType = wrap ? typeof(FlowLayoutGroup) : row ? typeof(HorizontalLayoutGroup) : typeof(VerticalLayoutGroup);
+            if (!RemoveOtherLayoutGroups(go, groupType))
+            {
+                return;
+            }
+
             if (wrap)
             {
                 var flow = GetOrAdd<FlowLayoutGroup>(go);
@@ -1070,6 +1076,35 @@ namespace Chang.Editor.DesignSystem
             }
 
             return go.AddComponent<T>();
+        }
+
+        /// <summary>
+        /// A board may change its direction or wrapping in Penpot, and an object holds only one LayoutGroup: the other kinds are removed.
+        /// An inherited one can't be removed in a variant or an instance; it is switched off and goes away when its base prefab is
+        /// imported (bases are imported first). Returns false while such a group is still in the way.
+        /// </summary>
+        private static bool RemoveOtherLayoutGroups(GameObject go, System.Type keep)
+        {
+            var free = true;
+            foreach (var group in go.GetComponents<LayoutGroup>())
+            {
+                if (group.GetType() == keep)
+                {
+                    continue;
+                }
+
+                if (!PrefabUtility.IsPartOfPrefabInstance(group))
+                {
+                    Object.DestroyImmediate(group);
+                    continue;
+                }
+
+                group.enabled = false;
+                free = false;
+                Debug.LogWarning($"[{nameof(PenpotUiBuilder)}] [{nameof(RemoveOtherLayoutGroups)}] '{go.name}' inherits a {group.GetType().Name}; re-import its base prefab first");
+            }
+
+            return free;
         }
 
         /// <summary>Components inherited from a prefab can't be removed in an instance or variant: they are switched off instead.</summary>

@@ -165,6 +165,15 @@ namespace Chang.Editor.DesignSystem
 
         private static void Hide(GameObject root, string path) => Hide(Q(root, path));
 
+        /// <summary>Shows a part an earlier build hid.</summary>
+        private static void Show(Transform t)
+        {
+            if (!t.gameObject.activeSelf)
+            {
+                t.gameObject.SetActive(true);
+            }
+        }
+
         private static void HideAll(IEnumerable<Transform> items)
         {
             foreach (var t in items.ToList())
@@ -359,6 +368,23 @@ namespace Chang.Editor.DesignSystem
         {
             var localized = GetOrAdd<LocalizedTMPText>(text);
             Set(localized, ("_localizationKey", key));
+        }
+
+        /// <summary>Localizes a design text, <paramref name="english"/> replaces the design sample and is shown until the key is in the sheet.</summary>
+        private static void Localize(Transform text, string key, string english)
+        {
+            text.GetComponent<TMP_Text>().text = english;
+            Localize(text, key);
+        }
+
+        /// <summary>A bar (the design's Bar/Value) filled by code.</summary>
+        private static LoadingFillBar FillBar(Transform bar)
+        {
+            var value = Q(bar, "Value");
+            Show(value);
+            var fillBar = GetOrAdd<LoadingFillBar>(bar);
+            Set(fillBar, ("_fill", (RectTransform)value));
+            return fillBar;
         }
 
         /// <summary>A full-size transparent Image that catches touches.</summary>
