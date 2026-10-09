@@ -181,6 +181,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9025245161894670723, guid: 67588304325c346238708cb8a97e4539, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6607857660020097948}
+    - targetCorrespondingSourceObject: {fileID: 9025245161894670723, guid: 67588304325c346238708cb8a97e4539, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2517834185601979751}
+    - targetCorrespondingSourceObject: {fileID: 9025245161894670723, guid: 67588304325c346238708cb8a97e4539, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4503267422023916348}
   m_SourcePrefab: {fileID: 100100000, guid: 67588304325c346238708cb8a97e4539, type: 3}
 --- !u!1 &328173413548158963 stripped
 GameObject:
@@ -231,6 +237,44 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!222 &2517834185601979751
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328173413548158963}
+  m_CullTransparentMesh: 1
+--- !u!114 &4503267422023916348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328173413548158963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &2290322641242183577 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7351324974584351209, guid: 67588304325c346238708cb8a97e4539, type: 3}

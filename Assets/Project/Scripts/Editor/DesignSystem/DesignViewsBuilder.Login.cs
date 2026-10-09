@@ -81,32 +81,34 @@ namespace Chang.Editor.DesignSystem
                 var logInBtn = CardButton("Button/Primary", authButtons, "LogInBtn", "Login.LogIn", "Log in");
                 var signUpBtn = CardButton("Button/Primary", authButtons, "SignUpBtn", "Login.SignUp", "Sign up");
 
-                // ---- signed in ----
-                var logged = Card(column, "LoggedState");
-                var loggedContent = Q(logged, "Content");
+                // ---- signed in: the design's account cards (AccountCard / Default, AccountCard / Confirm) ----
+                // the earlier build made this panel from a Dialog card in code
+                var oldLogged = column.Find("LoggedState");
+                if (oldLogged != null)
+                {
+                    Object.DestroyImmediate(oldLogged.gameObject);
+                }
 
-                var logoutContent = Row(loggedContent, "LogOutContent");
-                var logOutBtn = CardButton("Button/Secondary", logoutContent, "LogOutBtn", "Lobby.Profile.LogOut", "Log out");
-                var deleteBtn = CardButton("Button/Danger", logoutContent, "DeleteBtn", "Login.Delete", "Delete account");
+                var logged = Child(column, "AccountState");
+                Stretch(logged);
+                var account = BottomCard(logged, "AccountCard/Default", "Account");
+                var confirm = BottomCard(logged, "AccountCard/Confirm", "Confirm");
 
-                var confirmContent = Child(loggedContent, "ConfirmContent");
-                var confirmLayout = GetOrAdd<VerticalLayoutGroup>(confirmContent);
-                confirmLayout.spacing = 16f;
-                confirmLayout.childControlWidth = confirmLayout.childControlHeight = true;
-                confirmLayout.childForceExpandWidth = true;
-                confirmLayout.childForceExpandHeight = false;
-                var confirmText = Child(confirmContent, "ConfirmLbl");
-                CopyText(confirmText.gameObject, Q<TMP_Text>(Component("Dialog/Confirm"), "Body"));
-                Localize(confirmText, "Login.DeleteConfirm", "Are you sure? The progress will be lost.");
-                var confirmButtons = Row(confirmContent, "ConfirmButtons");
-                var notSureBtn = CardButton("Button/Ghost", confirmButtons, "NotSureBtn", "Login.Back", "Back");
-                var sureBtn = CardButton("Button/Danger", confirmButtons, "SureBtn", "Login.DeleteSure", "Delete");
-                Hide(confirmContent);
+                Localize(Q(account, "Header|Title"), "Login.Account", "Account");
+                Localize(Q(account, "Buttons|LogOut|Label"), "Lobby.Profile.LogOut", "Log out");
+                Localize(Q(account, "Buttons|Delete|Label"), "Login.Delete", "Delete account");
+                var logOutBtn = ButtonOn(Q(account, "Buttons|LogOut"));
+                var deleteBtn = ButtonOn(Q(account, "Buttons|Delete"));
+                var closeBtn = ButtonOn(Q(account, "Header|Close"));
 
-                var close = Instance(Component("IconButton/Close"), logged, "CloseBtn");
-                GetOrAdd<LayoutElement>(close).ignoreLayout = true;
-                close.anchorMin = close.anchorMax = close.pivot = Vector2.one;
-                close.anchoredPosition = new Vector2(-16f, -16f);
+                Localize(Q(confirm, "Title"), "Login.DeleteTitle", "Delete account?");
+                Localize(Q(confirm, "Body"), "Login.DeleteConfirm", "All your progress will be lost. This can’t be undone.");
+                Localize(Q(confirm, "Buttons|Back|Label"), "Login.Back", "Back");
+                Localize(Q(confirm, "Buttons|Delete|Label"), "Login.DeleteSure", "Delete");
+                var notSureBtn = ButtonOn(Q(confirm, "Buttons|Back"));
+                var sureBtn = ButtonOn(Q(confirm, "Buttons|Delete"));
+                Hide(confirm);
+                Hide(logged);
 
                 // ---- awaiting a server response ----
                 var blocker = Blocker(root.transform, "LoadingBlocker");
@@ -131,19 +133,30 @@ namespace Chang.Editor.DesignSystem
                     ("_logInBtn", logInBtn),
                     ("_switchLogInTgl", logInToggle),
                     ("_switchSignUpTgl", signUpToggle),
-                    ("_logoutContent", logoutContent.gameObject),
+                    ("_logoutContent", account.gameObject),
                     ("_logOutBtn", logOutBtn),
                     ("_deleteBtn", deleteBtn),
-                    ("_confirmContent", confirmContent.gameObject),
+                    ("_confirmContent", confirm.gameObject),
                     ("_notSureBtn", notSureBtn),
                     ("_sureBtn", sureBtn),
-                    ("_closeBtn", close.GetComponent<Button>()),
+                    ("_closeBtn", closeBtn),
                     ("_validColor", PenpotDocument.ParseColor("#8a8fa8")),
                     ("_invalidColor", PenpotDocument.ParseColor("#e04f4a")),
                     ("_validInputTextColor", PenpotDocument.ParseColor("#1d2140")),
                     ("_invalidInputTextColor", PenpotDocument.ParseColor("#e04f4a")),
                     ("_loadingBlocker", blocker.gameObject));
             });
+        }
+
+        /// <summary>A design card component at the bottom of the screen, as tall as the design draws it.</summary>
+        private static RectTransform BottomCard(Transform parent, string component, string name)
+        {
+            var card = Instance(Component(component), parent, name);
+            card.anchorMin = card.anchorMax = new Vector2(0.5f, 0f);
+            card.pivot = new Vector2(0.5f, 0f);
+            card.sizeDelta = DesignSize(Component(component));
+            card.anchoredPosition = new Vector2(0f, 24f);
+            return card;
         }
 
         /// <summary>The design's dialog card at the bottom of the screen, its sample content hidden; returns the card with a "Content" column.</summary>

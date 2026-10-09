@@ -1047,6 +1047,15 @@ namespace Chang.Editor.DesignSystem
                 }
             }
 
+            // The background can be missing or switched off (Ghost has none) and texts don't catch touches:
+            // a transparent image on the button itself is its hit area in every variant.
+            if (go.GetComponent<Graphic>() == null)
+            {
+                var hitArea = GetOrAdd<Image>(go);
+                hitArea.color = new Color(0f, 0f, 0f, 0f);
+                hitArea.raycastTarget = true;
+            }
+
             var interactable = !name.Contains("Disabled");
             if (button.interactable != interactable)
             {

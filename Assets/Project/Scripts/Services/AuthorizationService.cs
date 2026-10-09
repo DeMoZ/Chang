@@ -52,6 +52,7 @@ namespace Chang.Services
 
         private void OnLogOutClicked()
         {
+            Debug.Log("OnLogOutClicked: the account view is shown");
             _logInController.LogOutAsync().AsUniTask().Forget();
         }
 

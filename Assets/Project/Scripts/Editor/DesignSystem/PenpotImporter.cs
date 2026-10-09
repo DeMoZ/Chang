@@ -44,7 +44,7 @@ namespace Chang.Editor.DesignSystem
         private const string ComponentsPage = "Redesign · Components";
         private const string ScreensPage = "Redesign · Screens";
         private const string MascotPage = "Redesign · Mascot";
-        private const string LastJsonKey = "Chang.PenpotImporter.LastJson";
+        internal const string LastJsonKey = "Chang.PenpotImporter.LastJson";
 
         private static readonly (string family, string folder, string file)[] FontFiles =
         {

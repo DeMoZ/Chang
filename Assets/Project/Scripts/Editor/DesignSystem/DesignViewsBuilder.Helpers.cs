@@ -338,6 +338,14 @@ namespace Chang.Editor.DesignSystem
                 button.targetGraphic = bg.GetComponent<Graphic>();
             }
 
+            // without a background (or with it switched off) nothing would catch the touch
+            if (t.GetComponent<Graphic>() == null)
+            {
+                var hitArea = GetOrAdd<Image>(t);
+                hitArea.color = new Color(0f, 0f, 0f, 0f);
+                hitArea.raycastTarget = true;
+            }
+
             return button;
         }
 

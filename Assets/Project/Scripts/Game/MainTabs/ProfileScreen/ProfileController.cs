@@ -73,7 +73,8 @@ namespace Chang
 
         public void Init()
         {
-            _view.Init(_mainScreenBus.OnLogOutClicked, OnChangeNameClicked, OnChangeGenderClicked, OnChangeLanguageClicked,
+            // the bus delegate is read on click: subscribers added after Init (AuthorizationService) are called too
+            _view.Init(() => _mainScreenBus.OnLogOutClicked?.Invoke(), OnChangeNameClicked, OnChangeGenderClicked, OnChangeLanguageClicked,
                 OnEditMascotClicked);
         }
 

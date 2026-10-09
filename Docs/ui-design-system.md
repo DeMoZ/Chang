@@ -83,19 +83,13 @@ Direct children of a screen are anchored to the nearest edge (top, bottom or str
 
 ## Updating the design
 
-1. Open the Penpot file in the browser (logged in) and run this in the browser console. It saves the whole file as JSON:
+The Penpot file is downloaded as JSON through the Penpot API with a **personal access token**, no browser session is needed.
 
-   ```js
-   const id = new URLSearchParams(location.hash.split('?')[1]).get('file-id');
-   const r = await fetch(`/api/rpc/command/get-file?id=${id}`, { headers: { Accept: 'application/json' } });
-   const a = document.createElement('a');
-   a.href = URL.createObjectURL(await r.blob());
-   a.download = 'chang-penpot.json';
-   a.click();
-   ```
+1. Once: create a token in Penpot (your avatar → **Your account → Access tokens → Generate new token**) and save it with **Chang → Design System → Set Penpot Access Token…**. It is kept in `Design/penpot-token.txt`, which git ignores (or set the `PENPOT_ACCESS_TOKEN` environment variable). When the token expires, the download asks for a new one.
+2. **Chang → Design System → Download and Import from Penpot** downloads the file into `Design/chang-penpot.json` and imports it. **Download from Penpot** only downloads; **Re-import last Penpot JSON** imports the downloaded file again.
+3. **Chang → Design System → Build Views**.
 
-   Keep the file in `Design/chang-penpot.json` at the repository root. `Design/*.json` is git-ignored: the export is ~35 MB and can always be taken again from Penpot.
-2. In Unity: **Chang → Design System → Import from Penpot JSON…** and pick the file. **Re-import last Penpot JSON** repeats the last one.
+From the terminal (the same token): `python3 Tools/Penpot/download.py`. `Design/*.json` is git-ignored: the export is ~20–35 MB and can always be taken again from Penpot. A download that is not a valid file export (an error, an expired token) never replaces the last good JSON.
 
 The import updates prefabs in place: objects are matched by `DesignNode` id, so components and children added by hand (scripts, extra objects) survive, and shapes removed from the design are removed (or disabled inside nested prefabs). The preview scene is regenerated every time — don't put anything in it.
 
@@ -133,7 +127,7 @@ The views are built by **Chang → Design System → Build Views** (`DesignViews
 
 ### Login
 
-`LoginView` (built by `BuildLogin`) carries `LogInView` of the `DMZ.Legacy.LoginScreen` submodule. The design draws only the first step (sign in with a name / continue as a guest); the name and password form and the signed-in panel (log out, delete account) are cards made of the design components: the Dialog card, TextField, the Segmented control (Log in / Sign up, painted after the toggles by `ToggleSelection`) and buttons. The validation and server messages are still the submodule's English texts.
+`LoginView` (built by `BuildLogin`) carries `LogInView` of the `DMZ.Legacy.LoginScreen` submodule. The design draws only the first step (sign in with a name / continue as a guest); the signed-in panel is the design's `AccountCard / Default` (title and ✕ in the top row, Delete account and Log out below, so ✕ is never over Delete) with `AccountCard / Confirm` for the deletion; the name and password form is a card made of the design components: the Dialog card, TextField, the Segmented control (Log in / Sign up, painted after the toggles by `ToggleSelection`) and buttons. The validation and server messages are still the submodule's English texts.
 
 ### Texts
 

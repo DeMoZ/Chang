@@ -554,6 +554,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RepetitionView
       objectReference: {fileID: 0}
+    - target: {fileID: 4889304146269516114, guid: 548a3a010491446ce971f58f871c2313, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 3171216409686044119}
+    - target: {fileID: 6445196593159670412, guid: 548a3a010491446ce971f58f871c2313, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 2718183654189752422}
     - target: {fileID: 8824736328045134459, guid: 548a3a010491446ce971f58f871c2313, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -639,6 +647,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 548a3a010491446ce971f58f871c2313, type: 3}
+--- !u!114 &2718183654189752422 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8023359491615406976, guid: 548a3a010491446ce971f58f871c2313, type: 3}
+  m_PrefabInstance: {fileID: 5395417165635410918}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!114 &3171216409686044119 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7413544933531301425, guid: 548a3a010491446ce971f58f871c2313, type: 3}
+  m_PrefabInstance: {fileID: 5395417165635410918}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!224 &3501440666639260061 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8824736328045134459, guid: 548a3a010491446ce971f58f871c2313, type: 3}

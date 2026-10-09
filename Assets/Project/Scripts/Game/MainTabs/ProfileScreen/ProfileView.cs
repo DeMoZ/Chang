@@ -130,6 +130,7 @@ namespace Chang
 
         private void OnLogOutClick()
         {
+            Debug.Log("OnLogOutClick");
             _onLogOutClick?.Invoke();
         }
         

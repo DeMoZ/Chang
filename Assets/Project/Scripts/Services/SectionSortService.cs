@@ -22,18 +22,22 @@ namespace Chang.Services
             _playerProfile = playerProfile;
         }
 
-        /// <returns>true if at least one section key is in the log</returns>
+        /// <returns>true if the section is sorted (to restore the order) or sorting would move keys between lessons</returns>
         public bool CanSort(VocabularySection section)
         {
             Dictionary<string, VocabularyQuestLog> log = _profileService.VocabularyProgress.Log;
-            return section.Lessons.SelectMany(lesson => lesson.Keys).Any(log.ContainsKey);
+            return IsSorted(section)
+                   || (section.Lessons.SelectMany(lesson => lesson.Keys).Any(log.ContainsKey)
+                       && ChangesLessons(section.Lessons, key => _profileService.GetVocabularyMark(key)));
         }
 
-        /// <returns>true if at least one section key is in the log</returns>
+        /// <inheritdoc cref="CanSort(VocabularySection)"/>
         public bool CanSort(SentencesSection section)
         {
             Dictionary<string, SentenceQuestLog> log = _profileService.SentencesProgress.Log;
-            return section.SectionLessons.SelectMany(lesson => lesson.Keys).Any(log.ContainsKey);
+            return IsSorted(section)
+                   || (section.SectionLessons.SelectMany(lesson => lesson.Keys).Any(log.ContainsKey)
+                       && ChangesLessons(section.SectionLessons, _profileService.GetSentencesMark));
         }
 
         public bool IsSorted(VocabularySection section)
@@ -102,6 +106,16 @@ namespace Chang.Services
             newSection.PopulateQuestions();
 
             _playerProfile.AddReorderSentencesSection(_profileService.ReorderedSectionKey(section.Section), newSection);
+        }
+
+        /// <summary>
+        /// Sorting keeps the keys of a lesson together when they are already the best marked ones,
+        /// the order inside a lesson is not visible: then the sort button would do nothing
+        /// </summary>
+        private static bool ChangesLessons(List<Lesson> lessons, Func<string, float> getMark)
+        {
+            List<Lesson> sorted = SortLessons(lessons, getMark);
+            return lessons.Where((lesson, i) => !new HashSet<string>(lesson.Keys).SetEquals(sorted[i].Keys)).Any();
         }
 
         private static List<Lesson> SortLessons(List<Lesson> lessons, Func<string, float> getMark)

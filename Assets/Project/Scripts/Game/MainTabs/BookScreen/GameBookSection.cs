@@ -96,6 +96,14 @@ namespace Chang.GameBook
         {
             sortSectionToggle.SetIsOnWithoutNotify(isOn);
             sortSectionToggle.interactable = isInteractable;
+            // the toggle has no transition: an unavailable sort (nothing would move) is shown dimmed
+            var sortGroup = sortSectionToggle.GetComponent<CanvasGroup>();
+            if (sortGroup == null)
+            {
+                sortGroup = sortSectionToggle.gameObject.AddComponent<CanvasGroup>();
+            }
+
+            sortGroup.alpha = isInteractable ? 1f : 0.4f;
             _isSorted = isOn;
             ShowState();
             
