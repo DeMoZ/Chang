@@ -79,7 +79,9 @@ Keys are path-like: `{Language}/{Type}/{Section}/{Key}`.
 - `WordPathHelper.GetSoundPath(key, voice)` builds the path, the default voice is `Female`.
 - Generation: Google Cloud TTS (the key is in `ChangExternal`), voices: Chirp3-HD Aoede (female) and Charon (male) by default. The Google Cloud project must have billing enabled.
 - New sound folders are added to `Remote_<Language>_Sound_Words` Addressables groups (created from `Remote_Thai_Sound_Words`).
-- **Thai male voice (since 2026-10):** `SoundWords/Thai/Male` is voiced by the macOS Siri voice *Voice 1* (`com.apple.ttsbundle.gryphon-neural_th-TH-A_th-TH_premium`), not by Media Prompts. Download it in System Settings → Accessibility → Spoken Content → System voice → Manage Voices → Thai. Siri voices are not available to `say -v`, so `Tools/ThaiVoice/revoice.py` renders them with `AVSpeechSynthesizer` (`tts.swift`) and trims them with the same ffmpeg filter. Run it from the project root after adding words (it overwrites the files, the `.meta` files are kept): `python3 Tools/ThaiVoice/revoice.py` (`--only <key part>` for a subset, `--voice Female` for Siri *Voice 2*). New folders still need an Addressables entry.
+- **Word Sounds (Siri), Thai, macOS:** **Chang/Utilities/Word Sounds (Siri)** selects `Assets/Project/Configs/WordSounds.asset` (`WordSoundsConfig`); its inspector voices the word sounds with the macOS Siri voices (Thai: Voice 1 male, Voice 2 female; download them in System Settings → Accessibility → Spoken Content → System voice → Manage Voices). Needs Xcode and ffmpeg. Pick the Vocabulary config (`BookConfigs/<Language>/Vocabulary.asset`; download the configs from Google Sheets first to get new words). Options: Male and/or Female (voice of each), Normal and/or Slow (speech rate of each), Rewrite existing (off = only missing files). The list shows every word with its files (M, F, Ms, Fs; green = exists, click to play); a word is checked when one of its selected files is missing, and can be checked by hand. Siri voices are only available to Apple-signed programs, so the words are spoken by `Tools/ChangVoice/Resources/siri-tts.swift` run by the Swift interpreter from Xcode; ffmpeg then trims the silence and writes mp3. (`Tools/ChangVoice` also has an unused desktop app with the same features.)
+- **Slow sounds:** `Assets/Project/Resources_Bundled/SoundWordsSlow/<Language>/<Voice>/<Section>/<Key>.mp3`, groups `Remote_<Language>_Sound_Words_Slow`.
+- New section folders (also the ones the app makes) are added to the Addressables groups automatically when Unity imports them (`SoundFoldersPostprocessor`).
 
 > **Rule.** Word sounds must have no silence at the start or end: sentence audio is assembled from individual words.
 > The generator trims it with ffmpeg: mp3, 24 kHz, mono, 32 kbps, filter
@@ -108,5 +110,6 @@ Content is downloaded from **Unity Cloud Content Delivery**: environment `dev`, 
 |---|---|
 | Chang/Utilities/Sheets To Configs | Import content from Google Sheets |
 | Chang/Utilities/Media Prompts | Word picture prompts, generate missing pictures and sounds |
+| Chang/Utilities/Word Sounds (Siri) | Voice the word sounds (male/female, normal/slow) with the macOS Siri voices |
 | Chang/Utilities/Localization/Create Sheet View | Create a localization CSV viewer asset |
 | Chang/Content/Addressables/Addressables Resources | Cache, catalogs, empty label check |
