@@ -7,7 +7,8 @@ namespace Chang.Utilities.Media
 {
     /// <summary>
     /// Settings of the word sounds voicing with the macOS voices, Siri voices included (macOS only).
-    /// The inspector (<see cref="WordSoundsConfigEditor"/>) lists the words of the Vocabulary config and voices the checked ones.
+    /// The inspector (<see cref="WordSoundsConfigEditor"/>) lists the words of the Vocabulary config (the learn language)
+    /// or of the localization CSVs (one native language at a time) and voices the checked ones.
     /// See Docs/content-pipeline.md#word-sounds.
     /// </summary>
     [CreateAssetMenu(menuName = "Chang/Utilities/Word Sounds Config", fileName = "WordSounds")]
@@ -16,8 +17,23 @@ namespace Chang.Utilities.Media
         public const string ConfigPath = "Assets/Project/Configs/WordSounds.asset";
         private const string DefaultVocabulary = "Assets/Project/Resources_Bundled/BookConfigs/Thai/Vocabulary.asset";
 
+        public enum Sources
+        {
+            Vocabulary,
+            Localization,
+        }
+
+        [Tooltip("Vocabulary: the learn words of the book language. Localization: the word translations of one native language")]
+        public Sources Source;
+
         [Tooltip("BookConfigs/<Language>/Vocabulary.asset: download the configs from Google Sheets first to get new words")]
         public VocabularyConfig Vocabulary;
+
+        [Tooltip("Google Sheets table id of the localization; empty = the one of LocalizationSettings")]
+        public string LocalizationTableId;
+        [Tooltip("Folder with the localization CSVs: Assets/Resources/Localization or the downloaded ones")]
+        public string LocalizationFolder = "Assets/Resources/Localization";
+        public Languages LocalizationLanguage = Languages.English;
 
         public bool Male = true;
         public bool Female = true;

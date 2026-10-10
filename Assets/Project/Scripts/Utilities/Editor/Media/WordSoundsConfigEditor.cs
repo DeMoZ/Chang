@@ -4,21 +4,28 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Assets.SimpleLocalization.Scripts;
 using Chang.Core;
+using Chang.Utilities.Localization;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 using VocabularyConfig = Chang.Core.Vocabulary;
 using Debug = DMZ.DebugSystem.DMZLogger;
 
 namespace Chang.Utilities.Media
 {
     /// <summary>
-    /// The inspector of <see cref="WordSoundsConfig"/>: voices the word sounds of a Vocabulary config with the macOS voices,
+    /// The inspector of <see cref="WordSoundsConfig"/>: voices the word sounds with the macOS voices,
     /// Siri voices included (macOS only): Male and/or Female, Normal and/or Slow, only the missing files or all of them,
     /// for the words checked in the list.
+    /// The words come from a Vocabulary config (the learn words, SoundWords/{Book language}/…) or from the localization CSVs
+    /// (the word translations of one language, SoundWords/{Language}/…, see WordPathHelper.GetNativeSoundKey).
+    /// The localization CSVs are read from a folder: Assets/Resources/Localization or the sheets downloaded by the table id.
+    /// Only the vocabulary keys ({Book}/Vocabulary/{Section}/{Key}) are voiced: no Lobby keys, no sentences.
     /// Siri voices are only given to Apple-signed programs, so the words are spoken by Tools/ChangVoice/Resources/siri-tts.swift
     /// run by the Swift interpreter from Xcode; ffmpeg then trims the silence and writes mp3 24 kHz mono 32 kbps.
     /// New section folders get their Addressables entries from <see cref="SoundFoldersPostprocessor"/>.
@@ -29,6 +36,7 @@ namespace Chang.Utilities.Media
     {
         private const string Helper = "Tools/ChangVoice/Resources/siri-tts.swift";
         private const string SoundsRoot = "Assets/Project/Resources_Bundled";
+        private const string DownloadFolder = "Library/WordSoundsLocalization";
 
         // word sounds must have no silence around them: sentences are assembled from words
         private const string Trim = "silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.02:detection=rms:window=0.02,areverse";
@@ -36,7 +44,9 @@ namespace Chang.Utilities.Media
         private static readonly Dictionary<Languages, string> Locales = new()
         {
             { Languages.Thai, "th" }, { Languages.English, "en" }, { Languages.Russian, "ru" }, { Languages.Vietnamese, "vi" },
-            { Languages.Lao, "lo" }, { Languages.ChineseSimplified, "zh" }, { Languages.Japanese, "ja" }, { Languages.Korean, "ko" },
+            { Languages.Lao, "lo" }, { Languages.ChineseSimplified, "zh-CN" }, { Languages.ChineseTraditional, "zh-TW" },
+            { Languages.Japanese, "ja" }, { Languages.Korean, "ko" }, { Languages.German, "de" }, { Languages.French, "fr" },
+            { Languages.Spanish, "es" }, { Languages.Hindi, "hi" }, { Languages.Malay, "ms" }, { Languages.Indonesian, "id" },
         };
 
         // voices are listed by the helper once per Editor session: it takes a few seconds (the interpreter compiles it)
@@ -62,6 +72,19 @@ namespace Chang.Utilities.Media
             public string Badge => (Gender == Gender.Male ? "M" : "F") + (Speed == Speed.Slow ? "s" : "");
         }
 
+        /// <summary>A word to voice: a Vocabulary word or a localization row</summary>
+        private class Item
+        {
+            /// <summary>SoundKey of a word, the localization key of a row: Thai/Vocabulary/Fruits/Mango</summary>
+            public string Key;
+            public string Section;
+            public string Name;
+            public string Text;
+
+            /// <summary>"Fruits/Mango"</summary>
+            public string Relative;
+        }
+
         private class VoiceInfo
         {
             public string id;
@@ -73,6 +96,8 @@ namespace Chang.Utilities.Media
             public string Title => $"{name}{(siri ? " (Siri)" : "")}{(string.IsNullOrEmpty(gender) ? "" : " · " + gender)}";
         }
 
+        private readonly List<Item> _items = new();
+        private readonly List<Languages> _csvLanguages = new();
         private readonly HashSet<string> _checked = new();
         private readonly HashSet<string> _existing = new();
         private readonly HashSet<string> _collapsed = new();
@@ -82,14 +107,18 @@ namespace Chang.Utilities.Media
         private Vector2 _logScroll;
         private bool _running;
         private bool _cancel;
+        private bool _downloading;
         private float _progress;
         private string _status = "";
 
         private WordSoundsConfig Config => (WordSoundsConfig)target;
 
-        private IEnumerable<Word> Words => Config.Vocabulary == null
-            ? Enumerable.Empty<Word>()
-            : Config.Vocabulary.Words.Where(w => !string.IsNullOrEmpty(w.SoundKey) && !string.IsNullOrEmpty(w.LearnWord));
+        private bool IsLocalization => Config.Source == WordSoundsConfig.Sources.Localization;
+
+        /// <summary>The language of the sounds: the book language of the Vocabulary or the chosen localization language</summary>
+        private Languages? Language => IsLocalization
+            ? _csvLanguages.Contains(Config.LocalizationLanguage) ? Config.LocalizationLanguage : (Languages?)null
+            : Config.Vocabulary != null ? Config.Vocabulary.Language : (Languages?)null;
 
         private void OnEnable()
         {
@@ -109,12 +138,12 @@ namespace Chang.Utilities.Media
             return parts.Length == 3 ? parts[2] : $"{word.Section}/{word.Key}";
         }
 
-        private string FilePath(Word word, Output output) =>
-            $"{SoundsRoot}/{output.Root}/{Config.Vocabulary.Language}/{output.Gender}/{Relative(word)}.mp3";
+        private string FilePath(Item item, Output output) =>
+            $"{SoundsRoot}/{output.Root}/{Language}/{output.Gender}/{item.Relative}.mp3";
 
-        private static string FileId(Word word, Output output) => $"{output.Root}/{output.Gender}/{word.SoundKey}";
+        private static string FileId(Item item, Output output) => $"{output.Root}/{output.Gender}/{item.Key}";
 
-        private bool Exists(Word word, Output output) => _existing.Contains(FileId(word, output));
+        private bool Exists(Item item, Output output) => _existing.Contains(FileId(item, output));
 
         private static IEnumerable<Output> AllOutputs =>
             from g in new[] { Gender.Male, Gender.Female } from s in new[] { Speed.Normal, Speed.Slow } select new Output(g, s);
@@ -123,22 +152,32 @@ namespace Chang.Utilities.Media
             .Where(o => (o.Gender == Gender.Male ? Config.Male : Config.Female) && (o.Speed == Speed.Normal ? Config.Normal : Config.Slow))
             .ToList();
 
-        /// <summary>Reads which files exist and checks the words with a missing selected file.</summary>
+        /// <summary>Reads the words and which files exist, checks the words with a missing selected file.</summary>
         private void Refresh()
         {
+            _items.Clear();
             _existing.Clear();
-            if (Config.Vocabulary == null)
+            if (IsLocalization)
             {
-                return;
+                ReadLocalization();
+            }
+            else if (Config.Vocabulary != null)
+            {
+                _items.AddRange(Config.Vocabulary.Words
+                    .Where(w => !string.IsNullOrEmpty(w.SoundKey) && !string.IsNullOrEmpty(w.LearnWord))
+                    .Select(w => new Item { Key = w.SoundKey, Section = w.Section, Name = w.Key, Text = w.LearnWord, Relative = Relative(w) }));
             }
 
-            foreach (Word word in Words)
+            if (Language != null)
             {
-                foreach (Output output in AllOutputs)
+                foreach (Item item in _items)
                 {
-                    if (File.Exists(FilePath(word, output)))
+                    foreach (Output output in AllOutputs)
                     {
-                        _existing.Add(FileId(word, output));
+                        if (File.Exists(FilePath(item, output)))
+                        {
+                            _existing.Add(FileId(item, output));
+                        }
                     }
                 }
             }
@@ -146,11 +185,111 @@ namespace Chang.Utilities.Media
             ResetChecks();
         }
 
+        /// <summary>
+        /// The vocabulary rows of the CSVs of the localization folder in the chosen language:
+        /// {Book}/Vocabulary/{Section}/{Key} → SoundWords/{Language}/{Voice}/{Section}/{Key}.mp3 (Lobby keys and sentences are skipped).
+        /// </summary>
+        private void ReadLocalization()
+        {
+            _csvLanguages.Clear();
+            string folder = Config.LocalizationFolder;
+            if (string.IsNullOrEmpty(folder) || !Directory.Exists(folder))
+            {
+                return;
+            }
+
+            var keys = new HashSet<string>();
+            foreach (string path in Directory.GetFiles(folder, "*.csv").OrderBy(p => p))
+            {
+                LocalizationSheetData sheet = LocalizationSheetData.Parse(File.ReadAllText(path), '/');
+                foreach (string name in sheet.Languages)
+                {
+                    if (Enum.TryParse(name, out Languages language) && !_csvLanguages.Contains(language))
+                    {
+                        _csvLanguages.Add(language);
+                    }
+                }
+
+                int column = sheet.Languages.IndexOf(Config.LocalizationLanguage.ToString());
+                if (column < 0)
+                {
+                    continue;
+                }
+
+                foreach (LocalizationEntry entry in sheet.Entries)
+                {
+                    string[] parts = entry.Key.Split(new[] { '/' }, 4);
+                    string text = column < entry.Values.Length ? entry.Values[column].Trim() : null;
+                    if (parts.Length < 4 || parts[1] != "Vocabulary" || string.IsNullOrEmpty(text) || !keys.Add(entry.Key))
+                    {
+                        continue;
+                    }
+
+                    _items.Add(new Item { Key = entry.Key, Section = parts[2], Name = parts[3], Text = text, Relative = $"{parts[2]}/{parts[3]}" });
+                }
+            }
+
+            _csvLanguages.Sort((a, b) => string.CompareOrdinal(a.ToString(), b.ToString()));
+        }
+
+        /// <summary>Downloads the sheets of LocalizationSettings from the table into <see cref="DownloadFolder"/> and reads them.</summary>
+        private async UniTaskVoid DownloadLocalizationAsync()
+        {
+            LocalizationSettings settings = LocalizationSettings.Instance;
+            string tableId = string.IsNullOrWhiteSpace(Config.LocalizationTableId) ? settings.TableId : Config.LocalizationTableId.Trim();
+            _downloading = true;
+            _log.Clear();
+            try
+            {
+                if (Directory.Exists(DownloadFolder))
+                {
+                    Directory.Delete(DownloadFolder, true);
+                }
+
+                Directory.CreateDirectory(DownloadFolder);
+                for (int i = 0; i < settings.Sheets.Count; i++)
+                {
+                    Sheet sheet = settings.Sheets[i];
+                    _status = $"Downloading {sheet.Name} ({i + 1}/{settings.Sheets.Count})";
+                    Repaint();
+                    using UnityWebRequest request = UnityWebRequest.Get(string.Format(LocalizationSettings.UrlPattern, tableId, sheet.Id));
+                    try
+                    {
+                        await request.SendWebRequest();
+                    }
+                    catch (UnityWebRequestException)
+                    {
+                        // UniTask throws on HTTP errors, the details are logged below
+                    }
+
+                    if (request.result != UnityWebRequest.Result.Success || request.downloadHandler.text.Contains("signin/identifier"))
+                    {
+                        Log($"✗ {sheet.Name}: {request.error ?? "access denied"}");
+                        continue;
+                    }
+
+                    File.WriteAllBytes(Path.Combine(DownloadFolder, sheet.Name + ".csv"), request.downloadHandler.data);
+                    Log($"✓ {sheet.Name}");
+                }
+
+                Undo.RecordObject(Config, "Word sounds localization");
+                Config.LocalizationFolder = DownloadFolder;
+                EditorUtility.SetDirty(Config);
+                _status = $"Downloaded to {DownloadFolder}";
+            }
+            finally
+            {
+                _downloading = false;
+                Refresh();
+                Repaint();
+            }
+        }
+
         private void ResetChecks()
         {
             List<Output> outputs = SelectedOutputs;
             _checked.Clear();
-            _checked.UnionWith(Words.Where(w => outputs.Any(o => !Exists(w, o))).Select(w => w.SoundKey));
+            _checked.UnionWith(_items.Where(w => outputs.Any(o => !Exists(w, o))).Select(w => w.Key));
         }
 
         private int PlannedCount
@@ -158,7 +297,7 @@ namespace Chang.Utilities.Media
             get
             {
                 List<Output> outputs = SelectedOutputs;
-                return Words.Where(w => _checked.Contains(w.SoundKey)).Sum(w => outputs.Count(o => Config.Rewrite || !Exists(w, o)));
+                return _items.Where(w => _checked.Contains(w.Key)).Sum(w => outputs.Count(o => Config.Rewrite || !Exists(w, o)));
             }
         }
 
@@ -201,13 +340,12 @@ namespace Chang.Utilities.Media
         {
             get
             {
-                VocabularyConfig vocabulary = Config.Vocabulary;
-                if (vocabulary == null || _voices == null)
+                if (Language is not { } language || _voices == null)
                 {
                     return new List<VoiceInfo>();
                 }
 
-                string prefix = Locales.TryGetValue(vocabulary.Language, out string locale) ? locale : vocabulary.Language.ToString().Substring(0, 2).ToLower();
+                string prefix = Locales.TryGetValue(language, out string locale) ? locale : language.ToString().Substring(0, 2).ToLower();
                 return _voices.Where(v => v.language.StartsWith(prefix)).OrderBy(v => v.siri ? 0 : 1).ThenBy(v => v.name).ToList();
             }
         }
@@ -235,7 +373,7 @@ namespace Chang.Utilities.Media
 
         public override void OnInspectorGUI()
         {
-            using (new EditorGUI.DisabledScope(_running))
+            using (new EditorGUI.DisabledScope(_running || _downloading))
             {
                 DrawSettings();
                 EditorGUILayout.Space(6);
@@ -251,18 +389,36 @@ namespace Chang.Utilities.Media
         {
             WordSoundsConfig config = Config;
             EditorGUI.BeginChangeCheck();
-            var vocabulary = (VocabularyConfig)EditorGUILayout.ObjectField(new GUIContent("Vocabulary",
-                "BookConfigs/<Language>/Vocabulary.asset: download the configs from Google Sheets first to get new words"),
-                config.Vocabulary, typeof(VocabularyConfig), false);
+            var source = (WordSoundsConfig.Sources)EditorGUILayout.EnumPopup(new GUIContent("Source",
+                "Vocabulary: the learn words of the book language. Localization: the word translations of one native language"), config.Source);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(config, "Word sounds vocabulary");
-                config.Vocabulary = vocabulary;
+                Undo.RecordObject(config, "Word sounds source");
+                config.Source = source;
                 EditorUtility.SetDirty(config);
                 Refresh();
             }
 
-            if (vocabulary == null)
+            if (IsLocalization)
+            {
+                DrawLocalizationSource();
+            }
+            else
+            {
+                EditorGUI.BeginChangeCheck();
+                var vocabulary = (VocabularyConfig)EditorGUILayout.ObjectField(new GUIContent("Vocabulary",
+                    "BookConfigs/<Language>/Vocabulary.asset: download the configs from Google Sheets first to get new words"),
+                    config.Vocabulary, typeof(VocabularyConfig), false);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(config, "Word sounds vocabulary");
+                    config.Vocabulary = vocabulary;
+                    EditorUtility.SetDirty(config);
+                    Refresh();
+                }
+            }
+
+            if (Language == null)
             {
                 return;
             }
@@ -288,6 +444,70 @@ namespace Chang.Utilities.Media
                 {
                     ResetChecks();
                 }
+            }
+        }
+
+        private void DrawLocalizationSource()
+        {
+            WordSoundsConfig config = Config;
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUI.BeginChangeCheck();
+                string tableId = EditorGUILayout.TextField(new GUIContent("Table Id",
+                    "Google Sheets table id of the localization; empty = the one of LocalizationSettings. The sheets (names, gids) are the ones of LocalizationSettings"),
+                    config.LocalizationTableId);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(config, "Word sounds table id");
+                    config.LocalizationTableId = tableId;
+                    EditorUtility.SetDirty(config);
+                }
+
+                if (GUILayout.Button(new GUIContent("Download", $"Download the sheets into {DownloadFolder} and read them"), GUILayout.Width(80)))
+                {
+                    DownloadLocalizationAsync().Forget();
+                }
+            }
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUI.BeginChangeCheck();
+                string folder = EditorGUILayout.DelayedTextField(new GUIContent("CSV folder",
+                    "Folder with the localization CSVs: Assets/Resources/Localization, the downloaded sheets or any other one"), config.LocalizationFolder);
+                if (GUILayout.Button("…", GUILayout.Width(26)))
+                {
+                    string chosen = EditorUtility.OpenFolderPanel("Localization CSV folder", config.LocalizationFolder, "");
+                    if (!string.IsNullOrEmpty(chosen))
+                    {
+                        string project = Directory.GetCurrentDirectory().Replace('\\', '/') + "/";
+                        folder = chosen.StartsWith(project) ? chosen.Substring(project.Length) : chosen;
+                        GUI.changed = true;
+                    }
+                }
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(config, "Word sounds CSV folder");
+                    config.LocalizationFolder = folder;
+                    EditorUtility.SetDirty(config);
+                    Refresh();
+                }
+            }
+
+            if (_csvLanguages.Count == 0)
+            {
+                EditorGUILayout.HelpBox("No localization CSVs in the folder", MessageType.Warning);
+                return;
+            }
+
+            int index = _csvLanguages.IndexOf(config.LocalizationLanguage);
+            int picked = EditorGUILayout.Popup("Language", index, _csvLanguages.Select(l => l.ToString()).ToArray());
+            if (picked != index && picked >= 0)
+            {
+                Undo.RecordObject(config, "Word sounds language");
+                config.LocalizationLanguage = _csvLanguages[picked];
+                EditorUtility.SetDirty(config);
+                Refresh();
             }
         }
 
@@ -331,44 +551,44 @@ namespace Chang.Utilities.Media
             {
                 _filter = EditorGUILayout.TextField(_filter, EditorStyles.toolbarSearchField, GUILayout.Width(200));
                 if (GUILayout.Button(new GUIContent("Missing", "Check the words with a missing selected file"), GUILayout.Width(64))) ResetChecks();
-                if (GUILayout.Button("All", GUILayout.Width(40))) _checked.UnionWith(Filtered().Select(w => w.SoundKey));
-                if (GUILayout.Button("None", GUILayout.Width(46))) _checked.ExceptWith(Filtered().Select(w => w.SoundKey));
+                if (GUILayout.Button("All", GUILayout.Width(40))) _checked.UnionWith(Filtered().Select(w => w.Key));
+                if (GUILayout.Button("None", GUILayout.Width(46))) _checked.ExceptWith(Filtered().Select(w => w.Key));
                 if (GUILayout.Button(new GUIContent("↻", "Read the files again"), GUILayout.Width(26))) Refresh();
             }
 
-            GUILayout.Label($"{_checked.Count} of {Words.Count()} words checked · {PlannedCount} files to write", EditorStyles.miniLabel);
+            GUILayout.Label($"{_checked.Count} of {_items.Count} words checked · {PlannedCount} files to write", EditorStyles.miniLabel);
         }
 
-        private IEnumerable<Word> Filtered()
+        private IEnumerable<Item> Filtered()
         {
             string f = _filter.Trim().ToLowerInvariant();
-            return string.IsNullOrEmpty(f) ? Words : Words.Where(w => w.SoundKey.ToLowerInvariant().Contains(f) || w.LearnWord.Contains(f));
+            return string.IsNullOrEmpty(f) ? _items : _items.Where(w => w.Key.ToLowerInvariant().Contains(f) || w.Text.ToLowerInvariant().Contains(f));
         }
 
         private void DrawList()
         {
-            if (Config.Vocabulary == null)
+            if (Language == null)
             {
                 return;
             }
 
             List<Output> selected = SelectedOutputs;
             _scroll = EditorGUILayout.BeginScrollView(_scroll, EditorStyles.helpBox, GUILayout.Height(420));
-            foreach (IGrouping<string, Word> section in Filtered().GroupBy(w => w.Section))
+            foreach (IGrouping<string, Item> section in Filtered().GroupBy(w => w.Section))
             {
-                List<Word> words = section.ToList();
+                List<Item> words = section.ToList();
                 bool open = !_collapsed.Contains(section.Key);
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    bool all = words.All(w => _checked.Contains(w.SoundKey));
+                    bool all = words.All(w => _checked.Contains(w.Key));
                     bool toggled = EditorGUILayout.Toggle(all, GUILayout.Width(16));
                     if (toggled != all)
                     {
-                        if (toggled) _checked.UnionWith(words.Select(w => w.SoundKey));
-                        else _checked.ExceptWith(words.Select(w => w.SoundKey));
+                        if (toggled) _checked.UnionWith(words.Select(w => w.Key));
+                        else _checked.ExceptWith(words.Select(w => w.Key));
                     }
 
-                    bool nowOpen = EditorGUILayout.Foldout(open, $"{section.Key} ({words.Count(w => _checked.Contains(w.SoundKey))}/{words.Count})", true);
+                    bool nowOpen = EditorGUILayout.Foldout(open, $"{section.Key} ({words.Count(w => _checked.Contains(w.Key))}/{words.Count})", true);
                     if (nowOpen != open)
                     {
                         if (nowOpen) _collapsed.Remove(section.Key);
@@ -378,7 +598,7 @@ namespace Chang.Utilities.Media
 
                 if (open)
                 {
-                    foreach (Word word in words)
+                    foreach (Item word in words)
                     {
                         DrawRow(word, selected);
                     }
@@ -388,20 +608,20 @@ namespace Chang.Utilities.Media
             EditorGUILayout.EndScrollView();
         }
 
-        private void DrawRow(Word word, List<Output> selected)
+        private void DrawRow(Item word, List<Output> selected)
         {
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.Space(18);
-                bool on = _checked.Contains(word.SoundKey);
+                bool on = _checked.Contains(word.Key);
                 if (EditorGUILayout.Toggle(on, GUILayout.Width(16)) != on)
                 {
-                    if (on) _checked.Remove(word.SoundKey);
-                    else _checked.Add(word.SoundKey);
+                    if (on) _checked.Remove(word.Key);
+                    else _checked.Add(word.Key);
                 }
 
-                GUILayout.Label(new GUIContent(word.Key, word.SoundKey), GUILayout.MinWidth(80));
-                GUILayout.Label(word.LearnWord, GUILayout.MinWidth(80));
+                GUILayout.Label(new GUIContent(word.Name, word.Key), GUILayout.MinWidth(80));
+                GUILayout.Label(word.Text, GUILayout.MinWidth(80));
                 GUILayout.FlexibleSpace();
 
                 foreach (Output output in AllOutputs)
@@ -435,7 +655,7 @@ namespace Chang.Utilities.Media
                 }
                 else
                 {
-                    using (new EditorGUI.DisabledScope(Config.Vocabulary == null || PlannedCount == 0))
+                    using (new EditorGUI.DisabledScope(_downloading || Language == null || PlannedCount == 0))
                     {
                         if (GUILayout.Button($"Voice {PlannedCount} files", GUILayout.Height(26), GUILayout.Width(160)))
                         {
@@ -470,10 +690,10 @@ namespace Chang.Utilities.Media
                 return;
             }
 
-            var jobs = new List<(Output Output, string Voice, List<Word> Words)>();
+            var jobs = new List<(Output Output, string Voice, List<Item> Words)>();
             foreach (Output output in SelectedOutputs)
             {
-                List<Word> words = Words.Where(w => _checked.Contains(w.SoundKey) && (Config.Rewrite || !Exists(w, output))).ToList();
+                List<Item> words = _items.Where(w => _checked.Contains(w.Key) && (Config.Rewrite || !Exists(w, output))).ToList();
                 if (words.Count == 0)
                 {
                     continue;
@@ -482,7 +702,7 @@ namespace Chang.Utilities.Media
                 string voice = VoiceFor(output.Gender);
                 if (voice == null)
                 {
-                    Log($"No {output.Gender} voice for {Config.Vocabulary.Language}");
+                    Log($"No {output.Gender} voice for {Language}");
                     continue;
                 }
 
@@ -502,7 +722,7 @@ namespace Chang.Utilities.Media
             int done = 0;
             try
             {
-                foreach ((Output output, string voice, List<Word> words) in jobs)
+                foreach ((Output output, string voice, List<Item> words) in jobs)
                 {
                     if (_cancel)
                     {
@@ -519,7 +739,7 @@ namespace Chang.Utilities.Media
                         {
                             ["voice"] = voice,
                             ["rate"] = output.Speed == Speed.Slow ? Config.SlowRate : Config.NormalRate,
-                            ["items"] = new JArray(words.Select((w, i) => new JObject { ["text"] = SpeechText(w.LearnWord), ["out"] = cafs[i] })),
+                            ["items"] = new JArray(words.Select((w, i) => new JObject { ["text"] = SpeechText(w.Text), ["out"] = cafs[i] })),
                         };
                         string jobPath = Path.Combine(temp, "job.json");
                         File.WriteAllText(jobPath, job.ToString());
@@ -551,8 +771,8 @@ namespace Chang.Utilities.Media
                             done++;
                             _progress = (float)done / total;
                             Log(converted.IsSuccess
-                                ? $"✓ {output.Gender} {output.Speed} {Relative(words[i])} [{SpeechText(words[i].LearnWord)}]"
-                                : $"✗ {Relative(words[i])}: {converted.Output}");
+                                ? $"✓ {output.Gender} {output.Speed} {words[i].Relative} [{SpeechText(words[i].Text)}]"
+                                : $"✗ {words[i].Relative}: {converted.Output}");
                             Repaint();
                         }
                     }
