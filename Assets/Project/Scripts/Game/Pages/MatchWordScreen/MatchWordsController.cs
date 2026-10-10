@@ -68,7 +68,7 @@ namespace Chang
                 toggle.Set(word, left[i].Phonetics, isOn =>
                 {
                     OnToggleValueChanged(true, index, isOn);
-                    if (isOn && _isLeftLearnLanguage)
+                    if (isOn)
                     {
                         onPlaySound?.Invoke(left[index].WordKey, _isLeftLearnLanguage);
                     }
@@ -86,7 +86,7 @@ namespace Chang
                 toggle.Set(word, right[i].Phonetics, isOn =>
                 {
                     OnToggleValueChanged(false, index, isOn);
-                    if (isOn && !_isLeftLearnLanguage)
+                    if (isOn)
                     {
                         onPlaySound?.Invoke(right[index].WordKey, !_isLeftLearnLanguage);
                     }

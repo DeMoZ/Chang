@@ -104,12 +104,11 @@ namespace Chang.FSM
 
         private void OnPlaySound(string key, bool isLearnLanguage)
         {
-            var language = isLearnLanguage 
-                ? _profileService.ProfileData.LearnLanguage.ToString() 
-                : _profileService.ProfileData.NativeLanguage.ToString();
-            
-            string path = _wordPathHelper.GetSoundPath(key);
-            AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
+            string soundKey = isLearnLanguage
+                ? key
+                : _wordPathHelper.GetNativeSoundKey(key, _profileService.ProfileData.NativeLanguage);
+
+            AudioClip asset = _pagesContentProvider.GetCachedAudioClip(soundKey);
 
             if (asset)
             {
