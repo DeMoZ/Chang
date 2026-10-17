@@ -172,7 +172,7 @@ The new canvases are 540×1080 design units in *Expand* mode: the whole design a
 The design shows these, the game has no data or logic for them yet (step 3). They are hidden or left static in the views:
 
 - Streak chip, daily goal, "phrase of the day" (#86).
-- Word detail sheet (#85), dialogues (#88), alphabet (#89), slow sound.
+- Word detail sheet (#85), dialogues (#88), alphabet (#89).
 - The "Chang" chip in the mascot editor is static: the mascot is the player, it has no own name. Texts of the mascot editor are English · Thai from the design, without localization keys.
 - The lesson number on the result screen ("Lesson complete" is shown).
 

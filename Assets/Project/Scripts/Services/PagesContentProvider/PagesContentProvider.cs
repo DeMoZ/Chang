@@ -70,6 +70,11 @@ namespace Project.Services.PagesContentProvider
                 .Select(w => _wordPathHelper.GetSoundPath(_wordPathHelper.GetNativeSoundKey(w.WordKey, nativeLanguage)))
                 .Where(path => !string.IsNullOrEmpty(path) && _assetManager.IsAssetExists(path)));
 
+            // slow sounds are recorded only for the learned (Thai) words, the Sound Slow button is shown only when the file exists
+            soundKeys.UnionWith(words
+                .Select(w => _wordPathHelper.GetSlowSoundPath(w.WordKey))
+                .Where(path => !string.IsNullOrEmpty(path) && _assetManager.IsAssetExists(path)));
+
             HashSet<string> totalKeys = new();
             totalKeys.UnionWith(imageKeys);
             totalKeys.UnionWith(soundKeys);
