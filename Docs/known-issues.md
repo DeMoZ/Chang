@@ -6,6 +6,13 @@ Found while writing the docs (2026-10-04). Remove an item once it is fixed. When
 
 Publishing the WebGL version has a problem that is planned to be investigated. Record the symptoms, cause and fix here (or in an ADR) once it is understood.
 
+Likely causes found and fixed in #83 (check after the first Cloudflare deploys, then remove this section):
+
+- Unity's PWA Service Worker cached every request (the page and the CCD catalog too) cache-first and never deleted old caches, so a new deploy or new content could stay invisible. Fixed in the `ChangPWA` template.
+- The old **DMZ/Build WebGL** menu renamed the files in the build root (`ServiceWorker.js`, `manifest.webmanifest`), which broke the PWA. Replaced by **Chang/Build/WebGL**.
+
+See [build-and-deploy.md](build-and-deploy.md#environments).
+
 ## Likely bugs
 
 - **Hint on the sentence page.** `PagesState` enables the Hint button on every page, but `SentenceSelectWordView.ShowHint()` throws `NotImplementedException`.

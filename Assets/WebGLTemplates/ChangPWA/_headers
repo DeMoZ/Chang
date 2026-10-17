@@ -1,0 +1,19 @@
+/Build/*.js.br
+  Content-Encoding: br
+  Content-Type: application/javascript
+/Build/*.wasm.br
+  Content-Encoding: br
+  Content-Type: application/wasm
+/Build/*.data.br
+  Content-Encoding: br
+  Content-Type: application/octet-stream
+/Build/*
+  Cache-Control: public, max-age=31536000, immutable
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/ServiceWorker.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
