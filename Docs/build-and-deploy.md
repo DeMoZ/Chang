@@ -6,7 +6,7 @@
 |---|---|
 | Unity | 6000.3.12f1 |
 | Product / Company | Chang / roman.kolychev |
-| Version | `bundleVersion` in `ProjectSettings/ProjectSettings.asset` (currently 0.0.95) |
+| Version | `bundleVersion` in `ProjectSettings/ProjectSettings.asset` (currently 0.1.1) |
 | Bundle id | `com.roman.kolychev.Chang` (Android, Standalone). iOS still has the template id. |
 | Scenes in build | Bootstrap, Reboot, Game |
 | Unity Cloud | project "Chang", organization "demozbox" |
@@ -20,7 +20,8 @@
 ## What exists today
 
 - **Content:** Addressables are built into the `CCDBuildData` submodule and uploaded to CCD (environment `dev`, badge `latest`).
-- **Client:** **DMZ/Build Data Window** and **DMZ/Build WebGL** from the LoginScreen submodule make a Development WebGL build. `OnBuildPreprocesses` stamps the version and date from `Assets/Configs/OnBuildConfig.asset` into the build.
+- **Client:** **DMZ/Build WebGL** from the LoginScreen submodule makes a Development WebGL build. **DMZ/Build Data Window** shows the version and the last build date and can increment the version (`bundleVersion`).
+- **Build info:** on every player build `OnBuildPreprocesses` (LoginScreen submodule, `BuildConfig/Editor/`) writes the version and the current date to `Assets/Resources/BuildInfo/BuildInfo.asset`, creating it if missing. The asset is generated and in `.gitignore`. `ShowBuildVersion` (prefab `BuildVersionData`: Profile view, Bootstrap, Reboot) loads it with `Resources.Load` and shows `build: <Application.version>` and `date: <build date>`, or `date: editor` when no build has been made yet.
 - There is no CI and no command-line build script.
 
 <!-- TODO: the release process is not settled yet. Document it once it is (version bump, bundle upload, WebGL publishing, Android build). -->
