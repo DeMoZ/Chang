@@ -8,7 +8,18 @@ namespace Chang.Resources
         {
             // key = Thai/Vocabulary/Fruits/Coconut
             // result Assets/Project/Resources_Bundled/SoundWords/Thai/Female/Fruits/Coconut.mp3
-            
+            return GetSoundPath(AssetPaths.Addressables.SoundWords, key, voice);
+        }
+
+        public string GetSlowSoundPath(string key, SoundVoices voice = SoundVoices.Female)
+        {
+            // key = Thai/Vocabulary/Fruits/Coconut
+            // result Assets/Project/Resources_Bundled/SoundWordsSlow/Thai/Female/Fruits/Coconut.mp3
+            return GetSoundPath(AssetPaths.Addressables.SoundWordsSlow, key, voice);
+        }
+
+        private string GetSoundPath(string root, string key, SoundVoices voice)
+        {
             if (string.IsNullOrWhiteSpace(key))
             {
                 return string.Empty;
@@ -22,7 +33,7 @@ namespace Chang.Resources
             
             string path = Path.Combine(
                 AssetPaths.Addressables.Root,
-                AssetPaths.Addressables.SoundWords,
+                root,
                 $"{key}.mp3");
 
             return NormalizePath(path);

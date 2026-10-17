@@ -455,7 +455,6 @@ namespace Chang.Editor.DesignSystem
                 Set(questionWord, ("_word", Q<TMP_Text>(card.gameObject, "Thai")), ("_phonetic", Q<TMP_Text>(card.gameObject, "Phonetics")));
 
                 var actions = Q(card, "Actions");
-                Hide(Q(actions, "Chang DS / IconButton / Sound Slow"));
                 var group = GetOrAdd<ToggleGroup>(actions);
                 group.allowSwitchOff = true;
 
@@ -473,6 +472,7 @@ namespace Chang.Editor.DesignSystem
                     ("_mixWordContent", actions),
                     ("_toggleGroup", group),
                     ("_playStopBtn", PlayStop(Q(actions, "Chang DS / IconButton / Sound"))),
+                    ("_playSlowBtn", PlayStop(Q(actions, "Chang DS / IconButton / Sound Slow"))),
                     ("_translationToggle", translation));
             });
 

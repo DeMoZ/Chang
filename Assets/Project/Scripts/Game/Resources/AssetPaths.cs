@@ -33,6 +33,7 @@ namespace Chang.Resources
             public const string Words = "Words/";
             public const string BookConfigs = "BookConfigs/";
             public const string SoundWords = "SoundWords/";
+            public const string SoundWordsSlow = "SoundWordsSlow/";
             public const string ImageWords = "ImageWords/";
 
             public const string EmptyWordPlaceHolder = "EmptyWordPlaceHolder.asset";
