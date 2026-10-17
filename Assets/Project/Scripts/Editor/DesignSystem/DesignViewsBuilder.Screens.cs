@@ -487,14 +487,24 @@ namespace Chang.Editor.DesignSystem
                 var group = GetOrAdd<ToggleGroup>(options);
                 group.allowSwitchOff = true;
 
+                // The design has no sound button on this page; it plays the question word, right of the picture.
+                var picture = Q(prompt, "Picture");
+                var questionImage = ContentImage(picture, "Illustration");
+                var sound = Instance(Component("IconButton/Sound"), picture, "Sound");
+                sound.anchorMin = sound.anchorMax = new Vector2(1f, 0.5f);
+                sound.pivot = new Vector2(0f, 0.5f);
+                sound.anchoredPosition = new Vector2(16f, 0f);
+                GetOrAdd<LayoutElement>(sound).ignoreLayout = true;
+                sound.SetAsLastSibling();
+
                 var view = GetOrAdd<SelectWordView>(root);
                 Set(view,
-                    ("_questionImage", ContentImage(Q(prompt, "Picture"), "Illustration")),
+                    ("_questionImage", questionImage),
                     ("_questionWord", questionWord),
                     ("_mixWordPrefab", items.Option),
                     ("_mixWordContent", options),
                     ("_toggleGroup", group),
-                    ("_playStopBtn", null));
+                    ("_playStopBtn", PlayStop(sound)));
             });
 
             BuildPage("Lesson - Match pairs", "MatchWordsView", (root, content) =>
