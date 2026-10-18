@@ -60,7 +60,7 @@ namespace Chang
             }
             logInView.Init(loginModel);
             
-            var loginController = new LogInController(loginModel);
+            var loginController = new LogInController(loginModel, AppEnvironment.Current);
             Container.BindInstances(loginModel);
             Container.BindInterfacesAndSelfTo<LogInController>().FromInstance(loginController).AsSingle();
         }
