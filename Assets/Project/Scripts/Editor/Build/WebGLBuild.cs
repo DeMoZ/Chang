@@ -7,7 +7,7 @@ namespace Chang.Editor.Build
 {
     /// <summary>
     /// WebGL player build for Cloudflare Pages. The same build is deployed to dev, staging and production:
-    /// the CCD environment is picked at runtime by the page hostname (see Chang.Resources.CcdEnvironments).
+    /// the environment is picked at runtime by the page hostname (see Chang.Resources.AppEnvironment).
     /// See Docs/build-and-deploy.md.
     /// </summary>
     public static class WebGLBuild

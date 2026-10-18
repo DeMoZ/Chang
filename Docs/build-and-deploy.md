@@ -13,7 +13,7 @@
 
 ## Platforms
 
-- **WebGL** is the main public platform: project template `ChangPWA`, hosted on Cloudflare Pages (see [Environments](#environments)). [Unity Play](https://play.unity.com/en/games/efe1a90f-d700-4609-adfd-6481103f4d5b/chang) (`com.unity.connect.share`) is kept only for quick one-off sharing; there the game uses the content environment it was built with (`dev`).
+- **WebGL** is the main public platform: project template `ChangPWA`, hosted on Cloudflare Pages (see [Environments](#environments)). [Unity Play](https://play.unity.com/en/games/efe1a90f-d700-4609-adfd-6481103f4d5b/chang) (`com.unity.connect.share`) is kept only for quick one-off sharing; there the game uses the `dev` environment. Its auto publish is off (`autoPublish` in `ProjectSettings/Packages/com.unity.connect.share/Settings.json`), otherwise every WebGL build would be uploaded to Unity Play; publish manually from the WebGL Publisher window.
 - **Android**: min SDK 25. The keystore is in the `ChangExternal/AndroidKeystore` submodule.
 - `Builds/` and `WebGL Builds/` are in `.gitignore`.
 
@@ -30,26 +30,39 @@
 
 Issue [#83](https://github.com/DeMoZ/Chang/issues/83). Three tiers; a build is **promoted**, not rebuilt, between them.
 
-| Env | Purpose | Web address (Cloudflare Pages) | CCD environment / badge | Access |
+| Env | Purpose | Web address (Cloudflare Pages) | Unity Cloud environment / CCD badge | Access |
 |---|---|---|---|---|
-| dev | any commit, may be broken | `dev.kruchaang.pages.dev` | `dev` / `latest` | private (Cloudflare Access) |
-| staging | release candidate | `staging.kruchaang.pages.dev` | `staging` / `live` | private (Cloudflare Access) |
-| prod | what players see | `kruchaang.pages.dev` | `production` / `live` | public |
+| dev | development, Editor, any commit, may be broken | `dev.kruchaang.win` | `dev` / `latest` | private (Cloudflare Access) |
+| staging | release candidate, checked before prod | `staging.kruchaang.win` | `staging` / `latest` | private (Cloudflare Access) |
+| prod | what players see | `kruchaang.win` | `production` / `live` | public |
 
-A custom domain can replace `*.pages.dev` later: keep the `dev.` / `staging.` prefixes and add the production host to `ProductionHosts` in `CcdEnvironments.cs`.
+The domain `kruchaang.win`, Pages and Access are in the Cloudflare account demozbox@gmail.com. Production hosts are listed in `ProductionHosts` in `AppEnvironment.cs`.
 
-### How the client picks the content environment
+### Unity Cloud terms
 
-`Remote.LoadPath` is built from `{CcdManager.EnvironmentName}`, `{CcdManager.BucketId}` and `{CcdManager.Badge}`, which are evaluated at runtime. Addressables fills `CcdManager` from the build (the profile's `EnvironmentName`, i.e. `dev`) only if it is not set yet.
+- **Environment** (`dev`, `staging`, `production`): a separate copy of the project's Unity Gaming Services data: CCD content, Cloud Save data, Remote Config. Player accounts (Authentication) are shared by all environments of the project; the data saved for a player is per environment.
+- **Bucket**: a folder of content files in CCD inside one environment, one per platform (`WebGL`, `Android`, `StandaloneOSX`, `iOS`; the name is the build target name, Addressables looks the bucket up by it). Buckets with the same name in different environments are different buckets with different ids.
+- **Release**: an immutable snapshot of a bucket (catalog + bundles). Every upload or promotion creates a new release.
+- **Badge**: a label on one release; the game asks for "the release with badge X". `latest` is moved by CCD to the newest release automatically; `live` is moved by hand.
+- **Promotion**: copying a release into a bucket of another environment.
+- **Promotion only** bucket: content can get there only by promotion, no direct uploads or deletes. `staging` and `production` buckets are promotion only, so they contain exactly what was checked in the previous environment.
 
-`Chang.Resources.CcdEnvironments` (`Assets/Project/Scripts/Game/Resources/CcdEnvironments.cs`) sets it before the first scene loads, in WebGL players only, from the page hostname:
+### How the client picks the environment
 
-- `dev.*` → `dev`, `staging.*` → `staging`, a host from `ProductionHosts` → `production`;
-- anything else (localhost, Unity Play, a per-deploy `<hash>.kruchaang.pages.dev` address), the Editor and other platforms → the environment the content was built with.
+`Chang.Resources.AppEnvironment` (`Assets/Project/Scripts/Game/Resources/AppEnvironment.cs`) resolves the environment before the first scene loads:
 
-The bucket ids of every environment and platform are in the same file. If a bucket id is empty, a warning is logged and the build environment is used.
+- WebGL player: by the page hostname: `dev.*` → `dev`, `staging.*` → `staging`, a host from `ProductionHosts` → `production`;
+- Editor: **Chang/Environment → Dev / Staging / Production** (saved per machine in EditorPrefs, applies on the next Play);
+- anything else (localhost, Unity Play, Cloudflare's own `*.pages.dev` addresses, Android/iOS builds for now) → `dev`.
+
+The environment is used for:
+
+- **CCD content**: `Remote.LoadPath` is built from `{CcdManager.EnvironmentName}`, `{CcdManager.BucketId}` and `{CcdManager.Badge}`, evaluated at runtime. Addressables fills `CcdManager` from the content build only if it is not set yet, so `AppEnvironment` sets it first (bucket by platform, badge by environment). The bucket ids are in the same file;
+- **Unity Gaming Services** (Cloud Save, Remote Config): `ProjectInstaller` passes `AppEnvironment.Current` to `LogInController`, which calls `InitializationOptions.SetEnvironmentName` before `UnityServices.InitializeAsync`.
 
 The catalog and bundles are the same in every environment (the load path inside the catalog has the `{CcdManager.*}` placeholders), so a CCD release can be promoted from `dev` to `staging` to `production` as is.
+
+In the Editor, CCD content is loaded only with the Addressables Play Mode Script **Use Existing Build**; with **Use Asset Database** (the default) the content comes from the project and the environment only affects Unity Gaming Services.
 
 ### WebGL build
 
@@ -67,7 +80,7 @@ Template changes compared to Unity's PWA template:
 
 ### Deploy to Cloudflare Pages
 
-One Pages project `kruchaang` (Direct Upload), one branch per environment. `main` is the production branch; `dev` and `staging` are preview branches with the stable aliases `dev.kruchaang.pages.dev` and `staging.kruchaang.pages.dev`. Deploy with Wrangler (needs Node.js; `npx` downloads Wrangler on first use):
+One Pages project `kruchaang` (Direct Upload), one branch per environment: `main` (production), `dev`, `staging`. The "branch" is only a label given on upload, not a git branch. Each branch gets its own address of the project's domain: `kruchaang.win` → `main`, `dev.kruchaang.win` → `dev`, `staging.kruchaang.win` → `staging`. Deploy with Wrangler (needs Node.js; `npx` downloads Wrangler on first use):
 
 ```bash
 npx wrangler pages deploy Builds/WebGL/Chang --project-name kruchaang --branch dev
@@ -78,28 +91,28 @@ Use `--branch staging` and `--branch main` for the other environments.
 ### Release flow
 
 1. **Content**: build Addressables (WebGL target) and release to CCD `dev`, badge `latest`. Commit `CCDBuildData`.
-2. **Client**: increment the version in **DMZ/Build Data Window**, run **Chang/Build/WebGL Release**, deploy with `--branch dev`. Check on `dev.kruchaang.pages.dev`.
-3. **Promote to staging**: in Unity Cloud → CCD, promote the release from `dev`/`WebGL` to `staging`/`WebGL` and put the `live` badge on it. Deploy **the same** `Builds/WebGL/Chang` folder with `--branch staging`. Check on `staging.kruchaang.pages.dev`.
-4. **Promote to production**: promote the CCD release from `staging` to `production` and move the `live` badge; deploy the same folder with `--branch main`.
+2. **Client**: increment the version in **DMZ/Build Data Window**, run **Chang/Build/WebGL Release**, deploy with `--branch dev`. Check on `dev.kruchaang.win`.
+3. **Promote to staging**: in Unity Cloud → CCD, promote the release from `dev`/`WebGL` to `staging`/`WebGL` (it gets `latest` there). Deploy **the same** `Builds/WebGL/Chang` folder with `--branch staging`. Check on `staging.kruchaang.win`.
+4. **Promote to production**: promote the CCD release from `staging` to `production` and put the `live` badge on it; deploy the same folder with `--branch main`.
 5. **Rollback**: content — move the `live` badge back to the previous release in CCD; client — in Cloudflare (Workers & Pages → kruchaang → Deployments) use **Rollback** on the previous production deployment. No rebuild.
 
 Keep the build folder (or a zip of it) until the release reaches production, because promotion means deploying the same files.
 
 ### One-time manual setup
 
-Unity Cloud (project "Chang" → Content Delivery):
+Unity Cloud (project "Chang", done on 2026-10-18):
 
-- create the environment `staging`;
-- create the buckets `WebGL` and `Android` in `staging` and `WebGL` in `production` (bucket name = build target name), then put their ids into `CcdEnvironments.cs`;
-- refresh **Addressables Profiles → Cloud Content Delivery** in the Editor so `ProfileDataSourceSettings.asset` lists the new environment and buckets.
+- environments `dev`, `staging`, `production` (project → Environments);
+- in each environment the public buckets `WebGL`, `Android`, `StandaloneOSX`, `iOS` (bucket name = build target name). In `staging` and `production` they are **Promotion only**: content gets there only by promotion from `dev`. Their ids are in `AppEnvironment.cs`;
+- a new bucket or environment: create it in Content Delivery (the Create Bucket dialog can create it in several environments at once), add its id to `AppEnvironment.cs`, and refresh **Addressables Profiles → Cloud Content Delivery** in the Editor.
 
-Cloudflare (the same account as the other projects):
+Cloudflare (account demozbox@gmail.com, domain `kruchaang.win`):
 
 - `npx wrangler login` once on the build machine;
 - create the project: `npx wrangler pages project create kruchaang --production-branch main`;
-- the first `--branch dev` / `--branch staging` deploy creates the `dev.` / `staging.` aliases;
-- protect dev and staging with Cloudflare Access: Pages project → Settings → General → **Enable access policy** for preview deployments (covers every non-production address, including `dev.` and `staging.`), then edit the created policy in Zero Trust → Access → Applications to list the testers' emails (one-time PIN login; free up to 50 users);
-- optional custom domain: Pages project → Custom domains (`kruchaang.<domain>`, `dev.kruchaang.<domain>` pointing to the `dev` branch, and so on), then update `ProductionHosts` and this table.
+- attach the domain: Pages project → Custom domains → `kruchaang.win` for production; `dev.kruchaang.win` and `staging.kruchaang.win` as CNAME records to the `dev` / `staging` branch aliases of the project (Cloudflare shows the alias of each branch after its first deploy);
+- protect dev and staging with Cloudflare Access: Zero Trust → Access → Applications → a self-hosted application for `dev.kruchaang.win` and `staging.kruchaang.win` with an Allow policy listing the testers' emails (one-time PIN login; free up to 50 users). Also turn on Pages project → Settings → **Enable access policy** for preview deployments, so Cloudflare's own `*.pages.dev` preview addresses are closed too;
+- a new production host (another domain, `www.`) goes into `ProductionHosts` in `AppEnvironment.cs`.
 
 ### Not done yet
 
