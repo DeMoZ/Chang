@@ -106,13 +106,21 @@ Unity Cloud (project "Chang", done on 2026-10-18):
 - in each environment the public buckets `WebGL`, `Android`, `StandaloneOSX`, `iOS` (bucket name = build target name). In `staging` and `production` they are **Promotion only**: content gets there only by promotion from `dev`. Their ids are in `AppEnvironment.cs`;
 - a new bucket or environment: create it in Content Delivery (the Create Bucket dialog can create it in several environments at once), add its id to `AppEnvironment.cs`, and refresh **Addressables Profiles → Cloud Content Delivery** in the Editor.
 
-Cloudflare (account demozbox@gmail.com, domain `kruchaang.win`):
+Cloudflare (account demozbox@gmail.com, domain `kruchaang.win`). Done on 2026-10-19 unless marked "todo":
 
-- `npx wrangler login` once on the build machine;
-- create the project: `npx wrangler pages project create kruchaang --production-branch main`;
-- attach the domain: Pages project → Custom domains → `kruchaang.win` for production; `dev.kruchaang.win` and `staging.kruchaang.win` as CNAME records to the `dev` / `staging` branch aliases of the project (Cloudflare shows the alias of each branch after its first deploy);
-- protect dev and staging with Cloudflare Access: Zero Trust → Access → Applications → a self-hosted application for `dev.kruchaang.win` and `staging.kruchaang.win` with an Allow policy listing the testers' emails (one-time PIN login; free up to 50 users). Also turn on Pages project → Settings → **Enable access policy** for preview deployments, so Cloudflare's own `*.pages.dev` preview addresses are closed too;
-- a new production host (another domain, `www.`) goes into `ProductionHosts` in `AppEnvironment.cs`.
+- Wrangler: `npx wrangler login` once on the build machine (choose the demozbox account in the browser). `npx wrangler whoami` shows the account.
+- Pages project `kruchaang` (Direct Upload, production branch `main`): `npx wrangler pages project create kruchaang --production-branch main`.
+- Custom domain of a branch (done for `dev`; todo for `staging` and `kruchaang.win` after their first deploys). It needs a successful deploy of that branch first:
+  1. Workers & Pages → kruchaang → Custom domains → **Set up a domain** → `dev.kruchaang.win` → Continue → Activate domain;
+  2. kruchaang.win → DNS → Records → CNAME `dev` → Edit: target `kruchaang.pages.dev` → `dev.kruchaang.pages.dev`, Proxied (orange cloud) must stay on, otherwise the address shows `main`. See [Custom branch aliases](https://developers.cloudflare.com/pages/how-to/custom-branch-aliases/).
+  
+  For production only step 1 with `kruchaang.win`.
+- Cloudflare Access (Zero Trust Free plan, login page `small-resonance-ef33.cloudflareaccess.com`):
+  - reusable policy **Testers** (Access controls → Policies): Allow, Include → Emails. Add a tester by adding their email there; they sign in with a one-time code sent to that email;
+  - self-hosted application **KruChaang dev & staging** (Access controls → Applications) with the Testers policy for `dev.kruchaang.win`, `staging.kruchaang.win`, `dev.kruchaang.pages.dev`, `staging.kruchaang.pages.dev`;
+  - Pages → kruchaang → Settings → **Preview access: Restrict previews**, which closes the per-deploy `<hash>.kruchaang.pages.dev` addresses.
+- `kruchaang.pages.dev` (production on Cloudflare's own address) stays open; todo: redirect it to `kruchaang.win`.
+- A new production host (another domain, `www.`) goes into `ProductionHosts` in `AppEnvironment.cs`.
 
 ### Not done yet
 
