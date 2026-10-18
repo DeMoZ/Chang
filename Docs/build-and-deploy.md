@@ -106,20 +106,20 @@ Unity Cloud (project "Chang", done on 2026-10-18):
 - in each environment the public buckets `WebGL`, `Android`, `StandaloneOSX`, `iOS` (bucket name = build target name). In `staging` and `production` they are **Promotion only**: content gets there only by promotion from `dev`. Their ids are in `AppEnvironment.cs`;
 - a new bucket or environment: create it in Content Delivery (the Create Bucket dialog can create it in several environments at once), add its id to `AppEnvironment.cs`, and refresh **Addressables Profiles → Cloud Content Delivery** in the Editor.
 
-Cloudflare (account demozbox@gmail.com, domain `kruchaang.win`). Done on 2026-10-19 unless marked "todo":
+Cloudflare (account demozbox@gmail.com, domain `kruchaang.win`). Done on 2026-10-19:
 
 - Wrangler: `npx wrangler login` once on the build machine (choose the demozbox account in the browser). `npx wrangler whoami` shows the account.
 - Pages project `kruchaang` (Direct Upload, production branch `main`): `npx wrangler pages project create kruchaang --production-branch main`.
-- Custom domain of a branch (done for `dev`; todo for `staging` and `kruchaang.win` after their first deploys). It needs a successful deploy of that branch first:
+- Custom domain of a branch (done for `dev` and `staging`). It needs a successful deploy of that branch first:
   1. Workers & Pages → kruchaang → Custom domains → **Set up a domain** → `dev.kruchaang.win` → Continue → Activate domain;
   2. kruchaang.win → DNS → Records → CNAME `dev` → Edit: target `kruchaang.pages.dev` → `dev.kruchaang.pages.dev`, Proxied (orange cloud) must stay on, otherwise the address shows `main`. See [Custom branch aliases](https://developers.cloudflare.com/pages/how-to/custom-branch-aliases/).
   
-  For production only step 1 with `kruchaang.win`.
+  For production (branch `main`) only step 1: done for `kruchaang.win` and `www.kruchaang.win` (both serve the game; `www` is in `ProductionHosts` too).
 - Cloudflare Access (Zero Trust Free plan, login page `small-resonance-ef33.cloudflareaccess.com`):
   - reusable policy **Testers** (Access controls → Policies): Allow, Include → Emails. Add a tester by adding their email there; they sign in with a one-time code sent to that email;
   - self-hosted application **KruChaang dev & staging** (Access controls → Applications) with the Testers policy for `dev.kruchaang.win`, `staging.kruchaang.win`, `dev.kruchaang.pages.dev`, `staging.kruchaang.pages.dev`;
   - Pages → kruchaang → Settings → **Preview access: Restrict previews**, which closes the per-deploy `<hash>.kruchaang.pages.dev` addresses.
-- `kruchaang.pages.dev` (production on Cloudflare's own address) stays open; todo: redirect it to `kruchaang.win`.
+- `kruchaang.pages.dev` (production on Cloudflare's own address) redirects to `kruchaang.win`, so players only see the own domain. It is a **Bulk Redirect** (account level, Delivery & performance → Bulk redirects): list `kruchaang_pages_dev` with one entry `kruchaang.pages.dev/` → `https://kruchaang.win/`, 301, Preserve query string, Subpath matching, Preserve path suffix, **without** Include subdomains (so `dev.`/`staging.kruchaang.pages.dev` keep working behind Access), and the rule "kruchaang.pages.dev to kruchaang.win" that enables the list. To stop the redirect, disable the rule.
 - A new production host (another domain, `www.`) goes into `ProductionHosts` in `AppEnvironment.cs`.
 
 ### Not done yet
