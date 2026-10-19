@@ -115,7 +115,7 @@ Cloudflare (account demozbox@gmail.com, domain `kruchaang.win`). Done on 2026-10
   2. kruchaang.win → DNS → Records → CNAME `dev` → Edit: target `kruchaang.pages.dev` → `dev.kruchaang.pages.dev`, Proxied (orange cloud) must stay on, otherwise the address shows `main`. See [Custom branch aliases](https://developers.cloudflare.com/pages/how-to/custom-branch-aliases/).
   
   For production (branch `main`) only step 1: done for `kruchaang.win` and `www.kruchaang.win` (both serve the game; `www` is in `ProductionHosts` too).
-- Cloudflare Access (Zero Trust Free plan, login page `small-resonance-ef33.cloudflareaccess.com`):
+- Cloudflare Access (Zero Trust Free plan, login page `kruchaang.cloudflareaccess.com`, the team domain set in Zero Trust → Settings):
   - reusable policy **Testers** (Access controls → Policies): Allow, Include → Emails. Add a tester by adding their email there; they sign in with a one-time code sent to that email;
   - self-hosted application **KruChaang dev & staging** (Access controls → Applications) with the Testers policy for `dev.kruchaang.win`, `staging.kruchaang.win`, `dev.kruchaang.pages.dev`, `staging.kruchaang.pages.dev`;
   - Pages → kruchaang → Settings → **Preview access: Restrict previews**, which closes the per-deploy `<hash>.kruchaang.pages.dev` addresses.
