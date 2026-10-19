@@ -19,7 +19,7 @@
 
 ## What exists today
 
-- **Content:** Addressables are built into the `CCDBuildData` submodule and uploaded to CCD (environment `dev`, badge `latest`). The Addressables profile is in CCD **Automatic** mode: the bucket is the one named after the build target (`WebGL`, `Android`, `StandaloneOSX`), so content of different platforms does not overwrite each other.
+- **Content:** Addressables are built with **Build & Release** into the `CCDBuildData` folder and uploaded to CCD (environment `dev`, badge `latest`); see [Content builds](#content-builds). The Addressables profile is in CCD **Automatic** mode: the bucket is the one named after the build target (`WebGL`, `Android`, `StandaloneOSX`), so content of different platforms does not overwrite each other.
 - **Client:** **Chang/Build/WebGL Release** and **Chang/Build/WebGL Development** (`Assets/Project/Scripts/Editor/Build/WebGLBuild.cs`) build WebGL to `Builds/WebGL/Chang`. **DMZ/Build Data Window** shows the version and the last build date and can increment the version (`bundleVersion`).
 - **Build info:** on every player build `OnBuildPreprocesses` (LoginScreen submodule, `BuildConfig/Editor/`) writes the version and the current date to `Assets/Resources/BuildInfo/BuildInfo.asset`, creating it if missing. The asset is generated and in `.gitignore`. `ShowBuildVersion` (prefab `BuildVersionData`: Profile view, Bootstrap, Reboot) loads it with `Resources.Load` and shows `build: <Application.version>` and `date: <build date>`, or `date: editor` when no build has been made yet.
 - There is no CI and no command-line build script.
@@ -90,10 +90,10 @@ Use `--branch staging` and `--branch main` for the other environments.
 
 ### Release flow
 
-1. **Content**: build Addressables (WebGL target) and release to CCD `dev`, badge `latest`. Commit `CCDBuildData`.
+1. **Content**: with the WebGL build target, **Chang/Content/Build & Release to dev** (the same as Addressables Groups → Build → Build & Release; CCD `dev`, badge `latest`). Nothing to commit.
 2. **Client**: increment the version in **DMZ/Build Data Window**, run **Chang/Build/WebGL Release**, deploy with `--branch dev`. Check on `dev.kruchaang.win`.
-3. **Promote to staging**: in Unity Cloud → CCD, promote the release from `dev`/`WebGL` to `staging`/`WebGL` (it gets `latest` there). Deploy **the same** `Builds/WebGL/Chang` folder with `--branch staging`. Check on `staging.kruchaang.win`.
-4. **Promote to production**: promote the CCD release from `staging` to `production` and put the `live` badge on it; deploy the same folder with `--branch main`.
+3. **Promote to staging**: **Chang/Content/Promote dev to staging** (or in Unity Cloud → CCD, promote the release from `dev`/`WebGL` to `staging`/`WebGL`; it gets `latest` there). Deploy **the same** `Builds/WebGL/Chang` folder with `--branch staging`. Check on `staging.kruchaang.win`.
+4. **Promote to production**: **Chang/Content/Promote staging to production (live)** promotes the CCD release from `staging` to `production` and puts the `live` badge on it; deploy the same folder with `--branch main`.
 5. **Rollback**: content — move the `live` badge back to the previous release in CCD; client — in Cloudflare (Workers & Pages → kruchaang → Deployments) use **Rollback** on the previous production deployment. No rebuild.
 
 Keep the build folder (or a zip of it) until the release reaches production, because promotion means deploying the same files.
@@ -123,9 +123,19 @@ Cloudflare (account demozbox@gmail.com, domain `kruchaang.win`). Done on 2026-10
 - kruchaang.win → Caching → Configuration → **Browser Cache TTL: Respect Existing Headers**. The default (4 hours) replaced `no-cache` from `_headers` on `ServiceWorker.js` with `max-age=14400`.
 - A new production host (another domain, `www.`) goes into `ProductionHosts` in `AppEnvironment.cs`.
 
+### Content builds
+
+Issue [#103](https://github.com/DeMoZ/Chang/issues/103).
+
+- Remote groups (`Remote_*`) use bundle naming **Append Hash**: `<name>_<hash>.bundle`. The hash changes with the content, so an updated bundle gets a new URL and a CDN or browser cache can never serve the old one. Every content build can rename bundles, so the catalog and the bundles always go to CCD together.
+- `CCDBuildData` is the folder the Addressables CCD **Automatic** profile builds into (the path is fixed in the Addressables package). **Build & Release** deletes it, builds, uploads its contents to the bucket of the active build target and creates a release. The folder is in `.gitignore`.
+- Build artifacts are stored only in CCD: every release is an immutable snapshot of a bucket (catalog + bundles), promotion copies it to `staging` and `production`, rollback moves the badge back. Nothing is kept in git. `addressables_content_state.bin` is not needed: content is always built from scratch, "Update a Previous Build" is not used.
+- The remote catalog is named after the player version (`catalog_<bundleVersion>.json`); the player build takes the catalog name from the last content build of its platform. Build the content before the player.
+- **Chang/Content** (`Assets/Project/Scripts/Editor/Build/ContentRelease.cs`) works with the active build target: Build & Release to `dev`, and promotion of the release a badge points to into the next environment through the CCD Management API with the Editor's Unity account. Bucket ids and badges come from `AppEnvironment`. The menu items can be run from a terminal: `unity command menu --project-path . "Chang/Content/Build & Release to dev"` (the result is in the Editor console).
+- Each platform has its own bucket, so after a change of the bundle settings run Build & Release once per platform (switch the build target first).
+
 ### Not done yet
 
-- hashed Addressables bundle names and build artifacts storage: [#103](https://github.com/DeMoZ/Chang/issues/103);
 - build number check (reload the page / open the store on mismatch): [#104](https://github.com/DeMoZ/Chang/issues/104);
 - content environments for Android and the Editor: [#105](https://github.com/DeMoZ/Chang/issues/105).
 
