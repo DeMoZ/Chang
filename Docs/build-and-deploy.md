@@ -120,6 +120,7 @@ Cloudflare (account demozbox@gmail.com, domain `kruchaang.win`). Done on 2026-10
   - self-hosted application **KruChaang dev & staging** (Access controls → Applications) with the Testers policy for `dev.kruchaang.win`, `staging.kruchaang.win`, `dev.kruchaang.pages.dev`, `staging.kruchaang.pages.dev`;
   - Pages → kruchaang → Settings → **Preview access: Restrict previews**, which closes the per-deploy `<hash>.kruchaang.pages.dev` addresses.
 - `kruchaang.pages.dev` (production on Cloudflare's own address) redirects to `kruchaang.win`, so players only see the own domain. It is a **Bulk Redirect** (account level, Delivery & performance → Bulk redirects): list `kruchaang_pages_dev` with one entry `kruchaang.pages.dev/` → `https://kruchaang.win/`, 301, Preserve query string, Subpath matching, Preserve path suffix, **without** Include subdomains (so `dev.`/`staging.kruchaang.pages.dev` keep working behind Access), and the rule "kruchaang.pages.dev to kruchaang.win" that enables the list. To stop the redirect, disable the rule.
+- kruchaang.win → Caching → Configuration → **Browser Cache TTL: Respect Existing Headers**. The default (4 hours) replaced `no-cache` from `_headers` on `ServiceWorker.js` with `max-age=14400`.
 - A new production host (another domain, `www.`) goes into `ProductionHosts` in `AppEnvironment.cs`.
 
 ### Not done yet
