@@ -30,6 +30,8 @@ namespace Chang.Editor.Build
             Debug.Log($"{nameof(ContentRelease)}: Build & Release {platform} content to dev");
 
             AddressableAssetBuildResult result = await AddressableAssetSettings.BuildAndReleasePlayerContent();
+            // the Addressables CCD upload leaves its "Postbuild" progress bar open
+            EditorUtility.ClearProgressBar();
 
             if (!string.IsNullOrEmpty(result.Error))
             {
