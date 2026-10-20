@@ -20,11 +20,11 @@
 ## What exists today
 
 - **Content:** Addressables are built with **Build & Release** into the `CCDBuildData` folder and uploaded to CCD (environment `dev`, badge `latest`); see [Content builds](#content-builds). The Addressables profile is in CCD **Automatic** mode: the bucket is the one named after the build target (`WebGL`, `Android`, `StandaloneOSX`), so content of different platforms does not overwrite each other.
-- **Client:** **Chang/Build/WebGL Release** and **Chang/Build/WebGL Development** (`Assets/Project/Scripts/Editor/Build/WebGLBuild.cs`) build WebGL to `Builds/WebGL/Chang`. **DMZ/Build Data Window** shows the version and the last build date and can increment the version (`bundleVersion`).
+- **Client:** **Chang/Build/WebGL Release** and **Chang/Build/WebGL Development** (`Assets/Project/Scripts/Editor/Build/WebGLBuild.cs`) build WebGL to `Builds/WebGL/Chang`. **Chang/Build/Android APK (dev / staging / production)** (`AndroidBuild.cs`) builds an APK for one environment to `Builds/Android`; see [Android and Editor](#android-and-editor). **DMZ/Build Data Window** shows the version and the last build date and can increment the version (`bundleVersion`).
 - **Build info:** on every player build `OnBuildPreprocesses` (LoginScreen submodule, `BuildConfig/Editor/`) writes the version and the current date to `Assets/Resources/BuildInfo/BuildInfo.asset`, creating it if missing. The asset is generated and in `.gitignore`. `ShowBuildVersion` (prefab `BuildVersionData`: Profile view, Bootstrap, Reboot) loads it with `Resources.Load` and shows `build: <Application.version>` and `date: <build date>`, or `date: editor` when no build has been made yet.
 - There is no CI and no command-line build script.
 
-<!-- TODO: Android release process (store build, content in the production environment) is not settled yet. -->
+<!-- TODO: Android store build (AAB, upload key, version code) is not settled yet. -->
 
 ## Environments
 
@@ -53,7 +53,8 @@ The domain `kruchaang.win`, Pages and Access are in the Cloudflare account demoz
 
 - WebGL player: by the page hostname: `dev.*` → `dev`, `staging.*` → `staging`, a host from `ProductionHosts` → `production`;
 - Editor: **Chang/Environment → Dev / Staging / Production** (saved per machine in EditorPrefs, applies on the next Play);
-- anything else (localhost, Unity Play, Cloudflare's own `*.pages.dev` addresses, Android/iOS builds for now) → `dev`.
+- other players (Android, iOS, Standalone): the environment written into the build (see [Android and Editor](#android-and-editor));
+- anything else (WebGL on localhost, Unity Play, Cloudflare's own `*.pages.dev` addresses, a build without a written environment) → `dev`.
 
 The environment is used for:
 
@@ -134,10 +135,39 @@ Issue [#103](https://github.com/DeMoZ/Chang/issues/103).
 - **Chang/Content** (`Assets/Project/Scripts/Editor/Build/ContentRelease.cs`) works with the active build target: Build & Release to `dev`, and promotion of the release a badge points to into the next environment through the CCD Management API with the Editor's Unity account. Bucket ids and badges come from `AppEnvironment`. The menu items can be run from a terminal: `unity command menu --project-path . "Chang/Content/Build & Release to dev"` (the result is in the Editor console).
 - Each platform has its own bucket, so after a change of the bundle settings run Build & Release once per platform (switch the build target first).
 
+### Android and Editor
+
+Issue [#105](https://github.com/DeMoZ/Chang/issues/105).
+
+Content per platform and environment:
+
+| Platform (bucket) | Built and released | Promoted | Loaded by |
+|---|---|---|---|
+| `WebGL` | Chang/Content/Build & Release to dev with the WebGL build target | Chang/Content/Promote … (WebGL target) | WebGL player: environment by hostname; Editor with the WebGL target |
+| `Android` | the same with the Android build target | the same with the Android target | Android APK: environment written into the build; Editor with the Android target |
+| `StandaloneOSX` | the same with the macOS build target | the same with the macOS target | Editor with the macOS target |
+
+Each platform goes through `dev` → `staging` → `production` on its own: Chang/Content and the bucket always follow the **active build target**, so switch the target before Build & Release or Promote.
+
+**Android builds.** An app has no page hostname, so the environment is fixed at build time:
+
+- **Chang/Build/Android APK (dev)** (development build), **(staging)**, **(production)** build `Builds/Android/Chang-<version>-<environment>.apk`;
+- `PlayerBuildEnvironment` (a build preprocessor, `Assets/Project/Scripts/Editor/Build/`) writes the environment into `Assets/Resources/BuildInfo/AppEnvironment.txt` before every player build; `AppEnvironment` reads it at start. The file is generated and in `.gitignore` (the `BuildInfo` folder). A build started from the Build Profiles window gets `dev`;
+- the catalog name comes from the last content build of the platform (see [Content builds](#content-builds)), so run Build & Release with the Android target before the first Android build of a new version;
+- install on a device: `adb install -r "Builds/Android/Chang-<version>-<environment>.apk"`. The Unity log shows `AppEnvironment: <environment>, bucket Android <id>, badge <badge>`.
+
+Release: Build & Release Android content to `dev` → test the `(dev)` APK → promote to `staging` → test the `(staging)` APK → promote to `production` → the `(production)` build goes to the stores. The store build (AAB, signing, version code) is not set up yet.
+
+**Testing an environment:**
+
+- **Editor**: Chang/Environment → Dev / Staging / Production picks the environment for Play mode (accounts, Cloud Save, and CCD content). Remote content is loaded only with the Addressables Play Mode Script **Use Existing Build**, from the bucket of the active build target, so that platform's content must be released to that environment. With **Use Asset Database** the content comes from the project.
+- **Android device**: install the APK of that environment; dev and production APKs have the same bundle id, so one replaces the other (the player data in the cloud stays per environment).
+- **WebGL**: open `dev.`, `staging.` or `kruchaang.win`.
+
 ### Not done yet
 
 - build number check (reload the page / open the store on mismatch): [#104](https://github.com/DeMoZ/Chang/issues/104);
-- content environments for Android and the Editor: [#105](https://github.com/DeMoZ/Chang/issues/105).
+- Android store build (AAB, signing, version code).
 
 ## Main dependencies
 

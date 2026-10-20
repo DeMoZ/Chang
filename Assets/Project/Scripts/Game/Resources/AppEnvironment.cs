@@ -11,7 +11,8 @@ namespace Chang.Resources
     /// One WebGL build is promoted between environments without a rebuild, so the environment is picked at runtime:
     /// - WebGL player: by the page hostname: "dev.*" and "staging.*", a host from <see cref="ProductionHosts"/> is production;
     /// - Editor: the choice in the menu Chang/Environment (saved in EditorPrefs);
-    /// - anything else (localhost, Unity Play, other platforms): <see cref="DefaultEnvironment"/>.
+    /// - other players (Android, iOS, Standalone) and WebGL on other hosts (localhost, Unity Play): the environment written
+    ///   into the build (<see cref="BuildResourcePath"/>, by the Chang/Build menu), otherwise <see cref="DefaultEnvironment"/>.
     /// Remote.LoadPath uses {CcdManager.EnvironmentName}, {CcdManager.BucketId} and {CcdManager.Badge}; Addressables fills
     /// them from the build only when they are not set yet, so they are set here before the first scene loads.
     /// See Docs/build-and-deploy.md.
@@ -24,6 +25,9 @@ namespace Chang.Resources
 
         public const string DefaultEnvironment = Dev;
         public const string EditorPrefsKey = "Chang.AppEnvironment";
+
+        /// <summary>Resources path of the text asset with the environment of a player build (generated, not in git).</summary>
+        public const string BuildResourcePath = "BuildInfo/AppEnvironment";
 
         public static readonly string[] All = { Dev, Staging, Production };
 
@@ -97,10 +101,17 @@ namespace Chang.Resources
             string selected = UnityEditor.EditorPrefs.GetString(EditorPrefsKey, DefaultEnvironment);
             return Environments.ContainsKey(selected) ? selected : DefaultEnvironment;
 #elif UNITY_WEBGL
-            return GetEnvironmentByUrl(Application.absoluteURL) ?? DefaultEnvironment;
+            return GetEnvironmentByUrl(Application.absoluteURL) ?? GetBuildEnvironment() ?? DefaultEnvironment;
 #else
-            return DefaultEnvironment;
+            return GetBuildEnvironment() ?? DefaultEnvironment;
 #endif
+        }
+
+        private static string GetBuildEnvironment()
+        {
+            var asset = UnityEngine.Resources.Load<TextAsset>(BuildResourcePath);
+            string environment = asset != null ? asset.text.Trim() : null;
+            return environment != null && Environments.ContainsKey(environment) ? environment : null;
         }
 
         private static string GetPlatform()
