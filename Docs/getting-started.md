@@ -24,7 +24,6 @@ git submodule update --init --recursive
 |---|---|---|
 | `DeMoZ/ChangExternal` (private) | `Assets/Project/Scripts/Utilities/ChangExternal` | Google API keys, spreadsheet ids, Android keystore. **Secrets; never copy them elsewhere.** |
 | `DeMoZ/DMZ.Legacy.LoginScreen` | `Assets/DMZ.Legacy.LoginScreen` | Login screen, Unity Authentication, build window |
-| `DeMoZ/ChangBundlesBuilds` | `CCDBuildData` | Built Addressables bundles for Unity CCD |
 
 ## First run
 
@@ -61,5 +60,5 @@ Assets/
 Docs/                    this documentation
 Tools/WordImages/        Python generators for word images
 UML/                     draw.io diagrams
-CCDBuildData/            submodule with built bundles
+CCDBuildData/            Addressables content build for CCD (generated, not in git)
 ```

@@ -94,7 +94,7 @@ Keys are path-like: `{Language}/{Type}/{Section}/{Key}`.
 
 ## Addressables and Unity CCD
 
-Content is downloaded from **Unity Cloud Content Delivery**: environment `dev`, badge `latest`. Settings: `Assets/AddressableAssetsData/`.
+Content is downloaded from **Unity Cloud Content Delivery**; the environment, bucket and badge are picked at runtime by `AppEnvironment` (see [Environments](build-and-deploy.md#environments)). Settings: `Assets/AddressableAssetsData/`.
 
 | Group | Contents | Packing | Label |
 |---|---|---|---|
@@ -105,7 +105,7 @@ Content is downloaded from **Unity Cloud Content Delivery**: environment `dev`, 
 - An asset's address is its full path. `WordPathHelper` builds the image and sound paths from a word key by removing `Vocabulary/`, giving e.g. `SoundWords/Thai/Female/<Section>/<Key>.mp3`.
 - The `Base` label is downloaded in the Reboot scene.
 - `PagesContentProvider` downloads the lesson's images and sounds before the lesson starts and shows the progress in bytes.
-- Built bundles are kept in the `CCDBuildData` submodule (`DeMoZ/ChangBundlesBuilds`).
+- Remote bundles are named `<name>_<hash>.bundle` (Append Hash). They are built into the `CCDBuildData` folder (not in git) by **Build & Release** and stored only in CCD releases; see [Content builds](build-and-deploy.md#content-builds).
 - In the Editor, **Chang/Content/Addressables/Addressables Resources** selects the config with buttons that clear the bundle and catalog cache.
 
 ## Editor menus

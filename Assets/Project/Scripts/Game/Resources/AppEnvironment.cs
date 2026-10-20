@@ -145,12 +145,29 @@ namespace Chang.Resources
         }
 
         /// <summary>
+        /// The CCD bucket id and badge the game loads for an environment and platform (bucket name = BuildTarget name).
+        /// </summary>
+        public static bool TryGetCcd(string environmentName, string platform, out string bucketId, out string badge)
+        {
+            bucketId = null;
+            badge = null;
+
+            if (!Environments.TryGetValue(environmentName, out Environment environment)
+                || !environment.Buckets.TryGetValue(platform, out bucketId))
+            {
+                return false;
+            }
+
+            badge = environment.Badge;
+            return true;
+        }
+
+        /// <summary>
         /// Points Addressables to the environment's CCD bucket and badge. Must be called before Addressables initialization.
         /// </summary>
         public static bool ApplyCcd(string environmentName, string platform)
         {
-            if (!Environments.TryGetValue(environmentName, out Environment environment)
-                || !environment.Buckets.TryGetValue(platform, out string bucketId))
+            if (!TryGetCcd(environmentName, platform, out string bucketId, out string badge))
             {
                 Debug.LogWarning($"{nameof(AppEnvironment)}: no {platform} bucket in {environmentName}, using the content build settings");
                 return false;
@@ -158,9 +175,9 @@ namespace Chang.Resources
 
             CcdManager.EnvironmentName = environmentName;
             CcdManager.BucketId = bucketId;
-            CcdManager.Badge = environment.Badge;
+            CcdManager.Badge = badge;
 
-            Debug.Log($"{nameof(AppEnvironment)}: {environmentName}, bucket {platform} {bucketId}, badge {environment.Badge}");
+            Debug.Log($"{nameof(AppEnvironment)}: {environmentName}, bucket {platform} {bucketId}, badge {badge}");
             return true;
         }
     }
