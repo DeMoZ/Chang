@@ -76,7 +76,8 @@ In the Editor, CCD content is loaded only with the Addressables Play Mode Script
 Template changes compared to Unity's PWA template:
 
 - `ServiceWorker.js`: the cache name is unique per build and old caches are deleted; the page (`index.html`, manifest) is network-first; requests to other hosts (CCD catalog and bundles) are not cached by the Service Worker. Unity's original cached every request cache-first and never deleted old caches, so players could keep getting the old page and the old content catalog after a deploy.
-- `_headers` (Cloudflare Pages): `Content-Encoding: br` for `Build/*.br`, long caching for `Build/*`, `no-cache` for the page, manifest and Service Worker.
+- `_headers` (Cloudflare Pages): `Content-Encoding: br` for `Build/*.br`, long caching for `Build/*`, `no-cache` for the page, manifest, Service Worker and `version.json`.
+- Build number check, see [Build number check](#build-number-check).
 - The page title is the product name. Unity 6's template has no "not supported on mobile" warning, so nothing to remove there.
 
 ### Deploy to Cloudflare Pages
@@ -164,9 +165,18 @@ Release: Build & Release Android content to `dev` → test the `(dev)` APK → p
 - **Android device**: install the APK of that environment; dev and production APKs have the same bundle id, so one replaces the other (the player data in the cloud stays per environment).
 - **WebGL**: open `dev.`, `staging.` or `kruchaang.win`.
 
+### Build number check
+
+Issue [#104](https://github.com/DeMoZ/Chang/issues/104). A player can run an old client against newer content: a page from the Service Worker's offline cache, or a tab (an installed PWA) kept open across a deploy. The content catalog is named after the player version, so an old client would look for a catalog that the new CCD release does not have.
+
+- Every WebGL build gets `version.json` next to `index.html`: `{"version":"<bundleVersion>"}`, written by `WebGLBuildVersion` (a build postprocessor, `Assets/Project/Scripts/Editor/Build/`). It is deployed with the build, so each environment (`dev.`, `staging.`, `kruchaang.win`) checks against its own deploy; nothing to set by hand.
+- `index.html` has its own build version baked in (`PRODUCT_VERSION`, the same as `Application.version`). On load and whenever the tab becomes visible again it fetches `version.json` past all caches (`no-store`, `no-cache` in `_headers`, skipped by the Service Worker). If the versions differ, it deletes the Cache Storage (the Service Worker and Unity caches) and reloads the page. At most one reload per deployed version per tab (`sessionStorage`), so a stale CDN response cannot cause a reload loop. Offline or without `version.json` (e.g. Unity Play) nothing happens.
+- A new deploy is picked up only when the version changes: increment it in **DMZ/Build Data Window** for every release.
+- Mobile (open the store page on a mismatch) is not done: it needs the store pages and a shared value per environment (e.g. Remote Config).
+
 ### Not done yet
 
-- build number check (reload the page / open the store on mismatch): [#104](https://github.com/DeMoZ/Chang/issues/104);
+- build number check on mobile (open the store on mismatch): [#104](https://github.com/DeMoZ/Chang/issues/104);
 - Android store build (AAB, signing, version code).
 
 ## Main dependencies

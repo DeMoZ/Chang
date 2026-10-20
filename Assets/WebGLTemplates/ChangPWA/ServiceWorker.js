@@ -2,6 +2,7 @@
 // - the cache name is unique per build (the data file name is a content hash), and old caches are deleted on activate;
 // - the page (index.html, manifest) is network-first, the cache is only an offline fallback;
 // - only this site's files are cached: requests to other hosts (CCD catalog and bundles) are not touched.
+// - version.json (the deployed build number, checked by index.html) always goes to the network.
 const cacheName = {{{ JSON.stringify(COMPANY_NAME + "-" + PRODUCT_NAME + "-" + PRODUCT_VERSION + "-" + DATA_FILENAME) }}};
 const contentToCache = [
     "Build/{{{ LOADER_FILENAME }}}",
@@ -40,7 +41,7 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (e) {
     const url = new URL(e.request.url);
 
-    if (e.request.method !== 'GET' || url.origin !== self.location.origin) {
+    if (e.request.method !== 'GET' || url.origin !== self.location.origin || url.pathname.endsWith('/version.json')) {
       return;
     }
 

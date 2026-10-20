@@ -36,6 +36,40 @@
         if ("serviceWorker" in navigator) {
           navigator.serviceWorker.register("ServiceWorker.js");
         }
+        checkBuildVersion();
+      });
+
+      // Chang: build number check (#104). version.json is written next to the page by the WebGL build
+      // (WebGLBuildVersion.cs) and served with no-cache. A page from the offline cache or a tab kept open
+      // across a deploy runs an old build: then clear the Cache Storage (Service Worker and Unity caches)
+      // and reload. Checked on load and when the tab becomes visible again; one reload per deployed version.
+      var buildVersion = {{{ JSON.stringify(PRODUCT_VERSION) }}};
+      var versionReloadKey = "chang-version-reload";
+
+      async function checkBuildVersion() {
+        try {
+          var response = await fetch("version.json", { cache: "no-store" });
+          if (!response.ok) return;
+          var deployed = (await response.json()).version;
+          if (!deployed || deployed === buildVersion) {
+            sessionStorage.removeItem(versionReloadKey);
+            return;
+          }
+          if (sessionStorage.getItem(versionReloadKey) === deployed) return;
+          sessionStorage.setItem(versionReloadKey, deployed);
+          console.log("[Chang] build " + buildVersion + " is old, deployed " + deployed + ": reloading");
+          if ("caches" in window) {
+            var keys = await caches.keys();
+            await Promise.all(keys.map((key) => caches.delete(key)));
+          }
+          location.reload();
+        } catch (error) {
+          // offline or no version.json: keep the running build
+        }
+      }
+
+      document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible") checkBuildVersion();
       });
 
       var container = document.querySelector("#unity-container");
