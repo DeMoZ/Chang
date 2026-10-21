@@ -26,9 +26,11 @@ All learning content (words, sentences, books and lessons) is edited **only in G
 
 | Sheet type | Range | Format |
 |---|---|---|
-| Vocabulary | `B6:I` | One row per word: WordKey, ImageKey, SoundKey, Key, LearnWord, Phonetics, DefaultTranslation, DefaultDescription |
+| Vocabulary | `B6:J` | One row per word: WordKey, ImageKey, SoundKey, Key, LearnWord, Phonetics, DefaultTranslation, DefaultDescription, Syllables |
 | Sentences | `C5:O` | 9-row blocks per sentence. Rows 0–4: Key, SentenceKey, ImageKey, SoundKey, DefaultTranslation. Row 5: DisplayIndex per word. Row 6: M/R/G modifiers. Row 8: word keys (up to 9) |
 | VocabularyBook / SentencesBook | `A4:C` | `Section` in column A starts a section, a non-empty column B starts a lesson, column C holds a key |
+
+**Syllables** (column J, optional): the word written as it is pronounced, syllables separated by `-`, e.g. `ผน-ละ-ไม้` for ผลไม้ (hidden vowels written out). Only the Word Sounds tool reads it, to voice the [syllable sounds](#word-sounds).
 
 A sentence translation uses `{0}`, `{1}`… placeholders where the Replaceable words go, e.g. "I want to buy {0}". See [learning-logic.md](learning-logic.md#sentences).
 
@@ -83,8 +85,9 @@ Keys are path-like: `{Language}/{Type}/{Section}/{Key}`.
   - **Vocabulary**: the learn words of the book language. Pick the Vocabulary config (`BookConfigs/<Language>/Vocabulary.asset`; download the configs from Google Sheets first to get new words).
   - **Localization**: the word translations of one native language, written to `SoundWords/<Language>/<Voice>/<Section>/<Key>.mp3` (the paths of `WordPathHelper.GetNativeSoundKey`). The words are read from the CSVs of **CSV folder**: `Assets/Resources/Localization` by default, any folder with downloaded CSVs, or **Download** fetches the sheets of `LocalizationSettings` (names and gids) from **Table Id** (empty = the table of `LocalizationSettings`) into `Library/WordSoundsLocalization`. **Language** lists the CSV columns, one language at a time. Only the vocabulary keys (`<Book>/Vocabulary/<Section>/<Key>`) are voiced: Lobby keys and sentences are skipped.
 
-  Options: Male and/or Female (voice of each), Normal and/or Slow (speech rate of each), Rewrite existing (off = only missing files). The list shows every word with its files (M, F, Ms, Fs; green = exists, click to play); a word is checked when one of its selected files is missing, and can be checked by hand. Siri voices are only available to Apple-signed programs, so the words are spoken by `Tools/ChangVoice/Resources/siri-tts.swift` run by the Swift interpreter from Xcode; ffmpeg then trims the silence and writes mp3. (`Tools/ChangVoice` also has an unused desktop app with the same features.)
+  Options: Male and/or Female (voice of each), Normal, Slow and/or Syllables (speech rate of each; Syllables also has the pause between syllables), Rewrite existing (off = only missing files). The list shows every word with its files (M, F, Ms, Fs, Msy, Fsy; green = exists, click to play; no syllable badges for a word without the Syllables column); a word is checked when one of its selected files is missing, and can be checked by hand. Siri voices are only available to Apple-signed programs, so the words are spoken by `Tools/ChangVoice/Resources/siri-tts.swift` run by the Swift interpreter from Xcode; ffmpeg then trims the silence and writes mp3. (`Tools/ChangVoice` also has an unused desktop app with the same features.)
 - **Slow sounds:** `Assets/Project/Resources_Bundled/SoundWordsSlow/<Language>/<Voice>/<Section>/<Key>.mp3` (`WordPathHelper.GetSlowSoundPath`), groups `Remote_<Language>_Sound_Words_Slow`. Thai only: they are recorded for the learned words, never for the native-language words. The lesson preloads the slow sounds of its words that exist in the catalog; the Sound Slow (turtle) button on the New word page plays it and is hidden when the word has no slow file.
+- **Syllable sounds:** `Assets/Project/Resources_Bundled/SoundWordsSyllables/<Language>/<Voice>/<Section>/<Key>.mp3` (`WordPathHelper.GetSyllablesSoundPath`), groups `Remote_<Language>_Sound_Words_Syllables`. The whole word in one file, said clearly syllable by syllable, so a learner hears every sound that is swallowed in normal speech. Thai only, from the Syllables column: each syllable is spoken on its own, trimmed, and the syllables are joined with a pause (no silence at the start or end of the file). The lesson preloads the ones that exist in the catalog; the Syllables button on the New word page (left of the turtle) plays it and is hidden when the word has no syllables file.
 - New section folders (also the ones the app makes) are added to the Addressables groups automatically when Unity imports them (`SoundFoldersPostprocessor`).
 
 > **Rule.** Word sounds must have no silence at the start or end: sentence audio is assembled from individual words.
@@ -101,6 +104,8 @@ Content is downloaded from **Unity Cloud Content Delivery**; the environment, bu
 | `Remote_Thai_Book` | the 4 book configs | together | `Base` (downloaded at startup) |
 | `Remote_Thai_Image_Words` | `ImageWords/Thai/*` folders | by label | — |
 | `Remote_Thai_Sound_Words` | `SoundWords/Thai/<Voice>/*` folders | separately | — |
+| `Remote_Thai_Sound_Words_Slow` | `SoundWordsSlow/Thai/<Voice>/*` folders | separately | — |
+| `Remote_Thai_Sound_Words_Syllables` | `SoundWordsSyllables/Thai/<Voice>/*` folders | separately | — |
 
 - An asset's address is its full path. `WordPathHelper` builds the image and sound paths from a word key by removing `Vocabulary/`, giving e.g. `SoundWords/Thai/Female/<Section>/<Key>.mp3`.
 - The `Base` label is downloaded in the Reboot scene.
@@ -114,6 +119,6 @@ Content is downloaded from **Unity Cloud Content Delivery**; the environment, bu
 |---|---|
 | Chang/Utilities/Sheets To Configs | Import content from Google Sheets |
 | Chang/Utilities/Media Prompts | Word picture prompts, generate missing pictures and sounds |
-| Chang/Utilities/Word Sounds (Siri) | Voice the word sounds (male/female, normal/slow) with the macOS Siri voices |
+| Chang/Utilities/Word Sounds (Siri) | Voice the word sounds (male/female, normal/slow/syllables) with the macOS Siri voices |
 | Chang/Utilities/Localization/Create Sheet View | Create a localization CSV viewer asset |
 | Chang/Content/Addressables/Addressables Resources | Cache, catalogs, empty label check |

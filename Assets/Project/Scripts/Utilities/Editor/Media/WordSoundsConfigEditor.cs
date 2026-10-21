@@ -20,8 +20,10 @@ namespace Chang.Utilities.Media
 {
     /// <summary>
     /// The inspector of <see cref="WordSoundsConfig"/>: voices the word sounds with the macOS voices,
-    /// Siri voices included (macOS only): Male and/or Female, Normal and/or Slow, only the missing files or all of them,
+    /// Siri voices included (macOS only): Male and/or Female, Normal, Slow and/or Syllables, only the missing files or all of them,
     /// for the words checked in the list.
+    /// Syllables: the Syllables column of a word (ผน-ละ-ไม้) is spoken one syllable at a time, the syllables are joined
+    /// with pauses into one file (SoundWordsSyllables/…); words without the column get no syllables file.
     /// The words come from a Vocabulary config (the learn words, SoundWords/{Book language}/…) or from the localization CSVs
     /// (the word translations of one language, SoundWords/{Language}/…, see WordPathHelper.GetNativeSoundKey).
     /// The localization CSVs are read from a folder: Assets/Resources/Localization or the sheets downloaded by the table id.
@@ -55,7 +57,7 @@ namespace Chang.Utilities.Media
 
         private enum Gender { Male, Female }
 
-        private enum Speed { Normal, Slow }
+        private enum Speed { Normal, Slow, Syllables }
 
         private readonly struct Output
         {
@@ -68,8 +70,8 @@ namespace Chang.Utilities.Media
                 Speed = speed;
             }
 
-            public string Root => Speed == Speed.Normal ? "SoundWords" : "SoundWordsSlow";
-            public string Badge => (Gender == Gender.Male ? "M" : "F") + (Speed == Speed.Slow ? "s" : "");
+            public string Root => Speed switch { Speed.Slow => "SoundWordsSlow", Speed.Syllables => "SoundWordsSyllables", _ => "SoundWords" };
+            public string Badge => (Gender == Gender.Male ? "M" : "F") + Speed switch { Speed.Slow => "s", Speed.Syllables => "sy", _ => "" };
         }
 
         /// <summary>A word to voice: a Vocabulary word or a localization row</summary>
@@ -80,6 +82,9 @@ namespace Chang.Utilities.Media
             public string Section;
             public string Name;
             public string Text;
+
+            /// <summary>"ผน-ละ-ไม้": the word as pronounced, split into syllables; only the Vocabulary words have it</summary>
+            public string Syllables;
 
             /// <summary>"Fruits/Mango"</summary>
             public string Relative;
@@ -145,11 +150,23 @@ namespace Chang.Utilities.Media
 
         private bool Exists(Item item, Output output) => _existing.Contains(FileId(item, output));
 
+        /// <summary>A syllables file is made only for a word with the Syllables column</summary>
+        private static bool HasOutput(Item item, Output output) => output.Speed != Speed.Syllables || SyllablesOf(item).Count > 0;
+
+        private bool IsMissing(Item item, Output output) => HasOutput(item, output) && !Exists(item, output);
+
+        private bool IsPlanned(Item item, Output output) => HasOutput(item, output) && (Config.Rewrite || !Exists(item, output));
+
+        private static List<string> SyllablesOf(Item item) => string.IsNullOrWhiteSpace(item.Syllables)
+            ? new List<string>()
+            : Regex.Split(item.Syllables, @"[-\s]+").Select(SpeechText).Where(s => s.Length > 0).ToList();
+
         private static IEnumerable<Output> AllOutputs =>
-            from g in new[] { Gender.Male, Gender.Female } from s in new[] { Speed.Normal, Speed.Slow } select new Output(g, s);
+            from g in new[] { Gender.Male, Gender.Female } from s in new[] { Speed.Normal, Speed.Slow, Speed.Syllables } select new Output(g, s);
 
         private List<Output> SelectedOutputs => AllOutputs
-            .Where(o => (o.Gender == Gender.Male ? Config.Male : Config.Female) && (o.Speed == Speed.Normal ? Config.Normal : Config.Slow))
+            .Where(o => (o.Gender == Gender.Male ? Config.Male : Config.Female) &&
+                        o.Speed switch { Speed.Slow => Config.Slow, Speed.Syllables => Config.Syllables, _ => Config.Normal })
             .ToList();
 
         /// <summary>Reads the words and which files exist, checks the words with a missing selected file.</summary>
@@ -165,7 +182,7 @@ namespace Chang.Utilities.Media
             {
                 _items.AddRange(Config.Vocabulary.Words
                     .Where(w => !string.IsNullOrEmpty(w.SoundKey) && !string.IsNullOrEmpty(w.LearnWord))
-                    .Select(w => new Item { Key = w.SoundKey, Section = w.Section, Name = w.Key, Text = w.LearnWord, Relative = Relative(w) }));
+                    .Select(w => new Item { Key = w.SoundKey, Section = w.Section, Name = w.Key, Text = w.LearnWord, Syllables = w.Syllables, Relative = Relative(w) }));
             }
 
             if (Language != null)
@@ -289,7 +306,7 @@ namespace Chang.Utilities.Media
         {
             List<Output> outputs = SelectedOutputs;
             _checked.Clear();
-            _checked.UnionWith(_items.Where(w => outputs.Any(o => !Exists(w, o))).Select(w => w.Key));
+            _checked.UnionWith(_items.Where(w => outputs.Any(o => IsMissing(w, o))).Select(w => w.Key));
         }
 
         private int PlannedCount
@@ -297,7 +314,7 @@ namespace Chang.Utilities.Media
             get
             {
                 List<Output> outputs = SelectedOutputs;
-                return _items.Where(w => _checked.Contains(w.Key)).Sum(w => outputs.Count(o => Config.Rewrite || !Exists(w, o)));
+                return _items.Where(w => _checked.Contains(w.Key)).Sum(w => outputs.Count(o => IsPlanned(w, o)));
             }
         }
 
@@ -429,16 +446,26 @@ namespace Chang.Utilities.Media
             EditorGUI.BeginChangeCheck();
             bool male = VoiceRow("Male", config.Male, Gender.Male, voices, titles, out string maleVoice);
             bool female = VoiceRow("Female", config.Female, Gender.Female, voices, titles, out string femaleVoice);
-            float normalRate = config.NormalRate, slowRate = config.SlowRate;
+            float normalRate = config.NormalRate, slowRate = config.SlowRate, syllablesRate = config.SyllablesRate;
             bool normal = SpeedRow("Normal", config.Normal, ref normalRate, 0.3f, 0.6f);
             bool slow = SpeedRow("Slow", config.Slow, ref slowRate, 0.15f, 0.45f);
+            bool syllables = SpeedRow("Syllables", config.Syllables, ref syllablesRate, 0.2f, 0.6f);
+            float pause;
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.Space(74);
+                pause = EditorGUILayout.Slider(new GUIContent("Pause", "Seconds of silence between the syllables"), config.SyllablePause, 0.1f, 1f, GUILayout.Width(260));
+            }
+
             bool rewrite = EditorGUILayout.ToggleLeft(new GUIContent("Rewrite existing", "Off: only the missing files of the checked words are voiced"), config.Rewrite);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(config, "Word sounds settings");
-                bool outputsChanged = male != config.Male || female != config.Female || normal != config.Normal || slow != config.Slow;
-                (config.Male, config.Female, config.Normal, config.Slow, config.Rewrite) = (male, female, normal, slow, rewrite);
+                bool outputsChanged = male != config.Male || female != config.Female || normal != config.Normal || slow != config.Slow ||
+                                      syllables != config.Syllables;
+                (config.Male, config.Female, config.Normal, config.Slow, config.Syllables, config.Rewrite) = (male, female, normal, slow, syllables, rewrite);
                 (config.MaleVoice, config.FemaleVoice, config.NormalRate, config.SlowRate) = (maleVoice, femaleVoice, normalRate, slowRate);
+                (config.SyllablesRate, config.SyllablePause) = (syllablesRate, pause);
                 EditorUtility.SetDirty(config);
                 if (outputsChanged)
                 {
@@ -626,12 +653,18 @@ namespace Chang.Utilities.Media
 
                 foreach (Output output in AllOutputs)
                 {
+                    if (!HasOutput(word, output))
+                    {
+                        GUILayout.Space(30);
+                        continue;
+                    }
+
                     bool exists = Exists(word, output);
                     bool isSelected = selected.Any(o => o.Gender == output.Gender && o.Speed == output.Speed);
                     Color previous = GUI.backgroundColor;
                     GUI.backgroundColor = exists ? new Color(0.35f, 0.85f, 0.4f, isSelected ? 1f : 0.45f) : new Color(0.5f, 0.5f, 0.5f, isSelected ? 0.8f : 0.3f);
                     var content = new GUIContent(output.Badge, $"{output.Gender} {output.Speed}: {(exists ? "exists, click to play" : "missing")}");
-                    if (GUILayout.Button(content, EditorStyles.miniButton, GUILayout.Width(26)) && exists)
+                    if (GUILayout.Button(content, EditorStyles.miniButton, GUILayout.Width(output.Speed == Speed.Syllables ? 30 : 26)) && exists)
                     {
                         Play(FilePath(word, output));
                     }
@@ -693,7 +726,7 @@ namespace Chang.Utilities.Media
             var jobs = new List<(Output Output, string Voice, List<Item> Words)>();
             foreach (Output output in SelectedOutputs)
             {
-                List<Item> words = _items.Where(w => _checked.Contains(w.Key) && (Config.Rewrite || !Exists(w, output))).ToList();
+                List<Item> words = _items.Where(w => _checked.Contains(w.Key) && IsPlanned(w, output)).ToList();
                 if (words.Count == 0)
                 {
                     continue;
@@ -734,12 +767,19 @@ namespace Chang.Utilities.Media
                     try
                     {
                         _status = $"{output.Gender} · {output.Speed}: speaking {words.Count} words";
-                        List<string> cafs = words.Select((_, i) => Path.Combine(temp, $"{i}.caf")).ToList();
+                        // the texts each word is spoken in: the word, or each of its syllables separately
+                        List<List<string>> texts = words
+                            .Select(w => output.Speed == Speed.Syllables ? SyllablesOf(w) : new List<string> { SpeechText(w.Text) })
+                            .ToList();
+                        List<List<string>> cafs = texts
+                            .Select((t, i) => t.Select((_, j) => Path.Combine(temp, $"{i}_{j}.caf")).ToList())
+                            .ToList();
+                        int cafCount = cafs.Sum(c => c.Count);
                         var job = new JObject
                         {
                             ["voice"] = voice,
-                            ["rate"] = output.Speed == Speed.Slow ? Config.SlowRate : Config.NormalRate,
-                            ["items"] = new JArray(words.Select((w, i) => new JObject { ["text"] = SpeechText(w.Text), ["out"] = cafs[i] })),
+                            ["rate"] = output.Speed switch { Speed.Slow => Config.SlowRate, Speed.Syllables => Config.SyllablesRate, _ => Config.NormalRate },
+                            ["items"] = new JArray(texts.SelectMany((t, i) => t.Select((text, j) => new JObject { ["text"] = text, ["out"] = cafs[i][j] }))),
                         };
                         string jobPath = Path.Combine(temp, "job.json");
                         File.WriteAllText(jobPath, job.ToString());
@@ -749,7 +789,7 @@ namespace Chang.Utilities.Media
                         {
                             // a .caf appears when its word starts: the ones before it are finished
                             int written = Math.Max(0, Directory.GetFiles(temp, "*.caf").Length - 1);
-                            _progress = (before + written * 0.5f) / total;
+                            _progress = (before + written * 0.5f * words.Count / cafCount) / total;
                             Repaint();
                             return _cancel;
                         });
@@ -766,12 +806,12 @@ namespace Chang.Utilities.Media
                             string mp3 = Path.GetFullPath(FilePath(words[i], output));
                             Directory.CreateDirectory(Path.GetDirectoryName(mp3)!);
                             ExternalProcess.Result converted = await ExternalProcess.RunAsync(ffmpeg,
-                                $"-y -loglevel error -i \"{cafs[i]}\" -af \"{Trim},{Trim}\" -ar 24000 -ac 1 -b:a 32k \"{mp3}\"",
+                                $"-y -loglevel error {ConvertArguments(cafs[i])} -ar 24000 -ac 1 -b:a 32k \"{mp3}\"",
                                 Directory.GetCurrentDirectory(), TimeSpan.FromMinutes(1), () => _cancel);
                             done++;
                             _progress = (float)done / total;
                             Log(converted.IsSuccess
-                                ? $"✓ {output.Gender} {output.Speed} {words[i].Relative} [{SpeechText(words[i].Text)}]"
+                                ? $"✓ {output.Gender} {output.Speed} {words[i].Relative} [{string.Join(" · ", texts[i])}]"
                                 : $"✗ {words[i].Relative}: {converted.Output}");
                             Repaint();
                         }
@@ -792,6 +832,24 @@ namespace Chang.Utilities.Media
                 Refresh();
                 Repaint();
             }
+        }
+
+        /// <summary>
+        /// ffmpeg inputs and filter: one file is trimmed; several (the syllables) are trimmed each,
+        /// get the pause after them (except the last one) and are joined, so the file still has no silence around it.
+        /// </summary>
+        private string ConvertArguments(List<string> cafs)
+        {
+            string inputs = string.Join(" ", cafs.Select(c => $"-i \"{c}\""));
+            if (cafs.Count == 1)
+            {
+                return $"{inputs} -af \"{Trim},{Trim}\"";
+            }
+
+            string pause = Config.SyllablePause.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
+            IEnumerable<string> parts = cafs.Select((_, i) => $"[{i}]{Trim},{Trim}{(i < cafs.Count - 1 ? $",apad=pad_dur={pause}" : "")}[s{i}]");
+            string joined = string.Concat(cafs.Select((_, i) => $"[s{i}]"));
+            return $"{inputs} -filter_complex \"{string.Join(";", parts)};{joined}concat=n={cafs.Count}:v=0:a=1\"";
         }
 
         private void Log(string line)

@@ -71,7 +71,7 @@ namespace Chang.Utilities.GoogleSheets
                     Title = sheet.Title,
                 };
 
-                string dataRange = SpreadSheetUtilities.Range(sheet.Title, "B6:I");
+                string dataRange = SpreadSheetUtilities.Range(sheet.Title, "B6:J");
                 IList<IList<object>> data = await provider.GetSheetDataAsync(dataRange);
                 List<Word> words = new ();
 
@@ -89,7 +89,8 @@ namespace Chang.Utilities.GoogleSheets
                         LearnWord = SpreadSheetUtilities.SafeGetValue(entity, 4),
                         Phonetics = SpreadSheetUtilities.SafeGetValue(entity, 5),
                         DefaultTranslation = SpreadSheetUtilities.SafeGetValue(entity, 6),
-                        DefaultDescription = SpreadSheetUtilities.SafeGetValue(entity, 7)
+                        DefaultDescription = SpreadSheetUtilities.SafeGetValue(entity, 7),
+                        Syllables = SpreadSheetUtilities.SafeGetValue(entity, 8)
                     };
 
                     words.Add(word);

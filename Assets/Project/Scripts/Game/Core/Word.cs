@@ -18,6 +18,7 @@ namespace Chang.Core
         public string Phonetics;
         public string DefaultTranslation;
         public string DefaultDescription;
+        public string Syllables; // ผน-ละ-ไม้: the word as pronounced, syllables split by "-", voiced into the syllables sound
 
         // runtime properties
         public bool IsShowPhonetics { get; private set; }
@@ -53,6 +54,7 @@ namespace Chang.Core
                 Phonetics = string.Empty,
                 DefaultTranslation = string.Empty,
                 DefaultDescription = string.Empty,
+                Syllables = string.Empty,
             };
         }
     }

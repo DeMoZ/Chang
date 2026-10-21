@@ -29,9 +29,10 @@ namespace Chang
         public void Init(Word correctWord,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound,
-            Action onClickPlaySlowSound)
+            Action onClickPlaySlowSound,
+            Action onClickPlaySyllablesSound)
         {
-            _view.Init(correctWord, onToggleValueChanged, onClickPlaySound, onClickPlaySlowSound);
+            _view.Init(correctWord, onToggleValueChanged, onClickPlaySound, onClickPlaySlowSound, onClickPlaySyllablesSound);
         }
     }
 }

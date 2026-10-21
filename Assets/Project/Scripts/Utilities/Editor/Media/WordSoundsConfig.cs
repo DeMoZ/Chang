@@ -46,6 +46,12 @@ namespace Chang.Utilities.Media
         [Range(0.3f, 0.6f)] public float NormalRate = 0.5f;
         [Range(0.15f, 0.45f)] public float SlowRate = 0.32f;
 
+        [Tooltip("Syllables: the Syllables column of the words (ผน-ละ-ไม้), each syllable spoken on its own, joined with pauses into one file")]
+        public bool Syllables;
+        [Range(0.2f, 0.6f)] public float SyllablesRate = 0.4f;
+        [Tooltip("Seconds of silence between the syllables")]
+        [Range(0.1f, 1f)] public float SyllablePause = 0.35f;
+
         [Tooltip("Off: only the missing files of the checked words are voiced")]
         public bool Rewrite;
 

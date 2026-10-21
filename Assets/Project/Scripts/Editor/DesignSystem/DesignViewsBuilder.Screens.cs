@@ -473,6 +473,7 @@ namespace Chang.Editor.DesignSystem
                     ("_toggleGroup", group),
                     ("_playStopBtn", PlayStop(Q(actions, "Chang DS / IconButton / Sound"))),
                     ("_playSlowBtn", PlayStop(Q(actions, "Chang DS / IconButton / Sound Slow"))),
+                    ("_playSyllablesBtn", PlayStop(Q(actions, "Chang DS / IconButton / Sound Syllables"))),
                     ("_translationToggle", translation));
             });
 

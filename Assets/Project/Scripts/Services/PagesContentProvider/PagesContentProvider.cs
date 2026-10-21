@@ -75,6 +75,11 @@ namespace Project.Services.PagesContentProvider
                 .Select(w => _wordPathHelper.GetSlowSoundPath(w.WordKey))
                 .Where(path => !string.IsNullOrEmpty(path) && _assetManager.IsAssetExists(path)));
 
+            // syllable sounds too: Thai words only, the Syllables button is shown only when the file exists
+            soundKeys.UnionWith(words
+                .Select(w => _wordPathHelper.GetSyllablesSoundPath(w.WordKey))
+                .Where(path => !string.IsNullOrEmpty(path) && _assetManager.IsAssetExists(path)));
+
             HashSet<string> totalKeys = new();
             totalKeys.UnionWith(imageKeys);
             totalKeys.UnionWith(soundKeys);

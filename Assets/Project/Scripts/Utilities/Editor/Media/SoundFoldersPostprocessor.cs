@@ -9,16 +9,16 @@ namespace Chang.Utilities.Media
 {
     /// <summary>
     /// Word sounds of new sections (Word Sounds (Siri) config, the unused Chang Voice app) land in new section folders:
-    /// SoundWords/{Language}/{Voice}/{Section} and SoundWordsSlow/{Language}/{Voice}/{Section}.
+    /// SoundWords/{Language}/{Voice}/{Section}, SoundWordsSlow/… and SoundWordsSyllables/….
     /// Each section folder is an Addressables entry with its path as the address, in Remote_{Language}_Sound_Words
-    /// (Remote_{Language}_Sound_Words_Slow for the slow ones), created from the Remote_Thai_Sound_Words group.
+    /// (Remote_{Language}_Sound_Words_Slow and Remote_{Language}_Sound_Words_Syllables for the slow and syllable ones), created from the Remote_Thai_Sound_Words group.
     /// </summary>
     public class SoundFoldersPostprocessor : AssetPostprocessor
     {
         private const string SoundGroupTemplate = "Remote_Thai_Sound_Words";
 
         private static readonly Regex SectionFolder =
-            new(@"^(Assets/Project/Resources_Bundled/(SoundWords|SoundWordsSlow)/([^/]+)/[^/]+/[^/]+)(/|$)");
+            new(@"^(Assets/Project/Resources_Bundled/(SoundWords|SoundWordsSlow|SoundWordsSyllables)/([^/]+)/[^/]+/[^/]+)(/|$)");
 
         private static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom)
         {
@@ -57,7 +57,7 @@ namespace Chang.Utilities.Media
                     continue;
                 }
 
-                string groupName = $"Remote_{folder.Language}_Sound_Words{(folder.Root == "SoundWordsSlow" ? "_Slow" : "")}";
+                string groupName = $"Remote_{folder.Language}_Sound_Words{folder.Root.Substring("SoundWords".Length) switch { "" => "", var kind => "_" + kind }}";
                 AddressableAssetGroup group = settings.FindGroup(groupName) ??
                                               settings.CreateGroup(groupName, false, false, true, template.Schemas);
 

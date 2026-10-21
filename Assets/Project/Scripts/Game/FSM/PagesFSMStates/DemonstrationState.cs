@@ -78,7 +78,11 @@ namespace Chang.FSM
             _correctWord.SetSprite(_pagesContentProvider.GetCachedSprite(_correctWord.ImageKey));
             // the Sound Slow button is shown only when the word has a slow recording
             bool hasSlowSound = _assetManager.IsAssetExists(_wordPathHelper.GetSlowSoundPath(_correctWord.WordKey));
-            _stateController.Init(_correctWord, OnToggleValueChanged, OnClickPlaySound, hasSlowSound ? OnClickPlaySlowSound : null);
+            // the same for the Syllables button
+            bool hasSyllablesSound = _assetManager.IsAssetExists(_wordPathHelper.GetSyllablesSoundPath(_correctWord.WordKey));
+            _stateController.Init(_correctWord, OnToggleValueChanged, OnClickPlaySound,
+                hasSlowSound ? OnClickPlaySlowSound : null,
+                hasSyllablesSound ? OnClickPlaySyllablesSound : null);
             _stateController.SetViewActive(true);
 
             OnClickPlaySound();
@@ -100,6 +104,17 @@ namespace Chang.FSM
         private void OnClickPlaySlowSound()
         {
             string path = _wordPathHelper.GetSlowSoundPath(_correctWord.WordKey);
+            AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
+
+            if (asset)
+            {
+                _pagesSoundController.PlaySound(asset);
+            }
+        }
+
+        private void OnClickPlaySyllablesSound()
+        {
+            string path = _wordPathHelper.GetSyllablesSoundPath(_correctWord.WordKey);
             AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
