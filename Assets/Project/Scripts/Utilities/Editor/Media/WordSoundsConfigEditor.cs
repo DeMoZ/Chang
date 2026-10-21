@@ -453,8 +453,9 @@ namespace Chang.Utilities.Media
             float pause;
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUILayout.Space(74);
-                pause = EditorGUILayout.Slider(new GUIContent("Pause", "Seconds of silence between the syllables"), config.SyllablePause, 0.1f, 1f, GUILayout.Width(260));
+                GUILayout.Space(18);
+                GUILayout.Label(new GUIContent("Pause", "Seconds of silence between the syllables"), GUILayout.Width(52));
+                pause = EditorGUILayout.Slider(config.SyllablePause, 0.1f, 1f, GUILayout.Width(260));
             }
 
             bool rewrite = EditorGUILayout.ToggleLeft(new GUIContent("Rewrite existing", "Off: only the missing files of the checked words are voiced"), config.Rewrite);
