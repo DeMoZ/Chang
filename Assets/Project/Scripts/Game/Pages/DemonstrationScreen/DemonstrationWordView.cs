@@ -16,6 +16,7 @@ namespace Chang.UI
         [SerializeField] private ToggleGroup _toggleGroup;
         [SerializeField] private PlayStopButton _playStopBtn;
         [SerializeField] private PlayStopButton _playSlowBtn;
+        [SerializeField] private PlayStopButton _playSyllablesBtn;
 
         [Tooltip("A toggle placed in the screen (the design's reveal chip). When set, it is used instead of instantiating Mix Word Prefab")]
         [SerializeField] private CToggle _translationToggle;
@@ -24,20 +25,23 @@ namespace Chang.UI
 
         private Action _onClickPlaySound;
         private Action _onClickPlaySlowSound;
+        private Action _onClickPlaySyllablesSound;
 
-        // the slow clip has the same name as the normal one, so the play state goes to the button that started it
-        private bool _isSlowSound;
+        // the slow and syllables clips have the same name as the normal one, so the play state goes to the button that started it
+        private PlayStopButton _playingBtn;
 
         public void Init(Word correctWord,
             Action<bool> onToggleValueChanged,
             Action onClickPlaySound,
-            Action onClickPlaySlowSound)
+            Action onClickPlaySlowSound,
+            Action onClickPlaySyllablesSound)
         {
             Debug.Log("Init SelectWordView");
 
             _onClickPlaySound = onClickPlaySound;
             _onClickPlaySlowSound = onClickPlaySlowSound;
-            _isSlowSound = false;
+            _onClickPlaySyllablesSound = onClickPlaySyllablesSound;
+            _playingBtn = _playStopBtn;
 
             if (_translationToggle == null)
             {
@@ -71,38 +75,49 @@ namespace Chang.UI
                 _playSlowBtn.OnClick += OnClickPlaySlowSound;
             }
 
+            // shown only when the word has a syllables recording
+            if (_playSyllablesBtn != null)
+            {
+                _playSyllablesBtn.gameObject.SetActive(onClickPlaySyllablesSound != null);
+                _playSyllablesBtn.OnClick += OnClickPlaySyllablesSound;
+            }
+
             _questionImage.sprite = correctWord.Sprite;
         }
 
         private void OnSoundPlay(bool play)
         {
-            PlayStopButton button = _isSlowSound ? _playSlowBtn : _playStopBtn;
-
-            if (button != null)
+            if (_playingBtn != null)
             {
-                button.SetPlay(!play);
+                _playingBtn.SetPlay(!play);
             }
         }
 
         private void OnClickPlaySound()
         {
-            SwitchSoundButton(false);
+            SwitchSoundButton(_playStopBtn);
             _onClickPlaySound?.Invoke();
         }
 
         private void OnClickPlaySlowSound()
         {
-            SwitchSoundButton(true);
+            SwitchSoundButton(_playSlowBtn);
             _onClickPlaySlowSound?.Invoke();
         }
 
-        // the playing sound is stopped by the next one, reset the button of the stopped sound before switching
-        private void SwitchSoundButton(bool isSlowSound)
+        private void OnClickPlaySyllablesSound()
         {
-            if (_isSlowSound != isSlowSound)
+            SwitchSoundButton(_playSyllablesBtn);
+            _onClickPlaySyllablesSound?.Invoke();
+        }
+
+        // the playing sound is stopped by the next one, reset the button of the stopped sound before switching
+        private void SwitchSoundButton(PlayStopButton button)
+        {
+            if (_playingBtn != button)
             {
                 OnSoundPlay(false);
-                _isSlowSound = isSlowSound;
+                _playingBtn = button;
             }
         }
 
@@ -116,6 +131,11 @@ namespace Chang.UI
             if (_playSlowBtn != null)
             {
                 _playSlowBtn.OnClick -= OnClickPlaySlowSound;
+            }
+
+            if (_playSyllablesBtn != null)
+            {
+                _playSyllablesBtn.OnClick -= OnClickPlaySyllablesSound;
             }
         }
     }

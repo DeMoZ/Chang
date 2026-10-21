@@ -15,6 +15,7 @@ namespace Project.Services.PagesContentProvider
         /// Translation sounds (in the native language) are loaded only when they exist in the catalog,
         /// a missing one is reported as an error when it is played.
         /// Slow sounds (only the learned Thai words have them) are loaded only when they exist in the catalog too.
+        /// Syllable sounds (Thai only as well) the same way.
         /// </summary>
         UniTask PreloadWordsContentAsync(List<Word> words, Languages nativeLanguage, Action<float, float> percents, CancellationToken ct);
 

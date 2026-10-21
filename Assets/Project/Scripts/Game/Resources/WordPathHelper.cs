@@ -18,6 +18,13 @@ namespace Chang.Resources
             return GetSoundPath(AssetPaths.Addressables.SoundWordsSlow, key, voice);
         }
 
+        public string GetSyllablesSoundPath(string key, SoundVoices voice = SoundVoices.Female)
+        {
+            // key = Thai/Vocabulary/Fruits/Coconut
+            // result Assets/Project/Resources_Bundled/SoundWordsSyllables/Thai/Female/Fruits/Coconut.mp3
+            return GetSoundPath(AssetPaths.Addressables.SoundWordsSyllables, key, voice);
+        }
+
         private string GetSoundPath(string root, string key, SoundVoices voice)
         {
             if (string.IsNullOrWhiteSpace(key))
