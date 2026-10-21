@@ -1,15 +1,14 @@
 {
-    "name": {{{ JSON.stringify(PRODUCT_NAME) }}},
-    "short_name": {{{ JSON.stringify(PRODUCT_NAME) }}},
+    "name": "KruChaang",
+    "short_name": "KruChaang",
     "start_url": "index.html",
     "display": "fullscreen",
     "background_color": "{{{ BACKGROUND_COLOR }}}",
-    "theme_color": "{{{  SPLASH_SCREEN_STYLE.toLowerCase() === 'light' ? '#fff' : '#000' }}}",
-    "description": {{{ JSON.stringify(PRODUCT_DESCRIPTION) }}},
-    "icons": [{
-      "src": "TemplateData/icons/unity-logo-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }]
+    "theme_color": "#FBF6EC",
+    "description": "Learn Thai with Kru Chaang, a friendly elephant teacher. Short lessons with words, sentences, audio and pictures. Made for beginners and travelers. Plays in the browser.",
+    "icons": [
+      { "src": "TemplateData/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+      { "src": "TemplateData/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+      { "src": "TemplateData/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
   }

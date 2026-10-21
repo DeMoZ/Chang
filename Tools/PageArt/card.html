@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- Unity Play thumbnail and Open Graph image (#107). Rendered by render.sh at 1280x720 and 1200x630;
+     sizes are in vw/vh, so the layout follows the window size. Colors are from DesignTheme.asset. -->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: Prompt; font-weight: 700; src: url("../../Assets/Project/Fonts/Prompt/Static/Prompt-Bold.ttf"); }
+  @font-face { font-family: Prompt; font-weight: 500; src: url("../../Assets/Project/Fonts/Prompt/Static/Prompt-Medium.ttf"); }
+  @font-face { font-family: NotoThai; font-weight: 700; src: url("../../Assets/Project/Fonts/NotoSansThaiLooped/NotoSansThaiLooped-Bold.ttf"); }
+  @font-face { font-family: NotoThai; font-weight: 500; src: url("../../Assets/Project/Fonts/NotoSansThaiLooped/NotoSansThaiLooped-Medium.ttf"); }
+  :root {
+    --rice: #FBF6EC; --sand: #F5EEDF; --ink: #1D2140; --ink2: #4A4F6E; --lotus: #E0688F; --lotus-soft: #FBE4EC;
+    --gold: #D99A1E; --gold-soft: #FCEFD0; --indigo: #2F3C9E; --indigo-soft: #E6E8F8; --jade-soft: #DCF2E8; --jade: #14916B;
+  }
+  html, body { margin: 0; width: 100vw; height: 100vh; overflow: hidden; background: var(--rice); }
+  body { position: relative; font-family: Prompt, NotoThai, sans-serif; color: var(--ink); }
+  .band { position: absolute; left: 0; right: 0; height: 5.5vh; background: var(--indigo);
+          background-image: url("pattern.svg"); background-size: auto 70%; background-repeat: repeat-x; background-position: center; }
+  .band.top { top: 0; } .band.bottom { bottom: 0; }
+  .halo { position: absolute; left: 6vw; top: 14vh; width: 40vw; height: 40vw; max-height: 72vh; max-width: 72vh;
+          border-radius: 50%; background: var(--lotus-soft); }
+  .mascot { position: absolute; left: 1vw; top: 13vh; width: 48vw; }
+  .mango { position: absolute; left: 36vw; top: 60vh; width: 11vw; transform: rotate(-12deg); }
+  .text { position: absolute; left: 51vw; right: 4vw; top: 50%; transform: translateY(-50%); }
+  .thai { font-family: NotoThai; font-weight: 700; color: var(--gold); font-size: 7.4vw; line-height: 1.25; }
+  .name { font-weight: 700; font-size: 8.2vw; line-height: 1.0; letter-spacing: -0.02em; }
+  .tagline { font-weight: 500; color: var(--ink2); font-size: 2.9vw; margin-top: 2.2vh; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.8vw; margin-top: 4vh; }
+  .chip { font-weight: 500; font-size: 1.85vw; padding: 0.4vw 1.2vw; border-radius: 99px; }
+  .chip:nth-child(1) { background: var(--indigo-soft); color: var(--indigo); }
+  .chip:nth-child(2) { background: var(--gold-soft); color: #8A5F0A; }
+  .chip:nth-child(3) { background: var(--jade-soft); color: var(--jade); }
+  .chip:nth-child(4) { background: var(--lotus-soft); color: #B0406A; }
+</style>
+</head>
+<body>
+  <div class="band top"></div>
+  <div class="halo"></div>
+  <img class="mascot" src="mascot.svg">
+  <img class="mango" src="mango.svg">
+  <div class="text">
+    <div class="thai">ครูช้าง</div>
+    <div class="name">KruChaang</div>
+    <div class="tagline">Learn Thai, one word at a time</div>
+    <div class="chips">
+      <span class="chip">words</span><span class="chip">sentences</span><span class="chip">sounds</span><span class="chip">pictures</span>
+    </div>
+  </div>
+  <div class="band bottom"></div>
+</body>
+</html>
