@@ -22,8 +22,9 @@ namespace Chang.Utilities.Media
     /// The inspector of <see cref="WordSoundsConfig"/>: voices the word sounds with the macOS voices,
     /// Siri voices included (macOS only): Male and/or Female, Normal, Slow and/or Syllables, only the missing files or all of them,
     /// for the words checked in the list.
-    /// Syllables: the Syllables column of a word (ผน-ละ-ไม้) is spoken one syllable at a time, the syllables are joined
-    /// with pauses into one file (SoundWordsSyllables/…); words without the column get no syllables file.
+    /// Syllables: the syllables of a word (ผน-ละ-ไม้) are spoken one at a time and joined with pauses into one file
+    /// (SoundWordsSyllables/…). They are kept in <see cref="SyllablesFile"/> (SoundKey → syllables) and edited in the word rows;
+    /// the Syllables column of the sheet, when filled, wins. Words without syllables get no syllables file.
     /// The words come from a Vocabulary config (the learn words, SoundWords/{Book language}/…) or from the localization CSVs
     /// (the word translations of one language, SoundWords/{Language}/…, see WordPathHelper.GetNativeSoundKey).
     /// The localization CSVs are read from a folder: Assets/Resources/Localization or the sheets downloaded by the table id.
@@ -39,6 +40,9 @@ namespace Chang.Utilities.Media
         private const string Helper = "Tools/ChangVoice/Resources/siri-tts.swift";
         private const string SoundsRoot = "Assets/Project/Resources_Bundled";
         private const string DownloadFolder = "Library/WordSoundsLocalization";
+
+        /// <summary>SoundKey → syllables ("Thai/Vocabulary/Fruits/Fruit\tผน-ละ-ไม้"), one word per line</summary>
+        public const string SyllablesFile = "Assets/Project/Configs/WordSyllables.tsv";
 
         // word sounds must have no silence around them: sentences are assembled from words
         private const string Trim = "silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.02:detection=rms:window=0.02,areverse";
@@ -86,6 +90,9 @@ namespace Chang.Utilities.Media
             /// <summary>"ผน-ละ-ไม้": the word as pronounced, split into syllables; only the Vocabulary words have it</summary>
             public string Syllables;
 
+            /// <summary>The syllables come from the Syllables column of the sheet, not from the syllables file</summary>
+            public bool SheetSyllables;
+
             /// <summary>"Fruits/Mango"</summary>
             public string Relative;
         }
@@ -106,6 +113,7 @@ namespace Chang.Utilities.Media
         private readonly HashSet<string> _checked = new();
         private readonly HashSet<string> _existing = new();
         private readonly HashSet<string> _collapsed = new();
+        private readonly Dictionary<string, string> _syllables = new();
         private readonly List<string> _log = new();
         private string _filter = "";
         private Vector2 _scroll;
@@ -150,7 +158,7 @@ namespace Chang.Utilities.Media
 
         private bool Exists(Item item, Output output) => _existing.Contains(FileId(item, output));
 
-        /// <summary>A syllables file is made only for a word with the Syllables column</summary>
+        /// <summary>A syllables file is made only for a word with syllables</summary>
         private static bool HasOutput(Item item, Output output) => output.Speed != Speed.Syllables || SyllablesOf(item).Count > 0;
 
         private bool IsMissing(Item item, Output output) => HasOutput(item, output) && !Exists(item, output);
@@ -182,7 +190,16 @@ namespace Chang.Utilities.Media
             {
                 _items.AddRange(Config.Vocabulary.Words
                     .Where(w => !string.IsNullOrEmpty(w.SoundKey) && !string.IsNullOrEmpty(w.LearnWord))
-                    .Select(w => new Item { Key = w.SoundKey, Section = w.Section, Name = w.Key, Text = w.LearnWord, Syllables = w.Syllables, Relative = Relative(w) }));
+                    .Select(w => new Item { Key = w.SoundKey, Section = w.Section, Name = w.Key, Text = w.LearnWord, Relative = Relative(w),
+                        SheetSyllables = !string.IsNullOrWhiteSpace(w.Syllables) }));
+
+                // the Syllables column of the sheet wins over the syllables file
+                ReadSyllables();
+                foreach (Item item in _items)
+                {
+                    Word word = Config.Vocabulary.Words.First(w => w.SoundKey == item.Key);
+                    item.Syllables = item.SheetSyllables ? word.Syllables : _syllables.GetValueOrDefault(item.Key);
+                }
             }
 
             if (Language != null)
@@ -200,6 +217,32 @@ namespace Chang.Utilities.Media
             }
 
             ResetChecks();
+        }
+
+        private void ReadSyllables()
+        {
+            _syllables.Clear();
+            if (!File.Exists(SyllablesFile))
+            {
+                return;
+            }
+
+            foreach (string line in File.ReadAllLines(SyllablesFile))
+            {
+                string[] parts = line.Split('\t');
+                if (parts.Length == 2 && !string.IsNullOrWhiteSpace(parts[1]))
+                {
+                    _syllables[parts[0].Trim()] = parts[1].Trim();
+                }
+            }
+        }
+
+        /// <summary>Writes the syllables of the file in the order of the words (the ones of other words are kept at the end).</summary>
+        private void WriteSyllables()
+        {
+            IEnumerable<string> keys = _items.Select(i => i.Key).Concat(_syllables.Keys).Distinct().Where(_syllables.ContainsKey);
+            File.WriteAllLines(SyllablesFile, keys.Select(k => $"{k}\t{_syllables[k]}"));
+            AssetDatabase.ImportAsset(SyllablesFile);
         }
 
         /// <summary>
@@ -650,6 +693,11 @@ namespace Chang.Utilities.Media
 
                 GUILayout.Label(new GUIContent(word.Name, word.Key), GUILayout.MinWidth(80));
                 GUILayout.Label(word.Text, GUILayout.MinWidth(80));
+                if (Config.Syllables && !IsLocalization)
+                {
+                    DrawSyllables(word);
+                }
+
                 GUILayout.FlexibleSpace();
 
                 foreach (Output output in AllOutputs)
@@ -671,6 +719,31 @@ namespace Chang.Utilities.Media
                     }
 
                     GUI.backgroundColor = previous;
+                }
+            }
+        }
+
+        /// <summary>The syllables of the word, edited into the syllables file (read only when they come from the sheet).</summary>
+        private void DrawSyllables(Item word)
+        {
+            using (new EditorGUI.DisabledScope(word.SheetSyllables))
+            {
+                var tooltip = word.SheetSyllables ? "From the Syllables column of the sheet" : "Syllables as pronounced, split by '-': ผน-ละ-ไม้";
+                EditorGUI.BeginChangeCheck();
+                string syllables = EditorGUILayout.DelayedTextField(new GUIContent("", tooltip), word.Syllables ?? "", GUILayout.Width(180));
+                if (EditorGUI.EndChangeCheck())
+                {
+                    word.Syllables = syllables.Trim();
+                    if (word.Syllables.Length > 0)
+                    {
+                        _syllables[word.Key] = word.Syllables;
+                    }
+                    else
+                    {
+                        _syllables.Remove(word.Key);
+                    }
+
+                    WriteSyllables();
                 }
             }
         }

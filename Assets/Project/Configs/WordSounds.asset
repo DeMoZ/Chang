@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85dac2645897b4a18827d73475e5a307, type: 3}
   m_Name: WordSounds
   m_EditorClassIdentifier: Assembly-CSharp-Editor::Chang.Utilities.Media.WordSoundsConfig
-  Source: 1
+  Source: 0
   Vocabulary: {fileID: 11400000, guid: 7e8ed0be4bb2349878155344f246b00b, type: 2}
   LocalizationTableId: 
   LocalizationFolder: Assets/Resources/Localization
@@ -21,8 +21,11 @@ MonoBehaviour:
   Female: 1
   MaleVoice: 
   FemaleVoice: 
-  Normal: 1
+  Normal: 0
   Slow: 0
   NormalRate: 0.5
   SlowRate: 0.32
+  Syllables: 1
+  SyllablesRate: 0.4
+  SyllablePause: 0.45
   Rewrite: 0
