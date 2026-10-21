@@ -78,7 +78,7 @@ Template changes compared to Unity's PWA template:
 - `ServiceWorker.js`: the cache name is unique per build and old caches are deleted; the page (`index.html`, manifest) is network-first; requests to other hosts (CCD catalog and bundles) are not cached by the Service Worker. Unity's original cached every request cache-first and never deleted old caches, so players could keep getting the old page and the old content catalog after a deploy.
 - `_headers` (Cloudflare Pages): `Content-Encoding: br` for `Build/*.br`, long caching for `Build/*`, `no-cache` for the page, manifest, Service Worker and `version.json`.
 - Build number check, see [Build number check](#build-number-check).
-- The page title is the product name. Unity 6's template has no "not supported on mobile" warning, so nothing to remove there.
+- Page texts and images: title, description, Open Graph / Twitter tags, favicon, PWA icons, the loading screen logo and the manifest name are KruChaang's, see [Game page texts and images](#game-page-texts-and-images). Unity 6's template has no "not supported on mobile" warning, so nothing to remove there.
 
 ### Deploy to Cloudflare Pages
 
@@ -173,6 +173,38 @@ Issue [#104](https://github.com/DeMoZ/Chang/issues/104). A player can run an old
 - `index.html` has its own build version baked in (`PRODUCT_VERSION`, the same as `Application.version`). On load and whenever the tab becomes visible again it fetches `version.json` past all caches (`no-store`, `no-cache` in `_headers`, skipped by the Service Worker). If the versions differ, it deletes the Cache Storage (the Service Worker and Unity caches) and reloads the page. At most one reload per deployed version per tab (`sessionStorage`), so a stale CDN response cannot cause a reload loop. Offline or without `version.json` (e.g. Unity Play) nothing happens.
 - A new deploy is picked up only when the version changes: increment it in **DMZ/Build Data Window** for every release.
 - Mobile (open the store page on a mismatch) is not done: it needs the store pages and a shared value per environment (e.g. Remote Config).
+
+### Game page texts and images
+
+Issue [#107](https://github.com/DeMoZ/Chang/issues/107). The same texts and images are used on Unity Play and on `kruchaang.win`.
+
+| | Text (limit on Unity Play) |
+|---|---|
+| Title (35) | KruChaang: Learn Thai |
+| Description (200) | Learn Thai with Kru Chaang, a friendly elephant teacher. Short lessons with words, sentences, audio and pictures. Made for beginners and travelers. Plays in the browser. |
+
+On the site they are in `index.html` (`<title>`, `meta description`, `og:*`, `twitter:*`) and in `manifest.webmanifest` (`description`); change them in both places.
+
+Images are drawn from the mascot (`Assets/Project/UI/Vectors/Mascot`) and the colors of `DesignTheme.asset`. The sources are HTML pages in `Tools/PageArt` (`card.html`: wide picture with the logo, `icon.html`: app icon). `Tools/PageArt/render.sh` renders them with headless Chrome (macOS) and writes:
+
+| File | Size | Used for |
+|---|---|---|
+| `Tools/PageArt/unity-play-thumbnail.png` | 1280×720 | Unity Play thumbnail (max 1 MB) |
+| `TemplateData/og-image.png` | 1200×630 | `og:image` / `twitter:image` (absolute URL on `kruchaang.win`, also for `dev.`/`staging.`) |
+| `TemplateData/icons/icon-192.png`, `icon-512.png` | 192, 512 | PWA icons, `purpose: any` |
+| `TemplateData/icons/icon-maskable-512.png` | 512 | PWA icon, `purpose: maskable` (mascot inside the safe zone) |
+| `TemplateData/icons/apple-touch-icon.png` | 180 | iOS home screen |
+| `TemplateData/favicon.ico` | 16, 32, 48 | browser tab |
+| `ChangPWA/thumbnail.png` | 128 | template picture in Player Settings |
+| `TemplateData/loading-mascot.svg` | vector | logo on the loading screen (a copy of `Tools/PageArt/mascot.svg`) |
+
+
+**Unity Play page** (done by hand on play.unity.com → the game → Edit):
+
+1. Title and description from the table above.
+2. Thumbnail: upload `Tools/PageArt/unity-play-thumbnail.png`.
+3. Turn on **I have added mobile controls to my game** (the game is played with taps, no keyboard needed).
+4. Optional: a short gameplay video (MP4/MOV/AVI, max 10 MB) and store links once there are store pages.
 
 ### Not done yet
 
