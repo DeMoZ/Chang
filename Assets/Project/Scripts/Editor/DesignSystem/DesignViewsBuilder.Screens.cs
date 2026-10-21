@@ -488,15 +488,12 @@ namespace Chang.Editor.DesignSystem
                 var group = GetOrAdd<ToggleGroup>(options);
                 group.allowSwitchOff = true;
 
-                // The design has no sound button on this page; it plays the question word, right of the picture.
+                // The design has no sound buttons on this page; they play the question word, right of the picture:
+                // Sound (72) on top, Sound Syllables (56) under it, centered on the same column.
                 var picture = Q(prompt, "Picture");
                 var questionImage = ContentImage(picture, "Illustration");
-                var sound = Instance(Component("IconButton/Sound"), picture, "Sound");
-                sound.anchorMin = sound.anchorMax = new Vector2(1f, 0.5f);
-                sound.pivot = new Vector2(0f, 0.5f);
-                sound.anchoredPosition = new Vector2(16f, 0f);
-                GetOrAdd<LayoutElement>(sound).ignoreLayout = true;
-                sound.SetAsLastSibling();
+                var sound = SideButton(picture, "IconButton/Sound", "Sound", new Vector2(16f, 40f));
+                var syllables = SideButton(picture, "IconButton/Sound Syllables", "Sound Syllables", new Vector2(24f, -38f));
 
                 var view = GetOrAdd<SelectWordView>(root);
                 Set(view,
@@ -505,7 +502,8 @@ namespace Chang.Editor.DesignSystem
                     ("_mixWordPrefab", items.Option),
                     ("_mixWordContent", options),
                     ("_toggleGroup", group),
-                    ("_playStopBtn", PlayStop(sound)));
+                    ("_playStopBtn", PlayStop(sound)),
+                    ("_playSyllablesBtn", PlayStop(syllables)));
             });
 
             BuildPage("Lesson - Match pairs", "MatchWordsView", (root, content) =>
@@ -593,6 +591,18 @@ namespace Chang.Editor.DesignSystem
                     ("_masteryValue", Q<TMP_Text>(stats.gameObject, "Chang DS / StatTile / Sentences|Value")),
                     ("_accuracyValue", Q<TMP_Text>(stats.gameObject, "Chang DS / StatTile / Questions|Value")));
             });
+        }
+
+        /// <summary>An icon button placed right of a picture, outside its layout; position: left edge and vertical center offsets.</summary>
+        private static RectTransform SideButton(Transform picture, string component, string name, Vector2 position)
+        {
+            var button = Instance(Component(component), picture, name);
+            button.anchorMin = button.anchorMax = new Vector2(1f, 0.5f);
+            button.pivot = new Vector2(0f, 0.5f);
+            button.anchoredPosition = position;
+            GetOrAdd<LayoutElement>(button).ignoreLayout = true;
+            button.SetAsLastSibling();
+            return button;
         }
 
         private static PlayStopButton PlayStop(Transform iconButton)
