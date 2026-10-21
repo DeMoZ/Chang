@@ -16,6 +16,7 @@ namespace Chang.UI
         [SerializeField] private Transform _mixWordContent;
         [SerializeField] private ToggleGroup _toggleGroup;
         [SerializeField] private PlayStopButton _playStopBtn;
+        [SerializeField] private PlayStopButton _playSyllablesBtn;
 
         [ShowInInspector, ReadOnly] public override ChangTypes ScreenType { get; } = ChangTypes.SelectWord;
 
@@ -23,17 +24,24 @@ namespace Chang.UI
         
         private bool _isQuestInTranslation;
         private Action _onClickPlaySound;
+        private Action _onClickPlaySyllablesSound;
+
+        // the syllables clip has the same name as the normal one, so the play state goes to the button that started it
+        private PlayStopButton _playingBtn;
 
         public void Init(bool isQuestInTranslation, 
             Word correctWord, 
             List<Word> mixWords,
             Action<int, bool> onToggleValueChanged,
-            Action onClickPlaySound)
+            Action onClickPlaySound,
+            Action onClickPlaySyllablesSound)
         {
             Debug.Log("Init SelectWordView");
 
             _isQuestInTranslation = isQuestInTranslation;
             _onClickPlaySound = onClickPlaySound;
+            _onClickPlaySyllablesSound = onClickPlaySyllablesSound;
+            _playingBtn = _playStopBtn;
 
             foreach (Transform child in _mixWordContent)
             {
@@ -64,19 +72,43 @@ namespace Chang.UI
             {
                 _playStopBtn.OnClick += OnClickPlaySound;
             }
+
+            // shown only for a Thai question word with a syllables recording
+            if (_playSyllablesBtn != null)
+            {
+                _playSyllablesBtn.gameObject.SetActive(onClickPlaySyllablesSound != null);
+                _playSyllablesBtn.OnClick += OnClickPlaySyllablesSound;
+            }
         }
 
         private void OnSoundPlay(bool play)
         {
-            if (_playStopBtn != null)
+            if (_playingBtn != null)
             {
-                _playStopBtn.SetPlay(!play);
+                _playingBtn.SetPlay(!play);
             }
         }
 
         private void OnClickPlaySound()
         {
+            SwitchSoundButton(_playStopBtn);
             _onClickPlaySound?.Invoke();
+        }
+
+        private void OnClickPlaySyllablesSound()
+        {
+            SwitchSoundButton(_playSyllablesBtn);
+            _onClickPlaySyllablesSound?.Invoke();
+        }
+
+        // the playing sound is stopped by the next one, reset the button of the stopped sound before switching
+        private void SwitchSoundButton(PlayStopButton button)
+        {
+            if (_playingBtn != button)
+            {
+                OnSoundPlay(false);
+                _playingBtn = button;
+            }
         }
         
         private void OnDisable()
@@ -84,6 +116,11 @@ namespace Chang.UI
             if (_playStopBtn != null)
             {
                 _playStopBtn.OnClick -= OnClickPlaySound;
+            }
+
+            if (_playSyllablesBtn != null)
+            {
+                _playSyllablesBtn.OnClick -= OnClickPlaySyllablesSound;
             }
             
             foreach(var toggle in _mixWordToggles)

@@ -26,9 +26,10 @@ namespace Chang
             Word correctWord,
             List<Word> mixWords,
             Action<int, bool> onToggleValueChanged,
-            Action onClickPlaySound)
+            Action onClickPlaySound,
+            Action onClickPlaySyllablesSound)
         {
-            _view.Init(isQuestInTranslation, correctWord, mixWords, onToggleValueChanged, onClickPlaySound);
+            _view.Init(isQuestInTranslation, correctWord, mixWords, onToggleValueChanged, onClickPlaySound, onClickPlaySyllablesSound);
         }
 
         public void SetViewActive(bool active)

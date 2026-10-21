@@ -110,8 +110,12 @@ namespace Chang.FSM
             }
 
             _correctWord.SetSprite(_pagesContentProvider.GetCachedSprite(_correctWord.ImageKey));
+            // the Syllables button only for the Thai question word (for a translation it would tell the answer) with a syllables recording
+            bool hasSyllablesSound = !isQuestInTranslation &&
+                                     _assetManager.IsAssetExists(_wordPathHelper.GetSyllablesSoundPath(_correctWord.WordKey));
             _stateController.Init(isQuestInTranslation, _correctWord, _mixWords, OnToggleValueChanged,
-                () => OnClickPlaySound(!isQuestInTranslation));
+                () => OnClickPlaySound(!isQuestInTranslation),
+                hasSyllablesSound ? OnClickPlaySyllablesSound : null);
             _stateController.SetViewActive(true);
 
             OnClickPlaySound(!isQuestInTranslation);
@@ -126,6 +130,17 @@ namespace Chang.FSM
                 : _wordPathHelper.GetNativeSoundKey(_correctWord.WordKey, _profileService.ProfileData.NativeLanguage);
 
             AudioClip asset = _pagesContentProvider.GetCachedAudioClip(key);
+
+            if (asset)
+            {
+                _pagesSoundController.PlaySound(asset);
+            }
+        }
+
+        private void OnClickPlaySyllablesSound()
+        {
+            string path = _wordPathHelper.GetSyllablesSoundPath(_correctWord.WordKey);
+            AudioClip asset = _pagesContentProvider.GetCachedAsset<AudioClip>(path);
 
             if (asset)
             {
