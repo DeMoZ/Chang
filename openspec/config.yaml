@@ -1,0 +1,42 @@
+schema: spec-driven
+
+context: |
+  Language: English. All artifacts must be written in English.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Project: Chang (public name KruChaang) — a Unity app for learning Thai with Kru Chaang the elephant.
+  Platforms: WebGL (main; Cloudflare Pages, domain kruchaang.win, staging branch first), Android.
+  Development docs live in Docs/ (English) and are the reference — read Docs/README.md and the matching page
+  (architecture, content-pipeline, build-and-deploy, conventions, ui-design-system) before planning.
+  Tasks: GitHub Project DeMoZ/projects/1, issues in English; name a change after its issue when there is one
+  (e.g. 107-unity-play-page).
+
+  Stack: Unity 6, C#, Zenject, UniTask, Addressables (Unity CCD), TextMeshPro, SimpleLocalization,
+  Unity Cloud Save. WebGL template: Assets/WebGLTemplates/ChangPWA (index.html, ServiceWorker.js, TemplateData).
+
+  Hard rules (never plan against them):
+  - Content and localization are edited only in Google Sheets: never edit Localization/*.csv or imported content
+    assets; give the rows to add to the sheet instead.
+  - Word/sentence keys: only Latin letters, digits and spaces. Word sounds have no leading/trailing silence.
+  - The Languages enum gets new values only at the end.
+  - Secrets live only in the private ChangExternal submodule; never commit or print them.
+  - No production users yet: player save compatibility is not a constraint.
+
+rules:
+  proposal:
+    - Reference the GitHub issue number when there is one.
+    - State what is out of scope.
+  design:
+    - Follow Docs/architecture.md (Controller + View screens, services bound in ProjectInstaller/GameInstaller).
+    - Say which Docs/ pages change.
+  tasks:
+    - Include a task to update the matching Docs/ page.
+    - For WebGL changes, include a check in a local WebGL build and on the staging deploy.
+
+operations:
+  apply:
+    guidance:
+      - Stage only the files the change touches; never commit to main or force push.
+  archive:
+    guidance:
+      - When the change adds a convention that matters for future work, update Docs/conventions.md too.

@@ -36,8 +36,11 @@
   <body>
     <div id="unity-container">
       <canvas id="unity-canvas" width={{{ WIDTH }}} height={{{ HEIGHT }}} tabindex="-1"></canvas>
+      <!-- Chang: start screen (play-button-lazy-load). The build is downloaded only after Play, so bots that run
+           JavaScript but never click do not download it; the progress bar replaces the button on start. -->
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
+        <button id="unity-play" type="button">Play</button>
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
@@ -177,6 +180,32 @@
 #endif
       loadingBar.style.display = "block";
 
+      // Chang: the Unity build (loader, framework, code, data) is requested only from startGame(): by the Play button,
+      // or at once for an installed app and after a reload in a tab where the game was already started (the #104
+      // version reload, F5). The Service Worker does not precache the build either.
+      var playButton = document.querySelector("#unity-play");
+      var startedKey = "chang-started";
+      var started = false;
+
+      function startGame() {
+        if (started) return;
+        started = true;
+        try { sessionStorage.setItem(startedKey, "1"); } catch (error) { }
+        playButton.style.display = "none";
+        loadingBar.classList.add("unity-loading");
+        loadUnity();
+      }
+
+      function shouldAutostart() {
+        if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+        if (navigator.standalone === true) return true;
+        try { return sessionStorage.getItem(startedKey) === "1"; } catch (error) { return false; }
+      }
+
+      playButton.addEventListener("click", startGame);
+      if (shouldAutostart()) startGame();
+
+      function loadUnity() {
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
@@ -201,6 +230,7 @@
         });
       };
       document.body.appendChild(script);
+      }
     </script>
   </body>
 </html>
