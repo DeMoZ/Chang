@@ -75,10 +75,22 @@ In the Editor, CCD content is loaded only with the Addressables Play Mode Script
 
 Template changes compared to Unity's PWA template:
 
-- `ServiceWorker.js`: the cache name is unique per build and old caches are deleted; the page (`index.html`, manifest) is network-first; requests to other hosts (CCD catalog and bundles) are not cached by the Service Worker. Unity's original cached every request cache-first and never deleted old caches, so players could keep getting the old page and the old content catalog after a deploy.
+- Start screen with a **Play** button, see [Start screen: the build loads after Play](#start-screen-the-build-loads-after-play).
+- `ServiceWorker.js`: the cache name is unique per build and old caches are deleted; the page (`index.html`, manifest) is network-first; requests to other hosts (CCD catalog and bundles) are not cached by the Service Worker. Unity's original cached every request cache-first and never deleted old caches, so players could keep getting the old page and the old content catalog after a deploy. On install it precaches only the page shell (`TemplateData/style.css`, the mascot), not the build: `Build/*` is cached cache-first the first time the game downloads it after **Play**.
 - `_headers` (Cloudflare Pages): `Content-Encoding: br` for `Build/*.br`, long caching for `Build/*`, `no-cache` for the page, manifest, Service Worker and `version.json`.
 - Build number check, see [Build number check](#build-number-check).
 - Page texts and images: title, description, Open Graph / Twitter tags, favicon, PWA icons, the loading screen logo and the manifest name are KruChaang's, see [Game page texts and images](#game-page-texts-and-images). Unity 6's template has no "not supported on mobile" warning, so nothing to remove there.
+
+#### Start screen: the build loads after Play
+
+The page opens with the mascot and a **Play** button; the Unity build (about 50 MB: loader, framework, `.wasm.br`, `.data.br`) is requested only after the button is pressed (`startGame()` in `index.html`). Crawlers, link-preview bots and scanners run JavaScript but almost never click, so they no longer download the build, and the first screen appears at once. After **Play** the button is replaced by the usual progress bar.
+
+No click is needed when:
+
+- the page runs as an installed app (`display-mode: standalone`, or `navigator.standalone` on iOS);
+- the page is reloaded in a tab where the game was already started: the [build number check](#build-number-check) reload or F5 (`sessionStorage` key `chang-started`, per tab). A new tab shows the button again.
+
+Analytics: a request to `Build/*.wasm.br` now means a person started this build in a browser for the first time. A returning player whose build is already cached (Service Worker, Unity data cache) does not send it again, so it counts first launches per build and browser, not every launch.
 
 ### Deploy to Cloudflare Pages
 

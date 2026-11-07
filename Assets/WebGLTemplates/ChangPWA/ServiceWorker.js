@@ -4,16 +4,11 @@
 // - only this site's files are cached: requests to other hosts (CCD catalog and bundles) are not touched.
 // - version.json (the deployed build number, checked by index.html) always goes to the network.
 const cacheName = {{{ JSON.stringify(COMPANY_NAME + "-" + PRODUCT_NAME + "-" + PRODUCT_VERSION + "-" + DATA_FILENAME) }}};
+// - the build (Build/*) is not precached on install: it is downloaded only after the Play button and then cached
+//   by the cache-first fetch handler below, so a page visit alone (e.g. a bot) does not download the build.
 const contentToCache = [
-    "Build/{{{ LOADER_FILENAME }}}",
-    "Build/{{{ FRAMEWORK_FILENAME }}}",
-#if USE_THREADS
-    "Build/{{{ WORKER_FILENAME }}}",
-#endif
-    "Build/{{{ DATA_FILENAME }}}",
-    "Build/{{{ CODE_FILENAME }}}",
-    "TemplateData/style.css"
-
+    "TemplateData/style.css",
+    "TemplateData/loading-mascot.svg"
 ];
 
 self.addEventListener('install', function (e) {
