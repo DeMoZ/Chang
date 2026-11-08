@@ -6,7 +6,7 @@ Today the WebGL page (`Assets/WebGLTemplates/ChangPWA/index.html`) starts downlo
 
 ## What Changes
 
-- The page opens with a start screen: the Kru Chaang mascot and a **Play** button. No Unity build file is requested before the button is pressed.
+- The page opens with a start screen: the KruChaang logo and a **Play** button, in the look of the in-game loading screen. No Unity build file is requested before the button is pressed.
 - Pressing **Play** loads the Unity loader script and calls `createUnityInstance(...)`. The start screen then turns into the existing loading bar.
 - The Service Worker no longer precaches the build files (`Build/*`) on install. It still caches them cache-first at runtime, the first time Unity fetches them after **Play**. So a page visit by itself does not download the build.
 - No click is needed in these cases (the person already chose to play):

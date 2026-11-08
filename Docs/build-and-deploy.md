@@ -79,11 +79,17 @@ Template changes compared to Unity's PWA template:
 - `ServiceWorker.js`: the cache name is unique per build and old caches are deleted; the page (`index.html`, manifest) is network-first; requests to other hosts (CCD catalog and bundles) are not cached by the Service Worker. Unity's original cached every request cache-first and never deleted old caches, so players could keep getting the old page and the old content catalog after a deploy. On install it precaches only the page shell (`TemplateData/style.css`, the mascot), not the build: `Build/*` is cached cache-first the first time the game downloads it after **Play**.
 - `_headers` (Cloudflare Pages): `Content-Encoding: br` for `Build/*.br`, long caching for `Build/*`, `no-cache` for the page, manifest, Service Worker and `version.json`.
 - Build number check, see [Build number check](#build-number-check).
-- Page texts and images: title, description, Open Graph / Twitter tags, favicon, PWA icons, the loading screen logo and the manifest name are KruChaang's, see [Game page texts and images](#game-page-texts-and-images). Unity 6's template has no "not supported on mobile" warning, so nothing to remove there.
+- Page texts and images: title, description, Open Graph / Twitter tags, favicon, PWA icons and the manifest name are KruChaang's, see [Game page texts and images](#game-page-texts-and-images). Unity 6's template has no "not supported on mobile" warning, so nothing to remove there.
 
 #### Start screen: the build loads after Play
 
-The page opens with the mascot and a **Play** button; the Unity build (about 50 MB: loader, framework, `.wasm.br`, `.data.br`) is requested only after the button is pressed (`startGame()` in `index.html`). Crawlers, link-preview bots and scanners run JavaScript but almost never click, so they no longer download the build, and the first screen appears at once. After **Play** the button is replaced by the usual progress bar.
+The page opens with the logo and a **Play** button; the Unity build (about 50 MB: loader, framework, `.wasm.br`, `.data.br`) is requested only after the button is pressed (`startGame()` in `index.html`). Crawlers, link-preview bots and scanners run JavaScript but almost never click, so they no longer download the build, and the first screen appears at once. After **Play** the button is replaced by the progress bar and the percent.
+
+Both the start screen and Unity's loading screen are drawn like the in-game Addressables loading screen (`Assets/Project/UI/Screens/Loading.prefab`), so the page hands over to the game without a visual jump:
+
+- colors from `DesignTheme.asset`: Rice paper background, the logo ช้าง and the bar fill in Temple gold, the bar track in Sand, the percent in Ink 2, the **Play** button in Royal indigo (the game's `Button/Primary`, radius 20, at least 48 px high);
+- sizes and positions in game UI units, `--u` in `TemplateData/style.css` = the game's CanvasScaler (540×1080, Expand): `min(100vw / 540, 100dvh / 1080)`. The logo is placed from the top, the bar, the button and the percent from the bottom, like the anchors in the prefab. If the in-game loading screen moves, change these numbers too;
+- fonts: `TemplateData/logo-charmonman.woff2` (Charmonman Bold, only ช้าง, 1 KB) and `TemplateData/prompt-semibold.woff2` (Prompt SemiBold, only `Play`, digits and `%`, 5 KB), made by `Tools/PageArt/fonts.sh` (needs `pip install fonttools brotli`). New text in these fonts needs its characters added there.
 
 No click is needed when:
 
@@ -208,7 +214,8 @@ Images are drawn from the mascot (`Assets/Project/UI/Vectors/Mascot`) and the co
 | `TemplateData/icons/apple-touch-icon.png` | 180 | iOS home screen |
 | `TemplateData/favicon.ico` | 16, 32, 48 | browser tab |
 | `ChangPWA/thumbnail.png` | 128 | template picture in Player Settings |
-| `TemplateData/loading-mascot.svg` | vector | logo on the loading screen (a copy of `Tools/PageArt/mascot.svg`) |
+
+The start/loading screen fonts are made by `Tools/PageArt/fonts.sh`, see [Start screen](#start-screen-the-build-loads-after-play).
 
 
 **Unity Play page** (done by hand on play.unity.com → the game → Edit):

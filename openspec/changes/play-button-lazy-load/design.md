@@ -19,7 +19,7 @@
 
 ## Decisions
 
-1. **Start screen reuses the loading container.** `#unity-loading-bar` already holds the centered mascot. Add a `<button id="unity-play">Play</button>` under the mascot and keep the progress bar hidden until start. One centered block, no new images. The button uses the page background color for contrast and the brand dark blue (`#1d2140`, from the mascot) for the fill; rounded, large touch target (at least 48 px high). Alternative: a separate full-screen overlay — more markup for the same result.
+1. **Start screen reuses the loading container, drawn like the in-game loading screen.** `#unity-loading-bar` becomes a full-screen layer with the logo ช้าง, the `<button id="unity-play">Play</button>` and the progress bar with the percent (hidden until start). It copies `Assets/Project/UI/Screens/Loading.prefab`: DesignTheme colors, sizes in game UI units (`--u` = CanvasScaler 540×1080 Expand), logo anchored to the top and bar/button/percent to the bottom like the prefab, so the hand-over to the game has no visual jump. The button is the game's `Button/Primary` (Royal indigo, radius 20), at least 48 px high. Fonts are tiny woff2 subsets (Charmonman for ช้าง, Prompt SemiBold for `Play`/digits) instead of images: crisp at any scale, 6 KB in total. Alternative: a picture of the logo — blurry when scaled and not text.
 
 2. **`startGame()` wraps the existing loader code.** The code that creates the loader `<script>` and calls `createUnityInstance` moves into `startGame()`, guarded by a `started` flag (double press). The button calls it; the autostart cases call it on page start. The `<canvas>` stays in the DOM from the start (Unity needs it), with the template background.
 
