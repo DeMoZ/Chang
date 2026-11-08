@@ -8,7 +8,8 @@ const cacheName = {{{ JSON.stringify(COMPANY_NAME + "-" + PRODUCT_NAME + "-" + P
 //   by the cache-first fetch handler below, so a page visit alone (e.g. a bot) does not download the build.
 const contentToCache = [
     "TemplateData/style.css",
-    "TemplateData/loading-mascot.svg"
+    "TemplateData/logo-charmonman.woff2",
+    "TemplateData/prompt-semibold.woff2"
 ];
 
 self.addEventListener('install', function (e) {

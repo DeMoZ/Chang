@@ -1,7 +1,7 @@
 #!/bin/bash
 # Renders the game page images (#107) from card.html and icon.html with headless Chrome:
-# the Unity Play thumbnail, the Open Graph image, the PWA icons, the favicon, the loading screen logo and the Player Settings thumbnail
-# of the ChangPWA WebGL template.
+# the Unity Play thumbnail, the Open Graph image, the PWA icons, the favicon and the Player Settings thumbnail
+# of the ChangPWA WebGL template. The loading screen fonts are made by fonts.sh.
 # Usage (macOS, Google Chrome installed): Tools/PageArt/render.sh
 set -euo pipefail
 
@@ -25,7 +25,6 @@ shot icon.html 192 192 "$TEMPLATE/icons/icon-192.png"
 shot "icon.html?maskable" 512 512 "$TEMPLATE/icons/icon-maskable-512.png"
 shot "icon.html?maskable" 180 180 "$TEMPLATE/icons/apple-touch-icon.png"
 shot icon.html 128 128 "$THUMBNAIL"
-cp mascot.svg "$TEMPLATE/loading-mascot.svg" # loading screen logo
 for s in 16 32 48; do shot icon.html $s $s "$TMP/favicon-$s.png"; done
 
 # favicon.ico with PNG images inside (supported by all current browsers)

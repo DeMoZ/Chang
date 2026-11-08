@@ -7,11 +7,11 @@ Defines how the WebGL web page starts the game: what the first screen shows, whe
 ## ADDED Requirements
 
 ### Requirement: Start screen before the game loads
-When the page opens, it SHALL show a start screen with the Kru Chaang mascot and a **Play** button, without waiting for any Unity build file. The button SHALL be reachable by keyboard and work with mouse and touch.
+When the page opens, it SHALL show a start screen with the KruChaang logo and a **Play** button, without waiting for any Unity build file. The button SHALL be reachable by keyboard and work with mouse and touch.
 
 #### Scenario: First visit in a browser tab
 - **WHEN** a person opens the game page in a browser tab
-- **THEN** the start screen with the mascot and the **Play** button is shown
+- **THEN** the start screen with the logo and the **Play** button is shown
 - **AND** no loading progress bar is shown yet
 
 ### Requirement: No build download before Play
@@ -57,3 +57,14 @@ After the build files are downloaded for a play, the Service Worker SHALL keep t
 #### Scenario: Second launch of the same build
 - **WHEN** a person played once and opens the page again later (same build), then presses **Play**
 - **THEN** the build files come from the cache, without network requests for `Build/*`
+
+### Requirement: Page screens look like the in-game loading screen
+The start screen and the build loading screen SHALL use the look of the in-game content loading screen: the same background, logo, progress bar and percent, with the same colors, sizes and positions at any window size, so that the hand-over from the page to the game shows no visual jump.
+
+#### Scenario: Hand-over to the game
+- **WHEN** the build finishes loading and the game shows its content loading screen
+- **THEN** the background, the logo, the bar and the percent stay in the same places and colors (within a couple of pixels)
+
+#### Scenario: Start screen
+- **WHEN** the start screen is shown
+- **THEN** it has the same background and logo, and the **Play** button in the game's primary button style where the progress bar will appear

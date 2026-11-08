@@ -1,14 +1,38 @@
-body { padding: 0; margin: 0 }
+/* Chang: the start screen and Unity's loading screen are drawn like the in-game Addressables loading screen
+   (Assets/Project/UI/Screens/Loading.prefab, colors from Assets/Project/UI/DesignTheme.asset), so the page hands over
+   to the game without a visual jump. --u is one unit of the game UI: CanvasScaler 540x1080, Expand. */
+@font-face { font-family: "Chang Logo"; font-weight: 700; font-display: block; src: url("logo-charmonman.woff2") format("woff2") } /* Charmonman Bold, only ช้าง */
+@font-face { font-family: "Chang Prompt"; font-weight: 600; font-display: swap; src: url("prompt-semibold.woff2") format("woff2") } /* Prompt SemiBold, only "Play", digits, % */
+
+:root {
+  --rice-paper: #FBF6EC;
+  --sand: #F5EEDF;
+  --temple-gold: #D99A1E;
+  --ink: #1D2140;
+  --ink-2: #4A4F6E;
+  --royal-indigo: #2F3C9E;
+  --u: min(calc(100vw / 540), calc(100vh / 1080));
+}
+@supports (height: 100dvh) { :root { --u: min(calc(100vw / 540), calc(100dvh / 1080)) } }
+
+body { padding: 0; margin: 0; background: var(--rice-paper) }
 #unity-container { position: fixed; width: 100%; height: 100%; }
-#unity-canvas { width: 100%; height: 100%; background: {{{ BACKGROUND_COLOR }}} }
-#unity-loading-bar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none }
-#unity-logo { width: 165px; height: 130px; background: url('loading-mascot.svg') no-repeat center / contain }
-#unity-progress-bar-empty { display: none; margin-left: auto; margin-right: auto; width: 141px; height: 18px; margin-top: 10px; background: url('progress-bar-empty-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center }
-#unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('progress-bar-full-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center }
-/* Chang: start screen Play button; the progress bar is shown only after start (play-button-lazy-load) */
-#unity-loading-bar.unity-loading #unity-progress-bar-empty { display: block }
-#unity-play { display: block; margin: 16px auto 0; min-width: 160px; min-height: 52px; padding: 0 32px; border: 0; border-radius: 26px; background: #1d2140; color: #ffffff; font: 600 20px/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 4px 12px rgba(29, 33, 64, 0.25); touch-action: manipulation; -webkit-tap-highlight-color: transparent }
-#unity-play:hover { background: #2c3260 }
-#unity-play:active { transform: translateY(1px) }
-#unity-play:focus-visible { outline: 3px solid #e3a21a; outline-offset: 3px }
+#unity-canvas { width: 100%; height: 100%; background: var(--rice-paper) }
+
+#unity-loading-bar { position: absolute; inset: 0; display: none; background: var(--rice-paper) }
+#unity-logo { position: absolute; left: 50%; top: calc(var(--u) * 361); transform: translate(-50%, -50%); font: 700 calc(var(--u) * 64)/1.3 "Chang Logo", serif; color: var(--temple-gold); white-space: nowrap; user-select: none }
+
+/* Play: the game's Button/Primary (Royal indigo, radius 20, label Prompt SemiBold 28) where the progress bar will be */
+#unity-play { position: absolute; left: 50%; bottom: calc(var(--u) * 374); transform: translate(-50%, 50%); width: calc(var(--u) * 360); height: max(48px, calc(var(--u) * 64)); padding: 0; border: 0; border-radius: calc(var(--u) * 20); background: var(--royal-indigo); color: #FFFFFF; font: 600 calc(var(--u) * 28)/1 "Chang Prompt", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; cursor: pointer; box-shadow: 0 calc(var(--u) * 2) calc(var(--u) * 8) rgba(29, 33, 64, 0.08); touch-action: manipulation; -webkit-tap-highlight-color: transparent }
+#unity-play:hover { filter: brightness(1.1) }
+#unity-play:active { transform: translate(-50%, 50%) scale(0.98) }
+#unity-play:focus-visible { outline: 3px solid var(--temple-gold); outline-offset: 3px }
+
+/* Progress: the game's Bar (360x12, Sand track, Temple gold fill) with the percent under it (Prompt SemiBold 22, Ink 2) */
+#unity-progress { display: none }
+#unity-loading-bar.unity-loading #unity-progress { display: block }
+#unity-progress-bar-empty { position: absolute; left: 50%; bottom: calc(var(--u) * 374); transform: translate(-50%, 50%); width: calc(var(--u) * 360); height: calc(var(--u) * 12); border-radius: calc(var(--u) * 6); background: var(--sand); overflow: hidden }
+#unity-progress-bar-full { width: 0%; height: 100%; border-radius: inherit; background: var(--temple-gold) }
+#unity-percent { position: absolute; left: 50%; bottom: calc(var(--u) * 338); transform: translate(-50%, 50%); font: 600 calc(var(--u) * 22)/1 "Chang Prompt", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink-2) }
+
 #unity-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: white; padding: 10px; display: none }
