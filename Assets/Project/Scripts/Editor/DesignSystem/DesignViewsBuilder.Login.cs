@@ -11,8 +11,9 @@ namespace Chang.Editor.DesignSystem
     {
         /// <summary>
         /// Login screen for <see cref="LogInView"/> (the DMZ.Legacy.LoginScreen submodule). The design draws only the first step
-        /// (sign in with a name or as a guest); the name and password form and the signed-in panel are cards built from the
-        /// design components (Dialog card, TextField, Segmented, buttons) over the same screen.
+        /// (sign in with a name or as a guest); the name and password form, the signed-in panel and the guest card
+        /// (keep the progress with a name) are cards built from the design components (Dialog card, TextField, Segmented, buttons)
+        /// over the same screen.
         /// </summary>
         private static void BuildLogin()
         {
@@ -108,6 +109,18 @@ namespace Chang.Editor.DesignSystem
                 var notSureBtn = ButtonOn(Q(confirm, "Buttons|Back"));
                 var sureBtn = ButtonOn(Q(confirm, "Buttons|Delete"));
                 Hide(confirm);
+
+                // ---- a guest: keep the progress with a name, a card over the account card (not drawn in the design yet) ----
+                var guest = Card(logged, "GuestCard");
+                guest.anchoredPosition = new Vector2(0f, 24f + DesignSize(Component("AccountCard/Default")).y + 12f);
+                var guestContent = Q(guest, "Content");
+                var guestHint = Hint(guestContent, "GuestHint");
+                guestHint.alignment = TextAlignmentOptions.Center;
+                guestHint.textWrappingMode = TextWrappingModes.Normal;
+                Localize(guestHint.transform, "Login.GuestHint",
+                    "You are playing as a guest. Sign in with a name and password to keep your progress.");
+                var saveProgressBtn = CardButton("Button/Primary", guestContent, "SaveProgressBtn", "Login.SaveProgress", "Save my progress");
+
                 Hide(logged);
 
                 // ---- awaiting a server response ----
@@ -140,6 +153,8 @@ namespace Chang.Editor.DesignSystem
                     ("_notSureBtn", notSureBtn),
                     ("_sureBtn", sureBtn),
                     ("_closeBtn", closeBtn),
+                    ("_guestContent", guest.gameObject),
+                    ("_saveProgressBtn", saveProgressBtn),
                     ("_validColor", PenpotDocument.ParseColor("#8a8fa8")),
                     ("_invalidColor", PenpotDocument.ParseColor("#e04f4a")),
                     ("_validInputTextColor", PenpotDocument.ParseColor("#1d2140")),

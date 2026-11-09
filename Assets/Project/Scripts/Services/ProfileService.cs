@@ -37,17 +37,21 @@ namespace Chang.Services
             _languagesConfig = languagesConfig;
             _prefsDataProvider = new PrefsDataProvider();
             _unityCloudDataProvider = new UnityCloudDataProvider(errorHandler, authorizationService.RequestAuthentication);
+            authorizationService.SetGuestUpgradeHandlers(KeepGuestDataForMergeAsync, DropPendingGuestData);
         }
 
         public void Dispose()
         {
+            _cts.Cancel();
+            _cts.Dispose();
             _prefsDataProvider.Dispose();
             _unityCloudDataProvider.Dispose();
         }
 
         /// <summary>
         /// Loads the cloud and the local data, the newer one wins.
-        /// The local data of another player is ignored
+        /// The local data of another player is ignored.
+        /// The data of a guest who signed in to this account is merged first, see <see cref="MergePendingGuestDataAsync"/>
         /// </summary>
         /// <returns>false if the player is not authenticated, authentication is requested then</returns>
         public async UniTask<bool> LoadStoredData(CancellationToken ct)
@@ -58,6 +62,7 @@ namespace Chang.Services
             }
 
             string playerId = _unityCloudDataProvider.PlayerId;
+            await MergePendingGuestDataAsync(playerId, ct);
 
             ProfileData cloudProfile = await _unityCloudDataProvider.LoadProfileDataAsync(ct);
             ProfileData prefsProfile = await _prefsDataProvider.LoadProfileDataAsync(ct);

@@ -21,6 +21,7 @@ namespace Chang
             _authorizationService = authorizationService;
             _authorizationService.OnPlayerLoggedOut += OnLoggedOut;
             _authorizationService.OnAuthenticationRequired += OnAuthenticationRequired;
+            _authorizationService.OnAccountSwitched += OnAccountSwitched;
         }
 
         public void Initialize()
@@ -33,11 +34,19 @@ namespace Chang
         {
             _authorizationService.OnPlayerLoggedOut -= OnLoggedOut;
             _authorizationService.OnAuthenticationRequired -= OnAuthenticationRequired;
+            _authorizationService.OnAccountSwitched -= OnAccountSwitched;
         }
         
         private void OnLoggedOut()
         {
             Debug.Log("OnLoggedOut");
+            LoadRebootScene();
+        }
+
+        // the reboot loads the data of the new player, the guest progress is merged into it then
+        private void OnAccountSwitched()
+        {
+            Debug.Log("OnAccountSwitched");
             LoadRebootScene();
         }
 
