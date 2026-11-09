@@ -24,8 +24,8 @@
 
 ## 4. Integration check
 
-- [ ] 4.1 Deploy to `dev.kruchaang.win` (user runs the wrangler command) and check: no `Build/*` before Play, Play loads and starts the game, the #104 version check still reloads to a new build and autostarts
-- [ ] 4.2 Check `staging.kruchaang.win` on a phone (browser tab and installed PWA) before promoting to production
+- [x] 4.1 Deploy to `dev.kruchaang.win` (user runs the wrangler command) and check: no `Build/*` before Play, Play loads and starts the game, the #104 version check still reloads to a new build and autostarts
+- [x] 4.2 Check `staging.kruchaang.win` on a phone (browser tab and installed PWA) before promoting to production
 
 ## Workflow follow-up
 

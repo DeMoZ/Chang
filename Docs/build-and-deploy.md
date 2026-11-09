@@ -13,7 +13,7 @@
 
 ## Platforms
 
-- **WebGL** is the main public platform: project template `ChangPWA`, hosted on Cloudflare Pages (see [Environments](#environments)). [Unity Play](https://play.unity.com/en/games/efe1a90f-d700-4609-adfd-6481103f4d5b/chang) (`com.unity.connect.share`) is kept only for quick one-off sharing; there the game uses the `dev` environment. Its auto publish is off (`autoPublish` in `ProjectSettings/Packages/com.unity.connect.share/Settings.json`), otherwise every WebGL build would be uploaded to Unity Play; publish manually from the WebGL Publisher window.
+- **WebGL** is the main public platform: project template `ChangPWA`, hosted on Cloudflare Pages (see [Environments](#environments)). [Unity Play](https://play.unity.com/en/games/6ebf1b50-c0b6-46af-a373-44ac045074a6/kruchaang) (`com.unity.connect.share`) is kept only for quick one-off sharing; there the game uses the `dev` environment. Its auto publish is off (`autoPublish` in `ProjectSettings/Packages/com.unity.connect.share/Settings.json`), otherwise every WebGL build would be uploaded to Unity Play; publish manually from the WebGL Publisher window.
 - **Android**: min SDK 25. The keystore is in the `ChangExternal/AndroidKeystore` submodule.
 - `Builds/` and `WebGL Builds/` are in `.gitignore`.
 
