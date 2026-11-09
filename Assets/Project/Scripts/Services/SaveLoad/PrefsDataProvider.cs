@@ -86,6 +86,27 @@ namespace Chang.Services.DataProvider
             PlayerPrefs.Save();
         }
 
+        /// <returns>null if there is no data of a guest waiting to be merged into an account</returns>
+        public PendingGuestData LoadPendingGuestData()
+        {
+            return Load<PendingGuestData>(DataProviderConstants.PendingGuestDataKey);
+        }
+
+        /// <summary>
+        /// Kept apart from the player data: <see cref="Clear"/> does not delete it
+        /// </summary>
+        public void SavePendingGuestData(PendingGuestData data)
+        {
+            Save(DataProviderConstants.PendingGuestDataKey, data);
+            PlayerPrefs.Save();
+        }
+
+        public void DeletePendingGuestData()
+        {
+            PlayerPrefs.DeleteKey(DataProviderConstants.PendingGuestDataKey);
+            PlayerPrefs.Save();
+        }
+
         private T Load<T>(string key) where T : class
         {
             if (!PlayerPrefs.HasKey(key))

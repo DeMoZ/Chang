@@ -16,6 +16,7 @@ namespace Chang.Services.DataProvider
     public class UnityCloudDataProvider : IDataProvider
     {
         private const int MaxRateLimitedAttempts = 3;
+        private const int MaxItemsPerSave = 20;
 
         private readonly ErrorHandler _errorHandler;
         private readonly Action _onNotAuthenticated;
@@ -108,6 +109,88 @@ namespace Chang.Services.DataProvider
             }
 
             return await LoadDataAsync<ProfileData>(DataProviderConstants.ProfileDataKey, ct);
+        }
+
+        /// <summary>
+        /// Loads the profile and the progress of all languages in one request.
+        /// Unlike the other loads, throws on errors: a failed load must not look like an account without data.
+        /// </summary>
+        public async UniTask<StoredPlayerData> LoadAllAsync(CancellationToken ct)
+        {
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                throw new InvalidOperationException("The player is not signed in.");
+            }
+
+            HashSet<string> keys = new() { DataProviderConstants.ProfileDataKey };
+            foreach (Languages language in Enum.GetValues(typeof(Languages)))
+            {
+                keys.Add(DataProviderConstants.VocabularyProgressKey(language));
+                keys.Add(DataProviderConstants.SentencesProgressKey(language));
+            }
+
+            Dictionary<string, Item> items = await RequestAsync(() => CloudSaveService.Instance.Data.Player.LoadAsync(keys), ct);
+
+            StoredPlayerData data = new() { Profile = Extract<ProfileData>(items, DataProviderConstants.ProfileDataKey) };
+            foreach (Languages language in Enum.GetValues(typeof(Languages)))
+            {
+                var vocabulary = Extract<ProgressData<VocabularyQuestLog>>(items, DataProviderConstants.VocabularyProgressKey(language));
+                if (vocabulary != null)
+                {
+                    data.Vocabulary[language] = vocabulary;
+                }
+
+                var sentences = Extract<ProgressData<SentenceQuestLog>>(items, DataProviderConstants.SentencesProgressKey(language));
+                if (sentences != null)
+                {
+                    data.Sentences[language] = sentences;
+                }
+            }
+
+            Debug.Log($"LoadAllAsync: loaded keys: {string.Join(", ", items.Keys)}");
+            return data;
+        }
+
+        /// <summary>
+        /// Saves the data that is not null. Unlike the other saves, throws on errors.
+        /// </summary>
+        public async UniTask SaveAllAsync(StoredPlayerData data, CancellationToken ct)
+        {
+            Dictionary<string, object> dataDict = new();
+            if (data.Profile != null)
+            {
+                dataDict[DataProviderConstants.ProfileDataKey] = data.Profile;
+            }
+
+            foreach (var (language, vocabulary) in data.Vocabulary)
+            {
+                dataDict[DataProviderConstants.VocabularyProgressKey(language)] = vocabulary;
+            }
+
+            foreach (var (language, sentences) in data.Sentences)
+            {
+                dataDict[DataProviderConstants.SentencesProgressKey(language)] = sentences;
+            }
+
+            // a save request takes a limited number of items
+            var pairs = dataDict.ToList();
+            for (int i = 0; i < pairs.Count; i += MaxItemsPerSave)
+            {
+                Dictionary<string, object> part = pairs.Skip(i).Take(MaxItemsPerSave).ToDictionary(pair => pair.Key, pair => pair.Value);
+                await RequestAsync(() => CloudSaveService.Instance.Data.Player.SaveAsync(part), ct);
+                Debug.Log($"SaveAllAsync: {string.Join(", ", part.Keys)} saved.");
+            }
+        }
+
+        private T Extract<T>(Dictionary<string, Item> items, string key) where T : class
+        {
+            if (!items.TryGetValue(key, out Item item))
+            {
+                return null;
+            }
+
+            string json = JsonConvert.SerializeObject(item.Value, _jSettings);
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         /// <summary>

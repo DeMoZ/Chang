@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DMZ.Legacy.LoginScreen;
 using Zenject;
@@ -11,6 +12,8 @@ namespace Chang.Services
     {
         public Action OnPlayerLoggedOut;
         public Action OnAuthenticationRequired;
+        /// <summary>a guest signed in to an existing account from the account view, another player is signed in now</summary>
+        public Action OnAccountSwitched;
 
         private readonly MainScreenBus _mainScreenBus;
         private readonly LogInController _logInController;
@@ -24,6 +27,15 @@ namespace Chang.Services
 
             _mainScreenBus.OnLogOutClicked += OnLogOutClicked;
             _logInController.OnLoggedOut += OnLoggedOut;
+            _logInController.OnAccountSwitched += OnLogInAccountSwitched;
+        }
+
+        /// <param name="beforeAccountSwitch">awaited while the guest is still signed in, before it switches to an existing account; an exception cancels the switch</param>
+        /// <param name="accountSwitchFailed">the sign-in to the account failed, the guest is signed in again</param>
+        public void SetGuestUpgradeHandlers(Func<Task> beforeAccountSwitch, Action accountSwitchFailed)
+        {
+            _logInController.BeforeAccountSwitch = beforeAccountSwitch;
+            _logInController.AccountSwitchFailed = accountSwitchFailed;
         }
 
         public void Dispose()
@@ -33,6 +45,9 @@ namespace Chang.Services
 
             _mainScreenBus.OnLogOutClicked -= OnLogOutClicked;
             _logInController.OnLoggedOut -= OnLoggedOut;
+            _logInController.OnAccountSwitched -= OnLogInAccountSwitched;
+            _logInController.BeforeAccountSwitch = null;
+            _logInController.AccountSwitchFailed = null;
         }
 
         public async UniTask AuthenticateAsync()
@@ -54,6 +69,12 @@ namespace Chang.Services
         {
             Debug.Log("OnLogOutClicked: the account view is shown");
             _logInController.LogOutAsync().AsUniTask().Forget();
+        }
+
+        private void OnLogInAccountSwitched()
+        {
+            Debug.Log("OnAccountSwitched");
+            OnAccountSwitched?.Invoke();
         }
 
         private void OnLoggedOut()
