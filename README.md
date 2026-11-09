@@ -1,6 +1,6 @@
 # Chang
 Learn Thai Language with Chang the Elephant at:<br>
-https://play.unity.com/en/games/efe1a90f-d700-4609-adfd-6481103f4d5b/chang
+https://play.unity.com/en/games/6ebf1b50-c0b6-46af-a373-44ac045074a6/kruchaang
 
 ## Documentation
 Project documentation lives in [`Docs/`](Docs/README.md):
