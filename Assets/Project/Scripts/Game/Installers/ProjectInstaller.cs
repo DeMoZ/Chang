@@ -1,6 +1,7 @@
 using Chang.Profile;
 using Chang.Resources;
 using Chang.Services;
+using Chang.Services.Auth;
 using DMZ.Legacy.LoginScreen;
 using Popup;
 using UnityEngine;
@@ -60,7 +61,11 @@ namespace Chang
             }
             logInView.Init(loginModel);
             
-            var loginController = new LogInController(loginModel, AppEnvironment.Current);
+            var providers = new IExternalSignInProvider[]
+            {
+                new GoogleSignInProvider(GoogleSignInConfig.Load()),
+            };
+            var loginController = new LogInController(loginModel, AppEnvironment.Current, providers);
             Container.BindInstances(loginModel);
             Container.BindInterfacesAndSelfTo<LogInController>().FromInstance(loginController).AsSingle();
         }
