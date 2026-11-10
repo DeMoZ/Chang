@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>KruChaang · Google sign-in</title>
+    <style>
+      body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+             font-family: system-ui, sans-serif; color: #1d2140; background: #fdf6ec; text-align: center; padding: 16px; }
+    </style>
+  </head>
+  <body>
+    <p id="message">Signing in…</p>
+    <script>
+      // Chang: the redirect page of the Google sign-in popup (Plugins/WebGL/ChangGoogleSignIn.jslib).
+      // Google puts the answer into the fragment: #id_token=…&state=… or #error=…&state=…
+      (function () {
+        var answer = new URLSearchParams(location.hash.slice(1));
+        var query = new URLSearchParams(location.search);
+        var data = {
+          source: 'chang-google-signin',
+          state: answer.get('state') || query.get('state'),
+          idToken: answer.get('id_token'),
+          error: answer.get('error') || query.get('error'),
+        };
+
+        // the token is not kept in the address and the history
+        history.replaceState(null, '', location.pathname);
+
+        try {
+          var channel = new BroadcastChannel('chang-google-signin');
+          channel.postMessage(data);
+          setTimeout(function () { channel.close(); }, 1000);
+        } catch (e) {
+        }
+
+        try {
+          if (window.opener) {
+            window.opener.postMessage(data, location.origin);
+          }
+        } catch (e) {
+        }
+
+        setTimeout(function () {
+          window.close();
+          document.getElementById('message').textContent = 'You can close this window and go back to the game.';
+        }, 300);
+      })();
+    </script>
+  </body>
+</html>
